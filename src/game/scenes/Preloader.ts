@@ -28,6 +28,7 @@ export class Preloader extends Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
+        this.load.image('5', '5.jpg');
         this.load.image('8', '8.jpg');
         this.load.image('7', '7.jpg');
         this.load.image('logo', 'logo.png');
@@ -35,6 +36,11 @@ export class Preloader extends Scene {
         this.load.image('health', 'health.png');
         this.load.image('shield', 'shield.png');
         this.load.image('vision', 'vision.png');
+        this.load.image('star', 'star-full.png');
+        this.load.image('arrow', 'arrow.png');
+        this.load.image('sword', 'sward.png');
+        this.load.image('bg', 'bg3.jpg');
+        this.load.image('bow', 'bow.png');
     }
 
     create() {

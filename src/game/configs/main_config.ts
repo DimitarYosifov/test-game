@@ -1,7 +1,7 @@
 export const main_config = {
-    "gridSizeHorizontal": 14,
-    "gridSizeVertical": 9,
-    "cellSize": 100,
+    "gridSizeHorizontal": 12,
+    "gridSizeVertical": 7,
+    "cellSize": 125,
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 10

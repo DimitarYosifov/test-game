@@ -10,7 +10,7 @@ import { Preloader } from './scenes/Preloader';
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
-    
+
     parent: 'game-container',
     backgroundColor: '#028af8',
     scale: {
@@ -29,8 +29,9 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 const StartGame = (parent: string) => {
-
-    return new Game({ ...config, parent });
+    const game = new Game({ ...config, parent });
+    (globalThis as any).__PHASER_GAME__ = game;
+    return game;
 
 }
 
