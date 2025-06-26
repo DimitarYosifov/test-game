@@ -18,18 +18,30 @@ export class Monster extends Phaser.GameObjects.Container {
     ranged_text: Phaser.GameObjects.Text;
     ranged: Phaser.GameObjects.Image;
 
-    constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number) {
+    constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
         this.scene = scene;
         this.unitData = unit;
         this.index = index;
-
 
         //bg
         this.bg = scene.add.image(0, 0, unit.type).setOrigin(0.5);
         this.bg.displayWidth = displayWidth;
         this.bg.displayHeight = displayHeight;
         this.add([this.bg]);
+
+        //outline
+        let color = isPlayerMonster ? 0x22c422 : 0xff0000;
+        let outline = this.scene.add.graphics();
+        outline.lineStyle(5, color);
+        outline.moveTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
+        outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / -2);
+        outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / 2);
+        outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / 2);
+        outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
+        outline.strokePath();
+        outline.setPosition(0, 0);
+        this.add(outline);
 
         if (unit.melee > 0) {
             //melee img
@@ -175,8 +187,8 @@ export class Monster extends Phaser.GameObjects.Container {
             targets: this,
             x: position.x,
             y: position.y,
-            duration: 450,
-            ease: 'Back.easeOut',
+            duration: 500,
+            ease: 'Back.easeIn',
             onStart: () => {
                 this.setInteraction(false);
             },
@@ -214,9 +226,13 @@ export class Monster extends Phaser.GameObjects.Container {
         this.unitData.health = healthLeft;
         this.health_text.setText(healthLeft.toString());
 
+
+        const glbPos = this.bg.getBounds()
+        const x = glbPos.x + this.bg.displayWidth / 2;
+        const y = glbPos.y + this.bg.displayHeight / 2;
         const lostHealth = this.scene.add.text(
-            0,
-            0,
+            x,
+            y,
             (dmg * -1).toString(),
             {
                 fontFamily: 'Arial Black', fontSize: 40, color: '#ff0000',
@@ -224,11 +240,11 @@ export class Monster extends Phaser.GameObjects.Container {
                 align: 'center'
             });
         lostHealth.setOrigin(0.5);
-        this.add(lostHealth);
+        // this.add(lostHealth);
         this.scene.tweens.add({
             targets: lostHealth,
             // alpha: { value: 0, delay: 2750 },
-            y: 75,
+            y: y + 75,
             duration: 1500,
             onComplete: () => {
                 if (healthLeft === 0) {
@@ -262,7 +278,20 @@ export class Monster extends Phaser.GameObjects.Container {
             yoyo: true,
             repeat: -1,
             duration: 650,
-            // ease: 'Back.easeOut'
+            // ease: 'Back.easeOut'  
         })
+
+
+        // const shape = new Phaser.Geom.Rectangle(this.bg.width / -4, this.bg.height / -4, this.bg.width / 2, this.bg.height / 2);
+        // const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(0, 0, 'circle', {
+        //     // frame: { frames: ['pendinMoveParticle'] }
+        //     // blendMode: 'ADD',
+        //     lifespan: 500,
+        //     scale: { start: 0.3, end: 0.1 }
+        // })
+        // emitter.addEmitZone({ type: 'edge', source: shape, quantity: 64, total: 64 });
+        // this.add(emitter)
+
+        // this.bg.postFX.addGlow(0xffffff, 8, 0, false, 0.1, 16);
     }
 }

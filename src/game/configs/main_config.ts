@@ -4,5 +4,5 @@ export const main_config = {
     "cellSize": 125,
     "gameWidth": 1920,
     "gameHeight": 1080,
-    "lineWidth": 10
+    "lineWidth": 6
 }

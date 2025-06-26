@@ -29,9 +29,9 @@ export class Monsters {
 
             const x = gridDimensions.cellSize * unit.col + gridDimensions.cellSize / 2;
             const y = gridDimensions.cellSize * unit.row + gridDimensions.cellSize / 2;
-            const width = gridDimensions.cellSize - main_config.lineWidth / 2;
-            const height = gridDimensions.cellSize - main_config.lineWidth / 2;
-            const monster = new Monster(this.scene, x, y, width, height, unit, index);
+            const width = gridDimensions.cellSize - main_config.lineWidth;
+            const height = gridDimensions.cellSize - main_config.lineWidth;
+            const monster = new Monster(this.scene, x, y, width, height, unit, index, isPlayer);
 
             monster.on('monster-selected', (data: IUnitData) => {
                 this.scene.events.emit('monster-selected', [monster, data]);
@@ -45,6 +45,8 @@ export class Monsters {
                 } else {
                     this.scene.data.list.opponentMonsters[index] = null;
                 }
+                this.scene.events.emit('monster-died', [monster, data]);
+
                 //TODO - CHECK GAME OVER HERE
             });
 

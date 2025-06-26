@@ -3,11 +3,13 @@ import { main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
+import { Cloud } from './in-game/Cloud';
 
 export class Game extends Scene {
 
     mainGridContainer: Phaser.GameObjects.Container;
     movementArrowsContainer: MovementArrowsContainer;
+    cloudsContainer: Phaser.GameObjects.Container;
     private gridLines: Phaser.GameObjects.Graphics;
     private gridDimensions: IGridDimensions;
     currentlySelectedMonster: Monster;
@@ -27,6 +29,12 @@ export class Game extends Scene {
         this.setInitialMonsters();
 
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
+        this.addClouds();
+        this.checkMapVisibility(true);
+
+        this.events.on('monster-died', () => {
+            this.checkMapVisibility(false);
+        });
 
         this.events.on('monster-selected', (data: Monster[] | IUnitData[]) => {
             this.currentlySelectedMonster = data[0] as Monster;
@@ -50,7 +58,11 @@ export class Game extends Scene {
             this.data.list.gridPositions[newRow][newCol].isEmpty = false;
             const isPlayerTurn = this.data.list.isPlayerTurn;
             this.data.list.gridPositions[newRow][newCol].occupiedBy = isPlayerTurn ? 'player' : 'opponent';
+            this.checkMapVisibility(false);
 
+            if (isPlayerTurn) {
+                this.pauseResumeInteraction(false);
+            }
         });
 
         this.events.on('target-selected', (data: number[]) => {
@@ -75,6 +87,13 @@ export class Game extends Scene {
                 target.takeDamege(damage);
             }
 
+            if (isPlayerTurn) {
+                this.pauseResumeInteraction(false);
+            }
+            else {
+                //TODO - repeat // ?????????
+            }
+
         });
 
         this.events.on('check-end-turn', () => {
@@ -93,7 +112,17 @@ export class Game extends Scene {
         if (turnEnd) {
             alert('end turn');
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
-            this.addInteraction();
+
+            if (this.data.list.isPlayerTurn) {
+                this.addInteraction();
+            } else {
+                this.addInteraction();
+                this.getRandomOpponentMonster();
+            }
+        } else if (this.data.list.isPlayerTurn) {
+            this.pauseResumeInteraction(true);
+        } else {
+            this.getRandomOpponentMonster();
         }
     }
 
@@ -138,6 +167,7 @@ export class Game extends Scene {
         this.mainGridContainer.add(this.gridLines);
 
         this.movementArrowsContainer = new MovementArrowsContainer(this, x, y);
+        this.cloudsContainer = this.add.container(x, y);
     }
 
     private setGridPositions(): void {
@@ -156,6 +186,23 @@ export class Game extends Scene {
         console.log(this.data.get('gridPositions'))
     }
 
+    private addClouds() {
+        const clouds = [];
+        for (let row = 0; row < this.gridDimensions.gridSizeVertical; row++) {
+            let cloudPositionsData = [];
+            for (let col = 0; col < this.gridDimensions.gridSizeHorizontal; col++) {
+                const x = this.gridDimensions.cellSize * col + this.gridDimensions.cellSize / 2;
+                const y = this.gridDimensions.cellSize * row + this.gridDimensions.cellSize / 2;
+                const cloud = new Cloud(this, x, y, row, col);
+                this.cloudsContainer.add(cloud);
+                cloudPositionsData.push(cloud)
+            }
+            clouds.push(cloudPositionsData);
+            console.log(clouds);
+            this.data.set('clouds', clouds);
+        }
+    }
+
     private setInitialMonsters(): void {
         this.data.set('playerMonsters', []);
         this.data.set('opponentMonsters', []);
@@ -168,14 +215,126 @@ export class Game extends Scene {
                 monster.pendingAction = this.data.list.isPlayerTurn;
             }
         });
+
         this.data.list.opponentMonsters.forEach((monster: Monster) => {
             if (monster) {
-                monster.setInteraction(!this.data.list.isPlayerTurn);
+                // monster.setInteraction(!this.data.list.isPlayerTurn);  FOR TESTING!!!
                 monster.pendingAction = !this.data.list.isPlayerTurn;
             }
         });
     }
+
+    private pauseResumeInteraction(resume: boolean): void {
+        this.data.list.playerMonsters.forEach((monster: Monster) => {
+            if (monster && monster.pendingAction) {
+                monster.setInteraction(resume);
+            }
+        });
+    }
+
+    private getVisibleCells(row: number, col: number, radius: number): { row: number, col: number, occupiedBy: string }[] {
+        const visibleCells = [];
+        const array = this.data.list.gridPositions;
+        for (let y = -radius; y <= radius; y++) {
+            for (let x = -radius; x <= radius; x++) {
+                const newRow = row + y;
+                const newCol = col + x;
+
+                if (
+                    newRow >= 0 && newRow < array.length &&
+                    newCol >= 0 && newCol < array[0].length
+                ) {
+                    const occupiedBy = array[newRow][newCol].occupiedBy;
+                    visibleCells.push({ row: newRow, col: newCol, occupiedBy });
+                }
+            }
+        }
+        return visibleCells;
+    }
+
+    checkMapVisibility(showImediatelly: boolean = false) {
+        // if (this.data.list.isPlayerTurn) {  //P L A Y E R   M O V E
+            const playerMonsters = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null);
+            this.data.list.clouds.forEach((row: Cloud[]) => {
+                row.forEach((cloud: Cloud) => {
+                    if (showImediatelly) {
+                        cloud.setAlpha(0.7);
+                    } else {
+                        cloud.toggleVisibility(0.7);
+                    }
+                });
+            });
+            playerMonsters.forEach((m: Monster) => {
+                const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision);
+                visibleCells.forEach((cell: { row: number, col: number }) => {
+                    if (showImediatelly) {
+                        this.data.list.clouds[cell.row][cell.col].setAlpha(0);
+                    } else {
+                        this.data.list.clouds[cell.row][cell.col].toggleVisibility(0);
+                    }
+                });
+            });
+        // }
+        // else { // O P P O N E N T   M O V E 
+        //     // alert(123)
+        //     // this.getRandomOpponentMonster();
+        // }
+    }
+
+    private getRandomOpponentMonster() {
+        const opponentMonsters = this.data.list.opponentMonsters.filter((m: Monster | null) => m!.pendingAction && m !== null);
+        const rndMonsterIndex = Phaser.Math.RND.between(0, opponentMonsters.length - 1);
+        this.currentlySelectedMonster = opponentMonsters[rndMonsterIndex];
+        this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
+
+        const rows = main_config.gridSizeHorizontal;
+        const cols = main_config.gridSizeVertical;
+
+        // get all positions visible to opponent
+        const allVisibleCellsToOpponent = Array.from({ length: cols }, () => Array(rows).fill(false));
+        opponentMonsters.forEach((m: Monster) => {
+            const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision);
+            visibleCells.forEach((cell: { row: number, col: number }) => {
+                allVisibleCellsToOpponent[cell.row][cell.col] = true;
+            });
+        });
+
+        const range = this.currentlySelectedMonster.unitData.ranged > 0 ? 2 : 1;
+        let visibleTargetsToCurrentOpponentMonster = this.getVisibleCells(
+            this.currentlySelectedMonster.unitData.row,
+            this.currentlySelectedMonster.unitData.col,
+            range
+        );
+        visibleTargetsToCurrentOpponentMonster = visibleTargetsToCurrentOpponentMonster.filter(x => x.occupiedBy === 'player');
+
+
+
+
+        if (visibleTargetsToCurrentOpponentMonster.length > 0) {
+            //ATTACK
+            const targetForOpponentCurrentMonster = this.getRandomTargetForOpponent(visibleTargetsToCurrentOpponentMonster);
+            console.log(visibleTargetsToCurrentOpponentMonster)
+            const targetData = targetForOpponentCurrentMonster;
+            this.events.emit('target-selected', [targetData.row, targetData.col, this.currentlySelectedMonster.unitData.ranged > 0])
+        } else if (true) {
+            // JUST MOVE FORWARD
+            this.events.emit('direction-selected', [this.currentlySelectedMonster.unitData.row, this.currentlySelectedMonster.unitData.col + 1,])
+            //TODO  - ELSE IF  knows position of player monster - FIND CLOSEST
+        }
+        else {     //TODO -  random move - most likely forward
+
+        }
+        //TODO - move to separate class!
+    }
+
+    private getRandomTargetForOpponent(visibleTargetsToCurrentOpponentMonster: any): any {
+        return visibleTargetsToCurrentOpponentMonster[Phaser.Math.RND.between(0, visibleTargetsToCurrentOpponentMonster.length - 1)];
+    }
+
 }
+
+
+
 
 export interface IGridDimensions {
     gridSizeHorizontal: number;

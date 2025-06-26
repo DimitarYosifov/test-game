@@ -23,13 +23,14 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         const isPlayerTurn = this.scene.data.list.isPlayerTurn;
         let neighborCells = [];
         const array = this.scene.data.list.gridPositions;
+        const cloudsArray = this.scene.data.list.clouds;
 
         //temp - lower the movement to 1 cell at a time
         radius = 1;
         //-------------------------------------------
         const isRanged = range > 0;
         if (isRanged) {
-            radius = 3
+            radius = 2;
         }
 
         for (let y = -radius; y <= radius; y++) {
@@ -42,6 +43,9 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 if (
                     newRow >= 0 && newRow < array.length &&
                     newCol >= 0 && newCol < array[0].length
+                    //TODO - uncomment the line below when opponent moves on its own!!!!
+                    // && cloudsArray[newRow][newCol].alpha === 0 // cell should be invisible
+                    // ----------------------------------------
                 ) {
                     if (array[newRow][newCol].isEmpty === true) {
                         const direction = this.getDirection(row, newRow, col, newCol)
