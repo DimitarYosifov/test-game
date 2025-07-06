@@ -36,10 +36,19 @@ export class Game extends Scene {
             this.checkMapVisibility(false);
         });
 
+        this.events.on('repeat-opponent-move', () => {
+            this.getRandomOpponentMonster(true);
+        });
+
         this.events.on('monster-selected', (data: Monster[] | IUnitData[]) => {
+            this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
             this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
-            this.movementArrowsContainer.createArrows(data[1] as IUnitData)
+            this.movementArrowsContainer.createArrows(data[1] as IUnitData);
+            const repeatMove = data[2]
+            if (repeatMove) {
+                this.pauseResumeInteraction(true);//????
+            }
         });
 
         this.events.on('direction-selected', (data: number[]) => {
@@ -73,19 +82,22 @@ export class Game extends Scene {
             const isRanged = data[2];
 
             this.movementArrowsContainer.removeArrows();
-            this.currentlySelectedMonster.performHit(newRow, newCol);
+            // this.currentlySelectedMonster.performHit(newRow, newCol);
 
             const isPlayerTurn = this.data.list.isPlayerTurn;
             const damage = isRanged ? this.currentlySelectedMonster.unitData.ranged : this.currentlySelectedMonster.unitData.melee;
+            let target: null | Monster = null;
             if (isPlayerTurn) {
                 console.log(this.data.list.opponentMonsters)
-                const target: Monster = this.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
-                // target.setScale(2) // test
-                target.takeDamege(damage);
+                target = this.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
             } else {
-                const target: Monster = this.data.list.playerMonsters.find((m: Monster) => m.unitData.row === newRow && m.unitData.col === newCol);
-                target.takeDamege(damage);
+                target = this.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
             }
+            const isTargetToTheLeft = target!.unitData.col < this.currentlySelectedMonster.unitData.col;
+            this.currentlySelectedMonster.performHit(target, isTargetToTheLeft, () => {
+                target!.takeDamege(damage);
+            });
+
 
             if (isPlayerTurn) {
                 this.pauseResumeInteraction(false);
@@ -97,9 +109,20 @@ export class Game extends Scene {
         });
 
         this.events.on('check-end-turn', () => {
-            this.checkNextTurn()
+            if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
+                this.currentlySelectedMonster.repeatMove();
+            } else {
+                this.currentlySelectedMonster.setAlpha(0.7);
+                this.checkNextTurn();
+            }
         })
         this.addInteraction();
+    }
+
+    private resetPreviousSelectedMonsterMoves(): void {
+        if (this.currentlySelectedMonster && this.currentlySelectedMonster.unitData.movesLeft === 0) {
+            this.currentlySelectedMonster.unitData.movesLeft = this.currentlySelectedMonster.unitData.moves;
+        }
     }
 
     private checkNextTurn(): void {
@@ -210,6 +233,7 @@ export class Game extends Scene {
     private addInteraction(): void {
         this.data.list.playerMonsters.forEach((monster: Monster) => {
             if (monster) {
+                monster.setAlpha(1);
                 monster.setInteraction(this.data.list.isPlayerTurn);
                 monster.pendingAction = this.data.list.isPlayerTurn;
             }
@@ -217,6 +241,7 @@ export class Game extends Scene {
 
         this.data.list.opponentMonsters.forEach((monster: Monster) => {
             if (monster) {
+                monster.setAlpha(1);
                 monster.pendingAction = !this.data.list.isPlayerTurn;
             }
         });
@@ -256,9 +281,9 @@ export class Game extends Scene {
         this.data.list.clouds.forEach((row: Cloud[]) => {
             row.forEach((cloud: Cloud) => {
                 if (showImediatelly) {
-                    cloud.setAlpha(1);
+                    cloud.setAlpha(main_config.fullCloudsOpacity);
                 } else {
-                    cloud.toggleVisibility(1);
+                    cloud.toggleVisibility(main_config.fullCloudsOpacity);
                 }
             });
         });
@@ -274,12 +299,14 @@ export class Game extends Scene {
         });
     }
 
-    private getRandomOpponentMonster() {
+    private getRandomOpponentMonster(repeatMove: boolean = false) {
         const opponentMonsters = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m!.pendingAction);
-        const rndMonsterIndex = Phaser.Math.RND.between(0, opponentMonsters.length - 1);
-        this.currentlySelectedMonster = opponentMonsters[rndMonsterIndex];
+        if (!repeatMove) {
+            const rndMonsterIndex = Phaser.Math.RND.between(0, opponentMonsters.length - 1);
+            this.resetPreviousSelectedMonsterMoves();
+            this.currentlySelectedMonster = opponentMonsters[rndMonsterIndex];
+        }
         this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
-
         const rows = main_config.gridSizeHorizontal;
         const cols = main_config.gridSizeVertical;
 
@@ -556,4 +583,6 @@ export interface IUnitData {
     vision: number;
     stars: number;
     type: string;
+    moves: number;
+    movesLeft: number;
 }

@@ -43,6 +43,7 @@ export class Preloader extends Scene {
         this.load.image('bow', 'bow.png');
         this.load.image('cloud', 'cloud.png');
         this.load.image('circle', 'circle.png');
+        this.load.image('blood-drop', 'blood-drop.png');
     }
 
     create() {

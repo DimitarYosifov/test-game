@@ -17,11 +17,15 @@ export class Monster extends Phaser.GameObjects.Container {
     pendingAction: boolean;
     ranged_text: Phaser.GameObjects.Text;
     ranged: Phaser.GameObjects.Image;
+    outline: Phaser.GameObjects.Graphics;
+    outlineColor: number;
+    emitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
         this.scene = scene;
         this.unitData = unit;
+        this.unitData.movesLeft = this.unitData.moves;
         this.index = index;
 
         //bg
@@ -30,18 +34,29 @@ export class Monster extends Phaser.GameObjects.Container {
         this.bg.displayHeight = displayHeight;
         this.add([this.bg]);
 
+        //emitter
+        this.addEmitter();
+
         //outline
-        let color = isPlayerMonster ? 0x22c422 : 0xff0000;
-        let outline = this.scene.add.graphics();
-        outline.lineStyle(5, color);
-        outline.moveTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
-        outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / -2);
-        outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / 2);
-        outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / 2);
-        outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
-        outline.strokePath();
-        outline.setPosition(0, 0);
-        this.add(outline);
+        this.outlineColor = isPlayerMonster ? 0x22c422 : 0xff0000;
+        this.outline = this.scene.add.graphics();
+        this.outline.lineStyle(5, this.outlineColor);
+        // this.outline.moveTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
+        // this.outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / -2);
+        // this.outline.lineTo(this.bg.displayWidth / 2, this.bg.displayHeight / 2);
+        // this.outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / 2);
+        // this.outline.lineTo(this.bg.displayWidth / -2, this.bg.displayHeight / -2);
+        // this.outline.strokePath();
+
+        this.outline.strokeRect(
+            -this.bg.displayWidth / 2,
+            -this.bg.displayHeight / 2,
+            this.bg.displayWidth,
+            this.bg.displayHeight
+        );
+
+        this.outline.setPosition(0, 0);
+        this.add(this.outline);
 
         if (unit.melee > 0) {
             //melee img
@@ -158,9 +173,20 @@ export class Monster extends Phaser.GameObjects.Container {
         this.addInteraction();
     }
 
+
+    repeatMove(): void {
+        console.log('repeatMove');
+        // this.pendingAction = true;
+        if (this.scene.data.list.isPlayerTurn) {
+            this.scene.events.emit('monster-selected', [this, this.unitData, true]);
+        } else {
+            this.scene.events.emit('repeat-opponent-move');
+        }
+    }
+
     private addInteraction(): void {
         this.bg.on('pointerdown', () => {
-            this.emit('monster-selected', this.unitData);
+            this.scene.events.emit('monster-selected', [this, this.unitData, false]);
         });
     }
 
@@ -177,27 +203,53 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
+    addEmitter() {
+        this.emitter = this.scene.add.particles(this.bg.x, this.bg.y, 'blood-drop', {
+            x: this.bg.x,
+            y: this.bg.y,
+            speed: { min: 85, max: 180 },
+            angle: { min: 0, max: 360 },
+            lifespan: 800,
+            quantity: 100,
+            scale: { start: 0.4, end: 0 },
+            alpha: { start: 1, end: 0 },
+            blendMode: 'ADD',
+            emitting: false
+        })
+        // this.emitter.startFollow(this.bg);
+        this.addAt(this.emitter, 0);
+    }
+
     move(row: number, col: number) {
+        this.emitter.emitting = true;
+
+        // return;
         this.pendingAction = false;
         // this.bg.disableInteractive();
         const position = this.scene.data.list.gridPositions[row][col];
         this.unitData.row = row;
         this.unitData.col = col;
         this.scene.tweens.add({
+            delay: this.scene.data.list.isPlayerTurn ? 250 : 1000,
             targets: this,
+            scale: { value: 1.15, yoyo: true, duration: 250 },
             x: position.x,
             y: position.y,
             duration: 500,
-            ease: 'Back.easeIn',
+            ease: 'Cubic.easeInOut',
             onStart: () => {
+                this.emitter.emitting = false;
                 this.setInteraction(false);
             },
             onComplete: () => {
-                //TODO - check if it has more moves \
-
-                const hasAnotherMove = false;
+                this.unitData.movesLeft--;
+                const hasAnotherMove = this.unitData.movesLeft !== 0;
                 this.setInteraction(hasAnotherMove);
-                this.scene.events.emit('check-end-turn');
+                if (hasAnotherMove) {
+                    this.repeatMove();
+                } else {
+                    this.scene.events.emit('check-end-turn');
+                }
             }
         })
     }
@@ -205,14 +257,74 @@ export class Monster extends Phaser.GameObjects.Container {
     skipMove(): void {
         this.pendingAction = false;
         this.setInteraction(false);
+        this.unitData.movesLeft--;
         this.scene.events.emit('check-end-turn');
     }
 
-    performHit(row: number, col: number): void {
+    performHit(target: Monster | null, isTargetToTheLeft: boolean, complete: Function): void {
         //TODO - implement hit
+        this.emitter.emitting = true;
         this.pendingAction = false;
         this.setInteraction(false);
+        this.unitData.movesLeft--;
+
+
+
+        const glbPos = this.bg.getBounds()
+        const x = glbPos.x + this.bg.displayWidth / 2;
+        const y = glbPos.y + this.bg.displayHeight / 2;
+        const targetGlobalPos = target!.bg.getBounds();
+        const targetX = targetGlobalPos.x + target!.bg.displayWidth / 2;
+        const targetY = targetGlobalPos.y + target!.bg.displayHeight / 2;
+
+        const swordImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5);
+        const startAngle = isTargetToTheLeft ? 45 : -45;
+        const endAngle = isTargetToTheLeft ? -45 : 45;
+        const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
+            lifespan: 1000,
+            speed: { random: [75, 150] },
+            scale: { start: 0.5, end: 0 },
+            gravityY: 100,
+            // blendMode: 'ADD',
+            emitting: false
+        })
+        this.scene.tweens.chain({
+            targets: swordImg,
+            tweens: [
+                {
+                    targets: swordImg,
+                    angle: startAngle,
+                    duration: 150,
+                    delay: this.scene.data.list.isPlayerTurn ? 250 : 1000,
+                    onStart: () => {
+                        this.emitter.emitting = false;
+                    }
+                },
+                {
+                    angle: { value: endAngle, duration: 150 },
+                    x: targetX,
+                    y: targetY,
+                    duration: 150,
+                    ease: 'Cubic.easeOut',
+                    onComplete: () => {
+                        complete();
+                        this.emitter.emitting = false;
+                        emitter.explode(48);
+                    }
+                },
+                {
+                    alpha: { value: 0, duration: 1000 },
+                    delay: 500,
+                    onComplete: () => {
+                        emitter.destroy(true);
+                        swordImg.destroy(true);
+                    }
+                }
+            ]
+        })
     }
+
+
 
     takeDamege(damage: number): void {
 

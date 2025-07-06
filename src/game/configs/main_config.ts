@@ -4,5 +4,7 @@ export const main_config = {
     "cellSize": 125,
     "gameWidth": 1920,
     "gameHeight": 1080,
-    "lineWidth": 6
+    "lineWidth": 6,
+    "fullCloudsOpacity": 0,
+    "rangedUnitsRange": 2
 }

@@ -33,9 +33,9 @@ export class Monsters {
             const height = gridDimensions.cellSize - main_config.lineWidth;
             const monster = new Monster(this.scene, x, y, width, height, unit, index, isPlayer);
 
-            monster.on('monster-selected', (data: IUnitData) => {
-                this.scene.events.emit('monster-selected', [monster, data]);
-            });
+            // monster.on('monster-selected', (data: IUnitData) => {
+            //     this.scene.events.emit('monster-selected', [monster, data]);
+            // });
 
             monster.on('monster-died', (data: IUnitData) => {
                 this.scene.data.list.gridPositions[data.row][data.col].isEmpty = true;

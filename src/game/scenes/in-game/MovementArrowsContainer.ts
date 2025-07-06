@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { IUnitData } from '../Game';
 import { DirectionArrow } from './DirectionArrow';
+import { main_config } from '../../configs/main_config';
 
 export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
@@ -30,7 +31,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         //-------------------------------------------
         const isRanged = range > 0;
         if (isRanged) {
-            radius = 2;
+            radius = main_config.rangedUnitsRange;
         }
 
         for (let y = -radius; y <= radius; y++) {
