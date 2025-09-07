@@ -46,8 +46,6 @@ export class Monsters {
                     this.scene.data.list.opponentMonsters[index] = null;
                 }
                 this.scene.events.emit('monster-died', [monster, data]);
-
-                //TODO - CHECK GAME OVER HERE
             });
 
             this.mainGridContainer.add(monster);

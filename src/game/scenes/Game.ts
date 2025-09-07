@@ -13,6 +13,7 @@ export class Game extends Scene {
     private gridLines: Phaser.GameObjects.Graphics;
     private gridDimensions: IGridDimensions;
     currentlySelectedMonster: Monster;
+    skipButton: Phaser.GameObjects.Image;
 
     constructor() {
         super('Game');
@@ -32,15 +33,58 @@ export class Game extends Scene {
         this.addClouds();
         this.checkMapVisibility(true);
 
-        this.events.on('monster-died', () => {
-            this.checkMapVisibility(false);
-        });
+        // event handlers
+        this.skipButtonHandler();
+        this.monsterDieHandler();
+        this.opponentRepeatMoveHandler();
+        this.monsterSelectHandler();
+        this.directionSelectHandler();
+        this.targetSelectHandler();
+        this.checkEndTurnHandler(); // it calls  this.addInteraction
 
+    }
+
+    private checkEndTurnHandler(): void {
+        this.events.on('check-end-turn', () => {
+            if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
+                this.currentlySelectedMonster.repeatMove();
+            } else {
+                this.currentlySelectedMonster.setAlpha(0.7);
+                this.checkNextTurn();
+            }
+        })
+        this.addInteraction();
+    }
+
+    private skipButtonHandler(): void {
+        this.skipButton = this.add.image(1820, 100, 'skip').setScale(0.5).setOrigin(0.5).setAlpha(0.6);
+        this.skipButton.on('pointerdown', () => {
+            if (!this.currentlySelectedMonster) {
+                return;
+            }
+            this.skipButton.disableInteractive().setAlpha(0.6);
+            console.log(this.currentlySelectedMonster);
+            this.currentlySelectedMonster.skipMove();
+            this.movementArrowsContainer.removeArrows();
+        })
+    }
+
+    private opponentRepeatMoveHandler(): void {
         this.events.on('repeat-opponent-move', () => {
             this.getRandomOpponentMonster(true);
         });
+    }
 
+    private monsterSelectHandler(): void {
         this.events.on('monster-selected', (data: Monster[] | IUnitData[]) => {
+
+            if (this.data.list.isPlayerTurn) {
+                this.skipButton.setInteractive().setAlpha(1);
+            }
+
+
+            // this.skipButton.disableInteractive().setAlpha(0.6);
+            // this.currentlySelectedMonster = null
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
             this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
@@ -50,7 +94,10 @@ export class Game extends Scene {
                 this.pauseResumeInteraction(true);//????
             }
         });
+    }
 
+    private directionSelectHandler(): void {
+        this.skipButton.disableInteractive().setAlpha(0.6);
         this.events.on('direction-selected', (data: number[]) => {
 
             const newRow = data[0];
@@ -72,9 +119,9 @@ export class Game extends Scene {
                 this.pauseResumeInteraction(false);
             }
         });
+    }
 
-
-
+    private targetSelectHandler(): void {
         this.events.on('target-selected', (data: number[]) => {
 
             const newRow = data[0];
@@ -107,16 +154,20 @@ export class Game extends Scene {
             }
 
         });
+    }
 
-        this.events.on('check-end-turn', () => {
-            if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
-                this.currentlySelectedMonster.repeatMove();
+    private monsterDieHandler(): void {
+        this.events.on('monster-died', () => {
+            if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
+                //TODO
+                alert('player wins')
+            } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
+                //TODO
+                alert('opponent wins')
             } else {
-                this.currentlySelectedMonster.setAlpha(0.7);
-                this.checkNextTurn();
+                this.checkMapVisibility(false);
             }
-        })
-        this.addInteraction();
+        });
     }
 
     private resetPreviousSelectedMonsterMoves(): void {
@@ -136,8 +187,10 @@ export class Game extends Scene {
             alert('end turn');
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
             if (this.data.list.isPlayerTurn) {
+                // this.skipButton.setInteractive().setAlpha(1);
                 this.addInteraction();
             } else {
+                this.skipButton.disableInteractive().setAlpha(0.6);
                 this.addInteraction();
                 this.getRandomOpponentMonster();
             }
@@ -230,7 +283,15 @@ export class Game extends Scene {
         this.data.set('opponentMonsters', []);
     }
 
+    // called after every player/opponent moves end
     private addInteraction(): void {
+
+        if (this.data.list.isPlayerTurn) {
+            // this.skipButton.setInteractive().setAlpha(1);
+        } else {
+            this.skipButton.disableInteractive().setAlpha(0.6);
+        }
+
         this.data.list.playerMonsters.forEach((monster: Monster) => {
             if (monster) {
                 monster.setAlpha(1);
@@ -247,7 +308,15 @@ export class Game extends Scene {
         });
     }
 
+    // called after every player action(select direction or attack)and after every player move
     private pauseResumeInteraction(resume: boolean): void {
+
+        if (!resume) {
+            this.skipButton.disableInteractive().setAlpha(0.6);
+        } else {
+            // this.skipButton.setInteractive().setAlpha(1);
+        }
+
         this.data.list.playerMonsters.forEach((monster: Monster) => {
             if (monster && monster.pendingAction) {
                 monster.setInteraction(resume);
@@ -552,9 +621,6 @@ export class Game extends Scene {
             }
         }
         check();
-
-
-
         return { newRow, newCol }
     }
 

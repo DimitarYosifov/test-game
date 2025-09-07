@@ -1,33 +1,37 @@
+import { monsters_power_config } from "../../configs/monsters_power_config";
+import { IUnitData } from "../Game";
 
 export class TestPlayerTeam {
 
-
-    constructor() {
-
-    }
     static get team() {
-        return [
+        // TODO - playerMonstersData should be taken from localstorage!
+        const playerMonstersData: IPlayerMonstersData[] = [
             {
-                col: 11, row: 1, melee: 0, ranged: 3, health: 4, shield: 1, vision: 2, stars: 1, type: '7', moves: 2, movesLeft: 2
+                type: 5, stars: 1, row: 0, col: 11
             },
             {
-                col: 10, row: 1, melee: 5, ranged: 0, health: 5, shield: 1, vision: 2, stars: 1, type: '7', moves: 1, movesLeft: 1
+                type: 7, stars: 1, row: 1, col: 11
             },
             {
-                col: 10, row: 0, melee: 0, ranged: 2, health: 4, shield: 1, vision: 2, stars: 1, type: '7',moves:1,movesLeft:1
+                type: 8, stars: 1, row: 2, col: 11
             },
-            {
-                col: 10, row: 6, melee: 4, ranged: 0, health: 6, shield: 2, vision: 1, stars: 2, type: '8',moves:1,movesLeft:1
-            },
-            {
-                col: 11, row: 5, melee: 2, ranged: 0, health: 5, shield: 1, vision: 1, stars: 4, type: '5',moves:1,movesLeft:1
-            },
-            {
-                col: 11, row: 3, melee: 3, ranged: 0, health: 4, shield: 1, vision: 1, stars: 4, type: '5',moves:1,movesLeft:1
-            }
         ]
+        let result: IUnitData[] = [];
+
+        playerMonstersData.forEach((monstersData: IPlayerMonstersData) => {
+            let data = { ...(monsters_power_config as any)[monstersData.type][monstersData.stars - 1] };
+            data.row = monstersData.row;
+            data.col = monstersData.col;
+            result.push(data);
+        });
+        return result;
     }
 
 }
 
-
+interface IPlayerMonstersData {
+    type: string | number,
+    stars: number,
+    row: number,
+    col: number
+}
