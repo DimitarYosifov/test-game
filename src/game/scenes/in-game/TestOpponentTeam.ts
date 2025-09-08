@@ -8,50 +8,50 @@ export class TestOpponentTeam {
 
         // TODO - opponentMonstersData should be taken from localstorage!
         const opponentMonstersData: IOpponentMonstersData[] = [
-            // {
-            //     type: 5, stars: 1, row: 0, col: 0
-            // },
-            // {
-            //     type: 7, stars: 1, row: 1, col: 0
-            // },
-            // {
-            //     type: 8, stars: 1, row: 2, col: 0
-            // },
-            // {
-            //     type: 7, stars: 1, row: 4, col: 0
-            // },
-            // {
-            //     type: 8, stars: 1, row: 6, col: 0
-            // },
+            {
+                type: 5, stars: 1, row: 0, col: 0
+            },
+            {
+                type: 5, stars: 1, row: 1, col: 0
+            },
+            {
+                type: 5, stars: 1, row: 2, col: 0
+            },
+            {
+                type: 5, stars: 1, row: 4, col: 0
+            },
+            {
+                type: 5, stars: 1, row: 6, col: 0
+            },
 
-            // {
-            //     type: 5, stars: 1, row: 5, col: 1
-            // },
-            // {
-            //     type: 7, stars: 1, row: 3, col: 1
-            // },
-            // {
-            //     type: 8, stars: 1, row: 1, col: 1
-            // },
-            // {
-            //     type: 7, stars: 1, row: 4, col: 1
-            // },
-            // {
-            //     type: 8, stars: 1, row: 2, col: 1
-            // },
+            {
+                type: 5, stars: 1, row: 5, col: 1
+            },
+            {
+                type: 5, stars: 1, row: 3, col: 1
+            },
+            {
+                type: 5, stars: 1, row: 1, col: 1
+            },
+            {
+                type: 5, stars: 1, row: 4, col: 1
+            },
+            {
+                type: 5, stars: 1, row: 2, col: 1
+            },
 
-            // {
-            //     type: 5, stars: 1, row: 4, col: 2
-            // },
-            // {
-            //     type: 7, stars: 1, row: 5, col: 2
-            // },
-            // {
-            //     type: 8, stars: 1, row: 0, col: 2
-            // },
-            // {
-            //     type: 7, stars: 1, row: 6, col: 2
-            // },
+            {
+                type: 5, stars: 1, row: 4, col: 2
+            },
+            {
+                type: 5, stars: 1, row: 5, col: 2
+            },
+            {
+                type: 5, stars: 1, row: 0, col: 2
+            },
+            {
+                type: 5, stars: 1, row: 6, col: 2
+            },
             {
                 type: 5, stars: 1, row: 1, col: 2
             },

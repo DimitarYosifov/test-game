@@ -292,13 +292,16 @@ export class Game extends Scene {
 
         if (this.data.list.isPlayerTurn) {
             this.data.list.playerMonsters.forEach((monster: Monster) => {
-                monster.resetMoves();
+                if (monster) {
+                    monster.resetMoves();
+                }
             });
-            // this.skipButton.setInteractive().setAlpha(1);
         } else {
             this.skipButton.disableInteractive().setAlpha(0.6);
             this.data.list.opponentMonsters.forEach((monster: Monster) => {
-                monster.resetMoves();
+                if (monster) {
+                    monster.resetMoves();
+                }
             });
         }
 
@@ -572,7 +575,6 @@ export class Game extends Scene {
         col = currentUnitData.col - 1;
         addMove(row, col);
 
-        console.log(moves);
         const maxWeight = Math.max(...moves.map((x) => x.weight));
         const bestMoves = moves.filter(move => move.weight === maxWeight);
         const move = Phaser.Math.RND.pick(bestMoves);
