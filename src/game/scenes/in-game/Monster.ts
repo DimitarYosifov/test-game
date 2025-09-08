@@ -190,12 +190,13 @@ export class Monster extends Phaser.GameObjects.Container {
         });
     }
 
-    setInteraction(interactive: boolean): void {
+    setInteraction(interactive: boolean, skipByUser: boolean = false): void {
+        // skipByUser is false for the currentlySelectedMonster when skipped
         interactive ? this.bg.setInteractive() : this.bg.disableInteractive();
-        if (interactive) {
+        if (interactive && !skipByUser) {
             this.setIdlePendingMove();
         } else {
-            if (this.idleTween) {
+            if (this.idleTween && !skipByUser) {
                 this.scale = 1;
                 this.idleTween.remove();
                 this.idleTween = null;
@@ -254,11 +255,11 @@ export class Monster extends Phaser.GameObjects.Container {
         })
     }
 
-    skipMove(): void {
+    skipMove(skipByUser: boolean = false): void {
         this.pendingAction = false;
-        this.setInteraction(false);
+        this.setInteraction(false, skipByUser);
         this.unitData.movesLeft--;
-        this.scene.events.emit('check-end-turn');
+        this.scene.events.emit('check-end-turn', skipByUser);
     }
 
     performHit(target: Monster | null, isTargetToTheLeft: boolean, complete: Function): void {
@@ -386,7 +387,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const initialScale = this.scale;
         this.idleTween = this.scene.tweens.add({
             targets: this,
-            scale: 1.03,
+            scale: 1.05,
             yoyo: true,
             repeat: -1,
             duration: 650,

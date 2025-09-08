@@ -45,12 +45,12 @@ export class Game extends Scene {
     }
 
     private checkEndTurnHandler(): void {
-        this.events.on('check-end-turn', () => {
+        this.events.on('check-end-turn', (skipByUser: boolean = false) => {
             if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
                 this.currentlySelectedMonster.repeatMove();
             } else {
                 this.currentlySelectedMonster.setAlpha(0.7);
-                this.checkNextTurn();
+                this.checkNextTurn(skipByUser);
             }
         })
         this.addInteraction();
@@ -64,7 +64,8 @@ export class Game extends Scene {
             }
             this.skipButton.disableInteractive().setAlpha(0.6);
             console.log(this.currentlySelectedMonster);
-            this.currentlySelectedMonster.skipMove();
+            this.currentlySelectedMonster.skipMove(true);
+            this.currentlySelectedMonster.setInteraction(false, false);
             this.movementArrowsContainer.removeArrows();
         })
     }
@@ -176,7 +177,7 @@ export class Game extends Scene {
         }
     }
 
-    private checkNextTurn(): void {
+    private checkNextTurn(skipByUser: boolean): void {
         let turnEnd = false;
         if (this.data.list.isPlayerTurn) {
             turnEnd = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
@@ -195,7 +196,7 @@ export class Game extends Scene {
                 this.getRandomOpponentMonster();
             }
         } else if (this.data.list.isPlayerTurn) {
-            this.pauseResumeInteraction(true);
+            this.pauseResumeInteraction(true, skipByUser);
         } else {
             this.getRandomOpponentMonster();
         }
@@ -309,7 +310,7 @@ export class Game extends Scene {
     }
 
     // called after every player action(select direction or attack)and after every player move
-    private pauseResumeInteraction(resume: boolean): void {
+    private pauseResumeInteraction(resume: boolean, skipByUser: boolean = false): void {
 
         if (!resume) {
             this.skipButton.disableInteractive().setAlpha(0.6);
@@ -319,7 +320,7 @@ export class Game extends Scene {
 
         this.data.list.playerMonsters.forEach((monster: Monster) => {
             if (monster && monster.pendingAction) {
-                monster.setInteraction(resume);
+                monster.setInteraction(resume, skipByUser);
             }
         });
     }
