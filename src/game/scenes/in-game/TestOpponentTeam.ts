@@ -39,6 +39,22 @@ export class TestOpponentTeam {
             {
                 type: 8, stars: 1, row: 2, col: 1
             },
+
+            {
+                type: 5, stars: 1, row: 4, col: 2
+            },
+            {
+                type: 7, stars: 1, row: 5, col: 2
+            },
+            {
+                type: 8, stars: 1, row: 0, col: 2
+            },
+            {
+                type: 7, stars: 1, row: 6, col: 2
+            },
+            {
+                type: 8, stars: 1, row: 1, col: 2
+            },
         ]
         let result: IUnitData[] = [];
 

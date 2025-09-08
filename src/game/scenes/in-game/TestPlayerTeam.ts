@@ -10,7 +10,13 @@ export class TestPlayerTeam {
                 type: 5, stars: 1, row: 5, col: 11
             },
             {
+                type: 5, stars: 1, row: 1, col: 11
+            },
+            {
                 type: 7, stars: 1, row: 0, col: 11
+            },
+            {
+                type: 7, stars: 1, row: 6, col: 11
             },
             {
                 type: 8, stars: 1, row: 2, col: 11
