@@ -46,6 +46,8 @@ export class Preloader extends Scene {
         this.load.image('blood-drop', 'blood-drop.png');
         this.load.image('skip', 'skip-btn.png');
         this.load.image('bow-arrow', 'bow-arrow.png');
+        this.load.image('green-dot', 'green-dot.png');
+        this.load.image('grey-dot', 'grey-dot.png');
     }
 
     create() {

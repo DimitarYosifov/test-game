@@ -5,7 +5,7 @@ export const monsters_power_config = {
     // monster name - 5
     '5': [
         {  // 1 star
-            melee: 0, ranged: 2, health: 4, shield: 0, vision: 2, stars: 1, type: '7', moves: 1, movesLeft: 1
+            melee: 0, ranged: 2, health: 4, shield: 0, vision: 2, stars: 1, type: '7', moves: 2, movesLeft: 2
         },
     ],
     '7': [

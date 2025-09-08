@@ -20,6 +20,7 @@ export class Monster extends Phaser.GameObjects.Container {
     outline: Phaser.GameObjects.Graphics;
     outlineColor: number;
     emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+    movesLeftContainer: Phaser.GameObjects.Container;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -170,15 +171,33 @@ export class Monster extends Phaser.GameObjects.Container {
         starsContainer.x = -5;
         this.add([starsContainer])
 
+        //moves
+        this.movesLeftContainer = scene.add.container(0, 0);
+        for (let index = 0; index < unit.moves; index++) {
+            const dot = scene.add.image(0, 0, 'green-dot').setScale(displayWidth * 0.15 / 100).setOrigin(0, 0.5);
+            this.movesLeftContainer.add(dot);
+        }
+
+        Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
+            width: 0,
+            height: this.movesLeftContainer.list.length,
+            cellWidth: 0,
+            cellHeight: 17, // spacing between items vertically
+            position: Phaser.Display.Align.CENTER
+        });
+        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+        this.movesLeftContainer.x = this.bg.displayWidth - 32;
+        this.add([this.movesLeftContainer])
+
         this.addInteraction();
     }
 
 
     repeatMove(): void {
         console.log('repeatMove');
-        // this.pendingAction = true;
+        this.pendingAction = true;
         if (this.scene.data.list.isPlayerTurn) {
-            this.scene.events.emit('monster-selected', [this, this.unitData, true]);
+            // this.scene.events.emit('monster-selected', [this, this.unitData, true]);
         } else {
             this.scene.events.emit('repeat-opponent-move');
         }
@@ -248,14 +267,10 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.setInteraction(false);
             },
             onComplete: () => {
-                this.unitData.movesLeft--;
-                const hasAnotherMove = this.unitData.movesLeft !== 0;
-                this.setInteraction(hasAnotherMove);
-                if (hasAnotherMove) {
-                    this.repeatMove();
-                } else {
-                    this.scene.events.emit('check-end-turn');
-                }
+
+                this.decreaseMoves();
+                this.scene.events.emit('check-end-turn');
+
             }
         })
     }
@@ -263,7 +278,7 @@ export class Monster extends Phaser.GameObjects.Container {
     skipMove(skipByUser: boolean = false): void {
         this.pendingAction = false;
         this.setInteraction(false, skipByUser);
-        this.unitData.movesLeft--;
+        this.decreaseMoves();
         this.scene.events.emit('check-end-turn', skipByUser);
     }
 
@@ -272,7 +287,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.emitter.emitting = true;
         this.pendingAction = false;
         this.setInteraction(false);
-        this.unitData.movesLeft--;
+        this.decreaseMoves();
 
         const glbPos = this.bg.getBounds()
         const x = glbPos.x + this.bg.displayWidth / 2;
@@ -447,5 +462,16 @@ export class Monster extends Phaser.GameObjects.Container {
         // this.add(emitter)
 
         // this.bg.postFX.addGlow(0xffffff, 8, 0, false, 0.1, 16);
+    }
+
+    decreaseMoves(): void {
+        this.unitData.movesLeft--;
+        (this.movesLeftContainer.list[this.unitData.movesLeft] as Phaser.GameObjects.Image).setTexture('grey-dot');
+    }
+
+    resetMoves(): void {
+        this.movesLeftContainer.list.forEach(dot => {
+            (dot as Phaser.GameObjects.Image).setTexture('green-dot');
+        });
     }
 }

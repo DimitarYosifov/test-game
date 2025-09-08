@@ -7,10 +7,10 @@ export class TestPlayerTeam {
         // TODO - playerMonstersData should be taken from localstorage!
         const playerMonstersData: IPlayerMonstersData[] = [
             {
-                type: 5, stars: 1, row: 5, col: 11
+                type: 5, stars: 1, row: 2, col: 4
             },
             {
-                type: 5, stars: 1, row: 1, col: 11
+                type: 7, stars: 1, row: 2, col: 3
             },
             {
                 type: 7, stars: 1, row: 0, col: 11
@@ -21,12 +21,12 @@ export class TestPlayerTeam {
             {
                 type: 8, stars: 1, row: 2, col: 11
             },
-            {
-                type: 7, stars: 1, row: 3, col: 11
-            },
-            {
-                type: 8, stars: 1, row: 4, col: 11
-            },
+            // {
+            //     type: 7, stars: 1, row: 3, col: 11
+            // },
+            // {
+            //     type: 8, stars: 1, row: 4, col: 11
+            // },
         ]
         let result: IUnitData[] = [];
 

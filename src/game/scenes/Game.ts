@@ -47,7 +47,15 @@ export class Game extends Scene {
     private checkEndTurnHandler(): void {
         this.events.on('check-end-turn', (skipByUser: boolean = false) => {
             if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
-                this.currentlySelectedMonster.repeatMove();
+
+                if (this.data.list.isPlayerTurn) {
+                    this.currentlySelectedMonster.pendingAction = true;
+                    this.checkNextTurn(skipByUser);
+                } else {
+                    this.currentlySelectedMonster.pendingAction = true;
+                    this.checkNextTurn(skipByUser);
+                }
+
             } else {
                 this.currentlySelectedMonster.setAlpha(0.7);
                 this.checkNextTurn(skipByUser);
@@ -65,7 +73,8 @@ export class Game extends Scene {
             this.skipButton.disableInteractive().setAlpha(0.6);
             console.log(this.currentlySelectedMonster);
             this.currentlySelectedMonster.skipMove(true);
-            this.currentlySelectedMonster.setInteraction(false, false);
+            const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
+            this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
             this.movementArrowsContainer.removeArrows();
         })
     }
@@ -78,14 +87,9 @@ export class Game extends Scene {
 
     private monsterSelectHandler(): void {
         this.events.on('monster-selected', (data: Monster[] | IUnitData[]) => {
-
             if (this.data.list.isPlayerTurn) {
                 this.skipButton.setInteractive().setAlpha(1);
             }
-
-
-            // this.skipButton.disableInteractive().setAlpha(0.6);
-            // this.currentlySelectedMonster = null
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
             this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
@@ -130,7 +134,6 @@ export class Game extends Scene {
             const isRanged = data[2];
 
             this.movementArrowsContainer.removeArrows();
-            // this.currentlySelectedMonster.performHit(newRow, newCol);
 
             const isPlayerTurn = this.data.list.isPlayerTurn;
             const damage = isRanged ? this.currentlySelectedMonster.unitData.ranged : this.currentlySelectedMonster.unitData.melee;
@@ -288,9 +291,15 @@ export class Game extends Scene {
     private addInteraction(): void {
 
         if (this.data.list.isPlayerTurn) {
+            this.data.list.playerMonsters.forEach((monster: Monster) => {
+                monster.resetMoves();
+            });
             // this.skipButton.setInteractive().setAlpha(1);
         } else {
             this.skipButton.disableInteractive().setAlpha(0.6);
+            this.data.list.opponentMonsters.forEach((monster: Monster) => {
+                monster.resetMoves();
+            });
         }
 
         this.data.list.playerMonsters.forEach((monster: Monster) => {
@@ -318,8 +327,9 @@ export class Game extends Scene {
             // this.skipButton.setInteractive().setAlpha(1);
         }
 
-        this.data.list.playerMonsters.forEach((monster: Monster) => {
+        this.data.list.playerMonsters.forEach((monster: Monster, index: number) => {
             if (monster && monster.pendingAction) {
+                console.log(index)
                 monster.setInteraction(resume, skipByUser);
             }
         });
