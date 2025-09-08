@@ -263,69 +263,105 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     performHit(target: Monster | null, isTargetToTheLeft: boolean, complete: Function): void {
-        //TODO - implement hit
+
         this.emitter.emitting = true;
         this.pendingAction = false;
         this.setInteraction(false);
         this.unitData.movesLeft--;
-
-
 
         const glbPos = this.bg.getBounds()
         const x = glbPos.x + this.bg.displayWidth / 2;
         const y = glbPos.y + this.bg.displayHeight / 2;
         const targetGlobalPos = target!.bg.getBounds();
         const targetX = targetGlobalPos.x + target!.bg.displayWidth / 2;
-        const targetY = targetGlobalPos.y + target!.bg.displayHeight / 2;
 
-        const swordImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5);
+        const targetY = targetGlobalPos.y + target!.bg.displayHeight / 2;
+        const weaponImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5);
         const startAngle = isTargetToTheLeft ? 45 : -45;
         const endAngle = isTargetToTheLeft ? -45 : 45;
+        const isRangedAttack = this.unitData.ranged > 0;
+
         const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
             lifespan: 1000,
             speed: { random: [75, 150] },
             scale: { start: 0.5, end: 0 },
             gravityY: 100,
-            // blendMode: 'ADD',
             emitting: false
         })
-        this.scene.tweens.chain({
-            targets: swordImg,
-            tweens: [
-                {
-                    targets: swordImg,
-                    angle: startAngle,
-                    duration: 150,
-                    delay: this.scene.data.list.isPlayerTurn ? 250 : 1000,
-                    onStart: () => {
-                        this.emitter.emitting = false;
+
+        // S W O R D   A T T A C K
+        if (isRangedAttack) {
+            weaponImg.setTexture('bow-arrow');
+            let angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(target!.x, target!.y, this.x, this.y));
+            angle -= 90;
+            weaponImg.setScale(this.bg.displayWidth * 1 / 100);
+            weaponImg.angle = angle;
+            this.scene.tweens.chain({
+                targets: weaponImg,
+                tweens: [
+                    {
+                        x: targetX,
+                        y: targetY,
+                        duration: 300,
+                        ease: 'Cubic.easeIn',
+                        onStart: () => {
+                            this.emitter.emitting = false;
+                        },
+                        onComplete: () => {
+                            complete();
+                            this.emitter.emitting = false;
+                            emitter.explode(48);
+                        }
+                    },
+                    {
+                        alpha: { value: 0, duration: 1000 },
+                        delay: 750,
+                        onComplete: () => {
+                            emitter.destroy(true);
+                            weaponImg.destroy(true);
+                        }
                     }
-                },
-                {
-                    angle: { value: endAngle, duration: 150 },
-                    x: targetX,
-                    y: targetY,
-                    duration: 150,
-                    ease: 'Cubic.easeOut',
-                    onComplete: () => {
-                        complete();
-                        this.emitter.emitting = false;
-                        emitter.explode(48);
+                ]
+            })
+        }
+        // A R R O W   A T T A C K
+        else {
+            this.scene.tweens.chain({
+                targets: weaponImg,
+                tweens: [
+                    {
+                        targets: weaponImg,
+                        angle: startAngle,
+                        duration: 150,
+                        delay: this.scene.data.list.isPlayerTurn ? 250 : 1000,
+                        onStart: () => {
+                            this.emitter.emitting = false;
+                        }
+                    },
+                    {
+                        angle: { value: endAngle, duration: 150 },
+                        x: targetX,
+                        y: targetY,
+                        duration: 150,
+                        ease: 'Cubic.easeOut',
+                        onComplete: () => {
+                            complete();
+                            this.emitter.emitting = false;
+                            emitter.explode(48);
+                        }
+                    },
+                    {
+                        alpha: { value: 0, duration: 1000 },
+                        delay: 500,
+                        onComplete: () => {
+                            emitter.destroy(true);
+                            weaponImg.destroy(true);
+                        }
                     }
-                },
-                {
-                    alpha: { value: 0, duration: 1000 },
-                    delay: 500,
-                    onComplete: () => {
-                        emitter.destroy(true);
-                        swordImg.destroy(true);
-                    }
-                }
-            ]
-        })
+                ]
+            })
+        }
     }
-
-
 
     takeDamege(damage: number): void {
 
