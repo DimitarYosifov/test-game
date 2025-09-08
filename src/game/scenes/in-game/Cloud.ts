@@ -8,8 +8,6 @@ export class Cloud extends Phaser.GameObjects.Image {
         super(scene, x, y, 'cloud');
         this.scene = scene;
         this.setScale(0.5);
-
-
     }
 
     toggleVisibility(alpha: number): void {

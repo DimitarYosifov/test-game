@@ -5,6 +5,6 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 0,
+    "fullCloudsOpacity": 0.5,// clouds visibility
     "rangedUnitsRange": 2
 }

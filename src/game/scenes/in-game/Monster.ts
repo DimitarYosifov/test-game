@@ -222,18 +222,22 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     move(row: number, col: number) {
-        this.emitter.emitting = true;
 
-        // return;
+        // if hidden below clouds - no particles and no scale while moving
+        const isVisible = this.scene.data.list.clouds[row][col].alpha === 0;
+        const scaleWhileMoving = isVisible ? 1.15 : 1;
+
+        this.emitter.emitting = isVisible;
         this.pendingAction = false;
-        // this.bg.disableInteractive();
         const position = this.scene.data.list.gridPositions[row][col];
         this.unitData.row = row;
         this.unitData.col = col;
+
+
         this.scene.tweens.add({
             delay: this.scene.data.list.isPlayerTurn ? 250 : 1000,
             targets: this,
-            scale: { value: 1.15, yoyo: true, duration: 250 },
+            scale: { value: scaleWhileMoving, yoyo: true, duration: 250 },
             x: position.x,
             y: position.y,
             duration: 500,
