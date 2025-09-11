@@ -15,8 +15,10 @@ export class Monster extends Phaser.GameObjects.Container {
     idleTween: Phaser.Tweens.Tween | null;
     index: number;
     pendingAction: boolean;
-    ranged_text: Phaser.GameObjects.Text;
     ranged: Phaser.GameObjects.Image;
+    ranged_text: Phaser.GameObjects.Text;
+    magic: Phaser.GameObjects.Image;
+    magic_text: Phaser.GameObjects.Text;
     outline: Phaser.GameObjects.Graphics;
     outlineColor: number;
     emitter: Phaser.GameObjects.Particles.ParticleEmitter;
@@ -59,6 +61,9 @@ export class Monster extends Phaser.GameObjects.Container {
         this.outline.setPosition(0, 0);
         this.add(this.outline);
 
+
+
+        // U N I T   I S   M E L E E
         if (unit.melee > 0) {
             //melee img
             this.melee = scene.add.image(0, 0, 'attack').setScale(displayWidth * 0.15 / 100).setOrigin(0);
@@ -79,6 +84,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.add([this.melee, this.melee_text]);
         }
 
+        // U N I T   I S   R A N G E D
         if (unit.ranged > 0) {
             //ranged img
             this.ranged = scene.add.image(0, 0, 'bow').setScale(displayWidth * 0.15 / 100).setOrigin(0);
@@ -97,6 +103,27 @@ export class Monster extends Phaser.GameObjects.Container {
                 });
             this.ranged_text.setOrigin(0);
             this.add([this.ranged, this.ranged_text]);
+        }
+
+        // U N I T   I S   M A G I C
+        if (unit.magic > 0) {
+            //magic img
+            this.magic = scene.add.image(0, 0, 'ball').setScale(displayWidth * 0.15 / 100).setOrigin(0);
+            this.magic.x = this.bg.displayWidth / -2 + this.bg.displayWidth * 0.02;
+            this.magic.y = this.bg.displayHeight / -2 + this.bg.displayHeight * 0.02;
+
+            //ranged text
+            this.magic_text = scene.add.text(
+                this.magic.x + this.magic.displayWidth,
+                this.magic.y - 2,
+                unit.magic.toString(),
+                {
+                    fontFamily: 'Arial Black', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 2,
+                    align: 'center'
+                });
+            this.magic_text.setOrigin(0);
+            this.add([this.magic, this.magic_text]);
         }
 
         //health text
@@ -300,6 +327,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const startAngle = isTargetToTheLeft ? 45 : -45;
         const endAngle = isTargetToTheLeft ? -45 : 45;
         const isRangedAttack = this.unitData.ranged > 0;
+        const isMagicAttack = this.unitData.magic > 0;
 
         const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
             lifespan: 1000,
@@ -309,7 +337,7 @@ export class Monster extends Phaser.GameObjects.Container {
             emitting: false
         })
 
-        // S W O R D   A T T A C K
+        // A R R O W   A T T A C K
         if (isRangedAttack) {
             weaponImg.setTexture('bow-arrow');
             let angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(target!.x, target!.y, this.x, this.y));
@@ -344,7 +372,41 @@ export class Monster extends Phaser.GameObjects.Container {
                 ]
             })
         }
-        // A R R O W   A T T A C K
+
+        //M A G I C    A T T A C K
+        else if (isMagicAttack) {
+            weaponImg.setTexture('ball');
+            weaponImg.setScale(this.bg.displayWidth * 0.4 / 100);
+            this.scene.tweens.chain({
+                targets: weaponImg,
+                tweens: [
+                    {
+                        x: targetX,
+                        y: targetY,
+                        duration: 300,
+                        ease: 'Cubic.easeIn',
+                        onStart: () => {
+                            this.emitter.emitting = false;
+                        },
+                        onComplete: () => {
+                            complete();
+                            this.emitter.emitting = false;
+                            emitter.explode(48);
+                        }
+                    },
+                    {
+                        alpha: { value: 0, duration: 1000 },
+                        delay: 750,
+                        onComplete: () => {
+                            emitter.destroy(true);
+                            weaponImg.destroy(true);
+                        }
+                    }
+                ]
+            })
+        }
+
+        //S W O R D    A T T A C K
         else {
             this.scene.tweens.chain({
                 targets: weaponImg,
@@ -383,9 +445,17 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    takeDamege(damage: number): void {
+    takeDamege(damage: number, isMagicAttack: boolean): void {
 
-        let dmg = damage - this.unitData.shield;
+        let dmg = 0;
+        if (isMagicAttack) {
+            // magic attack - no shield
+            dmg = damage;
+        } else {
+            //other attack - shield applies
+            dmg = damage - this.unitData.shield;
+        }
+
         if (dmg > this.unitData.health) dmg = this.unitData.health;
         if (dmg < 0) dmg = 0;
 

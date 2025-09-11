@@ -16,11 +16,11 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
     createArrows(data: IUnitData): void {
         this.removeArrows();
-        this.neighborCells = this.getNeighborCells(data.row, data.col, data.vision, data.ranged);
+        this.neighborCells = this.getNeighborCells(data.row, data.col, data.vision, data.ranged, data.magic);
         this.displayArrows(this.neighborCells); // TODO - check if enemy, do not add arrow but attack image
     }
 
-    private getNeighborCells(row: number, col: number, radius: number, range: number) {
+    private getNeighborCells(row: number, col: number, radius: number, range: number, magic: number) {
         const isPlayerTurn = this.scene.data.list.isPlayerTurn;
         let neighborCells = [];
         const array = this.scene.data.list.gridPositions;
@@ -30,6 +30,8 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         radius = 1;
         //-------------------------------------------
         const isRanged = range > 0;
+        const isMagic = magic > 0;
+
         if (isRanged) {
             radius = main_config.rangedUnitsRange;
         }
@@ -56,8 +58,8 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                         (!isPlayerTurn && array[newRow][newCol].occupiedBy === 'player')
                     ) {
                         const direction = this.getDirection(row, newRow, col, newCol);
-                        if (!isNaN(direction) || isRanged) {
-                            neighborCells.push({ row: newRow, col: newCol, direction, target: true, isRanged });
+                        if (!isNaN(direction) || isRanged || isMagic) {
+                            neighborCells.push({ row: newRow, col: newCol, direction, target: true, isRanged, isMagic });
                         }
                     }
                 }
@@ -103,11 +105,14 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             const angle = this.getAngle(emptyCell.direction);
             const target = emptyCell.target === true;
             const isRanged = emptyCell.isRanged
+            const isMagic = emptyCell.isMagic
             let img = null;
             if (!target) {
                 img = 'arrow';
             } else if (isRanged) {
                 img = 'bow';
+            } else if (isMagic) {
+                img = 'ball';
             } else {
                 img = 'sword';
             }
@@ -128,5 +133,6 @@ interface INeighborCells {
     col: number;
     direction: number;
     target?: boolean;
-    isRanged?: boolean
+    isRanged?: boolean;
+    isMagic?: boolean;
 }

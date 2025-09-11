@@ -29,6 +29,7 @@ export class Preloader extends Scene {
         this.load.setPath('assets');
 
         this.load.image('1', '1.png');
+        this.load.image('2', '2.png');
         this.load.image('5', '5.jpg');
         this.load.image('7', '7.jpg');
         this.load.image('8', '8.jpg');
@@ -50,6 +51,7 @@ export class Preloader extends Scene {
         this.load.image('bow-arrow', 'bow-arrow.png');
         this.load.image('green-dot', 'green-dot.png');
         this.load.image('grey-dot', 'grey-dot.png');
+        this.load.image('ball', 'ball.png');
     }
 
     create() {

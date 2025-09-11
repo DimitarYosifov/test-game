@@ -136,7 +136,16 @@ export class Game extends Scene {
             this.movementArrowsContainer.removeArrows();
 
             const isPlayerTurn = this.data.list.isPlayerTurn;
-            const damage = isRanged ? this.currentlySelectedMonster.unitData.ranged : this.currentlySelectedMonster.unitData.melee;
+
+            let damage = 0;
+            if (this.currentlySelectedMonster.unitData.ranged > 0) {
+                damage = this.currentlySelectedMonster.unitData.ranged;
+            } else if (this.currentlySelectedMonster.unitData.magic > 0) {
+                damage = this.currentlySelectedMonster.unitData.magic;
+            } else {
+                damage = this.currentlySelectedMonster.unitData.melee;
+            }
+
             let target: null | Monster = null;
             if (isPlayerTurn) {
                 console.log(this.data.list.opponentMonsters)
@@ -146,7 +155,7 @@ export class Game extends Scene {
             }
             const isTargetToTheLeft = target!.unitData.col < this.currentlySelectedMonster.unitData.col;
             this.currentlySelectedMonster.performHit(target, isTargetToTheLeft, () => {
-                target!.takeDamege(damage);
+                target!.takeDamege(damage, this.currentlySelectedMonster.unitData.magic > 0);
             });
 
 
@@ -657,6 +666,7 @@ export interface IUnitData {
     row: number;
     melee: number;
     ranged: number;
+    magic: number;
     health: number;
     shield: number;
     vision: number;
