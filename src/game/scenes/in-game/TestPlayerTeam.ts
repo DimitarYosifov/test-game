@@ -41,7 +41,7 @@ export class TestPlayerTeam {
 
 }
 
-interface IPlayerMonstersData {
+export interface IPlayerMonstersData {
     type: string | number,
     stars: number,
     row: number,

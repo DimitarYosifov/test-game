@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 import { IUnitData } from '../Game';
 
 export class Monster extends Phaser.GameObjects.Container {
-    private bg: Phaser.GameObjects.Image;
+    bg: Phaser.GameObjects.Image;
     private melee: Phaser.GameObjects.Image;
     private melee_text: Phaser.GameObjects.Text;
     private health_text: Phaser.GameObjects.Text;
@@ -23,11 +23,16 @@ export class Monster extends Phaser.GameObjects.Container {
     outlineColor: number;
     emitter: Phaser.GameObjects.Particles.ParticleEmitter;
     movesLeftContainer: Phaser.GameObjects.Container;
+    starsContainer: Phaser.GameObjects.Container;
+    startX: number;
+    startY: number;
+    positionIndex: number = NaN;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
         this.scene = scene;
         this.unitData = unit;
+        this.type = this.unitData.type;
         this.unitData.movesLeft = this.unitData.moves;
         this.index = index;
 
@@ -181,22 +186,22 @@ export class Monster extends Phaser.GameObjects.Container {
         this.add([this.vision_text, this.vision]);
 
         //stars
-        const starsContainer = scene.add.container(0, 0);
+        this.starsContainer = scene.add.container(0, 0);
         for (let index = 0; index < unit.stars; index++) {
             const star = scene.add.image(0, 0, 'star').setScale(displayWidth * 0.15 / 100).setOrigin(0, 0.5);
-            starsContainer.add(star);
+            this.starsContainer.add(star);
         }
 
-        Phaser.Actions.GridAlign(starsContainer.list, {
+        Phaser.Actions.GridAlign(this.starsContainer.list, {
             width: 0,
-            height: starsContainer.list.length,
+            height: this.starsContainer.list.length,
             cellWidth: 0,
-            cellHeight: 13, // spacing between items vertically
+            cellHeight: displayWidth * 0.1, // spacing between items vertically
             position: Phaser.Display.Align.CENTER
         });
-        starsContainer.y = starsContainer.getBounds().height / -2;
-        starsContainer.x = -5;
-        this.add([starsContainer])
+        this.starsContainer.y = this.starsContainer.getBounds().height / -2;
+        this.starsContainer.x = -5;
+        this.add([this.starsContainer])
 
         //moves
         this.movesLeftContainer = scene.add.container(0, 0);
@@ -209,7 +214,7 @@ export class Monster extends Phaser.GameObjects.Container {
             width: 0,
             height: this.movesLeftContainer.list.length,
             cellWidth: 0,
-            cellHeight: 17, // spacing between items vertically
+            cellHeight:  displayWidth * 0.15, // spacing between items vertically
             position: Phaser.Display.Align.CENTER
         });
         this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
