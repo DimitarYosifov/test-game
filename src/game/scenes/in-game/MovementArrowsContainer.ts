@@ -46,9 +46,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 if (
                     newRow >= 0 && newRow < array.length &&
                     newCol >= 0 && newCol < array[0].length
-                    //TODO - uncomment the line below when opponent moves on its own!!!!
-                    // && cloudsArray[newRow][newCol].alpha === 0 // cell should be invisible
-                    // ----------------------------------------
+                    && cloudsArray[newRow][newCol].alpha === 0
                 ) {
                     if (array[newRow][newCol].isEmpty === true) {
                         const direction = this.getDirection(row, newRow, col, newCol)
