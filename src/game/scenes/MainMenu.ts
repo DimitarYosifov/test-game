@@ -57,6 +57,12 @@ export class MainMenu extends Scene {
                     type: 1, stars: 1, row: NaN, col: 11
                 },
                 {
+                    type: 1, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 1, row: NaN, col: 11
+                },
+                {
                     type: 2, stars: 1, row: NaN, col: 11
                 },
                 {
@@ -69,10 +75,19 @@ export class MainMenu extends Scene {
                     type: 5, stars: 1, row: NaN, col: 11
                 },
                 {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
                     type: 7, stars: 1, row: NaN, col: 11
                 },
                 {
                     type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
                 },
                 {
                     type: 8, stars: 1, row: NaN, col: 11
@@ -84,6 +99,9 @@ export class MainMenu extends Scene {
                     type: 9, stars: 1, row: NaN, col: 11
                 },
                 {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                 {
                     type: 9, stars: 1, row: NaN, col: 11
                 },
             ]
