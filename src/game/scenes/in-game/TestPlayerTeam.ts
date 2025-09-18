@@ -4,30 +4,53 @@ import { IUnitData } from "../Game";
 export class TestPlayerTeam {
 
     static get team() {
-        // TODO - playerMonstersData should be taken from localstorage!
-        const playerMonstersData: IPlayerMonstersData[] = [
-            {
-                type: 5, stars: 1, row: 1, col: 11
-            },
-            {
-                type: 2, stars: 1, row: 5, col: 11
-            },
-            {
-                type: 7, stars: 1, row: 0, col: 11
-            },
-            {
-                type: 1, stars: 1, row: 6, col: 11
-            },
-            {
-                type: 8, stars: 1, row: 2, col: 11
-            },
-            {
-                type: 9, stars: 1, row: 3, col: 11
-            },
-            {
-                type: 8, stars: 1, row: 4, col: 11
-            },
-        ]
+
+        const playerMonstersDataFromStorage: IPlayerMonstersData[] = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null", (key, value) => {
+            return key === 'row' && value === null ? NaN : value;
+        });
+        let playerMonstersData = playerMonstersDataFromStorage ||
+            [
+                {
+                    type: 1, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 1, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                
+            ]
+
+        playerMonstersData = playerMonstersData.filter(x => !isNaN(x.row));
+
         let result: IUnitData[] = [];
 
         playerMonstersData.forEach((monstersData: IPlayerMonstersData) => {

@@ -6,6 +6,9 @@ import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
 const MAIN_DECK_Y = 500;
+const MONSTER_GAP = 80;
+const MONSTER_INITIAL_X = 200;
+const MAX_SELECTED_MONSTERS = 7;
 
 export class MainMenu extends Scene {
     background: GameObjects.Image;
@@ -24,194 +27,236 @@ export class MainMenu extends Scene {
 
     create() {
 
-        // this.input.once('pointerdown', () => {
-        //     this.scene.start('Game');
-        // });
-        // return;
 
-        this.playerMonstersData = [
-            {
-                type: 5, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 2, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 7, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 1, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 8, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 9, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 8, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 2, stars: 1, row: NaN, col: 11
-            },
-            {
-                type: 5, stars: 1, row: NaN, col: 11
-            },
-        ]
+        this.input.once('pointerdown', () => {
+            this.scene.start('Game');
+        });
+        return;
 
         this.monstersContainer = this.add.container();
 
-
-        this.playerMonstersData.sort((a, b) => {
-            if (a.type < b.type) return -1;
-            if (a.type > b.type) return 1;
-            return 0;
-        })
-
-        this.playerMonstersData.forEach((monstersData: IPlayerMonstersData, index: number) => {
-            let data = { ...(monsters_power_config as any)[monstersData.type][monstersData.stars - 1] };
-
-            let monster = new Monster(this, 200 + index * 80, MAIN_DECK_Y, MONSTER_SIZE, MONSTER_SIZE, data, 0, true);
-            monster.originalIndex = index;
-            monster.starsContainer.x = MONSTER_SIZE / -4 + 10;
-            monster.movesLeftContainer.x = MONSTER_SIZE / 2 + 10;
-            monster.bg.setInteractive({ draggable: true });
-            this.monstersContainer.add(monster);
-
-            monster.startX = monster.x;
-            monster.startY = monster.y;
-
-            monster.bg.on('pointerover', () => {
-                this.tweens.add({
-                    targets: monster,
-                    scale: 1.1,
-                    duration: 150,
-                })
-                this.monstersContainer.bringToTop(monster);
-            });
-            monster.bg.on('pointerout', () => {
-                this.tweens.add({
-                    targets: monster,
-                    scale: 1,
-                    duration: 150,
-                })
-                this.monstersContainer.moveTo(monster, index);
-            });
-
-            monster.bg.on('dragstart', function (pointer: any) {
-
-            }, this);
-
-            monster.bg.on('drag', (pointer: any) => {
-                monster.x = pointer.x;
-                monster.y = pointer.y;
-            });
-
-            monster.bg.on('dragend', (pointer: any) => {
-
-                if (this.mainDeckHitRect.contains(pointer.x, pointer.y)) {
-
-                    this.selectedMonsters[monster.positionIndex] = null;
-                    monster.positionIndex = NaN;
-                    this.playerMonstersData[monster.originalIndex].row = NaN;
-                    this.monstersContainer.moveTo(monster, index);
-                    this.reposition();
-                    return
-                }
-
-
-                for (let hitRectsIndex = 0; hitRectsIndex < this.hitRects.length; hitRectsIndex++) {
-                    const hitRect = this.hitRects[hitRectsIndex]
-                    if (hitRect.contains(pointer.x, pointer.y)) {
-                        const hasOldPositionIndex = !isNaN(monster.positionIndex);
-                        const monsterOnThisPosition: Monster | null = this.selectedMonsters[hitRectsIndex];
-
-                        if (hasOldPositionIndex) {
-                            this.selectedMonsters[monster.positionIndex] = null;
-                        }
-
-                        if (monsterOnThisPosition) {
-                            //move old monster to the initial position of the new monster
-                            if (hasOldPositionIndex) {
-                                //swapping 2 monsters from the starting ones
-                                this.selectedMonsters[monster.positionIndex] = monsterOnThisPosition;
-                                this.tweens.add({
-                                    targets: this.selectedMonsters[monster.positionIndex],
-                                    x: monster.startX,
-                                    y: monster.startY,
-                                    duration: 150
-                                })
-                                this.selectedMonsters[monster.positionIndex]!.startX = monster.startX;
-                                this.selectedMonsters[monster.positionIndex]!.startY = monster.startY;
-                                this.selectedMonsters[monster.positionIndex]!.positionIndex = monster.positionIndex;
-                                this.playerMonstersData[monsterOnThisPosition.originalIndex].row = monster.positionIndex
-
-                            }
-                            else {
-                                //swapping monster from the desk with one from the selected
-                                this.selectedMonsters[hitRectsIndex] = monsterOnThisPosition;
-                                this.selectedMonsters[hitRectsIndex]!.startX = monster.startX;
-                                this.selectedMonsters[hitRectsIndex]!.startY = monster.startY;
-                                this.playerMonstersData[this.selectedMonsters[monsterOnThisPosition.positionIndex]!.originalIndex].row = monster.positionIndex
-                                this.selectedMonsters[hitRectsIndex]!.positionIndex = NaN;
-                            }
-                        }
-
-                        if (this.selectedMonsters[hitRectsIndex]) {
-                            this.playerMonstersData[monster.originalIndex].row = hitRectsIndex;
-                            this.selectedMonsters[hitRectsIndex] = monster;
-                        } else {
-                            this.selectedMonsters[hitRectsIndex] = monster;
-                            this.playerMonstersData[monster.originalIndex].row = hitRectsIndex;
-                        }
-
-                        monster.setPosition(hitRect.x + hitRect.width / 2, hitRect.y + hitRect.height / 2);
-                        monster.startX = hitRect.x + hitRect.width / 2;
-                        monster.startY = hitRect.y + hitRect.height / 2;
-
-                        monster.positionIndex = hitRectsIndex;
-                        this.reposition();
-                        break;
-                    } else {
-                        monster.setPosition(monster.startX, monster.startY);
-                    }
-                }
-            });
-        });
-
+        this.loadPlayerMonsters();
         this.createMonstersSlots();
         this.createMainDeckHitRect();
         this.createOkButton();
+
+        this.initializeMonsters();
     }
 
+    private loadPlayerMonsters() {
 
+        const playerMonstersDataFromStorage = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null", (key, value) => {
+            return key === 'row' && value === null ? NaN : value;
+        });
+        this.playerMonstersData = playerMonstersDataFromStorage ||
+            [
+                {
+                    type: 1, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 1, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+            ]
 
+        this.playerMonstersData.sort((a, b) => {
+            if (+a.type < +b.type) return -1;
+            if (+a.type > +b.type) return 1;
+            return 0;
+        })
 
-    loadPlayerMonsters() {
-
+        console.log(`${playerMonstersDataFromStorage} - from local storage`);
     }
 
-    initializeMonsters() {
+    private initializeMonsters() {
+        this.playerMonstersData.forEach((monsterData, index) => {
+            const config = { ...(monsters_power_config as any)[monsterData.type][monsterData.stars - 1] };
 
+
+            if (isNaN(monsterData.row)) {
+                const x = MONSTER_INITIAL_X + index * MONSTER_GAP;
+                const y = MAIN_DECK_Y;
+                const monster = new Monster(this, x, y, MONSTER_SIZE, MONSTER_SIZE, config, 0, true);
+
+                monster.originalIndex = index;
+                monster.starsContainer.x = MONSTER_SIZE / -4 + 10;
+                monster.movesLeftContainer.x = MONSTER_SIZE / 2 + 10;
+                monster.bg.setInteractive({ draggable: true });
+
+                monster.startX = x;
+                monster.startY = y;
+
+                this.setupMonsterInteractions(monster, index);
+                this.setupMonsterDrag(monster, index);
+
+                this.monstersContainer.add(monster);
+            } else {
+                // const x = MONSTER_INITIAL_X + index * MONSTER_GAP;
+                // const y = MAIN_DECK_Y;
+
+
+                const x = this.hitRects[monsterData.row].x + MONSTER_SIZE / 2;
+                const y = this.hitRects[monsterData.row].y + MONSTER_SIZE / 2;
+
+                const monster = new Monster(this, x, y, MONSTER_SIZE, MONSTER_SIZE, config, 0, true);
+                this.selectedMonsters[config.row] = monster;
+
+                monster.originalIndex = index;
+                monster.starsContainer.x = MONSTER_SIZE / -4 + 10;
+                monster.movesLeftContainer.x = MONSTER_SIZE / 2 + 10;
+                monster.bg.setInteractive({ draggable: true });
+
+                monster.startX = x;
+                monster.startY = y;
+
+                this.setupMonsterInteractions(monster, index);
+                this.setupMonsterDrag(monster, index);
+
+                this.monstersContainer.add(monster);
+
+
+                monster.positionIndex = monsterData.row;
+
+
+            }
+
+
+
+        });
+        this.reposition();
     }
 
-    setupMonsterInteractions(monster, index) {
+    private setupMonsterInteractions(monster: Monster, index: number) {
+        monster.bg.on('pointerover', () => {
+            this.tweens.add({ targets: monster, scale: 1.1, duration: 150 });
+            this.monstersContainer.bringToTop(monster);
+        });
 
+        monster.bg.on('pointerout', () => {
+            this.tweens.add({ targets: monster, scale: 1, duration: 150 });
+            this.monstersContainer.moveTo(monster, index);
+        });
     }
 
-    setupMonsterDrag(monster) {
+    private setupMonsterDrag(monster: Monster, index: number) {
+        monster.bg.on('dragstart', () => {
+            // Optional: Add drag start visual feedback
+        });
 
+        monster.bg.on('drag', (pointer: Phaser.Input.Pointer) => {
+            monster.x = pointer.x;
+            monster.y = pointer.y;
+        });
+
+        monster.bg.on('dragend', (pointer: Phaser.Input.Pointer) => {
+            this.handleMonsterDrop(monster, pointer, index);
+        });
     }
 
-    handleMonsterDrop(monster, pointer) {
+    private handleMonsterDrop(monster: Monster, pointer: Phaser.Input.Pointer, index: number) {
 
+        if (this.mainDeckHitRect.contains(pointer.x, pointer.y)) {
+
+            this.selectedMonsters[monster.positionIndex] = null;
+            monster.positionIndex = NaN;
+            this.playerMonstersData[monster.originalIndex].row = NaN;
+            this.monstersContainer.moveTo(monster, index);
+            this.reposition();
+            return
+        }
+
+        let droppedInSlot = false;
+
+        for (let i = 0; i < this.hitRects.length; i++) {
+            const hitRect = this.hitRects[i];
+
+            if (hitRect.contains(pointer.x, pointer.y)) {
+                droppedInSlot = true;
+
+                const hasOldPosition = !isNaN(monster.positionIndex);
+                const existingMonster = this.selectedMonsters[i];
+
+                if (hasOldPosition) {
+                    this.selectedMonsters[monster.positionIndex] = null;
+                }
+
+                if (existingMonster) {
+                    // Handle swapping
+                    if (hasOldPosition) {
+                        this.selectedMonsters[monster.positionIndex] = existingMonster;
+                        this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                        existingMonster.startX = monster.startX;
+                        existingMonster.startY = monster.startY;
+                        existingMonster.positionIndex = monster.positionIndex;
+                        this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
+                    } else {
+                        this.selectedMonsters[i] = existingMonster;
+                        this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                        existingMonster.positionIndex = NaN;
+                        existingMonster.startX = monster.startX;
+                        existingMonster.startY = monster.startY;
+                        this.playerMonstersData[existingMonster.originalIndex].row = NaN;
+                    }
+                }
+
+                // Place dragged monster into the new slot
+                monster.setPosition(hitRect.x + hitRect.width / 2, hitRect.y + hitRect.height / 2);
+                monster.startX = monster.x;
+                monster.startY = monster.y;
+                monster.positionIndex = i;
+                this.playerMonstersData[monster.originalIndex].row = i;
+                this.selectedMonsters[i] = monster;
+
+                this.reposition();
+                break;
+            }
+        }
+
+        if (!droppedInSlot) {
+            monster.setPosition(monster.startX, monster.startY);
+        }
     }
 
+    private animateMonsterReturn(monster: Monster, x: number, y: number) {
+        this.tweens.add({
+            targets: monster,
+            x: x,
+            y: y,
+            duration: 150
+        });
+    }
 
-
-
-    createMonstersSlots() {
-        for (let index = 0; index < 7; index++) {
+    private createMonstersSlots() {
+        for (let index = 0; index < MAX_SELECTED_MONSTERS; index++) {
             const hitRect = new Phaser.Geom.Rectangle(HORIZONTAL_DISTANCE + (HORIZONTAL_DISTANCE + MONSTER_SIZE) * index, 100, MONSTER_SIZE, MONSTER_SIZE);
             const graphics = this.add.graphics();
             graphics.lineStyle(2, 0xffffff);
@@ -220,20 +265,19 @@ export class MainMenu extends Scene {
         }
     }
 
-    createMainDeckHitRect() {
+    private createMainDeckHitRect() {
         this.mainDeckHitRect = new Phaser.Geom.Rectangle(65, MAIN_DECK_Y - MONSTER_SIZE / 2, 1790, 200);
         const graphics = this.add.graphics();
         graphics.lineStyle(2, 0xffffff);
         graphics.strokeRectShape(this.mainDeckHitRect);
     }
 
-    reposition() {
+    private reposition() {
         const monsters = this.monstersContainer.list.filter((x: any) => isNaN(x.positionIndex))
         console.log(monsters)
 
-
         monsters.forEach((element: any, index) => {
-            const finalX = 200 + index * 80;
+            const finalX = MONSTER_INITIAL_X + index * MONSTER_GAP;
             this.tweens.add({
                 targets: element,
                 x: finalX,
@@ -246,7 +290,7 @@ export class MainMenu extends Scene {
 
     }
 
-    createOkButton() {
+    private createOkButton() {
         this.okButton = this.add.image(1800, 950, 'ok-btn').setScale(1).setOrigin(0.5).setInteractive();
         this.okButton.on('pointerover', () => {
             this.tweens.add({
@@ -267,16 +311,8 @@ export class MainMenu extends Scene {
         });
     }
 
-    save() {
-
+    private save() {
         console.table(this.playerMonstersData);
-        // this.data.list.playerMonstersData.push({
-        //     type: monster.unitData.type,
-        //     stars: monster.unitData.stars,
-        //     row: index,
-        //     col: 11
-        // })
-
-        // console.log(this.data.list.playerMonstersData);
+        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
     }
 }

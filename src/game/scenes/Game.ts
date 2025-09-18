@@ -525,7 +525,6 @@ export class Game extends Scene {
         row = currentUnitData.row - 1;
         col = currentUnitData.col - 1;
         if (this.isCellEmpty(row, col)) return true;
-        alert()
         return false;
     }
 

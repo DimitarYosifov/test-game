@@ -14,17 +14,17 @@ export const monsters_power_config = {
     ],
     '5': [
         {  // 1 star
-            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 2, stars: 1, type: '7', moves: 1, movesLeft: 1
+            melee: 2, ranged: 0, magic: 0, health: 5, shield: 0, vision: 2, stars: 1, type: '5', moves: 1, movesLeft: 1
         },
     ],
     '7': [
         { // 1 star
-            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 1, stars: 1, type: '8', moves: 1, movesLeft: 1
+            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '7', moves: 1, movesLeft: 1
         },
     ],
     '8': [
         { // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 6, shield: 0, vision: 1, stars: 1, type: '5', moves: 1, movesLeft: 1
+            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 1, stars: 1, type: '8', moves: 1, movesLeft: 1
         },
     ],
     '9': [

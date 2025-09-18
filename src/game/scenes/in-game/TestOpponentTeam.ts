@@ -45,52 +45,52 @@ export class TestOpponentTeam {
         // TODO - opponentMonstersData should be taken from localstorage!
         const opponentMonstersData: IOpponentMonstersData[] = [
             {
-                type: 5, stars: 1,
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 5, stars: 1,
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 5, stars: 1,
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 7, stars: 1,
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 7, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
 
             {
-                type: 7, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 8, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 8, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 8, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 9, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
 
             {
-                type: 9, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 9, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 1, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
             {
-                type: 1, stars: 1
+                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
             },
-            {
-                type: 1, stars: 1
-            },
+            // {
+            //     type: 1, stars: 1
+            // },
         ]
         let result: IUnitData[] = [];
 
