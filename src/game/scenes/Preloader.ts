@@ -52,6 +52,7 @@ export class Preloader extends Scene {
         this.load.image('green-dot', 'green-dot.png');
         this.load.image('grey-dot', 'grey-dot.png');
         this.load.image('ball', 'ball.png');
+        this.load.image('ok-btn', 'ok-btn.png');
     }
 
     create() {

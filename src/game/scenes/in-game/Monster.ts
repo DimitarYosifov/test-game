@@ -27,6 +27,7 @@ export class Monster extends Phaser.GameObjects.Container {
     startX: number;
     startY: number;
     positionIndex: number = NaN;
+    originalIndex: number;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
