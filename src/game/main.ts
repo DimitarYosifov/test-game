@@ -1,9 +1,11 @@
 import { Boot } from './scenes/Boot';
 import { GameOver } from './scenes/GameOver';
 import { Game as MainGame } from './scenes/Game';
-import { MainMenu } from './scenes/MainMenu';
 import { AUTO, Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { MainMenu } from './scenes/MainMenu';
+import { CardSelection } from './scenes/CardSelection';
+
 // import main_confi from '../sconfig/main_config.json';
 
 //  Find out more information about the Game Config at:
@@ -23,6 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
         Boot,
         Preloader,
         MainMenu,
+        CardSelection,
         MainGame,
         GameOver
     ]

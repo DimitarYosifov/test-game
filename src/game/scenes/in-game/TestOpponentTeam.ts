@@ -1,4 +1,5 @@
 
+import { level_config } from "../../configs/level_config";
 import { monsters_power_config } from "../../configs/monsters_power_config"
 import { IUnitData } from "../Game";
 
@@ -43,55 +44,59 @@ export class TestOpponentTeam {
         }
 
         // TODO - opponentMonstersData should be taken from localstorage!
-        const opponentMonstersData: IOpponentMonstersData[] = [
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
+        // const opponentMonstersData: IOpponentMonstersData[] = [
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
 
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
 
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            {
-                type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
-            },
-            // {
-            //     type: 1, stars: 1
-            // },
-        ]
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     {
+        //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
+        //     },
+        //     // {
+        //     //     type: 1, stars: 1
+        //     // },
+        // ]
+
+        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null")
+        const opponentMonstersData = level_config[currentLevel - 1].opponentMonstersData;
+
         let result: IUnitData[] = [];
 
         opponentMonstersData.forEach((monstersData: IOpponentMonstersData) => {
