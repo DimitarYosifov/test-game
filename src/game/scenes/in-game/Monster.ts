@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { IUnitData } from '../Game';
+import { GAME_SCENE_SCENE_EVENTS, IUnitData } from '../Game';
 
 export class Monster extends Phaser.GameObjects.Container {
     bg: Phaser.GameObjects.Image;
@@ -215,7 +215,7 @@ export class Monster extends Phaser.GameObjects.Container {
             width: 0,
             height: this.movesLeftContainer.list.length,
             cellWidth: 0,
-            cellHeight:  displayWidth * 0.15, // spacing between items vertically
+            cellHeight: displayWidth * 0.15, // spacing between items vertically
             position: Phaser.Display.Align.CENTER
         });
         this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
@@ -232,13 +232,13 @@ export class Monster extends Phaser.GameObjects.Container {
         if (this.scene.data.list.isPlayerTurn) {
             // this.scene.events.emit('monster-selected', [this, this.unitData, true]);
         } else {
-            this.scene.events.emit('repeat-opponent-move');
+            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.REPEAT_OPPONENT_MOVE);
         }
     }
 
     private addInteraction(): void {
         this.bg.on('pointerdown', () => {
-            this.scene.events.emit('monster-selected', [this, this.unitData, false]);
+            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
         });
     }
 
@@ -302,7 +302,7 @@ export class Monster extends Phaser.GameObjects.Container {
             onComplete: () => {
 
                 this.decreaseMoves();
-                this.scene.events.emit('check-end-turn');
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
 
             }
         })
@@ -312,7 +312,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.pendingAction = false;
         this.setInteraction(false, skipByUser);
         this.decreaseMoves();
-        this.scene.events.emit('check-end-turn', skipByUser);
+        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, skipByUser);
     }
 
     performHit(target: Monster | null, isTargetToTheLeft: boolean, complete: Function): void {
@@ -495,7 +495,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 if (healthLeft === 0) {
                     this.die();
                 } else {
-                    this.scene.events.emit('check-end-turn');
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                 }
                 lostHealth.destroy(true);
             }
@@ -504,13 +504,13 @@ export class Monster extends Phaser.GameObjects.Container {
 
     die() {
         // this.alpha = 0.5;
-        this.emit('monster-died', this.unitData);
+        this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
             duration: 1000,
             onComplete: () => {
-                this.scene.events.emit('check-end-turn');
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
             }
         })
     }

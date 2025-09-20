@@ -8,16 +8,19 @@ export class MainMenu extends Scene {
     gameover_text: Phaser.GameObjects.Text;
     deckButton: Phaser.GameObjects.Image;
     confirmPopupOpen: boolean;
+    coinTexture: Phaser.GameObjects.Image;
+    coinText: Phaser.GameObjects.Text;
+    coins: string | null;
+
 
     constructor() {
         super('MainMenu');
     }
 
     create() {
-
         this.createDeckbutton();
         this.createLevels();
-
+        this.createCoins();
     }
 
     private createLevels(): void {
@@ -48,6 +51,7 @@ export class MainMenu extends Scene {
 
                 levelConfirm.once('level-selected', (level: number) => {
                     localStorage.setItem('currentLevel', JSON.stringify(level));
+                    this.confirmPopupOpen = false;
                     this.scene.start('Game');
                 }, this);
 
@@ -81,5 +85,19 @@ export class MainMenu extends Scene {
             this.deckButton.disableInteractive();
             this.scene.start('CardSelection');
         });
+    }
+
+    private createCoins() {
+        this.coins = localStorage.getItem('coins') || '0';
+        this.coinTexture = this.add.image(100, 50, 'coin').setScale(0.5).setOrigin(0.5);
+        this.coinText = this.add.text(
+            150,
+            30,
+            `${this.coins}`,
+            {
+                fontFamily: 'Arial Black', fontSize: 40, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 2,
+                align: 'center'
+            });
     }
 }

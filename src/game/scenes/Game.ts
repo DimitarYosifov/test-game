@@ -4,6 +4,17 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
+import { level_config } from '../configs/level_config';
+import { monsters_power_config } from '../configs/monsters_power_config';
+
+export enum GAME_SCENE_SCENE_EVENTS {
+    'TARGET_SELECTED' = 'target-selected',
+    'CHECK_END_TURN' = 'check-end-turn',
+    'REPEAT_OPPONENT_MOVE' = 'repeat-opponent-move',
+    'MONSTER_SELECTED' = 'monster-selected',
+    'DIRECTION_SELECTED' = 'direction-selected',
+    'MONSTER_DIED' = 'monster-died'
+}
 
 export class Game extends Scene {
 
@@ -45,7 +56,7 @@ export class Game extends Scene {
     }
 
     private checkEndTurnHandler(): void {
-        this.events.on('check-end-turn', (skipByUser: boolean = false) => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, (skipByUser: boolean = false) => {
             if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
 
                 if (this.data.list.isPlayerTurn) {
@@ -80,13 +91,13 @@ export class Game extends Scene {
     }
 
     private opponentRepeatMoveHandler(): void {
-        this.events.on('repeat-opponent-move', () => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.REPEAT_OPPONENT_MOVE, () => {
             this.getRandomOpponentMonster(true);
         });
     }
 
     private monsterSelectHandler(): void {
-        this.events.on('monster-selected', (data: Monster[] | IUnitData[]) => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
             if (this.data.list.isPlayerTurn) {
                 this.skipButton.setInteractive().setAlpha(1);
             }
@@ -103,7 +114,7 @@ export class Game extends Scene {
 
     private directionSelectHandler(): void {
         this.skipButton.disableInteractive().setAlpha(0.6);
-        this.events.on('direction-selected', (data: number[]) => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, (data: number[]) => {
 
             const newRow = data[0];
             const newCol = data[1];
@@ -127,7 +138,7 @@ export class Game extends Scene {
     }
 
     private targetSelectHandler(): void {
-        this.events.on('target-selected', (data: number[]) => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, (data: number[]) => {
 
             const newRow = data[0];
             const newCol = data[1];
@@ -170,17 +181,188 @@ export class Game extends Scene {
     }
 
     private monsterDieHandler(): void {
-        this.events.on('monster-died', () => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 //TODO
-                alert('player wins')
+                alert('player wins');
+                this.createLevelOutroPopup(true);
             } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
                 //TODO
-                alert('opponent wins')
+                alert('opponent wins');
+                this.createLevelOutroPopup();
             } else {
                 this.checkMapVisibility(false);
             }
         });
+    }
+
+    private createLevelOutroPopup(levelWon: boolean = false): void {
+
+        const hasMonsterReweard = true;
+
+        // bg overlay
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        this.tweens.add({
+            targets: overlay,
+            duration: 200,
+            alpha: 0.85
+        })
+        this.add.existing(overlay);
+        overlay.setInteractive();
+        overlay.on('pointerdown', function (pointer: any) {
+            pointer.event.stopPropagation();
+        });
+
+        //   HEADER
+        const msg = levelWon ? 'LEVEL WON' : 'LEVEL LOST';
+        const leveltext: Phaser.GameObjects.Text = this.add.text(
+            960,
+            350,
+            msg,
+            {
+                fontFamily: 'Arial Black', fontSize: 100, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 2,
+                align: 'center'
+            }).setOrigin(0.5);
+
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0)
+        this.add.existing(rewardsContainer);
+
+        if (levelWon) {
+            // REWARD TEXT
+            const rewardtext: Phaser.GameObjects.Text = this.add.text(
+                960,
+                500,
+                'REWARDS: ',
+                {
+                    fontFamily: 'Arial Black', fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 2,
+                    align: 'center'
+                }).setOrigin(0, 0.5);
+            rewardsContainer.add(rewardtext);
+
+            //coin img
+            let coin = this.add.image(rewardtext.x + rewardtext.width, 500, 'coin').setOrigin(0, 0.5).setScale(0.5);
+            rewardsContainer.add(coin);
+
+            // COIN TEXT
+            const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+            const coinsWon = level_config[currentLevel - 1].firstWinReward;
+            const cointext: Phaser.GameObjects.Text = this.add.text(
+                coin.x + coin.displayWidth,
+                500,
+                `x${coinsWon}`,
+                {
+                    fontFamily: 'Arial Black', fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 2,
+                    align: 'center'
+                }).setOrigin(0, 0.5);
+            rewardsContainer.add(cointext);
+
+            let monsterSize = 0;
+            let monsterPadding = 0;
+
+            //TODO - determine monster type and stars !!!!
+            const monsterRewardType = 1;
+            const monsterRewardStars = 1;
+
+            if (hasMonsterReweard) {
+                //monster card reward
+                monsterSize = 150;
+                monsterPadding = 40;
+
+                const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][monsterRewardStars - 1] };
+                const monster = new Monster(this, cointext.x + cointext.displayWidth + monsterSize / 2 + monsterPadding, 500, monsterSize, monsterSize, newMonsterConfig, 0, true)
+                monster.starsContainer.x = monsterSize / -4 + 18;
+                monster.movesLeftContainer.x = monsterSize / 2 + 21;
+                rewardsContainer.add(monster);
+            }
+
+            //center reward container
+            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize;
+            rewardsContainer.x -= totalWidth / 2;
+            console.log()
+
+            // claim button
+            const claimButton = this.add.image(960, 700, 'claim').setScale(1).setOrigin(0.5).setInteractive();
+            claimButton.on('pointerover', () => {
+                this.tweens.add({
+                    targets: claimButton,
+                    scale: 1.05,
+                    duration: 150,
+                })
+            });
+            claimButton.on('pointerout', () => {
+                this.tweens.add({
+                    targets: claimButton,
+                    scale: 1,
+                    duration: 150,
+                })
+            });
+            claimButton.once('pointerdown', () => {
+
+                // UPDATE PLAYER COINS(LOCALE STORAGE) 
+                const playerCoins = localStorage.getItem('coins') || '0';
+                localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+
+                // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
+                const STORAGE_KEY = 'playerMonstersData';
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                const dataArray = storedData ? JSON.parse(storedData) : [];
+                const newObject = { type: monsterRewardType, stars: monsterRewardStars, row: NaN, col: 11 };
+                dataArray.push(newObject);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+
+                this.changeScene('MainMenu');
+            });
+        } else {
+            // try again button
+            const tryAgain = this.add.image(760, 700, 'try-again').setScale(0.85).setOrigin(0.5).setInteractive();
+            tryAgain.on('pointerover', () => {
+                this.tweens.add({
+                    targets: tryAgain,
+                    scale: 1.05,
+                    duration: 150,
+                })
+            });
+            tryAgain.on('pointerout', () => {
+                this.tweens.add({
+                    targets: tryAgain,
+                    scale: 1,
+                    duration: 150,
+                })
+            });
+            tryAgain.once('pointerdown', () => {
+                this.changeScene('Game');
+            });
+
+            // giveUp button
+            const giveUp = this.add.image(1160, 700, 'give-up').setScale(1).setOrigin(0.5).setInteractive();
+            giveUp.on('pointerover', () => {
+                this.tweens.add({
+                    targets: giveUp,
+                    scale: 1.05,
+                    duration: 150,
+                })
+            });
+            giveUp.on('pointerout', () => {
+                this.tweens.add({
+                    targets: giveUp,
+                    scale: 1,
+                    duration: 150,
+                })
+            });
+            giveUp.once('pointerdown', () => {
+                this.changeScene('MainMenu');
+            });
+        }
+    }
+
+    private changeScene(nextScene: string): void {
+        Object.values(GAME_SCENE_SCENE_EVENTS).forEach(event => {
+            this.events.removeListener(event);
+        });
+        this.scene.start(nextScene);
     }
 
     private resetPreviousSelectedMonsterMoves(): void {
@@ -426,7 +608,7 @@ export class Game extends Scene {
             console.log(visibleTargetsToCurrentOpponentMonster)
             console.log(targetForOpponentCurrentMonster)
             const targetData = targetForOpponentCurrentMonster;
-            this.events.emit('target-selected', [targetData.row, targetData.col, this.currentlySelectedMonster.unitData.ranged > 0])
+            this.events.emit(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, [targetData.row, targetData.col, this.currentlySelectedMonster.unitData.ranged > 0])
         } else {
             if (!this.checkPossibleMove()) {
                 this.currentlySelectedMonster.skipMove();
@@ -436,12 +618,12 @@ export class Game extends Scene {
             if (closestMonster) {
                 //MOVE TOWARDS CLOSEST PLAYER'S MONSTER VISIBLE BY ANY OPPONENT'S MONSTER 
                 const newPosition = this.getMove(closestMonster.unitData);
-                this.events.emit('direction-selected', [newPosition.row, newPosition.col]);
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, [newPosition.row, newPosition.col]);
             }
             else {
                 // MOVE TO RANDOM POSITION
                 const newPosition = this.getRandomDirection();
-                this.events.emit('direction-selected', [newPosition!.newRow, newPosition!.newCol]);
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, [newPosition!.newRow, newPosition!.newCol]);
             }
 
         }

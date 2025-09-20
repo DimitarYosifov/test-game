@@ -51,25 +51,25 @@ export class CardSelection extends Scene {
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
                 {
-                    type: 1, stars: 1, row: NaN, col: 11
+                    type: 1, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 1, stars: 1, row: NaN, col: 11
+                    type: 1, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 1, stars: 1, row: NaN, col: 11
+                    type: 1, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 2, stars: 1, row: NaN, col: 11
+                    type: 2, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 2, stars: 1, row: NaN, col: 11
+                    type: 2, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 2, stars: 1, row: NaN, col: 11
+                    type: 2, stars: 1, row: NaN, col: 1
                 },
                 {
-                    type: 5, stars: 1, row: NaN, col: 11
+                    type: 5, stars: 1, row: NaN, col: 1
                 },
                 {
                     type: 5, stars: 1, row: NaN, col: 11
@@ -138,15 +138,12 @@ export class CardSelection extends Scene {
 
                 this.monstersContainer.add(monster);
             } else {
-                // const x = MONSTER_INITIAL_X + index * MONSTER_GAP;
-                // const y = MAIN_DECK_Y;
-
 
                 const x = this.hitRects[monsterData.row].x + MONSTER_SIZE / 2;
                 const y = this.hitRects[monsterData.row].y + MONSTER_SIZE / 2;
 
                 const monster = new Monster(this, x, y, MONSTER_SIZE, MONSTER_SIZE, config, 0, true);
-                this.selectedMonsters[config.row] = monster;
+                this.selectedMonsters[monsterData.row] = monster;
 
                 monster.originalIndex = index;
                 monster.starsContainer.x = MONSTER_SIZE / -4 + 10;
@@ -161,14 +158,8 @@ export class CardSelection extends Scene {
 
                 this.monstersContainer.add(monster);
 
-
                 monster.positionIndex = monsterData.row;
-
-
             }
-
-
-
         });
         this.reposition();
     }

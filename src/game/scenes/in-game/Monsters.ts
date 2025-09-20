@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { main_config } from '../../configs/main_config';
-import { IGridDimensions, IUnitData } from '../Game';
+import { GAME_SCENE_SCENE_EVENTS, IGridDimensions, IUnitData } from '../Game';
 import { Monster } from './Monster';
 import { TestPlayerTeam } from './TestPlayerTeam';
 import { TestOpponentTeam } from './TestOpponentTeam';
@@ -33,11 +33,7 @@ export class Monsters {
             const height = gridDimensions.cellSize - main_config.lineWidth;
             const monster = new Monster(this.scene, x, y, width, height, unit, index, isPlayer);
 
-            // monster.on('monster-selected', (data: IUnitData) => {
-            //     this.scene.events.emit('monster-selected', [monster, data]);
-            // });
-
-            monster.on('monster-died', (data: IUnitData) => {
+            monster.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: IUnitData) => {
                 this.scene.data.list.gridPositions[data.row][data.col].isEmpty = true;
                 delete this.scene.data.list.gridPositions[data.row][data.col].occupiedBy;
                 if (isPlayer) {
@@ -45,7 +41,7 @@ export class Monsters {
                 } else {
                     this.scene.data.list.opponentMonsters[index] = null;
                 }
-                this.scene.events.emit('monster-died', [monster, data]);
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, [monster, data]);
             });
 
             this.mainGridContainer.add(monster);

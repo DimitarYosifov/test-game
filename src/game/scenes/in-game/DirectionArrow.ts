@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { GAME_SCENE_SCENE_EVENTS } from "../Game";
 
 export class DirectionArrow extends Phaser.GameObjects.Image {
 
@@ -26,11 +27,11 @@ export class DirectionArrow extends Phaser.GameObjects.Image {
 
     private addInteracion(): void {
         this.setInteractive();
-        this.on('pointerdown', () => {
+        this.once('pointerdown', () => {
             if (this.isTarget) {
-                this.scene.events.emit('target-selected', [this.row, this.col, this.isRanged]);
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, [this.row, this.col, this.isRanged]);
             } else {
-                this.scene.events.emit('direction-selected', [this.row, this.col, this.isRanged]);
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, [this.row, this.col, this.isRanged]);
             }
         });
     }

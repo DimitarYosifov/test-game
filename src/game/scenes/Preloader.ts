@@ -55,6 +55,11 @@ export class Preloader extends Scene {
         this.load.image('ok-btn', 'ok-btn.png');
         this.load.image('back-btn', 'back-btn.png');
         this.load.image('deck', 'deck.png');
+        this.load.image('coin', 'coin.png');
+        this.load.image('black-overlay', 'black-overlay.png');
+        this.load.image('claim', 'claim.png');
+        this.load.image('try-again', 'try-again.png');
+        this.load.image('give-up', 'give-up.png');
     }
 
     create() {
