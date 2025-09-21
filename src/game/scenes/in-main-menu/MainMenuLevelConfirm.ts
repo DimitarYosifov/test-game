@@ -43,8 +43,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             150,
             `Level ${this.levelData.levelName}`,
             {
-                fontFamily: 'Arial Black', fontSize: 70, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 70, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
@@ -56,8 +56,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             250,
             `First Win Reward: ${this.levelData.firstWinReward}`,
             {
-                fontFamily: 'Arial Black', fontSize: 55, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
@@ -69,8 +69,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             350,
             `Repeat Level Win Reward: ${this.levelData.repeatLevelWinReward}`,
             {
-                fontFamily: 'Arial Black', fontSize: 55, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
@@ -82,8 +82,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             450,
             `Enemies: `,
             {
-                fontFamily: 'Arial Black', fontSize: 55, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(enemies);
@@ -120,8 +120,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
                 monster.y + (monster.bg.height / 2),
                 `x ${count}`,
                 {
-                    fontFamily: 'Arial Black', fontSize: 45, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2,
+                    fontFamily: 'main-font', fontSize: 45, color: '#ffffff',
+                    stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 }).setOrigin(0.5);
             this.add(enemiesCount);

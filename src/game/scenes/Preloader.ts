@@ -62,6 +62,7 @@ export class Preloader extends Scene {
         this.load.image('give-up', 'give-up.png');
         this.load.image('upgrade', 'upgrade.png');
         this.load.image('sell-btn', 'sell-btn.png');
+        this.load.font('main-font', 'Oups.otf');
     }
 
     create() {

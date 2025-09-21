@@ -35,8 +35,8 @@ export class MainMenu extends Scene {
                 800 - index * 50,
                 `Level ${levelData.levelName}`,
                 {
-                    fontFamily: 'Arial Black', fontSize: 33, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2,
+                    fontFamily: 'main-font', fontSize: 33, color: '#ffffff',
+                    stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 });
             levelContentContainer.add(leveltext);
@@ -81,8 +81,8 @@ export class MainMenu extends Scene {
             30,
             `${this.coins}`,
             {
-                fontFamily: 'Arial Black', fontSize: 35, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);

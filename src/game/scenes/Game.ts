@@ -236,8 +236,8 @@ export class Game extends Scene {
             350,
             msg,
             {
-                fontFamily: 'Arial Black', fontSize: 100, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 100, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -251,8 +251,8 @@ export class Game extends Scene {
                 500,
                 'REWARDS: ',
                 {
-                    fontFamily: 'Arial Black', fontSize: 65, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2,
+                    fontFamily: 'main-font', fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 }).setOrigin(0, 0.5);
             rewardsContainer.add(rewardtext);
@@ -269,8 +269,8 @@ export class Game extends Scene {
                 500,
                 `x${coinsWon}`,
                 {
-                    fontFamily: 'Arial Black', fontSize: 65, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2,
+                    fontFamily: 'main-font', fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 }).setOrigin(0, 0.5);
             rewardsContainer.add(cointext);

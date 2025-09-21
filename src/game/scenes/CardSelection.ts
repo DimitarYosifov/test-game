@@ -422,8 +422,8 @@ export class CardSelection extends Scene {
             5,
             'SELECTED MONSTERS',
             {
-                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -444,8 +444,8 @@ export class CardSelection extends Scene {
             280,
             'MONSTERS (40 max)',
             {
-                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -464,8 +464,8 @@ export class CardSelection extends Scene {
             820,
             `sell monster for: ${this.sellsFor} `,
             {
-                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -533,8 +533,8 @@ export class CardSelection extends Scene {
             800,
             'UPGRADE MONSTER',
             {
-                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -553,8 +553,8 @@ export class CardSelection extends Scene {
             820,
             `cost: ${this.upgradeCost} `,
             {
-                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -768,8 +768,8 @@ export class CardSelection extends Scene {
             30,
             `${coins}`,
             {
-                fontFamily: 'Arial Black', fontSize: 35, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 2,
+                fontFamily: 'main-font', fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
