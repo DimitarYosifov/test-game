@@ -76,15 +76,15 @@ export class MainMenu extends Scene {
 
     private createCoins() {
         this.coins = localStorage.getItem('coins') || '0';
-        this.coinTexture = this.add.image(100, 50, 'coin').setScale(0.5).setOrigin(0.5);
         this.coinText = this.add.text(
-            150,
+            1900,
             30,
             `${this.coins}`,
             {
-                fontFamily: 'Arial Black', fontSize: 40, color: '#ffffff',
+                fontFamily: 'Arial Black', fontSize: 35, color: '#ffffff',
                 stroke: '#000000', strokeThickness: 2,
                 align: 'center'
-            });
+            }).setOrigin(1, 0.5);
+        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
     }
 }

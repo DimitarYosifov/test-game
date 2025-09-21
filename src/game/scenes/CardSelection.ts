@@ -29,11 +29,15 @@ export class CardSelection extends Scene {
     playerMonstersData: IPlayerMonstersData[];
     upgradeCostText: GameObjects.Text;
     upgradeCost: number = 0;
-    sellFor: number = 0;
+    sellsFor: number = 0;
     upgradeButton: GameObjects.Image;
     sellHitRect: Phaser.Geom.Rectangle;
     sellButton: Button;
     monsterAddedForSale: Monster | null;
+    sellCardText: GameObjects.Text;
+    coinText: GameObjects.Text;
+    coinTexture: GameObjects.Image;
+    ;
 
     constructor() {
         super('CardSelection');
@@ -54,6 +58,7 @@ export class CardSelection extends Scene {
         this.createUpgradeSlots();
         this.createSellCardSlot();
         this.createOkButton();
+        this.createCoins();
 
         this.initializeMonsters();
     }
@@ -271,6 +276,7 @@ export class CardSelection extends Scene {
             this.monstersContainer.moveTo(monster, monster.originalIndex);
             this.reposition();
             this.checkUpgradeButtonEnable();
+            this.toggleSellButtonEnable(!!this.monsterAddedForSale);
             return
         }
 
@@ -352,6 +358,7 @@ export class CardSelection extends Scene {
             monster.addedForSale = droppedInSellSlot;
             monster.startX = monster.x;
             monster.startY = monster.y;
+            this.toggleSellButtonEnable(!!this.monsterAddedForSale);
             this.reposition();
         }
 
@@ -452,17 +459,17 @@ export class CardSelection extends Scene {
 
     // region SELL
     private createSellCardSlot() {
-        const sellCardText: Phaser.GameObjects.Text = this.add.text(
+        this.sellCardText = this.add.text(
             1415,
             820,
-            `sell monster for: ${this.sellFor}`,
+            `sell monster for: ${this.sellsFor} `,
             {
                 fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
                 stroke: '#000000', strokeThickness: 2,
                 align: 'center'
             }).setOrigin(0.5);
 
-        this.add.existing(sellCardText);
+        this.add.existing(this.sellCardText);
 
         const hitRect = new Phaser.Geom.Rectangle(1165, 860, MONSTER_SIZE, MONSTER_SIZE);
         const graphics = this.add.graphics();
@@ -473,7 +480,48 @@ export class CardSelection extends Scene {
         this.sellButton = new Button(this, 1470, 970, 'sell-btn', this.onSellMonster.bind(this), true, 1.1);
     }
 
+    private toggleSellButtonEnable(enable: boolean) {
+        if (enable) {
+            this.sellButton.setInteractive().setAlpha(1);
+            this.sellsFor = this.monsterAddedForSale?.unitData.sellsFor || 0;
+        } else {
+            this.sellButton.disableInteractive().setAlpha(0.65);
+            this.sellsFor = 0;
+        }
+        this.sellCardText.setText(`sell monster for: ${this.sellsFor}`);
+    }
+
     private onSellMonster() {
+        console.log(this.playerMonstersData)
+        console.log(this.monstersContainer.list)
+
+        const playerCoins = localStorage.getItem('coins') || '0';
+        this.coinText.setText(`${+playerCoins + this.sellsFor}`);
+        localStorage.setItem('coins', JSON.stringify(+playerCoins + this.sellsFor));
+
+        const originalIndex = this.monsterAddedForSale?.originalIndex || 0;
+        (this.playerMonstersData as any)[originalIndex] = null;
+
+        this.monsterAddedForSale!.bg.removeAllListeners();
+        this.monsterAddedForSale!.destroy(true);
+        this.monsterAddedForSale!.removeAllListeners();
+        this.monsterAddedForSale = null;
+
+        this.playerMonstersData = this.playerMonstersData.filter((x: any) => x !== null);
+        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+
+        this.sortMonsters();
+        this.updateMonstersOrder();
+
+        this.toggleSellButtonEnable(false);
+
+        // update all indexes for monsters in the container
+        this.monstersContainer.list.forEach((m: any, index: number) => {
+            m.originalIndex = index;
+        });
+
+        console.log(this.playerMonstersData)
+        console.log(this.monstersContainer.list)
 
     }
     //end region
@@ -503,7 +551,7 @@ export class CardSelection extends Scene {
         this.upgradeCostText = this.add.text(
             970,
             820,
-            `cost: ${this.upgradeCost}`,
+            `cost: ${this.upgradeCost} `,
             {
                 fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
                 stroke: '#000000', strokeThickness: 2,
@@ -520,7 +568,7 @@ export class CardSelection extends Scene {
         if (this.upgradeSelectedMonsters.filter((m: Monster | null) => m !== null).length !== 3) {
             // less than 3 monstars
             this.upgradeCost = 0;
-            this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
+            this.upgradeCostText.setText(`cost: ${this.upgradeCost} `)
             this.toggleUpgradeButtonEnable(false);
             return;
         }
@@ -577,17 +625,24 @@ export class CardSelection extends Scene {
         const playerCoins = localStorage.getItem('coins') || '0';
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         const playerCoinsAfterUpgrade = +playerCoins - this.upgradeCost;
+        this.coinText.setText(`${playerCoinsAfterUpgrade}`);
         localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.toggleUpgradeButtonEnable(false);
         this.upgradeCost = 0;
-        this.upgradeCostText.setText(`cost: ${this.upgradeCost}`);
+        this.upgradeCostText.setText(`cost: ${this.upgradeCost} `);
 
         // set stats for the new monster
         const newMonsterType = this.upgradeSelectedMonsters[0]?.unitData.type!;
         const newMonsterStars = this.upgradeSelectedMonsters[0]?.unitData.stars! + 1;
 
         // create new card
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        this.monstersContainer.add(overlay);
+        overlay.setInteractive();
+        overlay.on('pointerdown', function (pointer: any) {
+            pointer.event.stopPropagation();
+        });
         const config = { ...(monsters_power_config as any)[newMonsterType][newMonsterStars - 1] };
         const newMonster = new Monster(this, 960, 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0);
         newMonster.starsContainer.x = MONSTER_SIZE / -4 + 10;
@@ -609,9 +664,7 @@ export class CardSelection extends Scene {
         this.monstersContainer.moveTo(newMonster, newMonsterIndex);
 
         // update all indexes for monsters in the container
-        this.monstersContainer.list.forEach((m: any, index: number) => {
-            m.originalIndex = index;
-        });
+        this.updateMonstersOrder();
 
         // set interaction for the new monster
         this.setupMonsterInteractions(newMonster, newMonsterIndex);
@@ -621,13 +674,6 @@ export class CardSelection extends Scene {
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
 
         // introduce new card
-        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
-        this.monstersContainer.add(overlay);
-        overlay.setInteractive();
-        overlay.on('pointerdown', function (pointer: any) {
-            pointer.event.stopPropagation();
-        });
-
         this.tweens.chain({
             tweens: [
                 {
@@ -652,7 +698,8 @@ export class CardSelection extends Scene {
                     alpha: 0,
                     delay: 1000,
                     onComplete: () => {
-                        this.monstersContainer.moveTo(newMonster, newMonster.originalIndex);
+                        // this.monstersContainer.moveTo(newMonster, newMonster.originalIndex);
+                        this.monstersContainer.moveTo(newMonster, newMonsterIndex);
                         overlay.destroy();
                         this.reposition();
                     }
@@ -679,7 +726,7 @@ export class CardSelection extends Scene {
             if (index > MAX_MONSTERS_0N_ROW) {
                 finalX = MONSTER_INITIAL_X + (index - MAX_MONSTERS_0N_ROW - 1) * MONSTER_GAP;
             }
-            const finalY = MAIN_DECK_Y + (index - MAX_MONSTERS_0N_ROW > 0 ? MAIN_DECK_HEIGHT / 2 : 0)
+            const finalY = MAIN_DECK_Y + (index - MAX_MONSTERS_0N_ROW > 0 ? MAIN_DECK_HEIGHT / 2 : 0);
             this.tweens.add({
                 targets: element,
                 x: finalX,
@@ -700,10 +747,31 @@ export class CardSelection extends Scene {
         this.okButton = new Button(this, 1800, 970, 'ok-btn', this.save.bind(this));
     }
 
+    // updates order of monsters- similar to zOrder
+    private updateMonstersOrder() {
+        this.monstersContainer.list.forEach((m: any, index: number) => {
+            m.originalIndex = index;
+        });
+    }
+
     private save() {
         console.log(this)
         console.table(this.playerMonstersData);
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.scene.start('MainMenu');
+    }
+
+    private createCoins() {
+        const coins = localStorage.getItem('coins') || '0';
+        this.coinText = this.add.text(
+            1900,
+            30,
+            `${coins}`,
+            {
+                fontFamily: 'Arial Black', fontSize: 35, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 2,
+                align: 'center'
+            }).setOrigin(1, 0.5);
+        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
     }
 }

@@ -875,4 +875,5 @@ export interface IUnitData {
     moves: number;
     movesLeft: number;
     upgradeCost?: number;
+    sellsFor?: number;
 }
