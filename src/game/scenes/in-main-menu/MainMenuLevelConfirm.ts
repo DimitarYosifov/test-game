@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { monsters_power_config } from "../../configs/monsters_power_config";
 import { Monster } from "../in-game/Monster";
 import { ILevelConfig } from "../../configs/level_config";
+import { Button } from "./Button";
 
 
 const MONSTER_SIZE = 150;
@@ -128,46 +129,12 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     }
 
     private createOkButton() {
-        this.okButton = this.scene.add.image(1800, 950, 'ok-btn').setScale(1).setOrigin(0.5).setInteractive();
+        this.okButton = new Button(this.scene, 1800, 950, 'ok-btn', () => this.emit('level-selected', this.levelData.levelName));
         this.add(this.okButton);
-        this.okButton.on('pointerover', () => {
-            this.scene.tweens.add({
-                targets: this.okButton,
-                scale: 1.1,
-                duration: 150,
-            })
-        });
-        this.okButton.on('pointerout', () => {
-            this.scene.tweens.add({
-                targets: this.okButton,
-                scale: 1,
-                duration: 150,
-            })
-        });
-        this.okButton.once('pointerdown', () => {
-            this.emit('level-selected', this.levelData.levelName);
-        });
     }
 
     private createBackButton() {
-        this.backButton = this.scene.add.image(100, 950, 'back-btn').setScale(1).setOrigin(0.5).setInteractive();
+        this.backButton = new Button(this.scene, 100, 950, 'back-btn', () => this.emit('level-unselected'));
         this.add(this.backButton);
-        this.backButton.on('pointerover', () => {
-            this.scene.tweens.add({
-                targets: this.backButton,
-                scale: 1.1,
-                duration: 150,
-            })
-        });
-        this.backButton.on('pointerout', () => {
-            this.scene.tweens.add({
-                targets: this.backButton,
-                scale: 1,
-                duration: 150,
-            })
-        });
-        this.backButton.once('pointerdown', () => {
-            this.emit('level-unselected');
-        });
     }
 }

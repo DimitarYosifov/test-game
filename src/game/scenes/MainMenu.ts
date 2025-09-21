@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { MainMenuLevelConfirm } from './in-main-menu/MainMenuLevelConfirm';
 import { ILevelConfig, level_config } from '../configs/level_config';
+import { Button } from './in-main-menu/Button';
 
 export class MainMenu extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -66,25 +67,11 @@ export class MainMenu extends Scene {
     }
 
     private createDeckbutton(): void {
-        this.deckButton = this.add.image(1700, 850, 'deck').setScale(0.5).setOrigin(0.5).setInteractive();
-        this.deckButton.on('pointerover', () => {
-            this.tweens.add({
-                targets: this.deckButton,
-                scale: 0.55,
-                duration: 150,
-            })
-        });
-        this.deckButton.on('pointerout', () => {
-            this.tweens.add({
-                targets: this.deckButton,
-                scale: 0.5,
-                duration: 150,
-            })
-        });
-        this.deckButton.on('pointerdown', () => {
+        const deckButtonClick = () => {
             this.deckButton.disableInteractive();
             this.scene.start('CardSelection');
-        });
+        }
+        this.deckButton = new Button(this, 1700, 850, 'deck', deckButtonClick.bind(this), false, 0.5);
     }
 
     private createCoins() {

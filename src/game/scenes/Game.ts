@@ -6,6 +6,7 @@ import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
 import { level_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
+import { Button } from './in-main-menu/Button';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -76,18 +77,33 @@ export class Game extends Scene {
     }
 
     private skipButtonHandler(): void {
-        this.skipButton = this.add.image(1820, 100, 'skip').setScale(0.5).setOrigin(0.5).setAlpha(0.6);
-        this.skipButton.on('pointerdown', () => {
-            if (!this.currentlySelectedMonster) {
-                return;
-            }
-            this.skipButton.disableInteractive().setAlpha(0.6);
-            console.log(this.currentlySelectedMonster);
-            this.currentlySelectedMonster.skipMove(true);
-            const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
-            this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
-            this.movementArrowsContainer.removeArrows();
-        })
+        // this.skipButton = this.add.image(1820, 100, 'skip').setScale(0.5).setOrigin(0.5).setAlpha(0.6);
+        // this.skipButton.on('pointerdown', () => {
+        //     if (!this.currentlySelectedMonster) {
+        //         return;
+        //     }
+        //     this.skipButton.disableInteractive().setAlpha(0.6);
+        //     console.log(this.currentlySelectedMonster);
+        //     this.currentlySelectedMonster.skipMove(true);
+        //     const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
+        //     this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
+        //     this.movementArrowsContainer.removeArrows();
+        // })
+
+        this.skipButton = new Button(this, 1820, 100, 'skip', this.onSkip.bind(this), true, 0.5);
+
+
+    }
+    private onSkip() {
+        if (!this.currentlySelectedMonster) {
+            return;
+        }
+        this.skipButton.disableInteractive().setAlpha(0.6);
+        console.log(this.currentlySelectedMonster);
+        this.currentlySelectedMonster.skipMove(true);
+        const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
+        this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
+        this.movementArrowsContainer.removeArrows();
     }
 
     private opponentRepeatMoveHandler(): void {

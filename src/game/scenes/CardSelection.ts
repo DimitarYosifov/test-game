@@ -2,6 +2,7 @@ import { Scene, GameObjects } from 'phaser';
 import { Monster } from './in-game/Monster';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
+import { Button } from './in-main-menu/Button';
 
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
@@ -36,7 +37,6 @@ export class CardSelection extends Scene {
 
     create() {
 
-
         // this.input.once('pointerdown', () => {
         //     this.scene.start('Game');
         // });
@@ -48,11 +48,10 @@ export class CardSelection extends Scene {
         this.createMonstersSlots();
         this.createMainDeckHitRect();
         this.createUpgradeSlots();
+        this.createSellCardSlot();
         this.createOkButton();
 
         this.initializeMonsters();
-
-
     }
 
     private loadPlayerMonsters() {
@@ -404,38 +403,6 @@ export class CardSelection extends Scene {
         }
     }
 
-    private checkUpgradeButtonEnable() {
-
-        if (this.upgradeSelectedMonsters.filter((m: Monster | null) => m !== null).length !== 3) {
-            // less than 3 monstars
-            this.upgradeCost = 0;
-            this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
-            this.toggleUpgradeButtonEnable(false);
-            return;
-        }
-
-        let firstUnitData = this.upgradeSelectedMonsters[0]!.unitData;
-        for (let index = 1; index < 3; index++) {
-            const unitData = this.upgradeSelectedMonsters[index]!.unitData;
-            if (unitData.type !== firstUnitData.type || unitData.stars !== firstUnitData.stars) {
-                this.toggleUpgradeButtonEnable(false);
-                return;
-            }
-        }
-
-        const playerCoins = localStorage.getItem('coins') || '0';
-        this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
-        this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
-
-        if (+playerCoins < this.upgradeCost) {
-            // not enough coin to upgrade
-            this.toggleUpgradeButtonEnable(false);
-            return;
-        }
-
-        this.toggleUpgradeButtonEnable(true);
-    }
-
     private toggleUpgradeButtonEnable(enable: boolean) {
         if (enable) {
             this.upgradeButton.setInteractive().setAlpha(1);
@@ -494,6 +461,11 @@ export class CardSelection extends Scene {
         graphics.strokeRectShape(this.mainDeckHitRect);
     }
 
+    private createSellCardSlot() {
+
+    }
+
+    // region UPGRADE
     private createUpgradeSlots() {
         const upgradeMonsters: Phaser.GameObjects.Text = this.add.text(
             65,
@@ -527,24 +499,39 @@ export class CardSelection extends Scene {
 
         this.add.existing(this.upgradeCostText);
 
-        this.upgradeButton = this.add.image(970, 970, 'upgrade').setScale(1).setOrigin(0.5).setAlpha(0.65);
-        this.upgradeButton.on('pointerover', () => {
-            this.tweens.add({
-                targets: this.upgradeButton,
-                scale: 1.05,
-                duration: 150,
-            })
-        });
-        this.upgradeButton.on('pointerout', () => {
-            this.tweens.add({
-                targets: this.upgradeButton,
-                scale: 1,
-                duration: 150,
-            })
-        });
-        this.upgradeButton.on('pointerdown', () => {
-            this.onUpgradeMonster();
-        });
+        this.upgradeButton = new Button(this, 970, 970, 'upgrade', this.onUpgradeMonster.bind(this), true);
+    }
+
+    private checkUpgradeButtonEnable() {
+
+        if (this.upgradeSelectedMonsters.filter((m: Monster | null) => m !== null).length !== 3) {
+            // less than 3 monstars
+            this.upgradeCost = 0;
+            this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
+            this.toggleUpgradeButtonEnable(false);
+            return;
+        }
+
+        let firstUnitData = this.upgradeSelectedMonsters[0]!.unitData;
+        for (let index = 1; index < 3; index++) {
+            const unitData = this.upgradeSelectedMonsters[index]!.unitData;
+            if (unitData.type !== firstUnitData.type || unitData.stars !== firstUnitData.stars) {
+                this.toggleUpgradeButtonEnable(false);
+                return;
+            }
+        }
+
+        const playerCoins = localStorage.getItem('coins') || '0';
+        this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
+        this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
+
+        if (+playerCoins < this.upgradeCost) {
+            // not enough coin to upgrade
+            this.toggleUpgradeButtonEnable(false);
+            return;
+        }
+
+        this.toggleUpgradeButtonEnable(true);
     }
 
     private onUpgradeMonster() {
@@ -664,6 +651,7 @@ export class CardSelection extends Scene {
         console.log(this.selectedMonsters)
         console.log(this.upgradeSelectedMonsters)
     }
+    // end region
 
     private addNewMonster(type: number, stars: number) {
         const newObject = { type, stars, row: NaN, col: 11 };
@@ -693,27 +681,11 @@ export class CardSelection extends Scene {
     }
 
     private createOkButton() {
-        this.okButton = this.add.image(1800, 950, 'ok-btn').setScale(1).setOrigin(0.5).setInteractive();
-        this.okButton.on('pointerover', () => {
-            this.tweens.add({
-                targets: this.okButton,
-                scale: 1.1,
-                duration: 150,
-            })
-        });
-        this.okButton.on('pointerout', () => {
-            this.tweens.add({
-                targets: this.okButton,
-                scale: 1,
-                duration: 150,
-            })
-        });
-        this.okButton.on('pointerdown', () => {
-            this.save();
-        });
+        this.okButton = new Button(this, 1800, 950, 'ok-btn', this.save.bind(this));
     }
 
     private save() {
+        console.log(this)
         console.table(this.playerMonstersData);
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.scene.start('MainMenu');
