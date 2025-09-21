@@ -5,7 +5,7 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 0.3,// clouds visibility
+    "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2
 }
 
@@ -17,3 +17,4 @@ export const main_config = {
 // implement buying packs
 // pick main foin and use it
 // add shop
+// add sell card in card selection

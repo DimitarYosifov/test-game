@@ -306,13 +306,7 @@ export class Game extends Scene {
                 localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
 
                 // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
-                const STORAGE_KEY = 'playerMonstersData';
-                const storedData = localStorage.getItem(STORAGE_KEY);
-                const dataArray = storedData ? JSON.parse(storedData) : [];
-                const newObject = { type: monsterRewardType, stars: monsterRewardStars, row: NaN, col: 11 };
-                dataArray.push(newObject);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
-
+                this.addNewMonster(monsterRewardType, monsterRewardStars);
                 this.changeScene('MainMenu');
             });
         } else {
@@ -356,6 +350,15 @@ export class Game extends Scene {
                 this.changeScene('MainMenu');
             });
         }
+    }
+
+    private addNewMonster(type: number, stars: number) {
+        const STORAGE_KEY = 'playerMonstersData';
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        const dataArray = storedData ? JSON.parse(storedData) : [];
+        const newObject = { type, stars, row: NaN, col: 11 };
+        dataArray.push(newObject);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
     }
 
     private changeScene(nextScene: string): void {
@@ -855,4 +858,5 @@ export interface IUnitData {
     type: string;
     moves: number;
     movesLeft: number;
+    upgradeCost?: number;
 }

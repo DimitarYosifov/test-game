@@ -60,6 +60,7 @@ export class Preloader extends Scene {
         this.load.image('claim', 'claim.png');
         this.load.image('try-again', 'try-again.png');
         this.load.image('give-up', 'give-up.png');
+        this.load.image('upgrade', 'upgrade.png');
     }
 
     create() {
