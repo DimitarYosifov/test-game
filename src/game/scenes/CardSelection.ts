@@ -29,7 +29,11 @@ export class CardSelection extends Scene {
     playerMonstersData: IPlayerMonstersData[];
     upgradeCostText: GameObjects.Text;
     upgradeCost: number = 0;
+    sellFor: number = 0;
     upgradeButton: GameObjects.Image;
+    sellHitRect: Phaser.Geom.Rectangle;
+    sellButton: Button;
+    monsterAddedForSale: Monster | null;
 
     constructor() {
         super('CardSelection');
@@ -259,19 +263,109 @@ export class CardSelection extends Scene {
             } else if (!isNaN(monster.upgradePostionIndex)) {
                 this.upgradeSelectedMonsters[monster.upgradePostionIndex] = null;
                 monster.upgradePostionIndex = NaN;
+            } else if (monster.addedForSale) {
+                monster.addedForSale = false;
+                this.monsterAddedForSale = null;
             }
+
             this.monstersContainer.moveTo(monster, monster.originalIndex);
             this.reposition();
             this.checkUpgradeButtonEnable();
-            console.log(this.selectedMonsters)
-            console.log(this.upgradeSelectedMonsters)
             return
         }
 
         let droppedInSlot = false;
         let droppedInUpgradeSlot = false;
+        let droppedInSellSlot = false;
 
-        // check dropped in upgrade section
+
+        //region check dropped in sell section
+        if (this.sellHitRect.contains(pointer.x, pointer.y)) {
+
+            droppedInSellSlot = true;
+
+            const hasOldSelectedPosition = !isNaN(monster.positionIndex);//old position was from selected monsters
+            const hasOldUpgradePosition = !isNaN(monster.upgradePostionIndex);//old position was from upgrade monsters
+            const hasOldSellPosition = monster.addedForSale;//old position was from sell section
+            const existingMonster = this.monsterAddedForSale;// has monster on the current drop spot
+
+            if (hasOldSelectedPosition) {
+                this.selectedMonsters[monster.positionIndex] = null;
+            } else if (hasOldUpgradePosition) {
+                this.upgradeSelectedMonsters[monster.upgradePostionIndex] = null;
+            } else if (hasOldSellPosition) {
+                monster.addedForSale = false;
+                this.monsterAddedForSale = null;
+            }
+
+            if (existingMonster) {
+                // Handle swapping
+                if (hasOldSelectedPosition) {
+                    // this.monsterAddedForSale!.addedForSale = false;
+
+                    this.selectedMonsters[monster.positionIndex] = existingMonster;
+                    this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                    existingMonster.startX = monster.startX;
+                    existingMonster.startY = monster.startY;
+                    existingMonster.positionIndex = monster.positionIndex;
+                    existingMonster.upgradePostionIndex = NaN;
+                    // this.monsterAddedForSale = null;
+                    existingMonster.addedForSale = false;
+
+                    this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
+                }
+                else if (hasOldUpgradePosition) {
+                    // this.monsterAddedForSale!.addedForSale = false;
+
+                    this.upgradeSelectedMonsters[monster.upgradePostionIndex] = existingMonster;
+                    this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                    existingMonster.startX = monster.startX;
+                    existingMonster.startY = monster.startY;
+                    // this.monsterAddedForSale = null;
+                    existingMonster.addedForSale = false;
+                    existingMonster.upgradePostionIndex = monster.upgradePostionIndex;
+                    existingMonster.positionIndex = NaN;
+                } else if (hasOldSellPosition) {
+                    this.monsterAddedForSale = existingMonster;
+                    existingMonster.addedForSale = true;
+                    this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                    existingMonster.startX = monster.startX;
+                    existingMonster.startY = monster.startY;
+                    existingMonster.upgradePostionIndex = NaN;
+                    existingMonster.positionIndex = NaN;
+                } else {
+                    // this.upgradeSelectedMonsters[i] = existingMonster;
+                    this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                    existingMonster.positionIndex = NaN;
+                    existingMonster.upgradePostionIndex = NaN;
+                    existingMonster.addedForSale = false;
+                    existingMonster.startX = monster.startX;
+                    existingMonster.startY = monster.startY;
+                    this.playerMonstersData[existingMonster.originalIndex].row = NaN;
+                }
+            }
+
+            // Place dragged monster into the new slot
+            monster.setPosition(this.sellHitRect.x + this.sellHitRect.width / 2, this.sellHitRect.y + this.sellHitRect.height / 2);
+            monster.startX = monster.x;
+            monster.startY = monster.y;
+
+            monster.positionIndex = NaN;
+            monster.upgradePostionIndex = NaN;
+            monster.addedForSale = true;
+            this.monsterAddedForSale = monster;
+
+            // this.upgradeSelectedMonsters[i] = monster;
+            this.reposition();
+            // this.checkUpgradeButtonEnable();
+            // break;
+        }
+        if (droppedInSellSlot) {
+            return;
+        }
+        //end region
+
+        //region check dropped in upgrade section
         for (let i = 0; i < this.upgradeHitRects.length; i++) {
             const hitRect = this.upgradeHitRects[i];
 
@@ -281,17 +375,24 @@ export class CardSelection extends Scene {
 
                 const hasOldSelectedPosition = !isNaN(monster.positionIndex);//old position was from selected monsters
                 const hasOldUpgradePosition = !isNaN(monster.upgradePostionIndex);//old position was from upgrade monsters
+                const hasOldSellPosition = monster.addedForSale;//old position was from sell section
                 const existingMonster = this.upgradeSelectedMonsters[i];// has monster on the current drop spot
 
                 if (hasOldSelectedPosition) {
                     this.selectedMonsters[monster.positionIndex] = null;
                 } else if (hasOldUpgradePosition) {
                     this.upgradeSelectedMonsters[monster.upgradePostionIndex] = null;
+                } else if (hasOldSellPosition) {
+                    monster.addedForSale = false;
+                    this.monsterAddedForSale = null;
                 }
 
                 if (existingMonster) {
                     // Handle swapping
                     if (hasOldSelectedPosition) {
+                        // this.monsterAddedForSale!.addedForSale = false;
+                        // this.monsterAddedForSale = null;
+                        existingMonster.addedForSale = false;
                         this.selectedMonsters[monster.positionIndex] = existingMonster;
                         this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
                         existingMonster.startX = monster.startX;
@@ -302,11 +403,23 @@ export class CardSelection extends Scene {
                         this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
                     }
                     else if (hasOldUpgradePosition) {
+                        // this.monsterAddedForSale!.addedForSale = false;
+                        // this.monsterAddedForSale = null;
+                        existingMonster.addedForSale = false;
+
                         this.upgradeSelectedMonsters[monster.upgradePostionIndex] = existingMonster;
                         this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
                         existingMonster.startX = monster.startX;
                         existingMonster.startY = monster.startY;
                         existingMonster.upgradePostionIndex = monster.upgradePostionIndex;
+                        existingMonster.positionIndex = NaN;
+                    } else if (hasOldSellPosition) {
+                        this.monsterAddedForSale = existingMonster;
+                        existingMonster.addedForSale = true;
+                        this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                        existingMonster.startX = monster.startX;
+                        existingMonster.startY = monster.startY;
+                        existingMonster.upgradePostionIndex = NaN;
                         existingMonster.positionIndex = NaN;
                     } else {
                         this.upgradeSelectedMonsters[i] = existingMonster;
@@ -324,20 +437,23 @@ export class CardSelection extends Scene {
                 monster.startX = monster.x;
                 monster.startY = monster.y;
 
+                monster.addedForSale = false;
                 monster.positionIndex = NaN;
                 monster.upgradePostionIndex = i;
+
+
                 this.upgradeSelectedMonsters[i] = monster;
                 this.reposition();
                 this.checkUpgradeButtonEnable();
                 break;
             }
         }
-
         if (droppedInUpgradeSlot) {
             return;
         }
+        //end region
 
-        // check dropped in selected section
+        //region check dropped in selected section
         for (let i = 0; i < this.hitRects.length; i++) {
             const hitRect = this.hitRects[i];
 
@@ -346,17 +462,23 @@ export class CardSelection extends Scene {
 
                 const hasOldSelectedPosition = !isNaN(monster.positionIndex);//old position was from selected monsters
                 const hasOldUpgradePosition = !isNaN(monster.upgradePostionIndex);//old position was from upgrade monsters
+                const hasOldSellPosition = monster.addedForSale;//old position was from sell section
                 const existingMonster = this.selectedMonsters[i];// has monster on the current drop spot
 
                 if (hasOldSelectedPosition) {
                     this.selectedMonsters[monster.positionIndex] = null;
                 } else if (hasOldUpgradePosition) {
                     this.upgradeSelectedMonsters[monster.upgradePostionIndex] = null;
+                } else if (hasOldSellPosition) {
+                    monster.addedForSale = false;
+                    this.monsterAddedForSale = null;
                 }
 
                 if (existingMonster) {
                     // Handle swapping
                     if (hasOldSelectedPosition) {
+                        existingMonster.addedForSale = false;
+                        // this.monsterAddedForSale = null;
                         this.selectedMonsters[monster.positionIndex] = existingMonster;
                         this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
                         existingMonster.startX = monster.startX;
@@ -365,11 +487,24 @@ export class CardSelection extends Scene {
                         existingMonster.upgradePostionIndex = NaN;
                         this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
                     } else if (hasOldUpgradePosition) {
+                        existingMonster.addedForSale = false;
+                        // this.monsterAddedForSale = null;
                         this.upgradeSelectedMonsters[monster.upgradePostionIndex] = existingMonster;
                         this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
                         existingMonster.startX = monster.startX;
                         existingMonster.startY = monster.startY;
                         existingMonster.upgradePostionIndex = monster.upgradePostionIndex;
+                        existingMonster.positionIndex = NaN;
+                    } else if (hasOldSellPosition) {
+                        // this.monsterAddedForSale!.addedForSale = false;
+                        // this.monsterAddedForSale = null;
+
+                        this.monsterAddedForSale = existingMonster;
+                        existingMonster.addedForSale = true;
+                        this.animateMonsterReturn(existingMonster, monster.startX, monster.startY);
+                        existingMonster.startX = monster.startX;
+                        existingMonster.startY = monster.startY;
+                        existingMonster.upgradePostionIndex = NaN;
                         existingMonster.positionIndex = NaN;
                     } else {
                         this.selectedMonsters[i] = existingMonster;
@@ -387,8 +522,11 @@ export class CardSelection extends Scene {
                 monster.setPosition(hitRect.x + hitRect.width / 2, hitRect.y + hitRect.height / 2);
                 monster.startX = monster.x;
                 monster.startY = monster.y;
+
                 monster.positionIndex = i;
                 monster.upgradePostionIndex = NaN;
+                monster.addedForSale = false;
+
                 this.playerMonstersData[monster.originalIndex].row = i;
                 this.selectedMonsters[i] = monster;
 
@@ -397,8 +535,9 @@ export class CardSelection extends Scene {
                 break;
             }
         }
+        //end region
 
-        if (!droppedInSlot && !droppedInUpgradeSlot) {
+        if (!droppedInSlot && !droppedInUpgradeSlot && !droppedInSellSlot) {
             monster.setPosition(monster.startX, monster.startY);
         }
     }
@@ -461,9 +600,33 @@ export class CardSelection extends Scene {
         graphics.strokeRectShape(this.mainDeckHitRect);
     }
 
+    // region SELL
     private createSellCardSlot() {
+        const sellCardText: Phaser.GameObjects.Text = this.add.text(
+            1415,
+            820,
+            `sell monster for: ${this.sellFor}`,
+            {
+                fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 2,
+                align: 'center'
+            }).setOrigin(0.5);
+
+        this.add.existing(sellCardText);
+
+        const hitRect = new Phaser.Geom.Rectangle(1165, 860, MONSTER_SIZE, MONSTER_SIZE);
+        const graphics = this.add.graphics();
+        graphics.lineStyle(2, 0xffffff);
+        graphics.strokeRectShape(hitRect);
+        this.sellHitRect = hitRect;
+
+        this.sellButton = new Button(this, 1470, 970, 'sell-btn', this.onSellMonster.bind(this), true, 1.1);
+    }
+
+    private onSellMonster() {
 
     }
+    //end region
 
     // region UPGRADE
     private createUpgradeSlots() {
@@ -489,7 +652,7 @@ export class CardSelection extends Scene {
 
         this.upgradeCostText = this.add.text(
             970,
-            845,
+            820,
             `cost: ${this.upgradeCost}`,
             {
                 fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
@@ -659,7 +822,7 @@ export class CardSelection extends Scene {
     }
 
     private reposition() {
-        const monsters = this.monstersContainer.list.filter((x: any) => isNaN(x.positionIndex) && isNaN(x.upgradePostionIndex))
+        const monsters = this.monstersContainer.list.filter((x: any) => isNaN(x.positionIndex) && isNaN(x.upgradePostionIndex) && !x.addedForSale)
 
         monsters.forEach((element: any, index) => {
             let finalX = MONSTER_INITIAL_X + index * MONSTER_GAP;
@@ -678,10 +841,13 @@ export class CardSelection extends Scene {
             element.startY = finalY;
             // this.monstersContainer.bringToTop(element); // causes bugs
         });
+        console.log(this.selectedMonsters)
+        console.log(this.upgradeSelectedMonsters)
+        console.log(this.monsterAddedForSale)
     }
 
     private createOkButton() {
-        this.okButton = new Button(this, 1800, 950, 'ok-btn', this.save.bind(this));
+        this.okButton = new Button(this, 1800, 970, 'ok-btn', this.save.bind(this));
     }
 
     private save() {
