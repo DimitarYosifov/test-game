@@ -43,7 +43,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             150,
             `Level ${this.levelData.levelName}`,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
@@ -56,7 +56,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             250,
             `First Win Reward: ${this.levelData.firstWinReward}`,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
@@ -69,7 +69,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             350,
             `Repeat Level Win Reward: ${this.levelData.repeatLevelWinReward}`,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
@@ -82,7 +82,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             450,
             `Enemies: `,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(0.5);
@@ -120,7 +120,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
                 monster.y + (monster.bg.height / 2),
                 `x ${count}`,
                 {
-                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 45, color: '#ffffff',
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 45, color: '#ffffff',
                     stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 }).setOrigin(0.5);

@@ -11,10 +11,7 @@ export const main_config = {
 
 
 // TODO:
-// implement card upgrade
-// add coin image and localstarage data for coins
-// detect level end and implement outro reward popup(add coins to player and localstorage)
 // implement buying packs
 // pick main foin and use it
 // add shop
-// add sell card in card selection
+// implement chance of getting a monster after level end

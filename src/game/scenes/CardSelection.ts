@@ -3,6 +3,7 @@ import { Monster } from './in-game/Monster';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
+import { AbstractScene } from './AbstractScene';
 
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
@@ -15,7 +16,7 @@ const MAIN_DECK_WIDTH = 1790;
 const MAIN_DECK_HEIGHT = 450;
 const MAX_MONSTERS_0N_ROW = 20;
 
-export class CardSelection extends Scene {
+export class CardSelection extends AbstractScene {
     background: GameObjects.Image;
     logo: GameObjects.Image;
     title: GameObjects.Text;
@@ -43,12 +44,21 @@ export class CardSelection extends Scene {
         super('CardSelection');
     }
 
-    create() {
+    init() {
 
+    }
+
+    create() {
+        super.create();
         // this.input.once('pointerdown', () => {
         //     this.scene.start('Game');
         // });
         // return;
+
+        // this.cameras.main.fadeIn(500, 0, 0, 0);
+        // this.cameras.main.once('camerafadeincomplete', () => {
+
+        // });
 
         this.monstersContainer = this.add.container().setDepth(100);
 
@@ -422,8 +432,8 @@ export class CardSelection extends Scene {
             5,
             'SELECTED MONSTERS',
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -444,8 +454,8 @@ export class CardSelection extends Scene {
             280,
             'MONSTERS (40 max)',
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -464,8 +474,8 @@ export class CardSelection extends Scene {
             820,
             `sell monster for: ${this.sellsFor} `,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -485,7 +495,7 @@ export class CardSelection extends Scene {
             this.sellButton.setInteractive().setAlpha(1);
             this.sellsFor = this.monsterAddedForSale?.unitData.sellsFor || 0;
         } else {
-            this.sellButton.disableInteractive().setAlpha(0.65);
+            this.sellButton.disableInteractive().setAlpha(0.65).setScale(1.1);
             this.sellsFor = 0;
         }
         this.sellCardText.setText(`sell monster for: ${this.sellsFor}`);
@@ -533,8 +543,8 @@ export class CardSelection extends Scene {
             800,
             'UPGRADE MONSTER',
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0);
 
@@ -553,8 +563,8 @@ export class CardSelection extends Scene {
             820,
             `cost: ${this.upgradeCost} `,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -758,7 +768,7 @@ export class CardSelection extends Scene {
         console.log(this)
         console.table(this.playerMonstersData);
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
-        this.scene.start('MainMenu');
+        this.changeScene('MainMenu');
     }
 
     private createCoins() {
@@ -768,10 +778,17 @@ export class CardSelection extends Scene {
             30,
             `${coins}`,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
+    }
+
+    changeScene(nextScene: string): void {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.scene.start(nextScene);
+        });
     }
 }

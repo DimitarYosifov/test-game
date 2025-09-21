@@ -7,6 +7,7 @@ import { Cloud } from './in-game/Cloud';
 import { level_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
+import { AbstractScene } from './AbstractScene';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -17,7 +18,7 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'MONSTER_DIED' = 'monster-died'
 }
 
-export class Game extends Scene {
+export class Game extends AbstractScene {
 
     mainGridContainer: Phaser.GameObjects.Container;
     movementArrowsContainer: MovementArrowsContainer;
@@ -32,7 +33,7 @@ export class Game extends Scene {
     }
 
     create() {
-
+        super.create();
         this.add.image(0, 0, 'bg').setOrigin(0);
         this.data.list.isPlayerTurn = true;
         this.setGridDimensions();
@@ -236,8 +237,8 @@ export class Game extends Scene {
             350,
             msg,
             {
-                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
 
@@ -251,8 +252,8 @@ export class Game extends Scene {
                 500,
                 'REWARDS: ',
                 {
-                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
-                    stroke: '#000000', letterSpacing:4,
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
                     align: 'center'
                 }).setOrigin(0, 0.5);
             rewardsContainer.add(rewardtext);
@@ -269,8 +270,8 @@ export class Game extends Scene {
                 500,
                 `x${coinsWon}`,
                 {
-                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
-                    stroke: '#000000', letterSpacing:4,
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
                     align: 'center'
                 }).setOrigin(0, 0.5);
             rewardsContainer.add(cointext);
@@ -377,11 +378,14 @@ export class Game extends Scene {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
     }
 
-    private changeScene(nextScene: string): void {
+    changeScene(nextScene: string): void {
         Object.values(GAME_SCENE_SCENE_EVENTS).forEach(event => {
             this.events.removeListener(event);
         });
-        this.scene.start(nextScene);
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.scene.start(nextScene);
+        });
     }
 
     private resetPreviousSelectedMonsterMoves(): void {

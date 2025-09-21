@@ -5,6 +5,7 @@ import { AUTO, Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { MainMenu } from './scenes/MainMenu';
 import { CardSelection } from './scenes/CardSelection';
+import { Map } from './scenes/Map';
 
 // import main_confi from '../sconfig/main_config.json';
 
@@ -27,6 +28,7 @@ const config: Phaser.Types.Core.GameConfig = {
         MainMenu,
         CardSelection,
         MainGame,
+        Map,
         GameOver
     ]
 };
