@@ -20,7 +20,7 @@ export class GameOver extends Scene
         this.background.setAlpha(0.5);
 
         this.gameover_text = this.add.text(512, 384, 'Game Over', {
-            fontFamily: 'main-font', fontSize: 64, color: '#ffffff',
+            fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 64, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         });

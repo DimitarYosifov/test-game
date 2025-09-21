@@ -84,7 +84,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.melee.y - 2,
                 unit.melee.toString(),
                 {
-                    fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 });
@@ -105,7 +105,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.ranged.y - 2,
                 unit.ranged.toString(),
                 {
-                    fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 });
@@ -126,7 +126,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.magic.y - 2,
                 unit.magic.toString(),
                 {
-                    fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 });
@@ -140,7 +140,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.bg.displayHeight / -2 + this.bg.displayHeight * 0.02 - 2,
             unit.health.toString(),
             {
-                fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             });
@@ -163,7 +163,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.shield.y - 2,
             unit.shield.toString(),
             {
-                fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             });
@@ -176,7 +176,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.bg.displayHeight / 2 - this.bg.displayHeight * 0.02 - 2,
             unit.vision.toString(),
             {
-                fontFamily: 'main-font', fontSize: displayWidth * 15 / 100, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             });
@@ -482,7 +482,7 @@ export class Monster extends Phaser.GameObjects.Container {
             y,
             (dmg * -1).toString(),
             {
-                fontFamily: 'main-font', fontSize: 40, color: '#ff0000',
+                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             });

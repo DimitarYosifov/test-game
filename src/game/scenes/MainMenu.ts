@@ -35,7 +35,7 @@ export class MainMenu extends Scene {
                 800 - index * 50,
                 `Level ${levelData.levelName}`,
                 {
-                    fontFamily: 'main-font', fontSize: 33, color: '#ffffff',
+                    fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
                     stroke: '#000000', letterSpacing:4,
                     align: 'center'
                 });
@@ -81,7 +81,7 @@ export class MainMenu extends Scene {
             30,
             `${this.coins}`,
             {
-                fontFamily: 'main-font', fontSize: 35, color: '#ffffff',
+                fontFamily: 'main-font', padding: { left: 0, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
                 stroke: '#000000', letterSpacing:4,
                 align: 'center'
             }).setOrigin(1, 0.5);
