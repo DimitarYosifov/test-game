@@ -31,4 +31,16 @@ export class Button extends Phaser.GameObjects.Image {
 
         this.scene.add.existing(this);
     }
+
+    setInteractive(hitArea?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
+        super.setInteractive(hitArea, callback, dropZone);
+        this.setAlpha(1);
+        return this;
+    }
+
+    disableInteractive(resetCursor?: boolean): this {
+        super.disableInteractive(resetCursor);
+        this.setAlpha(0.65);
+        return this;
+    }
 }

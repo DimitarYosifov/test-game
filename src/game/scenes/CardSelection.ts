@@ -238,7 +238,7 @@ export class CardSelection extends AbstractScene {
                 monster.positionIndex = monsterData.row;
             }
         });
-        this.reposition();
+        this.reposition(true);
     }
 
     private setupMonsterInteractions(monster: Monster, index: number) {
@@ -384,6 +384,12 @@ export class CardSelection extends AbstractScene {
         for (let i = 0; i < this.upgradeHitRects.length; i++) {
             const hitRect = this.upgradeHitRects[i];
             if (hitRect.contains(pointer.x, pointer.y)) {
+
+                if (monster.unitData.stars === 5) {
+                    // monster is 5 stars and can not be upgraded!
+                    break;
+                }
+
                 droppedInUpgradeSlot = true;
                 proceed(i, hitRect);
                 break;
@@ -729,7 +735,7 @@ export class CardSelection extends AbstractScene {
         this.playerMonstersData.push(newObject);
     }
 
-    private reposition() {
+    private reposition(moveImmediately: boolean = false) {
         const monsters = this.monstersContainer.list.filter((x: any) => isNaN(x.positionIndex) && isNaN(x.upgradePostionIndex) && !x.addedForSale)
 
         monsters.forEach((element: any, index) => {
@@ -738,11 +744,12 @@ export class CardSelection extends AbstractScene {
                 finalX = MONSTER_INITIAL_X + (index - MAX_MONSTERS_0N_ROW - 1) * MONSTER_GAP;
             }
             const finalY = MAIN_DECK_Y + (index - MAX_MONSTERS_0N_ROW > 0 ? MAIN_DECK_HEIGHT / 2 : 0);
+            const duration = moveImmediately ? 1 : 150;
             this.tweens.add({
                 targets: element,
                 x: finalX,
                 y: finalY,
-                duration: 150,
+                duration,
                 scale: 1
             })
             element.startX = finalX;

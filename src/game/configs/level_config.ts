@@ -41,7 +41,7 @@ export const level_config = [
     }
 ]
 
-interface IOpponentMonstersData {
+ export interface IOpponentMonstersData {
     type: number;
     stars: number;
 }
