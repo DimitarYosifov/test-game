@@ -48,8 +48,8 @@ export class MainMenu extends AbstractScene {
 
     private createShopbutton(): void {
         const shopButtonClick = () => {
-            // this.shopButton.disableInteractive();
-            // this.scene.start('CardSelection');
+            this.shopButton.disableInteractive();
+            this.scene.start('BuyPacks');
         }
         this.shopButton = new Button(this, 960, 250, 'shop-icon', shopButtonClick.bind(this), false, 1);
         const shopTitle = this.add.text(
@@ -66,10 +66,7 @@ export class MainMenu extends AbstractScene {
     private createDeckbutton(): void {
         const deckButtonClick = () => {
             this.deckButton.disableInteractive();
-            // this.cameras.main.fadeOut(500, 0, 0, 0);
-            // this.cameras.main.once('camerafadeoutcomplete', () => {
             this.changeScene('CardSelection');
-            // });
         }
         this.deckButton = new Button(this, 1650, 750, 'deck', deckButtonClick.bind(this), false, 0.5);
         const deckTitle = this.add.text(

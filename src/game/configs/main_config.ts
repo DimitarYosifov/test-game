@@ -15,3 +15,5 @@ export const main_config = {
 // pick main foin and use it
 // add shop
 // implement chance of getting a monster after level end
+// create pack config and use its pack cost in buyPack scene -pack cost, some info about the monster odds
+// check if user has coins to buy packs when creating buyPack scene and after purchasing a pack

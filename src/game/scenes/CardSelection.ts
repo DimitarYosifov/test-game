@@ -21,8 +21,8 @@ export class CardSelection extends AbstractScene {
     logo: GameObjects.Image;
     title: GameObjects.Text;
     monstersContainer: GameObjects.Container;
-    hitRects: Phaser.Geom.Rectangle[] = [];
-    upgradeHitRects: Phaser.Geom.Rectangle[] = [];
+    hitRects: Phaser.Geom.Rectangle[];
+    upgradeHitRects: Phaser.Geom.Rectangle[];
     selectedMonsters: Monster[] | null[] = [null, null, null, null, null, null, null];
     upgradeSelectedMonsters: Monster[] | null[] = [null, null, null];
     mainDeckHitRect: Phaser.Geom.Rectangle;
@@ -61,7 +61,8 @@ export class CardSelection extends AbstractScene {
         // });
 
         this.monstersContainer = this.add.container().setDepth(100);
-
+        this.hitRects = [];
+        this.upgradeHitRects = [];
         this.loadPlayerMonsters();
         this.createMonstersSlots();
         this.createMainDeckHitRect();
@@ -706,7 +707,7 @@ export class CardSelection extends AbstractScene {
                     targets: overlay,
                     duration: 200,
                     alpha: 0,
-                    delay: 1000,
+                    delay: 1250,
                     onComplete: () => {
                         // this.monstersContainer.moveTo(newMonster, newMonster.originalIndex);
                         this.monstersContainer.moveTo(newMonster, newMonsterIndex);

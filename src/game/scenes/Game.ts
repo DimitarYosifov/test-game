@@ -301,23 +301,7 @@ export class Game extends AbstractScene {
             console.log()
 
             // claim button
-            const claimButton = this.add.image(960, 700, 'claim').setScale(1).setOrigin(0.5).setInteractive();
-            claimButton.on('pointerover', () => {
-                this.tweens.add({
-                    targets: claimButton,
-                    scale: 1.05,
-                    duration: 150,
-                })
-            });
-            claimButton.on('pointerout', () => {
-                this.tweens.add({
-                    targets: claimButton,
-                    scale: 1,
-                    duration: 150,
-                })
-            });
-            claimButton.once('pointerdown', () => {
-
+            const claimButton = new Button(this, 960, 700, 'claim', () => {
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';
                 localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));

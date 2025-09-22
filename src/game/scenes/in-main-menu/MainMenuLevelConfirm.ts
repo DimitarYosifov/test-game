@@ -40,7 +40,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private createLevelHeader() {
         const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
             960,
-            150,
+            250,
             `Level ${this.levelData.levelName}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
@@ -53,7 +53,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private createFirstWinReward() {
         const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
             960,
-            250,
+            350,
             `First Win Reward: ${this.levelData.firstWinReward}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -66,7 +66,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private createRepeatLevelWinReward() {
         const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
             960,
-            350,
+            450,
             `Repeat Level Win Reward: ${this.levelData.repeatLevelWinReward}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -79,7 +79,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private createEnemyDescription() {
         const enemies: Phaser.GameObjects.Text = this.scene.add.text(
             960,
-            450,
+            550,
             `Enemies: `,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -109,7 +109,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
 
             const parsedKey = JSON.parse(key);
             const config = { ...(monsters_power_config as any)[parsedKey.type][parsedKey.stars - 1] };
-            const monster = new Monster(this.scene, x, 600, 150, 150, config, 0, true);
+            const monster = new Monster(this.scene, x, 700, 150, 150, config, 0, true);
             monster.starsContainer.x = MONSTER_SIZE / -4 + 18;
             monster.movesLeftContainer.x = MONSTER_SIZE / 2 + 18;
             this.add(monster);
