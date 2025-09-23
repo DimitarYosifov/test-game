@@ -29,6 +29,7 @@ export class Game extends AbstractScene {
     skipButton: Phaser.GameObjects.Image;
     opponentBulb: Phaser.GameObjects.Image;
     playerBulb: Phaser.GameObjects.Image;
+    opponentMonstersLeftText: Phaser.GameObjects.Text;
 
     constructor() {
         super('Game');
@@ -47,6 +48,7 @@ export class Game extends AbstractScene {
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
         this.addClouds();
         this.createBulbs();
+        this.addOpponentMonstersLeftText();
         this.checkMapVisibility(true);
 
         // event handlers
@@ -58,6 +60,22 @@ export class Game extends AbstractScene {
         this.targetSelectHandler();
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
+    }
+
+    private addOpponentMonstersLeftText() {
+        this.opponentMonstersLeftText = this.add.text(
+            150,
+            50,
+            `monsters left: ${this.data.list.opponentMonsters.length}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0, 0.5);
+    }
+
+    private updateOpponentMonstersLeft() {
+        this.opponentMonstersLeftText.setText(`monsters left: ${this.data.list.opponentMonsters.filter((x: Monster) => x !== null).length}`);
     }
 
     private createBulbs() {
@@ -193,6 +211,7 @@ export class Game extends AbstractScene {
 
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
+            this.updateOpponentMonstersLeft();
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 //TODO
                 alert('player wins');
