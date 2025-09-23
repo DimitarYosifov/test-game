@@ -332,11 +332,63 @@ export class BuyPacks extends AbstractScene {
     private onBuy(cost: number, packName: PackName) {
         this.overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
         this.overlay.setInteractive();
-        this.createMonsters(packName);
+
         this.overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
         });
 
+        const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+        if (playerMonstersCount >= 38) {
+            const msg = this.add.text(
+                960,
+                540,
+                `40 monsters maximum allowed, sell some monsters!`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
+                    align: 'center'
+                }
+            ).setOrigin(0.5).setAlpha(0);
+
+            this.tweens.chain({
+                tweens: [
+                    {
+                        targets: this.overlay,
+                        duration: 500,
+                        alpha: 0.9
+                    },
+                    {
+                        targets: msg,
+                        duration: 350,
+                        alpha: 1
+                    }
+                ]
+            })
+
+            this.time.delayedCall(4000, () => {
+                this.tweens.chain({
+                    tweens: [
+                        {
+                            targets: msg,
+                            duration: 500,
+                            alpha: 0
+                        },
+                        {
+                            targets: this.overlay,
+                            duration: 350,
+                            alpha: 0,
+                            onComplete: () => {
+                                this.overlay?.destroy(true);
+                                msg.destroy(true);
+                            }
+                        }
+                    ]
+                })
+            })
+            return;
+        }
+
+        this.createMonsters(packName);
         this.tweens.chain({
             tweens: [
                 {

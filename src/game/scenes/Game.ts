@@ -326,10 +326,19 @@ export class Game extends AbstractScene {
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';
                 localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+                const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+                if (playerMonstersCount >= 40) {
+                    leveltext.destroy(true);
+                    rewardsContainer.destroy(true);
+                    overlay.destroy(true);
+                    claimButton.destroy(true);
+                    this.monsterNotClaimedPopup();
+                } else {
+                    // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
+                    this.addNewMonster(monsterRewardType, monsterRewardStars);
+                    this.changeScene('MainMenu');
+                }
 
-                // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
-                this.addNewMonster(monsterRewardType, monsterRewardStars);
-                this.changeScene('MainMenu');
             });
         } else {
             // try again button
@@ -342,6 +351,41 @@ export class Game extends AbstractScene {
                 this.changeScene('MainMenu');
             })
         }
+    }
+
+    private monsterNotClaimedPopup() {
+        const overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        overlay.setInteractive();
+        overlay.on('pointerdown', function (pointer: any) {
+            pointer.event.stopPropagation();
+        });
+        const msg = this.add.text(
+            960,
+            540,
+            `monster not claimed, maximum 40 monsters allowed!`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
+                align: 'center'
+            }
+        ).setOrigin(0.5).setAlpha(0);
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: overlay,
+                    duration: 500,
+                    alpha: 0.9
+                },
+                {
+                    targets: msg,
+                    duration: 350,
+                    alpha: 1
+                }
+            ]
+        })
+        this.time.delayedCall(4000, () => {
+            this.changeScene('MainMenu');
+        })
     }
 
     private addNewMonster(type: number, stars: number) {
