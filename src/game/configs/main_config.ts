@@ -7,6 +7,7 @@ export const main_config = {
     "lineWidth": 6,
     "fullCloudsOpacity": 0.5,// clouds visibility
     "rangedUnitsRange": 2,
+    "chanceToGetMonsterOnLevelWin": 100, // 10%
     "packData": {
         "commonPack": {
             cost: 50,
@@ -47,4 +48,5 @@ export const main_config = {
 // implement info for monsters showing stats for all 5 stars
 // add remaining enemy monsters count inside levels
 // implement max 40  monsters for player deck
+// in-game implement drag movement for creatures
 

@@ -134,7 +134,8 @@ export class CardSelection extends AbstractScene {
                 },
                 {
                     type: 9, stars: 1, row: NaN, col: 11
-                }, {
+                },
+                {
                     type: 7, stars: 1, row: NaN, col: 11
                 },
                 {

@@ -215,7 +215,8 @@ export class Game extends AbstractScene {
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
-        const hasMonsterReweard = true;
+        const rndNum = Phaser.Math.RND.between(1, 100);
+        const hasMonsterReweard = rndNum <= main_config.chanceToGetMonsterOnLevelWin;
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
@@ -280,7 +281,7 @@ export class Game extends AbstractScene {
             let monsterPadding = 0;
 
             //TODO - determine monster type and stars !!!!
-            const monsterRewardType = 1;
+            const monsterRewardType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
             const monsterRewardStars = 1;
 
             if (hasMonsterReweard) {

@@ -39,7 +39,6 @@ const StartGame = (parent: string) => {
     const game = new Game({ ...config, parent });
     (globalThis as any).__PHASER_GAME__ = game;
     return game;
-
 }
 
 export default StartGame;
