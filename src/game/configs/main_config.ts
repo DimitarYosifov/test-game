@@ -47,4 +47,5 @@ export const main_config = {
 // TODO:
 // implement info for monsters showing stats for all 5 stars
 // in-game implement drag movement for creatures
+// add loading
 

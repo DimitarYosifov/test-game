@@ -30,6 +30,8 @@ export class MainMenu extends AbstractScene {
         playerSelectedMonsters === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
 
         const coins = localStorage.getItem('coins') || null;
+        const playerMonstersData = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []);
+
         if (coins === null) {
             //new game is started
             //TODO - add HINT to point to buy packs!
@@ -37,6 +39,37 @@ export class MainMenu extends AbstractScene {
             this.updateCoinsText(this.coins);
             localStorage.setItem('coins', JSON.stringify(main_config.playerStartingCoins));
             localStorage.setItem('mapLevel', JSON.stringify(1));
+        }
+
+        if (playerMonstersData.length === 0) {
+            // no player monsters
+            const pointer = this.add.image(this.shopButton.x, this.shopButton.y, 'pointer').setScale(1).setOrigin(0, 0.5).setAlpha(0);
+            this.time.delayedCall(2000, () => {
+                pointer.setAlpha(1);
+                this.tweens.add({
+                    targets: pointer,
+                    scale: 0.85,
+                    yoyo: true,
+                    repeat: -1,
+                    duration: 500,
+                    ease: 'Cubic.easeInOut',
+                });
+            })
+
+        } else if (playerMonstersData.filter((x: any) => x.row).length === 0) {
+            // no player monsters selected
+            const pointer = this.add.image(this.deckButton.x, this.deckButton.y, 'pointer').setScale(1).setOrigin(0, 0.5).setAlpha(0);
+            this.time.delayedCall(2000, () => {
+                pointer.setAlpha(1);
+                this.tweens.add({
+                    targets: pointer,
+                    scale: 0.85,
+                    yoyo: true,
+                    repeat: -1,
+                    duration: 500,
+                    ease: 'Cubic.easeInOut',
+                });
+            })
         }
     }
 
