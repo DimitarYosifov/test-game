@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
+import { main_config } from '../configs/main_config';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -14,7 +15,6 @@ export class MainMenu extends AbstractScene {
     shopButton: Button;
     mapButton: Button;
 
-
     constructor() {
         super('MainMenu');
     }
@@ -24,10 +24,24 @@ export class MainMenu extends AbstractScene {
         this.createDeckbutton();
         this.createShopbutton();
         this.createMapbutton();
-        // this.createLevels();
         this.createCoins();
+
+        const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row).length;
+        playerSelectedMonsters === 0 ? this.mapButton.disableInteractive() : this.mapButton.setInteractive();
+
+        const coins = localStorage.getItem('coins') || null;
+        if (coins === null) {
+            //new game is started
+            this.coins = main_config.playerStartingCoins.toString();
+            this.updateCoinsText(this.coins);
+            localStorage.setItem('coins', JSON.stringify(main_config.playerStartingCoins));
+        }
     }
 
+    private updateCoinsText(value: number | string) {
+        this.coinText.setText(`${value}`);
+        this.coinTexture.x = this.coinText.x - this.coinText.width;
+    }
 
     private createMapbutton(): void {
         const mapButtonClick = () => {

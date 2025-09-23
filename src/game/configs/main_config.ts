@@ -8,6 +8,7 @@ export const main_config = {
     "fullCloudsOpacity": 0.5,// clouds visibility
     "rangedUnitsRange": 2,
     "chanceToGetMonsterOnLevelWin": 10, // 10%
+    "playerStartingCoins": 100,
     "packData": {
         "commonPack": {
             cost: 50,

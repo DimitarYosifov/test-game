@@ -412,10 +412,15 @@ export class BuyPacks extends AbstractScene {
         const playerCoins = localStorage.getItem('coins') || '0';
         this.coins = +playerCoins - +cost;
         localStorage.setItem('coins', JSON.stringify(this.coins));
-        this.coinText.setText(`${this.coins}`);
+        this.updateCoinsText(`${this.coins}`);
 
         // // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
         this.addNewMonsters();
+    }
+
+    private updateCoinsText(value: number | string) {
+        this.coinText.setText(`${value}`);
+        this.coinTexture.x = this.coinText.x - this.coinText.width;
     }
 
     private addNewMonsters() {

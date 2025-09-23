@@ -220,12 +220,10 @@ export class Game extends AbstractScene {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
             this.updateOpponentMonstersLeft();
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
-                //TODO
-                alert('player wins');
+                // alert('player wins');
                 this.createLevelOutroPopup(true);
             } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
-                //TODO
-                alert('opponent wins');
+                // alert('opponent wins');
                 this.createLevelOutroPopup();
             } else {
                 this.checkMapVisibility(false);

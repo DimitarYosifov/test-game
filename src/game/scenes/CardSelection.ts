@@ -514,7 +514,9 @@ export class CardSelection extends AbstractScene {
         console.log(this.monstersContainer.list)
 
         const playerCoins = localStorage.getItem('coins') || '0';
-        this.coinText.setText(`${+playerCoins + this.sellsFor}`);
+        // this.coinText.setText(`${+playerCoins + this.sellsFor}`);
+        this.updateCoinsText(+playerCoins + this.sellsFor);
+
         localStorage.setItem('coins', JSON.stringify(+playerCoins + this.sellsFor));
 
         const originalIndex = this.monsterAddedForSale?.originalIndex || 0;
@@ -643,7 +645,8 @@ export class CardSelection extends AbstractScene {
         const playerCoins = localStorage.getItem('coins') || '0';
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         const playerCoinsAfterUpgrade = +playerCoins - this.upgradeCost;
-        this.coinText.setText(`${playerCoinsAfterUpgrade}`);
+        // this.coinText.setText(`${playerCoinsAfterUpgrade}`);
+        this.updateCoinsText(playerCoinsAfterUpgrade);
         localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.toggleUpgradeButtonEnable(false);
@@ -792,6 +795,11 @@ export class CardSelection extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
+    }
+
+    private updateCoinsText(value: number | string) {
+        this.coinText.setText(`${value}`);
+        this.coinTexture.x = this.coinText.x - this.coinText.width;
     }
 
     changeScene(nextScene: string): void {
