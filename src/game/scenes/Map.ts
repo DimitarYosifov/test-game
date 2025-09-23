@@ -84,7 +84,7 @@ export class Map extends AbstractScene {
     private createLevels(): void {
 
         const mapLevel = localStorage.getItem('mapLevel') || 1;
-        const currentLevel = localStorage.getItem('currentLevel') || 1;
+        const currentLevel = localStorage.getItem('currentLevel') || 0;
 
         level_config.forEach((levelData: ILevelConfig, index: number) => {
 
@@ -124,8 +124,10 @@ export class Map extends AbstractScene {
                 if (this.confirmPopupOpen) {
                     return;
                 }
+
                 this.confirmPopupOpen = true;
-                this.movePlayerToLevel(index * 4, () => {
+
+                const onMoveComplete = () => {
                     this.levelConfirm = new MainMenuLevelConfirm(this, 0, 0, levelData);
                     this.levelContentContainer.add([this.levelConfirm]);
 
@@ -142,17 +144,46 @@ export class Map extends AbstractScene {
                         this.levelConfirm.destroy(true);
                         this.confirmPopupOpen = false;
                     }, this);
-                });
+                }
+
+                if (currentLevel === 0) {
+                    if (this.player.alpha !== 0) {
+                        onMoveComplete();
+                        return;
+                    }
+                    const initialScale = this.player.scale;
+                    this.player.scale = initialScale * 2;
+                    this.player.setPosition(this.spots[0].x, this.spots[0].y);
+                    this.tweens.add({
+                        targets: this.player,
+                        alpha: 1,
+                        scale: initialScale,
+                        duration: 350,
+                        onComplete: () => {
+                            this.time.delayedCall(750, () => {
+                                onMoveComplete();
+                            })
+                        }
+                    });
+
+                } else {
+                    this.movePlayerToLevel(index * 4, () => {
+                        onMoveComplete();
+                    });
+                }
             });
         });
 
         this.levelContentContainer.add(this.player);
+        if (currentLevel === 0) {
+            this.player.setAlpha(0);
+        }
     }
 
     private movePlayerToLevel(newSpotIndex: number, onLevelReached: Function) {
         console.log(`new level is ${newSpotIndex}`)
         console.log(`playerDotSpot is ${this.playerDotSpot}`);
-       
+
         let currentSpot = this.playerDotSpot;
         const targetSpot = newSpotIndex;
         if (currentSpot === targetSpot) {

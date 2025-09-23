@@ -27,7 +27,7 @@ export class MainMenu extends AbstractScene {
         this.createCoins();
 
         const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row).length;
-        playerSelectedMonsters === 0 ? this.mapButton.disableInteractive() : this.mapButton.setInteractive();
+        playerSelectedMonsters === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
 
         const coins = localStorage.getItem('coins') || null;
         if (coins === null) {
