@@ -30,6 +30,7 @@ export class Game extends AbstractScene {
     opponentBulb: Phaser.GameObjects.Image;
     playerBulb: Phaser.GameObjects.Image;
     opponentMonstersLeftText: Phaser.GameObjects.Text;
+    giveUpButton: Button;
 
     constructor() {
         super('Game');
@@ -48,6 +49,7 @@ export class Game extends AbstractScene {
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
         this.addClouds();
         this.createBulbs();
+        this.createGiveUpButton();
         this.addOpponentMonstersLeftText();
         this.checkMapVisibility(true);
 
@@ -60,6 +62,11 @@ export class Game extends AbstractScene {
         this.targetSelectHandler();
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
+    }
+    createGiveUpButton() {
+        this.giveUpButton = new Button(this, 1810, 1000, 'give-up', () => {
+            this.createLevelOutroPopup();
+        })
     }
 
     private addOpponentMonstersLeftText() {
@@ -326,44 +333,14 @@ export class Game extends AbstractScene {
             });
         } else {
             // try again button
-            const tryAgain = this.add.image(760, 700, 'try-again').setScale(0.85).setOrigin(0.5).setInteractive();
-            tryAgain.on('pointerover', () => {
-                this.tweens.add({
-                    targets: tryAgain,
-                    scale: 1.05,
-                    duration: 150,
-                })
-            });
-            tryAgain.on('pointerout', () => {
-                this.tweens.add({
-                    targets: tryAgain,
-                    scale: 1,
-                    duration: 150,
-                })
-            });
-            tryAgain.once('pointerdown', () => {
+            const tryAgain = new Button(this, 760, 700, 'try-again', () => {
                 this.changeScene('Game');
-            });
+            }, false, 0.85);
 
             // giveUp button
-            const giveUp = this.add.image(1160, 700, 'give-up').setScale(1).setOrigin(0.5).setInteractive();
-            giveUp.on('pointerover', () => {
-                this.tweens.add({
-                    targets: giveUp,
-                    scale: 1.05,
-                    duration: 150,
-                })
-            });
-            giveUp.on('pointerout', () => {
-                this.tweens.add({
-                    targets: giveUp,
-                    scale: 1,
-                    duration: 150,
-                })
-            });
-            giveUp.once('pointerdown', () => {
+            const giveUp = new Button(this, 1160, 700, 'give-up', () => {
                 this.changeScene('MainMenu');
-            });
+            })
         }
     }
 
