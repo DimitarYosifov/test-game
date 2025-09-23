@@ -4,6 +4,10 @@ export const level_config = [
         levelName: 1,
         firstWinReward: 20,
         repeatLevelWinReward: 5,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
         opponentMonstersData: [
             { type: 1, stars: 1 },
             // { type: 2, stars: 1 },
@@ -24,6 +28,10 @@ export const level_config = [
         levelName: 2,
         firstWinReward: 25,
         repeatLevelWinReward: 7,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
         opponentMonstersData: [
             { type: 1, stars: 1 },
             { type: 1, stars: 1 },
@@ -38,10 +46,58 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 9, stars: 1 },
         ]
-    }
+    },
+    // L E V E L   3
+    {
+        levelName: 3,
+        firstWinReward: 20,
+        repeatLevelWinReward: 5,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 8, stars: 1 },
+            // { type: 9, stars: 1 },
+        ]
+    },
+    // L E V E L   4
+    {
+        levelName: 4,
+        firstWinReward: 20,
+        repeatLevelWinReward: 5,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 7, stars: 1 },
+            // { type: 8, stars: 1 },
+            // { type: 9, stars: 1 },
+        ]
+    },
 ]
 
- export interface IOpponentMonstersData {
+export interface IOpponentMonstersData {
     type: number;
     stars: number;
 }

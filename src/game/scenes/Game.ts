@@ -321,9 +321,15 @@ export class Game extends AbstractScene {
 
             // claim button
             const claimButton = new Button(this, 960, 700, 'claim', () => {
+
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';
                 localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+
+                // UPDATE MAP LEVEL( to unlock next level on the map)
+                const mapLevel = localStorage.getItem('mapLevel') || '1';
+                localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
+
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
                 if (playerMonstersCount >= 40) {
                     leveltext.destroy(true);

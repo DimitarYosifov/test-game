@@ -337,7 +337,7 @@ export class BuyPacks extends AbstractScene {
             pointer.event.stopPropagation();
         });
 
-        const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+        const playerMonstersCount = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).length;
         if (playerMonstersCount >= 38) {
             const msg = this.add.text(
                 960,

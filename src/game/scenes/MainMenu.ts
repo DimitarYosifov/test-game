@@ -32,9 +32,11 @@ export class MainMenu extends AbstractScene {
         const coins = localStorage.getItem('coins') || null;
         if (coins === null) {
             //new game is started
+            //TODO - add HINT to point to buy packs!
             this.coins = main_config.playerStartingCoins.toString();
             this.updateCoinsText(this.coins);
             localStorage.setItem('coins', JSON.stringify(main_config.playerStartingCoins));
+            localStorage.setItem('mapLevel', JSON.stringify(1));
         }
     }
 

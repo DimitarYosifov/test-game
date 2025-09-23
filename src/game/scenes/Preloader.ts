@@ -69,6 +69,7 @@ export class Preloader extends Scene {
         this.load.image('gold-pack', 'gold-pack.png');
         this.load.image('buy', 'buy.png');
         this.load.image('bulb', 'bulb.png');
+        this.load.image('lvl-plate', 'lvl-plate.png');
         this.load.font('main-font', 'Oups.otf');
     }
 
