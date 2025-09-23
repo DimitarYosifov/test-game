@@ -5,10 +5,10 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 0.5,// clouds visibility
+    "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
-    "chanceToGetMonsterOnLevelWin": 10, // 10%
-    "playerStartingCoins": 100,
+    "chanceToGetMonsterOnLevelWin": 25, // 10%
+    "playerStartingCoins": 150,
     "packData": {
         "commonPack": {
             cost: 50,
@@ -21,7 +21,7 @@ export const main_config = {
             ]
         },
         "silverPack": {
-            cost: 150,
+            cost: 250,
             monsterLevelOdds: [
                 80,  //  80% for 1 star  monster
                 95,  //  15% for 2 stars monster
@@ -31,7 +31,7 @@ export const main_config = {
             ]
         },
         "goldPack": {
-            cost: 500,
+            cost: 750,
             monsterLevelOdds: [
                 60,  //   60% for 1 star  monster
                 85,  //   25% for 2 stars monster
@@ -48,4 +48,14 @@ export const main_config = {
 // implement info for monsters showing stats for all 5 stars
 // in-game implement drag movement for creatures
 // add loading
+// add total power for opponent before level and for the player
+// add end turn button - skip all player remaining moves
+// auto select next player monster
+// add delete progress button
+// add text completed to first level reward when starting level for levels that have been completed
+// make common class button(including text) and make all buttons the samee
+// if a monster has more than 1 moves - after its move leave it selected if it has more moves
+
+//BUGS:
+// after upgrade two monster occupy the same row(happened after upgrade to lvl 2)
 

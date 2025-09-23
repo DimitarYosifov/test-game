@@ -36,28 +36,57 @@ export class Map extends AbstractScene {
             { x: 120, y: 675 },
             { x: 140, y: 600 },
             { x: 120, y: 525 },
-            { x: 100, y: 450 },
 
+            { x: 100, y: 450 },
             { x: 100, y: 375 },
             { x: 120, y: 300 },
             { x: 140, y: 225 },
+
             { x: 160, y: 150 },
             { x: 180, y: 75 },
-
             { x: 260, y: 50 },
-
             { x: 340, y: 75 },
+
             { x: 360, y: 150 },
             { x: 420, y: 205 },
             { x: 495, y: 240 },
             { x: 570, y: 205 },
+
+            { x: 620, y: 145 },
+            { x: 700, y: 125 },
+            { x: 750, y: 190 },
+            { x: 695, y: 250 },
+
+            { x: 645, y: 310 },
+            { x: 655, y: 390 },
+            { x: 645, y: 470 },
+            { x: 625, y: 550 },
+
+            { x: 535, y: 560 },
+            { x: 470, y: 500 },
+            { x: 470, y: 410 },
+            { x: 410, y: 340 },
+
+            { x: 320, y: 320 },
+            { x: 245, y: 375 },
+            { x: 255, y: 460 },
+            { x: 280, y: 545 },
+
+            { x: 295, y: 630 },
+            { x: 280, y: 715 },
+            { x: 265, y: 800 },
+            { x: 280, y: 875 },
+
+            { x: 350, y: 890 },
+
+             
         ];
 
         for (let index = 0; index < points.length; index++) {
             const spot = points[index];
             const graphics = this.add.graphics();
-            graphics.lineStyle(6, 0xffffff);
-            graphics.strokeCircle(spot.x, spot.y, 12);
+            graphics.lineStyle(3, 0xffffff);
+            graphics.strokeCircle(spot.x, spot.y, 8);
             this.dots.push(graphics);
             this.levelContentContainer.add(graphics)
             this.spots.push(spot);
