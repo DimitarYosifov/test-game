@@ -27,6 +27,8 @@ export class Game extends AbstractScene {
     private gridDimensions: IGridDimensions;
     currentlySelectedMonster: Monster;
     skipButton: Phaser.GameObjects.Image;
+    opponentBulb: Phaser.GameObjects.Image;
+    playerBulb: Phaser.GameObjects.Image;
 
     constructor() {
         super('Game');
@@ -44,6 +46,7 @@ export class Game extends AbstractScene {
 
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
         this.addClouds();
+        this.createBulbs();
         this.checkMapVisibility(true);
 
         // event handlers
@@ -55,6 +58,11 @@ export class Game extends AbstractScene {
         this.targetSelectHandler();
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
+    }
+
+    private createBulbs() {
+        this.playerBulb = this.add.image(1870, 35, 'bulb').setScale(0.7).setOrigin(0.5).setAlpha(1);
+        this.opponentBulb = this.add.image(55, 35, 'bulb').setScale(0.7).setOrigin(0.5).setAlpha(0.4);
     }
 
     private checkEndTurnHandler(): void {
@@ -78,23 +86,9 @@ export class Game extends AbstractScene {
     }
 
     private skipButtonHandler(): void {
-        // this.skipButton = this.add.image(1820, 100, 'skip').setScale(0.5).setOrigin(0.5).setAlpha(0.6);
-        // this.skipButton.on('pointerdown', () => {
-        //     if (!this.currentlySelectedMonster) {
-        //         return;
-        //     }
-        //     this.skipButton.disableInteractive().setAlpha(0.6);
-        //     console.log(this.currentlySelectedMonster);
-        //     this.currentlySelectedMonster.skipMove(true);
-        //     const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
-        //     this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
-        //     this.movementArrowsContainer.removeArrows();
-        // })
-
         this.skipButton = new Button(this, 1820, 100, 'skip', this.onSkip.bind(this), true, 0.5);
-
-
     }
+
     private onSkip() {
         if (!this.currentlySelectedMonster) {
             return;
@@ -379,6 +373,11 @@ export class Game extends AbstractScene {
         }
     }
 
+    private changeBulbIndicators(isPlayerTurn: boolean) {
+        this.playerBulb.setAlpha(isPlayerTurn ? 1 : 0.4);
+        this.opponentBulb.setAlpha(isPlayerTurn ? 0.4 : 1);
+    }
+
     private checkNextTurn(skipByUser: boolean): void {
         let turnEnd = false;
         if (this.data.list.isPlayerTurn) {
@@ -387,7 +386,7 @@ export class Game extends AbstractScene {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
         if (turnEnd) {
-            alert('end turn');
+            // alert('end turn');
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
             if (this.data.list.isPlayerTurn) {
                 // this.skipButton.setInteractive().setAlpha(1);
@@ -397,6 +396,7 @@ export class Game extends AbstractScene {
                 this.addInteraction();
                 this.getRandomOpponentMonster();
             }
+            this.changeBulbIndicators(this.data.list.isPlayerTurn);
         } else if (this.data.list.isPlayerTurn) {
             this.pauseResumeInteraction(true, skipByUser);
         } else {
