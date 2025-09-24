@@ -73,7 +73,7 @@ export class Game extends AbstractScene {
         this.opponentMonstersLeftText = this.add.text(
             150,
             50,
-            `monsters left: ${this.data.list.opponentMonsters.length}`,
+            `enemies left: ${this.data.list.opponentMonsters.length}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,
@@ -82,7 +82,7 @@ export class Game extends AbstractScene {
     }
 
     private updateOpponentMonstersLeft() {
-        this.opponentMonstersLeftText.setText(`monsters left: ${this.data.list.opponentMonsters.filter((x: Monster) => x !== null).length}`);
+        this.opponentMonstersLeftText.setText(`enemies left: ${this.data.list.opponentMonsters.filter((x: Monster) => x !== null).length}`);
     }
 
     private createBulbs() {

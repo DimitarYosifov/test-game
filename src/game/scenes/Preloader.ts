@@ -71,6 +71,7 @@ export class Preloader extends Scene {
         this.load.image('bulb', 'bulb.png');
         this.load.image('lvl-plate', 'lvl-plate.png');
         this.load.image('pointer', 'pointer.png');
+        this.load.image('location', 'location.png');
         this.load.font('main-font', 'Oups.otf');
     }
 

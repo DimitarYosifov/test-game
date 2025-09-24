@@ -98,7 +98,7 @@ export class MainMenu extends AbstractScene {
     private createShopbutton(): void {
         const shopButtonClick = () => {
             this.shopButton.disableInteractive();
-            this.scene.start('BuyPacks');
+            this.changeScene('BuyPacks');
         }
         this.shopButton = new Button(this, 960, 250, 'shop-icon', shopButtonClick.bind(this), false, 1);
         const shopTitle = this.add.text(

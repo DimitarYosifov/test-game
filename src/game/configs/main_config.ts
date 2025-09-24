@@ -45,6 +45,7 @@ export const main_config = {
 
 
 // TODO:
+// change player-monster on the map with location image
 // implement info for monsters showing stats for all 5 stars
 // in-game implement drag movement for creatures
 // add loading
@@ -55,6 +56,12 @@ export const main_config = {
 // add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee
 // if a monster has more than 1 moves - after its move leave it selected if it has more moves
+// add text "drag here" to hit rects in card selection 
+// add text 'opponent's turn' when opponent turn starts
+// add fade in out to confirm popup for entering level
+// double the dots on the map (now index % 4 and index * 4 should become index % 8 and index * 8)
+// add blink tween for the bulbs 
+// add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
 
 //BUGS:
 // after upgrade two monster occupy the same row(happened after upgrade to lvl 2)

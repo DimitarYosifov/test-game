@@ -79,7 +79,7 @@ export class Map extends AbstractScene {
 
             { x: 350, y: 890 },
 
-             
+
         ];
 
         for (let index = 0; index < points.length; index++) {
@@ -99,7 +99,7 @@ export class Map extends AbstractScene {
     }
 
     private createPlayer() {
-        this.player = this.add.image(0, 0, '9').setScale(0.35).setOrigin(0.5).setAlpha(0).setDepth(99);
+        this.player = this.add.image(0, 0, 'location').setScale(1).setOrigin(0.5, 1).setAlpha(0).setDepth(99);
     }
 
     private createBackButton() {
