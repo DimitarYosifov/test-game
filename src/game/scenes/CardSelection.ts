@@ -297,7 +297,7 @@ export class CardSelection extends AbstractScene {
         let droppedInSellSlot = false;
 
         const proceed = (i: number = NaN, hitRect?: Phaser.Geom.Rectangle) => {
-
+            console.log(this.selectedMonsters);
             const hasOldSelectedPosition = !isNaN(monster.positionIndex);       //old position was from selected monsters
             const hasOldUpgradePosition = !isNaN(monster.upgradePostionIndex);  //old position was from upgrade monsters
             const hasOldSellPosition = monster.addedForSale;                    //old position was from sell section
@@ -311,6 +311,9 @@ export class CardSelection extends AbstractScene {
             } else if (droppedInSlot) {
                 existingMonster = this.selectedMonsters[i];// has monster on the current drop spot
             }
+
+            console.log(existingMonster?.positionIndex)
+            console.log(monster?.positionIndex)
 
             if (hasOldSelectedPosition) {
                 this.selectedMonsters[monster.positionIndex] = null;
@@ -335,11 +338,13 @@ export class CardSelection extends AbstractScene {
                     existingMonster.addedForSale = false;
                     existingMonster.upgradePostionIndex = monster.upgradePostionIndex;
                     existingMonster.positionIndex = NaN;
+                    this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
                 } else if (hasOldSellPosition) {
                     this.monsterAddedForSale = existingMonster;
                     existingMonster.addedForSale = true;
                     existingMonster.upgradePostionIndex = NaN;
                     existingMonster.positionIndex = NaN;
+                    this.playerMonstersData[existingMonster.originalIndex].row = monster.positionIndex;
                 } else {
                     existingMonster.positionIndex = NaN;
                     existingMonster.upgradePostionIndex = NaN;
@@ -355,13 +360,15 @@ export class CardSelection extends AbstractScene {
                 // Place dragged monster into the new slot
                 monster.setPosition(this.sellHitRect.x + this.sellHitRect.width / 2, this.sellHitRect.y + this.sellHitRect.height / 2);
                 this.monsterAddedForSale = monster;
+                this.playerMonstersData[monster.originalIndex].row = NaN;
             } else if (droppedInUpgradeSlot) {
                 monster.setPosition(hitRect!.x + hitRect!.width / 2, hitRect!.y + hitRect!.height / 2);
                 this.upgradeSelectedMonsters[i] = monster;
+                this.playerMonstersData[monster.originalIndex].row = NaN;
                 this.checkUpgradeButtonEnable();
             } else if (droppedInSlot) {
                 monster.setPosition(hitRect!.x + hitRect!.width / 2, hitRect!.y + hitRect!.height / 2);
-                this.playerMonstersData[monster.originalIndex].row = i;
+                // this.playerMonstersData[monster.originalIndex].row = i;
                 this.selectedMonsters[i] = monster;
                 this.checkUpgradeButtonEnable();
             }
@@ -372,6 +379,12 @@ export class CardSelection extends AbstractScene {
             monster.startY = monster.y;
             this.toggleSellButtonEnable(!!this.monsterAddedForSale);
             this.reposition();
+
+
+
+            console.log(existingMonster?.positionIndex)
+            console.log(monster?.positionIndex)
+            console.log(this.selectedMonsters)
         }
 
         // check dropped in sell section
@@ -403,8 +416,8 @@ export class CardSelection extends AbstractScene {
         //region check dropped in selected section
         for (let i = 0; i < this.hitRects.length; i++) {
             const hitRect = this.hitRects[i];
-
             if (hitRect.contains(pointer.x, pointer.y)) {
+                console.log(this.playerMonstersData)
                 droppedInSlot = true;
                 proceed(i, hitRect)
                 break;
@@ -763,6 +776,7 @@ export class CardSelection extends AbstractScene {
         console.log(this.selectedMonsters)
         console.log(this.upgradeSelectedMonsters)
         console.log(this.monsterAddedForSale)
+        console.table(this.playerMonstersData);
     }
 
     private createOkButton() {
@@ -778,7 +792,14 @@ export class CardSelection extends AbstractScene {
 
     private save() {
         console.log(this)
+
+        this.selectedMonsters.filter(m => m !== null).forEach((monster) => {
+            this.playerMonstersData[monster!.originalIndex].row = monster!.positionIndex
+        });
+
         console.table(this.playerMonstersData);
+        this.selectedMonsters = [null, null, null, null, null, null, null];
+        this.upgradeSelectedMonsters = [null, null, null];
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.changeScene('MainMenu');
     }
