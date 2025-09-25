@@ -605,7 +605,7 @@ export class Game extends AbstractScene {
                     && newCol >= 0 && newCol < array[0].length
                 ) {
 
-                    if (allVisibleCellsToOpponent && !allVisibleCellsToOpponent[newRow][newCol]) {
+                    if (allVisibleCellsToOpponent.length && !allVisibleCellsToOpponent[newRow][newCol]) {
                         continue;// enemy unreachable by current monster
                     }
                     const occupiedBy = array[newRow][newCol].occupiedBy;
