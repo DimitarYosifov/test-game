@@ -33,52 +33,139 @@ export class Map extends AbstractScene {
 
         const points = [
             { x: 100, y: 750 },
-            { x: 120, y: 675 },
-            { x: 140, y: 600 },
-            { x: 120, y: 525 },
+            { x: 120, y: 685 },
+            { x: 140, y: 637 },
+            { x: 140, y: 585 },
+            { x: 95, y: 560 },
+            { x: 85, y: 505 },
 
             { x: 100, y: 450 },
-            { x: 100, y: 375 },
-            { x: 120, y: 300 },
-            { x: 140, y: 225 },
+            { x: 100, y: 388 },
+            { x: 98, y: 339 },
+            { x: 133, y: 300 },
+            { x: 161, y: 253 },
+            { x: 152, y: 205 },
 
             { x: 160, y: 150 },
-            { x: 180, y: 75 },
-            { x: 260, y: 50 },
-            { x: 340, y: 75 },
+            { x: 180, y: 95 },
+            { x: 220, y: 62 },
+            { x: 272, y: 50 },
+            { x: 325, y: 60 },
+            { x: 360, y: 95 },
 
             { x: 360, y: 150 },
-            { x: 420, y: 205 },
-            { x: 495, y: 240 },
-            { x: 570, y: 205 },
+            { x: 379, y: 205 },
+            { x: 432, y: 222 },
+            { x: 491, y: 222 },
+            { x: 534, y: 189 },
+            { x: 565, y: 144 },//ок
 
             { x: 620, y: 145 },
-            { x: 700, y: 125 },
-            { x: 750, y: 190 },
-            { x: 695, y: 250 },
+            { x: 675, y: 130 },
+            { x: 719, y: 151 },
+            { x: 740, y: 194 },
+            { x: 726, y: 240 },
+            { x: 686, y: 268 },//ок
 
             { x: 645, y: 310 },
-            { x: 655, y: 390 },
-            { x: 645, y: 470 },
-            { x: 625, y: 550 },
+            { x: 605, y: 353 },
+            { x: 553, y: 367 },
+            { x: 521, y: 410 },
+            { x: 528, y: 459 },
+            { x: 544, y: 504 },// ок
 
             { x: 535, y: 560 },
-            { x: 470, y: 500 },
-            { x: 470, y: 410 },
-            { x: 410, y: 340 },
+            { x: 477, y: 555 },
+            { x: 447, y: 512 },
+            { x: 440, y: 456 },
+            { x: 415, y: 409 },
+            { x: 372, y: 372 },//ок
 
-            { x: 320, y: 320 },
-            { x: 245, y: 375 },
-            { x: 255, y: 460 },
-            { x: 280, y: 545 },
+            { x: 315, y: 359 },
+            { x: 259, y: 370 },
+            { x: 240, y: 422 },
+            { x: 240, y: 478 },
+            { x: 250, y: 530 },
+            { x: 280, y: 575 },//ок
 
             { x: 295, y: 630 },
-            { x: 280, y: 715 },
-            { x: 265, y: 800 },
-            { x: 280, y: 875 },
+            { x: 302, y: 685 },
+            { x: 273, y: 729 },
+            { x: 260, y: 780 },
+            { x: 257, y: 834 },
+            { x: 297, y: 872 },
 
             { x: 350, y: 890 },
+            { x: 401, y: 864 },
+            { x: 441, y: 827 },
+            { x: 413, y: 781 },
+            { x: 399, y: 728 },
+            { x: 426, y: 678 },
 
+            { x: 483, y: 660 },
+            { x: 540, y: 660 },
+            { x: 565, y: 702 },
+            { x: 583, y: 753 },
+            { x: 563, y: 804 },
+            { x: 573, y: 858 },
+
+            { x: 612, y: 900 },
+            { x: 661, y: 920 },
+            { x: 709, y: 929 },
+            { x: 755, y: 955 },
+            { x: 806, y: 963 },
+            { x: 857, y: 965 },
+
+            { x: 912, y: 965 },
+            { x: 965, y: 965 },
+            { x: 1012, y: 977 },
+            { x: 1060, y: 1000 },
+            { x: 1114, y: 987 },
+            { x: 1162, y: 958 },
+
+            { x: 1182, y: 900 },
+            { x: 1235, y: 888 },
+            { x: 1285, y: 892 },
+            { x: 1329, y: 917 },
+            { x: 1366, y: 953 },
+            { x: 1415, y: 976 },
+
+            { x: 1469, y: 988 },
+            { x: 1522, y: 988 },
+            { x: 1572, y: 979 },
+            { x: 1618, y: 952 },
+            { x: 1645, y: 908 },
+            { x: 1676, y: 864 },
+
+            { x: 1686, y: 812 },
+            { x: 1731, y: 784 },
+            { x: 1774, y: 758 },
+            { x: 1795, y: 712 },
+            { x: 1791, y: 660 },
+            { x: 1756, y: 621 },
+
+            { x: 1700, y: 606 },
+            { x: 1644, y: 606 },
+            { x: 1602, y: 631 },
+            { x: 1586, y: 678 },
+            { x: 1550, y: 711 },
+            { x: 1499, y: 735 },
+
+            { x: 1445, y: 735 },
+            { x: 1394, y: 752 },
+            { x: 1341, y: 755 },
+            { x: 1303, y: 795 },
+            { x: 1246, y: 802 },
+            { x: 1193, y: 782 },
+
+            { x: 1138, y: 777 },
+            { x: 1097, y: 812 },
+            { x: 1058, y: 837 },
+            { x: 1013, y: 857 },
+            { x: 966, y: 865 },
+            { x: 915, y: 861 },
+
+            { x: 863, y: 861 },
 
         ];
 
@@ -115,12 +202,14 @@ export class Map extends AbstractScene {
         const mapLevel = localStorage.getItem('mapLevel') || 1;
         const currentLevel = localStorage.getItem('currentLevel') || 0;
 
+        //test!
+        // level_config.length = 10
         level_config.forEach((levelData: ILevelConfig, index: number) => {
 
-            const levelTexture = this.add.image(this.spots[index * 4].x, this.spots[index * 4].y, 'lvl-plate').setScale(0.5).setOrigin(0.5).setDepth(this.player.depth - 1);
+            const levelTexture = this.add.image(this.spots[index * 6].x, this.spots[index * 6].y, 'lvl-plate').setScale(0.5).setOrigin(0.5).setDepth(this.player.depth - 1);
 
-            const mapDot = this.spots[index * 4];
-            this.dots[index * 4].setVisible(false);
+            const mapDot = this.spots[index * 6];
+            this.dots[index * 6].setVisible(false);
             const leveltext: Phaser.GameObjects.Text = this.add.text(
                 mapDot.x,
                 mapDot.y,
@@ -144,7 +233,7 @@ export class Map extends AbstractScene {
             if (levelData.levelName === +currentLevel) {
                 //PLAYER IS HERE
                 this.player.setAlpha(1).setPosition(mapDot.x, mapDot.y);
-                this.playerDotSpot = index * 4;
+                this.playerDotSpot = index * 6;
                 // this.levelContentContainer.add(this.player);
             }
 
@@ -196,7 +285,7 @@ export class Map extends AbstractScene {
                     });
 
                 } else {
-                    this.movePlayerToLevel(index * 4, () => {
+                    this.movePlayerToLevel(index * 6, () => {
                         onMoveComplete();
                     });
                 }

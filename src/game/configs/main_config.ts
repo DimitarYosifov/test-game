@@ -45,24 +45,31 @@ export const main_config = {
 
 
 // TODO:
+
+// check if level is played when creating outro popup - so player can get "repeat level reward instead" of "first win reward"      - ^HIGH PRIORITY^
+// AND NO MONSTERS ON REPEAT LEVEL                                                                                                 - ^HIGH PRIORITY^
+
+//CHECK IF ENEMY MONSTER HAS A CHANCE TO KILL WHEN ATTACKING                                                                       - ^HIGH PRIORITY^
 // change player-monster on the map with location image
 // implement info for monsters showing stats for all 5 stars
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
-// add end turn button - skip all player remaining moves
+// add end turn button - skip all player remaining moves                                                                           - ^HIGH PRIORITY^
 // auto select next player monster
 // add delete progress button
 // add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee
 // if a monster has more than 1 moves - after its move leave it selected if it has more moves
-// add text "drag here" to hit rects in card selection 
+// add text "drag here" to hit rects in card selection
 // add text 'opponent's turn' when opponent turn starts
 // add fade in out to confirm popup for entering level
 // double the dots on the map (now index % 4 and index * 4 should become index % 8 and index * 8)
-// add blink tween for the bulbs 
+// add blink tween for the bulbs
 // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
 
 //BUGS:
-// after upgrade two monster occupy the same row(happened after upgrade to lvl 2)
+//   1:  IN GAME.TS   const range = this.currentlySelectedMonster.unitData.ranged > 0 ? 2 : 1; => this.currentlySelectedMonster IS NULL
+//    it was 1 on one!  last move player killed enemy ranged monster with ranged monster!!!    after level 9!
+//   2: enemy ranged   monsters shoot 2 distance while being able to sii only 1!!!!
 
