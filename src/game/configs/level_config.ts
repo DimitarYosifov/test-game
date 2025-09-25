@@ -16,11 +16,6 @@ export const level_config = [
             { type: 5, stars: 1 },
             { type: 5, stars: 1 },
             { type: 7, stars: 1 },
-            // { type: 7, stars: 1 },
-            // { type: 7, stars: 1 },
-            // { type: 7, stars: 1 },
-            // { type: 8, stars: 1 },
-            // { type: 9, stars: 1 },
         ]
     },
     // L E V E L   2    - monsters: 1 star x 8   2 stars x 0

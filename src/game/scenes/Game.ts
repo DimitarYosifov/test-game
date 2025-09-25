@@ -31,6 +31,7 @@ export class Game extends AbstractScene {
     playerBulb: Phaser.GameObjects.Image;
     opponentMonstersLeftText: Phaser.GameObjects.Text;
     giveUpButton: Button;
+    levelFinished: boolean;
 
     constructor() {
         super('Game');
@@ -38,8 +39,12 @@ export class Game extends AbstractScene {
 
     create() {
         super.create();
+
+        this.levelFinished = false;
+
         this.add.image(0, 0, 'bg').setOrigin(0);
         this.data.list.isPlayerTurn = true;
+
         this.setGridDimensions();
         this.drawGridLines();
         this.createContainers();
@@ -92,6 +97,11 @@ export class Game extends AbstractScene {
 
     private checkEndTurnHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, (skipByUser: boolean = false) => {
+
+            if (this.levelFinished) {
+                return;
+            }
+
             if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
 
                 if (this.data.list.isPlayerTurn) {
@@ -221,6 +231,7 @@ export class Game extends AbstractScene {
             this.updateOpponentMonstersLeft();
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 // alert('player wins');
+                this.levelFinished = true;
                 this.createLevelOutroPopup(true);
             } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
                 // alert('opponent wins');
@@ -581,7 +592,7 @@ export class Game extends AbstractScene {
         });
     }
 
-    private getVisibleCells(row: number, col: number, radius: number): { row: number, col: number, occupiedBy: string }[] {
+    private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = []): { row: number, col: number, occupiedBy: string }[] {
         const visibleCells = [];
         const array = this.data.list.gridPositions;
         for (let y = -radius; y <= radius; y++) {
@@ -590,9 +601,13 @@ export class Game extends AbstractScene {
                 const newCol = col + x;
 
                 if (
-                    newRow >= 0 && newRow < array.length &&
-                    newCol >= 0 && newCol < array[0].length
+                    newRow >= 0 && newRow < array.length
+                    && newCol >= 0 && newCol < array[0].length
                 ) {
+
+                    if (allVisibleCellsToOpponent && !allVisibleCellsToOpponent[newRow][newCol]) {
+                        continue;// enemy unreachable by current monster
+                    }
                     const occupiedBy = array[newRow][newCol].occupiedBy;
                     visibleCells.push({ row: newRow, col: newCol, occupiedBy });
                 }
@@ -645,19 +660,20 @@ export class Game extends AbstractScene {
             });
         });
 
-        const range = this.currentlySelectedMonster.unitData.ranged > 0 ? 2 : 1;
-        let visibleTargetsToCurrentOpponentMonster = this.getVisibleCells(
+        const range = this.currentlySelectedMonster.unitData.ranged > 0 ? main_config.rangedUnitsRange : 1;
+        let attackableTargetsToCurrentOpponentMonster = this.getVisibleCells(
             this.currentlySelectedMonster.unitData.row,
             this.currentlySelectedMonster.unitData.col,
-            range
+            range,
+            allVisibleCellsToOpponent
         );
 
         // all player monsters in range by current opponent's monster
-        visibleTargetsToCurrentOpponentMonster = visibleTargetsToCurrentOpponentMonster.filter(x => x.occupiedBy === 'player');
-        if (visibleTargetsToCurrentOpponentMonster.length > 0) {
+        attackableTargetsToCurrentOpponentMonster = attackableTargetsToCurrentOpponentMonster.filter(x => x.occupiedBy === 'player');
+        if (attackableTargetsToCurrentOpponentMonster.length > 0) {
             //ATTACK
-            const targetForOpponentCurrentMonster = this.getRandomTargetForOpponent(visibleTargetsToCurrentOpponentMonster);
-            console.log(visibleTargetsToCurrentOpponentMonster)
+            const targetForOpponentCurrentMonster = this.getRandomTargetForOpponent(attackableTargetsToCurrentOpponentMonster);
+            console.log(attackableTargetsToCurrentOpponentMonster)
             console.log(targetForOpponentCurrentMonster)
             const targetData = targetForOpponentCurrentMonster;
             this.events.emit(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, [targetData.row, targetData.col, this.currentlySelectedMonster.unitData.ranged > 0])

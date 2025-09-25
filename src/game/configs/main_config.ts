@@ -69,7 +69,4 @@ export const main_config = {
 // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
 
 //BUGS:
-//   1:  IN GAME.TS   const range = this.currentlySelectedMonster.unitData.ranged > 0 ? 2 : 1; => this.currentlySelectedMonster IS NULL
-//    it was 1 on one!  last move player killed enemy ranged monster with ranged monster!!!    after level 9!
-//   2: enemy ranged   monsters shoot 2 distance while being able to sii only 1!!!!
 

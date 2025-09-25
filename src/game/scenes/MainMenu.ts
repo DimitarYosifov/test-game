@@ -26,7 +26,7 @@ export class MainMenu extends AbstractScene {
         this.createMapbutton();
         this.createCoins();
 
-        const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row).length;
+        const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
         playerSelectedMonsters === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
 
         const coins = localStorage.getItem('coins') || null;
@@ -56,7 +56,7 @@ export class MainMenu extends AbstractScene {
                 });
             })
 
-        } else if (playerMonstersData.filter((x: any) => x.row).length === 0) {
+        } else if (playerMonstersData.filter((x: any) => x.row !== null).length === 0) {
             // no player monsters selected
             const pointer = this.add.image(this.deckButton.x, this.deckButton.y, 'pointer').setScale(1).setOrigin(0, 0.5).setAlpha(0);
             this.time.delayedCall(2000, () => {
