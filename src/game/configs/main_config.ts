@@ -50,8 +50,8 @@ export const main_config = {
 // AND NO MONSTERS ON REPEAT LEVEL                                                                                                 - ^HIGH PRIORITY^
 
 //CHECK IF ENEMY MONSTER HAS A CHANCE TO KILL WHEN ATTACKING                                                                       - ^HIGH PRIORITY^
-// change player-monster on the map with location image
 // implement info for monsters showing stats for all 5 stars
+// ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
@@ -64,9 +64,23 @@ export const main_config = {
 // add text "drag here" to hit rects in card selection
 // add text 'opponent's turn' when opponent turn starts
 // add fade in out to confirm popup for entering level
-// double the dots on the map (now index % 4 and index * 4 should become index % 8 and index * 8)
 // add blink tween for the bulbs
 // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
+// add chance to get 2 star monster after level
 
 //BUGS:
+// 1: for level intro if there are too many monsters in the description, they go out of screen horizontally -
+// lvl 15 lvl 16 foer example (MORE THAN 9 CAUUSES ISSUES!)   - DISABLE MORE THAN 9 DIFF TYPES MONSTERS IN A LEVEL
+
+// 2: AFTER SELLIMG CARD CHECK IF THERE IS 3 CARDS PENDING IN ULGRADE SECTION AN ENABLE/DISABLE UPGRADE BUTTON PROPERLY
+// IF SO DONE 3 CARDS IN THE UPGRADE ARE AUTUMATICALLY UPGRADED AFTER REFRESH !!!!
+
+
+
+
+//OBSERVATIONS:
+// ON LEVEL 11 ALL MONSTERS ARE LEVEL 2
+// ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)
+
+
 
