@@ -59,7 +59,6 @@ export const main_config = {
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
-// add end turn button - skip all player remaining moves                                                                           - ^HIGH PRIORITY^
 // add delete progress button
 // add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee
