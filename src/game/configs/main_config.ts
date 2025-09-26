@@ -83,12 +83,12 @@ export const main_config = {
 
 //3.sometimes angle of the bow is changed when ranged monster is about to act
 
-//4. SOMEHOW MAGICALLY UPGRADED MONSTER SHOW UP IN THE ATACK      - MAY BE THEY UPGRADE THEM SELVES AUTOMATICALLY ! - OBSERVE!             ^HIGH PRIORITY^
-// MAY BE SOME CREATURES ARE CLONED AN PLAYER DECK INCREASES WITH NO REASON
 
 
 // BUG  - AFTER UPGRADE ONE SPOT(ROW) IS OCCUPIED BY 2 MONSTERS                                                                            ^HIGH PRIORITY^
 // buf scale tween is buggy sometimes
+
+
 //OBSERVATIONS:
 // ON LEVEL 11 ALL MONSTERS ARE LEVEL 2
 // ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)
