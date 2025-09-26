@@ -5,7 +5,7 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 0,// clouds visibility
+    "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
     "chanceToGetMonsterOnLevelWin": 25, // 10%
     "playerStartingCoins": 150,
@@ -54,14 +54,12 @@ export const main_config = {
 // TODO:
 
  
-//CHECK IF ENEMY MONSTER HAS A CHANCE TO KILL WHEN ATTACKING                                                                       - ^HIGH PRIORITY^
 // implement info for monsters showing stats for all 5 stars
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
 // add end turn button - skip all player remaining moves                                                                           - ^HIGH PRIORITY^
-// auto select next player monster                                                                                                 - ^HIGH PRIORITY^ 
 // add delete progress button
 // add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee

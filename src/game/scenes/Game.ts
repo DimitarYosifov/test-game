@@ -8,7 +8,6 @@ import { level_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { PackName } from './BuyPacks';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -33,6 +32,7 @@ export class Game extends AbstractScene {
     opponentMonstersLeftText: Phaser.GameObjects.Text;
     giveUpButton: Button;
     levelFinished: boolean;
+    endTurnButton: Button;
 
     constructor() {
         super('Game');
@@ -56,6 +56,7 @@ export class Game extends AbstractScene {
         this.addClouds();
         this.createBulbs();
         this.createGiveUpButton();
+        this.createEndTurnButton();
         this.addOpponentMonstersLeftText();
         this.checkMapVisibility(true);
 
@@ -69,10 +70,29 @@ export class Game extends AbstractScene {
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
     }
-    createGiveUpButton() {
+    private createGiveUpButton() {
         this.giveUpButton = new Button(this, 1810, 1000, 'give-up', () => {
             this.createLevelOutroPopup();
         })
+    }
+
+    private createEndTurnButton() {
+        this.endTurnButton = new Button(this, 1810, 750, 'button', () => {
+            this.endTurnButton.disableInteractive();
+            this.data.list.playerMonsters.forEach((m: Monster) => {
+                m.pendingAction = false;
+            });
+            this.checkNextTurn(false);
+        })
+        const endTurnText = this.add.text(
+            this.endTurnButton.x,
+            this.endTurnButton.y,
+            `END\nTURN`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
     }
 
     private addOpponentMonstersLeftText() {
@@ -131,10 +151,19 @@ export class Game extends AbstractScene {
         }
         this.skipButton.disableInteractive().setAlpha(0.6);
         console.log(this.currentlySelectedMonster);
-        this.currentlySelectedMonster.skipMove(true);
+
         const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
+        this.currentlySelectedMonster.skipMove(true);
+
         this.currentlySelectedMonster.setInteraction(hasMoreMoves, hasMoreMoves);
         this.movementArrowsContainer.removeArrows();
+
+        const playerHasMoreMoves = this.data.list.playerMonsters.find((m: Monster) => m && m !== null && m.pendingAction);
+        if (playerHasMoreMoves) {
+            this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
+        } else {
+            // this.checkNextTurn(false);
+        }
     }
 
     private opponentRepeatMoveHandler(): void {
@@ -598,7 +627,10 @@ export class Game extends AbstractScene {
         });
 
         if (this.data.list.isPlayerTurn) {
+            this.endTurnButton.setInteractive();
             this.autoSelectRandomPlayerMonster();
+        } else {
+            this.endTurnButton.disableInteractive();
         }
     }
 
@@ -621,6 +653,9 @@ export class Game extends AbstractScene {
         if (resume && this.currentlySelectedMonster.unitData.movesLeft === 0) {
             this.autoSelectRandomPlayerMonster();
         }
+        // else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
+        //     this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
+        // }
     }
 
     private autoSelectRandomPlayerMonster() {
