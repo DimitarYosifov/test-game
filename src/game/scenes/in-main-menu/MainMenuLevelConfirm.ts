@@ -44,7 +44,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             `Level ${this.levelData.levelName}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
@@ -57,10 +57,30 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             `First Win Reward: ${this.levelData.firstWinReward}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
+
+        //completed text
+        const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
+            levelHeader.x,
+            levelHeader.y,
+            `completed`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+        levelCompletedText.angle = -25;
+        this.scene.tweens.add({
+            targets: levelCompletedText,
+            alpha: 1,
+            scale: 1,
+            duration: 300,
+            delay: 200
+        })
+        this.add(levelCompletedText);
     }
 
     private createRepeatLevelWinReward() {
@@ -70,7 +90,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             `Repeat Level Win Reward: ${this.levelData.repeatLevelWinReward}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
@@ -83,7 +103,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             `Enemies: `,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
-                stroke: '#000000', letterSpacing:4,
+                stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(enemies);
@@ -121,7 +141,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
                 `x ${count}`,
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 45, color: '#ffffff',
-                    stroke: '#000000', letterSpacing:4,
+                    stroke: '#000000', letterSpacing: 4,
                     align: 'center'
                 }).setOrigin(0.5);
             this.add(enemiesCount);

@@ -46,9 +46,7 @@ export const main_config = {
 
 // TODO:
 
-// check if level is played when creating outro popup - so player can get "repeat level reward instead" of "first win reward"      - ^HIGH PRIORITY^
-// AND NO MONSTERS ON REPEAT LEVEL                                                                                                 - ^HIGH PRIORITY^
-
+ 
 //CHECK IF ENEMY MONSTER HAS A CHANCE TO KILL WHEN ATTACKING                                                                       - ^HIGH PRIORITY^
 // implement info for monsters showing stats for all 5 stars
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
@@ -56,7 +54,7 @@ export const main_config = {
 // add loading
 // add total power for opponent before level and for the player
 // add end turn button - skip all player remaining moves                                                                           - ^HIGH PRIORITY^
-// auto select next player monster
+// auto select next player monster                                                                                                 - ^HIGH PRIORITY^ 
 // add delete progress button
 // add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee
@@ -69,8 +67,7 @@ export const main_config = {
 // add chance to get 2 star monster after level
 
 //BUGS:
-// 1: for level intro if there are too many monsters in the description, they go out of screen horizontally -
-// lvl 15 lvl 16 foer example (MORE THAN 9 CAUUSES ISSUES!)   - DISABLE MORE THAN 9 DIFF TYPES MONSTERS IN A LEVEL
+ 
 
 // 2: AFTER SELLIMG CARD CHECK IF THERE IS 3 CARDS PENDING IN ULGRADE SECTION AN ENABLE/DISABLE UPGRADE BUTTON PROPERLY
 // IF SO DONE 3 CARDS IN THE UPGRADE ARE AUTUMATICALLY UPGRADED AFTER REFRESH !!!!

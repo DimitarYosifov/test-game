@@ -553,6 +553,8 @@ export class CardSelection extends AbstractScene {
             m.originalIndex = index;
         });
 
+        this.checkUpgradeButtonEnable();
+
         console.log(this.playerMonstersData)
         console.log(this.monstersContainer.list)
 

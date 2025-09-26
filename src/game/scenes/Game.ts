@@ -244,8 +244,12 @@ export class Game extends AbstractScene {
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
+        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+        const currentLevelData = level_config[+currentLevel - 1];
+        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+currentLevelData.levelName) === false;
+
         const rndNum = Phaser.Math.RND.between(1, 100);
-        const hasMonsterReweard = rndNum <= main_config.chanceToGetMonsterOnLevelWin;
+        const hasMonsterReweard = isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
@@ -293,8 +297,7 @@ export class Game extends AbstractScene {
             rewardsContainer.add(coin);
 
             // COIN TEXT
-            const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
-            const coinsWon = level_config[currentLevel - 1].firstWinReward;
+            const coinsWon = isFirstTimeReward ? currentLevelData.firstWinReward : currentLevelData.repeatLevelWinReward;
             const cointext: Phaser.GameObjects.Text = this.add.text(
                 coin.x + coin.displayWidth,
                 500,
@@ -340,6 +343,11 @@ export class Game extends AbstractScene {
                 // UPDATE MAP LEVEL( to unlock next level on the map)
                 const mapLevel = localStorage.getItem('mapLevel') || '1';
                 localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
+
+                // UPDATE LEVELS WON(LOCAL STORAGE)
+                const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
+                levelsWon.push(+currentLevelData.levelName);
+                localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
 
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
                 if (playerMonstersCount >= 40) {
