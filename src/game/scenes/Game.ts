@@ -596,6 +596,10 @@ export class Game extends AbstractScene {
                 monster.pendingAction = !this.data.list.isPlayerTurn;
             }
         });
+
+        if (this.data.list.isPlayerTurn) {
+            this.autoSelectRandomPlayerMonster();
+        }
     }
 
     // called after every player action(select direction or attack)and after every player move
@@ -613,6 +617,17 @@ export class Game extends AbstractScene {
                 monster.setInteraction(resume, skipByUser);
             }
         });
+
+        if (resume && this.currentlySelectedMonster.unitData.movesLeft === 0) {
+            this.autoSelectRandomPlayerMonster();
+        }
+    }
+
+    private autoSelectRandomPlayerMonster() {
+        const randomPlayerMonster: Monster = this.data.list.playerMonsters.find((m: Monster) => m !== null && m.pendingAction);
+        if (randomPlayerMonster) {
+            this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [randomPlayerMonster, randomPlayerMonster.unitData, false]);
+        }
     }
 
     private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = []): { row: number, col: number, occupiedBy: string }[] {
