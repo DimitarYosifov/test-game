@@ -6,7 +6,7 @@ import { Monster } from './in-game/Monster';
 import { Button } from './in-main-menu/Button';
 
 
-type PackName = keyof typeof main_config.packData;
+export type PackName = keyof typeof main_config.packData;
 const MONSTER_SIZE = 200;
 const POSITION_CFG = {
     commonPack: {

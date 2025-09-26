@@ -9,6 +9,13 @@ export const main_config = {
     "rangedUnitsRange": 2,
     "chanceToGetMonsterOnLevelWin": 25, // 10%
     "playerStartingCoins": 150,
+    "afterLevelMonsterReward":[
+                89,   // 89% for 1 star  monster
+                99,   // 10% for 2 stars monster
+                100,  //  1% for 3 stars monster
+                0,    //  0% for 4 stars monster
+                0,    //  0% for 5 stars monster
+            ],
     "packData": {
         "commonPack": {
             cost: 50,

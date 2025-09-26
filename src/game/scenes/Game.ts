@@ -8,6 +8,7 @@ import { level_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
+import { PackName } from './BuyPacks';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -312,9 +313,19 @@ export class Game extends AbstractScene {
             let monsterSize = 0;
             let monsterPadding = 0;
 
-            //TODO - determine monster type and stars !!!!
+            //determine monster type and stars !!!!
+            //TODO - add more options in config - main_config.afterLevelMonsterReward
+            const odds = main_config.afterLevelMonsterReward;
             const monsterRewardType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
-            const monsterRewardStars = 1;
+            let monsterRewardStars = NaN;
+            const randomNumber = Phaser.Math.RND.between(1, 100);
+            for (let index = 0; index < odds.length; index++) {
+                const odd = odds[index];
+                if (randomNumber <= odd) {
+                    monsterRewardStars = index + 1;
+                    break;
+                }
+            }
 
             if (hasMonsterReweard) {
                 //monster card reward
@@ -342,12 +353,16 @@ export class Game extends AbstractScene {
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
                 const mapLevel = localStorage.getItem('mapLevel') || '1';
-                localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
+                if ((+currentLevel + 1) > +mapLevel) {
+                    localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
+                }
 
                 // UPDATE LEVELS WON(LOCAL STORAGE)
                 const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
-                levelsWon.push(+currentLevelData.levelName);
-                localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
+                if (!levelsWon.includes(+currentLevelData.levelName)) {
+                    levelsWon.push(+currentLevelData.levelName);
+                    localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
+                }
 
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
                 if (playerMonstersCount >= 40) {
@@ -706,6 +721,26 @@ export class Game extends AbstractScene {
     }
 
     private getRandomTargetForOpponent(targets: any): any {
+
+        // check if opponent can kill player monster
+        for (let index = 0; index < targets.length; index++) {
+            const playerMonster = this.data.list.playerMonsters.find((x: Monster) => x.unitData.row === targets[index].row && x.unitData.col === targets[index].col);
+            if (this.currentlySelectedMonster.unitData.magic) {
+                if (playerMonster.unitData.health - this.currentlySelectedMonster.unitData.magic <= 0) {
+                    return targets[index];
+                }
+            } else if (this.currentlySelectedMonster.unitData.ranged) {
+                if (playerMonster.unitData.health + playerMonster.unitData.shield - this.currentlySelectedMonster.unitData.ranged <= 0) {
+                    return targets[index];
+                }
+            } else if (this.currentlySelectedMonster.unitData.melee) {
+                if (playerMonster.unitData.health + playerMonster.unitData.shield - this.currentlySelectedMonster.unitData.melee <= 0) {
+                    return targets[index];
+                }
+            }
+        }
+
+        // if not attack random
         return targets[Phaser.Math.RND.between(0, targets.length - 1)];
     }
 

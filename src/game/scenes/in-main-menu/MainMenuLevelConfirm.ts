@@ -62,25 +62,27 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             }).setOrigin(0.5);
         this.add(levelHeader);
 
-        //completed text
-        const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
-            levelHeader.x,
-            levelHeader.y,
-            `completed`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(0.5).setAlpha(0).setScale(1.5);
-        levelCompletedText.angle = -25;
-        this.scene.tweens.add({
-            targets: levelCompletedText,
-            alpha: 1,
-            scale: 1,
-            duration: 300,
-            delay: 200
-        })
-        this.add(levelCompletedText);
+        if (JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+this.levelData.levelName)) {
+            //completed text
+            const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
+                levelHeader.x,
+                levelHeader.y,
+                `completed`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+            levelCompletedText.angle = -25;
+            this.scene.tweens.add({
+                targets: levelCompletedText,
+                alpha: 1,
+                scale: 1,
+                duration: 300,
+                delay: 200
+            })
+            this.add(levelCompletedText);
+        }
     }
 
     private createRepeatLevelWinReward() {
