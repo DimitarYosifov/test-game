@@ -30,6 +30,7 @@ export class Monster extends Phaser.GameObjects.Container {
     upgradePostionIndex: number = NaN;
     originalIndex: number;
     addedForSale: boolean = false;
+    isPlayerMonster: boolean;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -38,6 +39,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.type = this.unitData.type;
         this.unitData.movesLeft = this.unitData.moves;
         this.index = index;
+        this.isPlayerMonster = isPlayerMonster;
 
         //bg
         this.bg = scene.add.image(0, 0, unit.type).setOrigin(0.5);
@@ -302,10 +304,12 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.setInteraction(false);
             },
             onComplete: () => {
-
                 this.decreaseMoves();
+                const movesLeft = this.unitData.movesLeft;
                 this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
-
+                if (movesLeft > 0 && this.isPlayerMonster) {
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
+                }
             }
         })
     }
