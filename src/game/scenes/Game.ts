@@ -80,7 +80,13 @@ export class Game extends AbstractScene {
         this.endTurnButton = new Button(this, 1810, 750, 'button', () => {
             this.endTurnButton.disableInteractive();
             this.data.list.playerMonsters.forEach((m: Monster) => {
-                m.pendingAction = false;
+                if (m !== null) {
+                    while (m.unitData.movesLeft > 0) {
+                        m.decreaseMoves();
+                    }
+                    // m.unitData.movesLeft = 0;
+                    m.pendingAction = false;
+                }
             });
             this.checkNextTurn(false);
         })
@@ -401,8 +407,10 @@ export class Game extends AbstractScene {
                     claimButton.destroy(true);
                     this.monsterNotClaimedPopup();
                 } else {
-                    // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
-                    this.addNewMonster(monsterRewardType, monsterRewardStars);
+                    if (hasMonsterReweard) {
+                        // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
+                        this.addNewMonster(monsterRewardType, monsterRewardStars);
+                    }
                     this.changeScene('MainMenu');
                 }
 
@@ -653,9 +661,9 @@ export class Game extends AbstractScene {
         if (resume && this.currentlySelectedMonster.unitData.movesLeft === 0) {
             this.autoSelectRandomPlayerMonster();
         }
-        // else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
-        //     this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
-        // }
+        else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
+            this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
+        }
     }
 
     private autoSelectRandomPlayerMonster() {
@@ -774,7 +782,8 @@ export class Game extends AbstractScene {
 
         // check if opponent can kill player monster
         for (let index = 0; index < targets.length; index++) {
-            const playerMonster = this.data.list.playerMonsters.find((x: Monster) => x.unitData.row === targets[index].row && x.unitData.col === targets[index].col);
+            console.log(this.data.list.playerMonsters)
+            const playerMonster = this.data.list.playerMonsters.find((x: Monster) => x !== null && x.unitData.row === targets[index].row && x.unitData.col === targets[index].col);
             if (this.currentlySelectedMonster.unitData.magic) {
                 if (playerMonster.unitData.health - this.currentlySelectedMonster.unitData.magic <= 0) {
                     return targets[index];

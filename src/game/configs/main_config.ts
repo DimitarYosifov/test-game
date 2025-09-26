@@ -9,13 +9,13 @@ export const main_config = {
     "rangedUnitsRange": 2,
     "chanceToGetMonsterOnLevelWin": 25, // 10%
     "playerStartingCoins": 150,
-    "afterLevelMonsterReward":[
-                89,   // 89% for 1 star  monster
-                99,   // 10% for 2 stars monster
-                100,  //  1% for 3 stars monster
-                0,    //  0% for 4 stars monster
-                0,    //  0% for 5 stars monster
-            ],
+    "afterLevelMonsterReward": [
+        89,   // 89% for 1 star  monster
+        99,   // 10% for 2 stars monster
+        100,  //  1% for 3 stars monster
+        0,    //  0% for 4 stars monster
+        0,    //  0% for 5 stars monster
+    ],
     "packData": {
         "commonPack": {
             cost: 50,
@@ -53,7 +53,7 @@ export const main_config = {
 
 // TODO:
 
- 
+//CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                                                           ^HIGH PRIORITY^
 // implement info for monsters showing stats for all 5 stars
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
@@ -69,16 +69,26 @@ export const main_config = {
 // add blink tween for the bulbs
 // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
 // add chance to get 2 star monster after level
+//ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
+// add level number to in game-lvl
+// add space skip for move
 
 //BUGS:
- 
+//1. when i monster with 2 moves hits on its first move, its get locked - PROBABLY FIXED
 
+
+// below cant be reproduced FOR NOW
 // 2: AFTER SELLIMG CARD CHECK IF THERE IS 3 CARDS PENDING IN ULGRADE SECTION AN ENABLE/DISABLE UPGRADE BUTTON PROPERLY
 // IF SO DONE 3 CARDS IN THE UPGRADE ARE AUTUMATICALLY UPGRADED AFTER REFRESH !!!!
 
+//3.sometimes angle of the bow is changed when ranged monster is about to act
+
+//4. SOMEHOW MAGICALLY UPGRADED MONSTER SHOW UP IN THE ATACK      - MAY BE THEY UPGRADE THEM SELVES AUTOMATICALLY ! - OBSERVE!             ^HIGH PRIORITY^
+// MAY BE SOME CREATURES ARE CLONED AN PLAYER DECK INCREASES WITH NO REASON
 
 
-
+// BUG  - AFTER UPGRADE ONE SPOT(ROW) IS OCCUPIED BY 2 MONSTERS                                                                            ^HIGH PRIORITY^
+// buf scale tween is buggy sometimes
 //OBSERVATIONS:
 // ON LEVEL 11 ALL MONSTERS ARE LEVEL 2
 // ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)

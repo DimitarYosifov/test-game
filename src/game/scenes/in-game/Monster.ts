@@ -547,6 +547,11 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     decreaseMoves(): void {
+
+        //================== hack to fix nasty bug!===========================||
+        if (this.unitData.movesLeft === 0) return;
+        //====================================================================||
+
         this.unitData.movesLeft--;
         (this.movesLeftContainer.list[this.unitData.movesLeft] as Phaser.GameObjects.Image).setTexture('grey-dot');
     }
@@ -555,5 +560,6 @@ export class Monster extends Phaser.GameObjects.Container {
         this.movesLeftContainer.list.forEach(dot => {
             (dot as Phaser.GameObjects.Image).setTexture('green-dot');
         });
+        this.unitData.movesLeft = this.unitData.moves;
     }
 }
