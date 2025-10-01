@@ -583,15 +583,15 @@ export class Monster extends Phaser.GameObjects.Container {
                     targets: pack,
                     x: 960,
                     y: 540,
-                    scale: 0.6,
+                    scale: 0.75,
                     duration: 300
                 },
                 {
                     targets: pack,
-                    delay: 500,
+                    delay: 1100,
                     alpha: 0,
-                    scale: 0.6,
-                    duration: 1000,
+                    scale: 0,
+                    duration: 300,
                     ease: 'Back.easeOut',
                     onComplete: () => {
                         pack.destroy(true);
