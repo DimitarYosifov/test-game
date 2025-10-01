@@ -26,12 +26,12 @@ export class CardSelection extends AbstractScene {
     selectedMonsters: Monster[] | null[] = [null, null, null, null, null, null, null];
     upgradeSelectedMonsters: Monster[] | null[] = [null, null, null];
     mainDeckHitRect: Phaser.Geom.Rectangle;
-    okButton: GameObjects.Image;
+    okButton: Button;
     playerMonstersData: IPlayerMonstersData[];
     upgradeCostText: GameObjects.Text;
     upgradeCost: number = 0;
     sellsFor: number = 0;
-    upgradeButton: GameObjects.Image;
+    upgradeButton: Button;
     sellHitRect: Phaser.Geom.Rectangle;
     sellButton: Button;
     monsterAddedForSale: Monster | null;
@@ -512,15 +512,15 @@ export class CardSelection extends AbstractScene {
         graphics.strokeRectShape(hitRect);
         this.sellHitRect = hitRect;
 
-        this.sellButton = new Button(this, 1470, 970, 'sell-btn', this.onSellMonster.bind(this), true, 1.1);
+        this.sellButton = new Button(this, 1470, 970, 'button', 'sell', this.onSellMonster.bind(this), true, 1);
     }
 
     private toggleSellButtonEnable(enable: boolean) {
         if (enable) {
-            this.sellButton.setInteractive().setAlpha(1);
+            this.sellButton.setInteractive();
             this.sellsFor = this.monsterAddedForSale?.unitData.sellsFor || 0;
         } else {
-            this.sellButton.disableInteractive().setAlpha(0.65).setScale(1.1);
+            this.sellButton.disableInteractive();
             this.sellsFor = 0;
         }
         this.sellCardText.setText(`sell monster for: ${this.sellsFor}`);
@@ -558,6 +558,7 @@ export class CardSelection extends AbstractScene {
         });
 
         this.checkUpgradeButtonEnable();
+        this.sellButton.setScale(1);
 
         console.log(this.playerMonstersData)
         console.log(this.monstersContainer.list)
@@ -599,7 +600,7 @@ export class CardSelection extends AbstractScene {
 
         this.add.existing(this.upgradeCostText);
 
-        this.upgradeButton = new Button(this, 970, 970, 'upgrade', this.onUpgradeMonster.bind(this), true);
+        this.upgradeButton = new Button(this, 970, 970, 'upgrade', null, this.onUpgradeMonster.bind(this), true);
     }
 
     private checkUpgradeButtonEnable() {
@@ -819,7 +820,7 @@ export class CardSelection extends AbstractScene {
     }
 
     private createOkButton() {
-        this.okButton = new Button(this, 1800, 970, 'ok-btn', this.save.bind(this));
+        this.okButton = new Button(this, 1800, 970, 'button', 'OK', this.save.bind(this));
     }
 
     // updates order of monsters- similar to zOrder

@@ -151,12 +151,12 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     }
 
     private createOkButton() {
-        this.okButton = new Button(this.scene, 1800, 950, 'ok-btn', () => this.emit('level-selected', this.levelData.levelName));
+        this.okButton = new Button(this.scene, 1800, 950, 'button', 'OK', () => this.emit('level-selected', this.levelData.levelName));
         this.add(this.okButton);
     }
 
     private createBackButton() {
-        this.backButton = new Button(this.scene, 100, 950, 'back-btn', () => this.emit('level-unselected'));
+        this.backButton = new Button(this.scene, 100, 950, 'button', 'back', () => this.emit('level-unselected'));
         this.add(this.backButton);
     }
 }

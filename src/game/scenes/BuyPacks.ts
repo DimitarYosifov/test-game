@@ -144,7 +144,7 @@ export class BuyPacks extends AbstractScene {
         let freeText: any;
 
         // button
-        this.commonPackButton = new Button(this, this.commonPackTexture.x, commonPackCost.y + 120, 'buy', () => {
+        this.commonPackButton = new Button(this, this.commonPackTexture.x, commonPackCost.y + 120, 'buy', null, () => {
 
             const _freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
             const canBuy = this.onBuy(packCost, 'commonPack', _freeCommonPacks > 0);
@@ -262,7 +262,7 @@ export class BuyPacks extends AbstractScene {
         let freeText: any;
 
         // button
-        this.silverPackButton = new Button(this, this.silverPackTexture.x, silverPackCost.y + 120, 'buy', () => {
+        this.silverPackButton = new Button(this, this.silverPackTexture.x, silverPackCost.y + 120, 'buy', null, () => {
 
             const _freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
             const canBuy = this.onBuy(packCost, 'silverPack', _freeSilverPacks > 0);
@@ -380,7 +380,7 @@ export class BuyPacks extends AbstractScene {
         let freeText: any;
 
         // button
-        this.goldenPackButton = new Button(this, this.goldenPackTexture.x, goldenPackCost.y + 120, 'buy', () => {
+        this.goldenPackButton = new Button(this, this.goldenPackTexture.x, goldenPackCost.y + 120, 'buy', null, () => {
 
             const _freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
             const canBuy = this.onBuy(packCost, 'goldPack', _freeGoldPacks > 0);
@@ -425,7 +425,7 @@ export class BuyPacks extends AbstractScene {
     }
 
     private createBackButton() {
-        this.backButton = new Button(this, 100, 950, 'back-btn', () => {
+        this.backButton = new Button(this, 100, 950, 'button', 'back', () => {
             this.changeScene('MainMenu');
         });
         // this.add.existing(this.backButton);
@@ -556,7 +556,7 @@ export class BuyPacks extends AbstractScene {
     }
 
     private addClaimButton() {
-        this.claimButton = new Button(this, 960, 900, 'claim', () => {
+        this.claimButton = new Button(this, 960, 900, 'claim', null, () => {
             this.claimButton?.disableInteractive();
             this.hideRewards();
         }, true, 1);

@@ -296,7 +296,7 @@ export class Map extends AbstractScene {
     }
 
     private createBackButton() {
-        this.backButton = new Button(this, 100, 950, 'back-btn', () => {
+        this.backButton = new Button(this, 100, 950, 'button', 'back', () => {
             this.confirmPopupOpen = false;
             this.changeScene('MainMenu');
         });

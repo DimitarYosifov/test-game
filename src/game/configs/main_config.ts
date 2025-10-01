@@ -16,7 +16,7 @@ export const main_config = {
         995,   //     1% for silver pack
         1000,  //   0.5% for golden pack
     ],
-    "chanceToGetMonsterOnLevelWin": 25, // 10%
+    "chanceToGetMonsterOnLevelWin": 25, // 25%
     "afterLevelMonsterReward": [
         89,   // 89% for 1 star  monster
         99,   // 10% for 2 stars monster
@@ -61,27 +61,24 @@ export const main_config = {
 
 // TODO:
 // add survival level
-// add chance of monster death drops free pack + pack odds ( 90%  lvl 1 star => 10 % 2 stars => asnd so on)
 //CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                                                           ^HIGH PRIORITY^
 // implement info for monsters showing stats for all 5 stars
 // IMPLEMENT SURVIVAL MODE                                                                                                           ^HIGH PRIORITY^
-// IMPLEMENT CHANCE OF MONSTER DROP FREE PACKS UPON DEATH                                                                            ^HIGH PRIORITY^
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
 // add delete progress button
-// make common class button(including text) and make all buttons the samee
-// if a monster has more than 1 moves - after its move leave it selected if it has more moves
 // add text "drag here" to hit rects in card selection
-// add text 'opponent's turn' when opponent turn starts
-// add fade in out to confirm popup for entering level
 // add blink tween for the bulbs
 // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
-// add chance to get 2 star monster after level
 //ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
 // add level number to in game-lvl
 // add space skip for move
+
+
+
+
 
 //BUGS:
 //1. when i monster with 2 moves hits on its first move, its get locked - PROBABLY FIXED
@@ -99,7 +96,6 @@ export const main_config = {
 
 // BUG  - AFTER UPGRADE ONE SPOT(ROW) IS OCCUPIED BY 2 MONSTERS                                                                            ^HIGH PRIORITY^
 // buf scale tween is buggy sometimes
-// bug disable skip and end turn buttons while player monster act -PROBABLY FIXED
 
 
 //OBSERVATIONS:

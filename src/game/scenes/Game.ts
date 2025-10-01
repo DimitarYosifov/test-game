@@ -73,13 +73,13 @@ export class Game extends AbstractScene {
 
     }
     private createGiveUpButton() {
-        this.giveUpButton = new Button(this, 1810, 1000, 'give-up', () => {
+        this.giveUpButton = new Button(this, 1810, 1000, 'button', 'give\nup', () => {
             this.createLevelOutroPopup();
         })
     }
 
     private createEndTurnButton() {
-        this.endTurnButton = new Button(this, 1810, 750, 'button', () => {
+        this.endTurnButton = new Button(this, 1810, 500, 'button', 'end\nturn', () => {
             this.endTurnButton.disableInteractive();
             this.data.list.playerMonsters.forEach((m: Monster) => {
                 if (m !== null) {
@@ -92,15 +92,15 @@ export class Game extends AbstractScene {
             });
             this.checkNextTurn(false);
         })
-        const endTurnText = this.add.text(
-            this.endTurnButton.x,
-            this.endTurnButton.y,
-            `END\nTURN`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(0.5);
+        // const endTurnText = this.add.text(
+        //     this.endTurnButton.x,
+        //     this.endTurnButton.y,
+        //     `END\nTURN`,
+        //     {
+        //         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+        //         stroke: '#000000', letterSpacing: 4,
+        //         align: 'center'
+        //     }).setOrigin(0.5);
     }
 
     private createOpponentTurnMsg() {
@@ -186,14 +186,14 @@ export class Game extends AbstractScene {
     }
 
     private skipButtonHandler(): void {
-        this.skipButton = new Button(this, 1820, 100, 'skip', this.onSkip.bind(this), true, 0.5);
+        this.skipButton = new Button(this, 1810, 350, 'button', 'skip', this.onSkip.bind(this), true, 1);
     }
 
     private onSkip() {
         if (!this.currentlySelectedMonster) {
             return;
         }
-        this.skipButton.disableInteractive().setAlpha(0.6);
+        this.skipButton.disableInteractive();
         console.log(this.currentlySelectedMonster);
 
         const hasMoreMoves = this.currentlySelectedMonster.unitData.movesLeft > 0;
@@ -235,7 +235,7 @@ export class Game extends AbstractScene {
     }
 
     private directionSelectHandler(): void {
-        this.skipButton.disableInteractive().setAlpha(0.6);
+        this.skipButton.disableInteractive();
         this.events.on(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, (data: number[]) => {
 
             const newRow = data[0];
@@ -420,7 +420,7 @@ export class Game extends AbstractScene {
             console.log()
 
             // claim button
-            const claimButton = new Button(this, 960, 700, 'claim', () => {
+            const claimButton = new Button(this, 960, 700, 'claim', null, () => {
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';
@@ -457,12 +457,12 @@ export class Game extends AbstractScene {
             });
         } else {
             // try again button
-            const tryAgain = new Button(this, 760, 700, 'try-again', () => {
+            const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
-            }, false, 0.85);
+            }, false);
 
             // giveUp button
-            const giveUp = new Button(this, 1160, 700, 'give-up', () => {
+            const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
             })
         }
@@ -551,7 +551,7 @@ export class Game extends AbstractScene {
                 // this.skipButton.setInteractive().setAlpha(1);
                 this.addInteraction();
             } else {
-                this.skipButton.disableInteractive().setAlpha(0.6);
+                this.skipButton.disableInteractive();
                 this.addInteraction();
                 this.getRandomOpponentMonster();
             }
@@ -655,7 +655,7 @@ export class Game extends AbstractScene {
                 }
             });
         } else {
-            this.skipButton.disableInteractive().setAlpha(0.6);
+            this.skipButton.disableInteractive();
             this.showOpponentTurnMsg();
             this.data.list.opponentMonsters.forEach((monster: Monster) => {
                 if (monster) {

@@ -7,7 +7,7 @@ export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     gameover_text: Phaser.GameObjects.Text;
-    deckButton: Phaser.GameObjects.Image;
+    deckButton: Button;
     confirmPopupOpen: boolean;
     coinTexture: Phaser.GameObjects.Image;
     coinText: Phaser.GameObjects.Text;
@@ -101,7 +101,7 @@ export class MainMenu extends AbstractScene {
             this.mapButton.disableInteractive();
             this.changeScene('Map');
         }
-        this.mapButton = new Button(this, 250, 750, 'map', mapButtonClick.bind(this), false, 0.5);
+        this.mapButton = new Button(this, 250, 750, 'map', null, mapButtonClick.bind(this), false, 0.5);
         const mapTitle = this.add.text(
             250,
             930,
@@ -118,7 +118,7 @@ export class MainMenu extends AbstractScene {
             this.shopButton.disableInteractive();
             this.changeScene('BuyPacks');
         }
-        this.shopButton = new Button(this, 960, 250, 'shop-icon', shopButtonClick.bind(this), false, 1);
+        this.shopButton = new Button(this, 960, 250, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
         const shopTitle = this.add.text(
             960,
             380,
@@ -135,7 +135,7 @@ export class MainMenu extends AbstractScene {
             this.deckButton.disableInteractive();
             this.changeScene('CardSelection');
         }
-        this.deckButton = new Button(this, 1650, 750, 'deck', deckButtonClick.bind(this), false, 0.5);
+        this.deckButton = new Button(this, 1650, 750, 'deck', null, deckButtonClick.bind(this), false, 0.5);
         const deckTitle = this.add.text(
             1650,
             930,
