@@ -73,6 +73,7 @@ export class Preloader extends Scene {
         this.load.image('pointer', 'pointer.png');
         this.load.image('location', 'location.png');
         this.load.image('button', 'button.png');
+        this.load.image('survival1', 'survival1.png');
         this.load.font('main-font', 'Oups.otf');
     }
 

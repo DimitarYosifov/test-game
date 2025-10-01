@@ -291,7 +291,6 @@ export class Monster extends Phaser.GameObjects.Container {
         this.unitData.row = row;
         this.unitData.col = col;
 
-
         this.scene.tweens.add({
             delay: this.scene.data.list.isPlayerTurn ? 250 : 100,
             targets: this,

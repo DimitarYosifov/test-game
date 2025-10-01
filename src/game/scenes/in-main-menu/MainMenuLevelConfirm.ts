@@ -11,22 +11,39 @@ const PADDING = 50;
 export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
 
     private levelData: ILevelConfig;
-    private okButton: Phaser.GameObjects.Image;
-    private backButton: Phaser.GameObjects.Image;
+    private okButton: Button;
+    private backButton: Button;
 
-    constructor(scene: Scene, x: number, y: number, levelData: ILevelConfig) {
+    constructor(scene: Scene, x: number, y: number, levelData: ILevelConfig, isSurvivalLevel: boolean = false) {
         super(scene, x, y);
         this.scene = scene;
         this.levelData = levelData;
         this.scene.add.existing(this);
 
         this.createBGOverlay();
-        this.createLevelHeader();
-        this.createFirstWinReward();
-        this.createRepeatLevelWinReward();
-        this.createEnemyDescription();
+        if (isSurvivalLevel) {
+            this.createSurvivalLevelMsg();
+        } else {
+            this.createLevelHeader();
+            this.createFirstWinReward();
+            this.createRepeatLevelWinReward();
+            this.createEnemyDescription();
+        }
         this.createOkButton();
         this.createBackButton();
+    }
+
+    private createSurvivalLevelMsg(): void {
+        const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
+            960,
+            540,
+            `survive as long as you can!`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+        this.add(levelHeader);
     }
 
     private createBGOverlay() {

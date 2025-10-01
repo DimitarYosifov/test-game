@@ -4,7 +4,7 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { level_config } from '../configs/level_config';
+import { ILevelConfig, level_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
@@ -34,6 +34,13 @@ export class Game extends AbstractScene {
     levelFinished: boolean;
     endTurnButton: Button;
     opponentTurnMsg: Phaser.GameObjects.Text;
+    isSurvivalLevel: boolean;
+    survivalLevelData: ILevelConfig;
+    survivalLevelReward: number;
+    survivalLevelRewardText: Phaser.GameObjects.Text;
+    survivalLevelRewardImage: Phaser.GameObjects.Image;
+    survivalTotalMonstersCount: number | undefined;
+    survivalLevelKilledMonsters: number;
 
     constructor() {
         super('Game');
@@ -42,10 +49,19 @@ export class Game extends AbstractScene {
     create() {
         super.create();
 
-        this.levelFinished = false;
-
         this.add.image(0, 0, 'bg').setOrigin(0);
         this.data.list.isPlayerTurn = true;
+
+        this.isSurvivalLevel = (this.scene.settings.data as any).isSurvivalLevel;
+        this.survivalLevelData = JSON.parse(localStorage.getItem('survivalLevelData') ?? "null");
+        this.survivalLevelReward = 0;
+        this.survivalLevelKilledMonsters = 0;
+        if (this.isSurvivalLevel) {
+            this.survivalTotalMonstersCount = this.survivalLevelData.totalMonstersCount;
+            this.createSurvivalLevelRewardText();
+        }
+
+        this.levelFinished = false;
 
         this.setGridDimensions();
         this.drawGridLines();
@@ -71,7 +87,28 @@ export class Game extends AbstractScene {
         this.targetSelectHandler();
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
+        localStorage.removeItem('survivalLevelData');
     }
+
+    private createSurvivalLevelRewardText() {
+        this.survivalLevelRewardText = this.add.text(
+            960,
+            50,
+            `reward: ${this.survivalLevelReward}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5).setName('survivalLevelRewardText');
+        this.survivalLevelRewardImage = this.add.image(this.survivalLevelRewardText.x + this.survivalLevelRewardText.width / 2 + 15, 55, 'coin').setScale(0.35).setOrigin(0, 0.5);
+    }
+
+    private updateSurvivalLevelRewardText() {
+        this.survivalLevelReward = this.data.list.opponentMonsters.filter((monster: Monster) => monster === null).length * (this.survivalLevelData.rewardPerKill as number);
+        this.survivalLevelRewardText.setText(`reward: ${this.survivalLevelReward}`);
+        this.survivalLevelRewardImage.setX(this.survivalLevelRewardText.x + this.survivalLevelRewardText.width / 2 + 15);
+    }
+
     private createGiveUpButton() {
         this.giveUpButton = new Button(this, 1810, 1000, 'button', 'give\nup', () => {
             this.createLevelOutroPopup();
@@ -92,15 +129,6 @@ export class Game extends AbstractScene {
             });
             this.checkNextTurn(false);
         })
-        // const endTurnText = this.add.text(
-        //     this.endTurnButton.x,
-        //     this.endTurnButton.y,
-        //     `END\nTURN`,
-        //     {
-        //         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-        //         stroke: '#000000', letterSpacing: 4,
-        //         align: 'center'
-        //     }).setOrigin(0.5);
     }
 
     private createOpponentTurnMsg() {
@@ -305,6 +333,7 @@ export class Game extends AbstractScene {
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
             this.updateOpponentMonstersLeft();
+            this.updateSurvivalLevelRewardText();
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 // alert('player wins');
                 this.levelFinished = true;
@@ -325,7 +354,7 @@ export class Game extends AbstractScene {
         const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+currentLevelData.levelName) === false;
 
         const rndNum = Phaser.Math.RND.between(1, 100);
-        const hasMonsterReweard = isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
+        const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
@@ -341,21 +370,23 @@ export class Game extends AbstractScene {
         });
 
         //   HEADER
-        const msg = levelWon ? 'LEVEL WON' : 'LEVEL LOST';
-        const leveltext: Phaser.GameObjects.Text = this.add.text(
-            960,
-            350,
-            msg,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(0.5);
+        if (!this.isSurvivalLevel) {
+            const msg = levelWon ? 'LEVEL WON' : 'LEVEL LOST';
+            const leveltext: Phaser.GameObjects.Text = this.add.text(
+                960,
+                350,
+                msg,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5);
+        }
 
         const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0)
         this.add.existing(rewardsContainer);
 
-        if (levelWon) {
+        if (levelWon || this.isSurvivalLevel) {
             // REWARD TEXT
             const rewardtext: Phaser.GameObjects.Text = this.add.text(
                 960,
@@ -373,7 +404,10 @@ export class Game extends AbstractScene {
             rewardsContainer.add(coin);
 
             // COIN TEXT
-            const coinsWon = isFirstTimeReward ? currentLevelData.firstWinReward : currentLevelData.repeatLevelWinReward;
+            let coinsWon = isFirstTimeReward ? currentLevelData.firstWinReward : currentLevelData.repeatLevelWinReward;
+            if (this.isSurvivalLevel) {
+                coinsWon = this.survivalLevelReward;
+            }
             const cointext: Phaser.GameObjects.Text = this.add.text(
                 coin.x + coin.displayWidth,
                 500,
@@ -441,10 +475,10 @@ export class Game extends AbstractScene {
 
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
                 if (playerMonstersCount >= 40) {
-                    leveltext.destroy(true);
-                    rewardsContainer.destroy(true);
-                    overlay.destroy(true);
-                    claimButton.destroy(true);
+                    // leveltext.destroy(true);
+                    // rewardsContainer.destroy(true);
+                    // overlay.destroy(true);
+                    // claimButton.destroy(true);
                     this.monsterNotClaimedPopup();
                 } else {
                     if (hasMonsterReweard) {
@@ -657,6 +691,9 @@ export class Game extends AbstractScene {
         } else {
             this.skipButton.disableInteractive();
             this.showOpponentTurnMsg();
+            if (this.isSurvivalLevel) {
+                this.addNewSurvivalLevelMonsters();
+            }
             this.data.list.opponentMonsters.forEach((monster: Monster) => {
                 if (monster) {
                     monster.resetMoves();
@@ -710,6 +747,67 @@ export class Game extends AbstractScene {
         else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
             this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
         }
+    }
+
+    private addNewSurvivalLevelMonsters() {
+
+        const newMonstersCount = this.survivalLevelData.newEnemiesPerRound || 0;
+
+        for (let index = 0; index < newMonstersCount; index++) {
+            const monstersSpawned = this.data.list.opponentMonsters.length;
+
+            if (monstersSpawned === this.survivalTotalMonstersCount) {
+                console.log('can not spawn any more monsters');
+                break;
+            }
+
+            const odds = this.survivalLevelData.newEnemiesStars;
+            const monsterRewardType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+            let monsterRewardStars = NaN;
+            const randomNumber = Phaser.Math.RND.between(1, 100);
+            for (let index = 0; index < odds!.length; index++) {
+                const odd = odds![index];
+                if (randomNumber <= odd) {
+                    monsterRewardStars = index;
+                    break;
+                }
+            }
+            let unit = { ...(monsters_power_config as any)[monsterRewardType][monsterRewardStars] };
+            unit.row = Phaser.Math.RND.between(0, 6);
+            unit.col = 0;
+
+            if (this.data.list.gridPositions[unit.row][unit.col].occupiedBy) {
+                console.log('new monster not added, cause random position is occupied...');
+                continue;
+            }
+
+            const gridPosition = this.data.list.gridPositions[unit.row][unit.col];
+            gridPosition.isEmpty = false;
+            gridPosition.occupiedBy = 'opponent';
+
+            const x = this.gridDimensions.cellSize * unit.col + this.gridDimensions.cellSize / 2;
+            const y = this.gridDimensions.cellSize * unit.row + this.gridDimensions.cellSize / 2;
+            const width = this.gridDimensions.cellSize - main_config.lineWidth;
+            const height = this.gridDimensions.cellSize - main_config.lineWidth;
+            const index = this.data.list.opponentMonsters.length;
+            const monster = new Monster(this, x, y, width, height, unit, index, false);
+            monster.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: IUnitData) => {
+                this.data.list.gridPositions[data.row][data.col].isEmpty = true;
+                delete this.data.list.gridPositions[data.row][data.col].occupiedBy;
+                this.data.list.opponentMonsters[index] = null;
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, [monster, data]);
+            });
+
+            this.mainGridContainer.add(monster);
+
+            this.data.list.opponentMonsters.push(monster);
+
+        }
+        this.updateOpponentMonstersLeft();
+
+
+        console.log(this.data.list.opponentMonsters)
+        console.log(`new survival monsters => ${newMonstersCount}`)
     }
 
     private autoSelectRandomPlayerMonster() {

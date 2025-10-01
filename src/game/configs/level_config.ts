@@ -1,3 +1,41 @@
+
+// L E V E L  1  S U R V I V A L    T E S T
+export const survival_level_1_config = {
+    levelName: '',
+    survival: true,
+    mapPosition: {
+        x: 0,
+        y: 0
+    },
+    rewardPerKill: 5,
+    newEnemiesPerRound: 3,
+    revealedByLevel: 10,
+    totalMonstersCount: 100,
+    newEnemiesStars: [
+        50,    // 50% for 1 star  monster
+        100,   // 50% for 2 stars monster
+        0,     //  0% for 3 stars monster
+        0,     //  0% for 4 stars monster
+        0,     //  0% for 5 stars monster
+    ],
+    opponentMonstersData: [
+        { type: 9, stars: 1 },
+        { type: 9, stars: 1 },
+        { type: 9, stars: 1 },
+        { type: 9, stars: 1 },
+        // { type: 1, stars: 1 },
+        // { type: 2, stars: 2 },
+        // { type: 2, stars: 1 },
+        // { type: 2, stars: 1 },
+        // { type: 2, stars: 1 },
+        // { type: 5, stars: 1 },
+        // { type: 5, stars: 1 },
+        // { type: 5, stars: 1 },
+        // { type: 5, stars: 1 },
+        // { type: 5, stars: 1 },
+    ]
+}
+
 export const level_config = [
     // L E V E L   1    - monsters: 1 star x 7   2 stars x 0
     {
@@ -897,8 +935,14 @@ export interface IOpponentMonstersData {
 }
 
 export interface ILevelConfig {
-    levelName: number;
-    firstWinReward: number;
-    repeatLevelWinReward: number;
+    levelName: number | string;
+    firstWinReward?: number;
+    repeatLevelWinReward?: number;
     opponentMonstersData: IOpponentMonstersData[];
+    survival?: boolean;
+    rewardPerKill?: number;
+    newEnemiesPerRound?: number;
+    revealedByLevel?: number;
+    newEnemiesStars?: number[];
+    totalMonstersCount?: number;
 }

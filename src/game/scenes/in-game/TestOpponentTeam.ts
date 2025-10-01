@@ -95,7 +95,8 @@ export class TestOpponentTeam {
         // ]
 
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null");
-        const opponentMonstersData = level_config[currentLevel - 1].opponentMonstersData;
+        const survivalLevelData = JSON.parse(localStorage.getItem('survivalLevelData') ?? "null");
+        const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel - 1].opponentMonstersData;
 
         let result: IUnitData[] = [];
 

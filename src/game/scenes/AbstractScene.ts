@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { IOpponentMonstersData } from '../configs/level_config';
 
 export abstract class AbstractScene extends Scene implements ITest {
 
@@ -15,9 +16,9 @@ export abstract class AbstractScene extends Scene implements ITest {
         });
     }
 
-    abstract changeScene(nextScene: string): void;
+    abstract changeScene(nextScene: string, isSurvivalLevel: boolean): void;
 }
 
 interface ITest {
-    changeScene(nextScene: string): void;
+    changeScene(nextScene: string, isSurvivalLevel: boolean): void;
 }

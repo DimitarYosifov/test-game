@@ -61,9 +61,9 @@ export const main_config = {
 
 // TODO:
 // add survival level
-//CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                                                           ^HIGH PRIORITY^
+//CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
 // implement info for monsters showing stats for all 5 stars
-// IMPLEMENT SURVIVAL MODE                                                                                                           ^HIGH PRIORITY^
+// ADD TIME COUNT DOWN FOR SURVIVAL MODE                                                                                            ^HIGH PRIORITY^
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
 // add loading
@@ -75,7 +75,7 @@ export const main_config = {
 //ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
 // add level number to in game-lvl
 // add space skip for move
-
+// add some conffetti particles whrn getting a reward
 
 
 

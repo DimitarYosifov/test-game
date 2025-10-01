@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { MainMenuLevelConfirm } from './in-main-menu/MainMenuLevelConfirm';
-import { ILevelConfig, level_config } from '../configs/level_config';
+import { ILevelConfig, level_config, survival_level_1_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 
@@ -12,7 +12,9 @@ export class Map extends AbstractScene {
     backButton: Button;
     levelConfirm: MainMenuLevelConfirm;
     spots: { x: number, y: number }[];
+    survival1Spots: { x: number, y: number }[];
     dots: Phaser.GameObjects.Graphics[];
+    survival1dots: Phaser.GameObjects.Graphics[];
     player: Phaser.GameObjects.Image;
     levelContentContainer: Phaser.GameObjects.Container;
     playerDotSpot: number;
@@ -26,7 +28,9 @@ export class Map extends AbstractScene {
         super.create();
 
         this.spots = [];
+        this.survival1Spots = [];
         this.dots = [];
+        this.survival1dots = [];
         this.levelContentContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(101);
         this.add.existing(this.levelContentContainer);
 
@@ -58,35 +62,35 @@ export class Map extends AbstractScene {
             { x: 432, y: 222 },
             { x: 491, y: 222 },
             { x: 534, y: 189 },
-            { x: 565, y: 144 },//ок
+            { x: 565, y: 144 },
 
             { x: 620, y: 145 },
             { x: 675, y: 130 },
             { x: 719, y: 151 },
             { x: 740, y: 194 },
             { x: 726, y: 240 },
-            { x: 686, y: 268 },//ок
+            { x: 686, y: 268 },
 
             { x: 645, y: 310 },
             { x: 605, y: 353 },
             { x: 553, y: 367 },
             { x: 521, y: 410 },
             { x: 528, y: 459 },
-            { x: 544, y: 504 },// ок
+            { x: 544, y: 504 },
 
             { x: 535, y: 560 },
             { x: 477, y: 555 },
             { x: 447, y: 512 },
             { x: 440, y: 456 },
             { x: 415, y: 409 },
-            { x: 372, y: 372 },//ок
+            { x: 372, y: 372 },
 
             { x: 315, y: 359 },
             { x: 259, y: 370 },
             { x: 240, y: 422 },
             { x: 240, y: 478 },
             { x: 250, y: 530 },
-            { x: 280, y: 575 },//ок
+            { x: 280, y: 575 },
 
             { x: 295, y: 630 },
             { x: 302, y: 685 },
@@ -95,7 +99,7 @@ export class Map extends AbstractScene {
             { x: 257, y: 834 },
             { x: 297, y: 872 },
 
-            { x: 350, y: 890 },
+            { x: 350, y: 890 }, //lvl 10
             { x: 401, y: 864 },
             { x: 441, y: 827 },
             { x: 413, y: 781 },
@@ -285,8 +289,47 @@ export class Map extends AbstractScene {
             this.spots.push(spot);
         }
 
+
+
+        //========================SURVIVAL 1 LEVEL==========================================================
+        const survival_level_1_points = [
+            { x: 368, y: 944 }, //lvl survival test
+            { x: 401, y: 979 },
+            { x: 451, y: 998 },
+            { x: 507, y: 1008 }
+        ]
+
+        for (let index = 0; index < survival_level_1_points.length; index++) {
+            const spot = survival_level_1_points[index];
+            const graphics = this.add.graphics().setAlpha(0);
+            graphics.lineStyle(3, 0xFFD700);
+            graphics.strokeCircle(spot.x, spot.y, 8);
+            this.survival1dots.push(graphics);
+            this.levelContentContainer.add(graphics)
+            this.survival1Spots.push(spot);
+        }
+        //===================================================================================================
+
+
         this.createPlayer();
         this.createBackButton();
+
+        //========================SURVIVAL 1 LEVEL==========================================================
+        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+        const mapLevel = JSON.parse(localStorage.getItem('mapLevel') ?? "null") || '0';
+        const introduceToSurvivalLevel = currentLevel === survival_level_1_config.revealedByLevel && mapLevel === survival_level_1_config.revealedByLevel + 1
+
+        if (!introduceToSurvivalLevel && mapLevel > survival_level_1_config.revealedByLevel) {
+            this.survival1dots.forEach((element: Phaser.GameObjects.Graphics) => {
+                element.setAlpha(1);
+            });
+        }
+
+        if (mapLevel > survival_level_1_config.revealedByLevel) {
+            this.createSurvivalLevel1(introduceToSurvivalLevel);
+        }
+        //===================================================================================================
+
         this.createLevels();
         this.createCoins();
     }
@@ -303,6 +346,82 @@ export class Map extends AbstractScene {
         this.add.existing(this.backButton);
     }
 
+    private createSurvivalLevel1(introduceToSurvivalLevel: boolean) {
+        const levelTexture = this.add.image(this.survival1Spots[3].x, this.survival1Spots[3].y, 'survival1')
+            .setScale(0.4)
+            .setOrigin(0.5)
+            .setDepth(88)
+            .setAlpha(+!introduceToSurvivalLevel);
+        const leveltext: Phaser.GameObjects.Text = this.add.text(
+            this.survival1Spots[3].x,
+            this.survival1Spots[3].y,
+            `${survival_level_1_config.levelName}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
+                align: 'center'
+            })
+            .setOrigin(0.5)
+            .setDepth(88)
+            .setAlpha(+!introduceToSurvivalLevel);;
+
+        this.levelContentContainer.add([levelTexture, leveltext]);
+
+        levelTexture.setInteractive();
+        levelTexture.on('pointerdown', () => {
+            if (this.confirmPopupOpen) {
+                return;
+            }
+            this.confirmPopupOpen = true;
+            const onMoveComplete = () => {
+
+                this.levelConfirm = new MainMenuLevelConfirm(this, 0, 0, (survival_level_1_config as ILevelConfig), true);
+                this.levelContentContainer.add([this.levelConfirm]);
+
+                this.levelConfirm.once('level-selected', (level: number) => {
+                    localStorage.setItem('currentLevel', JSON.stringify(survival_level_1_config.revealedByLevel));
+                    this.confirmPopupOpen = false;
+                    this.levelConfirm.removeAllListeners();
+                    this.levelConfirm.destroy(true);
+                    localStorage.setItem('survivalLevelData', JSON.stringify(survival_level_1_config));
+                    this.changeScene('Game', true);
+                }, this);
+
+                this.levelConfirm.once('level-unselected', () => {
+                    this.player.setPosition(this.spots[this.playerDotSpot].x, this.spots[this.playerDotSpot].y);
+                    this.levelConfirm.removeAllListeners();
+                    this.levelConfirm.destroy(true);
+                    this.confirmPopupOpen = false;
+                }, this);
+            }
+            const targetLvl = survival_level_1_config.revealedByLevel - 1;// first we move the player to the level that revealed the survival level
+            this.movePlayerToLevel(targetLvl * 6, () => {
+                this.movePlayerToLevel(3, () => {
+                    onMoveComplete();
+                }, this.survival1Spots, true, 0);
+            });
+        })
+
+        //  tween alpha of new revielled survival level
+        if (introduceToSurvivalLevel) {
+            this.confirmPopupOpen = true;
+            this.survival1dots.forEach((element: Phaser.GameObjects.Graphics, index: number) => {
+                const target = index === 3 ? levelTexture : element;
+                this.tweens.add({
+                    targets: target,
+                    alpha: 1,
+                    delay: index * 400,
+                    duration: 350,
+                    onComplete: () => {
+                        if (index === 3) {
+                            this.confirmPopupOpen = false;
+                        }
+                    }
+                });
+            });
+        }
+    }
+
     private createLevels(): void {
 
         const mapLevel = localStorage.getItem('mapLevel') || 1;
@@ -312,9 +431,10 @@ export class Map extends AbstractScene {
         // level_config.length = 10
         level_config.forEach((levelData: ILevelConfig, index: number) => {
 
-            const levelTexture = this.add.image(this.spots[index * 6].x, this.spots[index * 6].y, 'lvl-plate').setScale(0.5).setOrigin(0.5).setDepth(this.player.depth - 1);
+            const levelTexture = this.add.image(this.spots[index * 6].x, this.spots[index * 6].y, 'lvl-plate').setScale(0.5).setOrigin(0.5).setDepth(88);
 
-            const mapDot = this.spots[index * 6];
+            let mapDot = this.spots[index * 6];
+
             this.dots[index * 6].setVisible(false);
             const leveltext: Phaser.GameObjects.Text = this.add.text(
                 mapDot.x,
@@ -324,10 +444,10 @@ export class Map extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
                     align: 'center'
-                }).setOrigin(0.5).setDepth(this.player.depth - 1);
+                }).setOrigin(0.5).setDepth(88);
 
             this.levelContentContainer.add([levelTexture, leveltext]);
-            if (levelData.levelName <= +mapLevel) {
+            if (+levelData.levelName <= +mapLevel) {
                 levelTexture.setInteractive();
             } else {
                 levelTexture.disableInteractive();
@@ -404,11 +524,11 @@ export class Map extends AbstractScene {
         }
     }
 
-    private movePlayerToLevel(newSpotIndex: number, onLevelReached: Function) {
+    private movePlayerToLevel(newSpotIndex: number, onLevelReached: Function, spots: { x: number, y: number }[] = this.spots, isSurvivalLevel: boolean = false, playerDotSpot: number = this.playerDotSpot) {
         console.log(`new level is ${newSpotIndex}`)
         console.log(`playerDotSpot is ${this.playerDotSpot}`);
 
-        let currentSpot = this.playerDotSpot;
+        let currentSpot = playerDotSpot;
         const targetSpot = newSpotIndex;
         if (currentSpot === targetSpot) {
             onLevelReached();
@@ -428,11 +548,14 @@ export class Map extends AbstractScene {
                     duration: duration / 2
                 },
                 duration,
-                x: this.spots[currentSpot].x,
-                y: this.spots[currentSpot].y,
+                x: spots[currentSpot].x,
+                y: spots[currentSpot].y,
                 onComplete: () => {
-                    if (currentSpot === targetSpot) {
+                    if (!isSurvivalLevel) {
                         this.playerDotSpot = currentSpot;
+                        console.log(`playerDotSpot is ${this.playerDotSpot}`);
+                    }
+                    if (currentSpot === targetSpot) {
                         onLevelReached();
                     }
                     else {
@@ -458,11 +581,10 @@ export class Map extends AbstractScene {
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
     }
 
-    changeScene(nextScene: string): void {
+    changeScene(nextScene: string, isSurvivalLevel: boolean = false): void {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start(nextScene);
+            this.scene.start(nextScene, { isSurvivalLevel });
         });
     }
-
 }
