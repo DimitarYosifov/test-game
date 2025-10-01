@@ -7,8 +7,16 @@ export const main_config = {
     "lineWidth": 6,
     "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
+    "playerStartingCoins": 50,
+    "playerStartingFreeCommonPacks": 3,
+
+    "chanceToDropPack": [ //rnd between 1 and 1000
+        965,   //  96.5% for no drop
+        985,   //     2% for common pack
+        995,   //     1% for silver pack
+        1000,  //   0.5% for golden pack
+    ],
     "chanceToGetMonsterOnLevelWin": 25, // 10%
-    "playerStartingCoins": 150,
     "afterLevelMonsterReward": [
         89,   // 89% for 1 star  monster
         99,   // 10% for 2 stars monster
@@ -30,8 +38,8 @@ export const main_config = {
         "silverPack": {
             cost: 250,
             monsterLevelOdds: [
-                80,  //  80% for 1 star  monster
-                95,  //  15% for 2 stars monster
+                75,  //  75% for 1 star  monster
+                95,  //  20% for 2 stars monster
                 100, //   5% for 3 stars monster
                 0,   //   0% for 4 stars monster
                 0,   //   0% for 5 stars monster
@@ -52,15 +60,17 @@ export const main_config = {
 
 
 // TODO:
-
+// add survival level
+// add chance of monster death drops free pack + pack odds ( 90%  lvl 1 star => 10 % 2 stars => asnd so on)
 //CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                                                           ^HIGH PRIORITY^
 // implement info for monsters showing stats for all 5 stars
+// IMPLEMENT SURVIVAL MODE                                                                                                           ^HIGH PRIORITY^
+// IMPLEMENT CHANCE OF MONSTER DROP FREE PACKS UPON DEATH                                                                            ^HIGH PRIORITY^
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures
 // add loading
 // add total power for opponent before level and for the player
 // add delete progress button
-// add text completed to first level reward when starting level for levels that have been completed
 // make common class button(including text) and make all buttons the samee
 // if a monster has more than 1 moves - after its move leave it selected if it has more moves
 // add text "drag here" to hit rects in card selection
@@ -76,7 +86,6 @@ export const main_config = {
 //BUGS:
 //1. when i monster with 2 moves hits on its first move, its get locked - PROBABLY FIXED
 
-
 // below cant be reproduced FOR NOW
 // 2: AFTER SELLIMG CARD CHECK IF THERE IS 3 CARDS PENDING IN ULGRADE SECTION AN ENABLE/DISABLE UPGRADE BUTTON PROPERLY
 // IF SO DONE 3 CARDS IN THE UPGRADE ARE AUTUMATICALLY UPGRADED AFTER REFRESH !!!!
@@ -85,12 +94,19 @@ export const main_config = {
 
 
 
+// BUG => PROBLEM IN UPGRADE SECTION ======================== AFTER UPGRADE MORE THAN 1 MONSTER IS SET TO THE SAME ROW!!!
+//  ^HIGHEST PRIORITY^ ==========================================
+
 // BUG  - AFTER UPGRADE ONE SPOT(ROW) IS OCCUPIED BY 2 MONSTERS                                                                            ^HIGH PRIORITY^
 // buf scale tween is buggy sometimes
+// bug disable skip and end turn buttons while player monster act -PROBABLY FIXED
 
 
 //OBSERVATIONS:
-// ON LEVEL 11 ALL MONSTERS ARE LEVEL 2
+// ON LEVEL 15 ALL MONSTERS ARE LEVEL 2
+// ON LEVEL 11 ALL MONSTERS ARE LEVEL 2 diff run
+// ON LEVEL 13 ALL MONSTERS ARE LEVEL 2 diff run
+// ОN LEVEL 27 - 2 3 STAR MONSTERS
 // ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)
 
 

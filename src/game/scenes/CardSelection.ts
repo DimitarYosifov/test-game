@@ -298,6 +298,8 @@ export class CardSelection extends AbstractScene {
 
         const proceed = (i: number = NaN, hitRect?: Phaser.Geom.Rectangle) => {
             console.log(this.selectedMonsters);
+            // this.hasDuplicates();
+
             const hasOldSelectedPosition = !isNaN(monster.positionIndex);       //old position was from selected monsters
             const hasOldUpgradePosition = !isNaN(monster.upgradePostionIndex);  //old position was from upgrade monsters
             const hasOldSellPosition = monster.addedForSale;                    //old position was from sell section
@@ -368,7 +370,7 @@ export class CardSelection extends AbstractScene {
                 this.checkUpgradeButtonEnable();
             } else if (droppedInSlot) {
                 monster.setPosition(hitRect!.x + hitRect!.width / 2, hitRect!.y + hitRect!.height / 2);
-                // this.playerMonstersData[monster.originalIndex].row = i;
+                this.playerMonstersData[monster.originalIndex].row = i;
                 this.selectedMonsters[i] = monster;
                 this.checkUpgradeButtonEnable();
             }
@@ -385,6 +387,8 @@ export class CardSelection extends AbstractScene {
             console.log(existingMonster?.positionIndex)
             console.log(monster?.positionIndex)
             console.log(this.selectedMonsters)
+            // this.hasDuplicates();
+
         }
 
         // check dropped in sell section
@@ -633,6 +637,8 @@ export class CardSelection extends AbstractScene {
     private onUpgradeMonster() {
         console.log(this.playerMonstersData);
         console.log(this.monstersContainer.list);
+        // this.hasDuplicates();
+
 
         // remove and destroy monsters in the upgrade section and set monsters as null in playerMonstersData for this monsters
         this.upgradeSelectedMonsters.forEach((m: Monster | null, index: number) => {
@@ -746,6 +752,8 @@ export class CardSelection extends AbstractScene {
         console.table(this.playerMonstersData);
         console.log(this.selectedMonsters)
         console.log(this.upgradeSelectedMonsters)
+        this.hasDuplicates();
+
     }
     // end region
 
@@ -778,7 +786,36 @@ export class CardSelection extends AbstractScene {
         console.log(this.selectedMonsters)
         console.log(this.upgradeSelectedMonsters)
         console.log(this.monsterAddedForSale)
+        console.log(this.selectedMonsters.map((m: any/*  */) => m?.positionIndex))
+        // this.hasDuplicates();
         console.table(this.playerMonstersData);
+    }
+
+    private hasDuplicates() {
+        let arr = this.selectedMonsters.map((m: any/*  */) => m?.positionIndex);
+        console.log(arr)
+        const freq: any = {};
+        for (let item of arr) {
+            if (freq[item] && item !== undefined && !isNaN(item)) {
+                alert('has Duplicates');
+                debugger;
+                console.log('has duplicartes')
+            }
+            freq[item] = 1;
+        }
+
+        let arr2 = this.playerMonstersData.map((m: any) => m?.row);
+        // arr2 = [2, 2, NaN, NaN];
+        console.log(arr2)
+        const freq2: any = {};
+        for (let item of arr2) {
+            if (freq2[item] && !isNaN(item)) {
+                alert('has Duplicates');
+                debugger;
+                console.log('has duplicartes')
+            }
+            freq2[item] = 1;
+        }
     }
 
     private createOkButton() {
@@ -794,14 +831,29 @@ export class CardSelection extends AbstractScene {
 
     private save() {
         console.log(this)
+        console.log(this.selectedMonsters.map((m: any) => m?.unitData?.row))
+        // this.hasDuplicates();
+
+        //=============test to fix bug with multiple monsters on same spot after upgrade!=================
+        this.playerMonstersData.forEach((element: IPlayerMonstersData) => {
+            element.row = NaN;
+        });
+        //================================================================================================
 
         this.selectedMonsters.filter(m => m !== null).forEach((monster) => {
-            this.playerMonstersData[monster!.originalIndex].row = monster!.positionIndex
+            this.playerMonstersData[monster!.originalIndex].row = monster!.positionIndex;
+            monster.addedForSale = false;
+            monster.positionIndex = NaN;
+            monster.upgradePostionIndex - NaN;
+            monster.originalIndex - NaN;
+
         });
+        this.hasDuplicates();
 
         console.table(this.playerMonstersData);
         this.selectedMonsters = [null, null, null, null, null, null, null];
         this.upgradeSelectedMonsters = [null, null, null];
+        this.monsterAddedForSale = null;
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.changeScene('MainMenu');
     }

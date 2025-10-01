@@ -26,13 +26,14 @@ export class Game extends AbstractScene {
     private gridLines: Phaser.GameObjects.Graphics;
     private gridDimensions: IGridDimensions;
     currentlySelectedMonster: Monster;
-    skipButton: Phaser.GameObjects.Image;
+    skipButton: Button;
     opponentBulb: Phaser.GameObjects.Image;
     playerBulb: Phaser.GameObjects.Image;
     opponentMonstersLeftText: Phaser.GameObjects.Text;
     giveUpButton: Button;
     levelFinished: boolean;
     endTurnButton: Button;
+    opponentTurnMsg: Phaser.GameObjects.Text;
 
     constructor() {
         super('Game');
@@ -57,6 +58,7 @@ export class Game extends AbstractScene {
         this.createBulbs();
         this.createGiveUpButton();
         this.createEndTurnButton();
+        this.createOpponentTurnMsg();
         this.addOpponentMonstersLeftText();
         this.checkMapVisibility(true);
 
@@ -99,6 +101,42 @@ export class Game extends AbstractScene {
                 stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
+    }
+
+    private createOpponentTurnMsg() {
+        this.opponentTurnMsg = this.add.text(
+            960,
+            540,
+            `opponent's turn`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
+                align: 'center'
+            }).setOrigin(0.5).setAlpha(0);
+    }
+
+    private showOpponentTurnMsg() {
+        this.opponentTurnMsg.setScale(1.5);
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: this.opponentTurnMsg,
+                    alpha: 1,
+                    scale: 1,
+                    duration: 250,
+                    ease: 'Back.easeOut'
+                },
+                {
+                    targets: this.opponentTurnMsg,
+                    alpha: 0,
+                    delay: 800,
+                    scale: 0,
+                    duration: 250,
+                    ease: 'Back.easeIn'
+
+                }
+            ]
+        });
     }
 
     private addOpponentMonstersLeftText() {
@@ -181,7 +219,9 @@ export class Game extends AbstractScene {
     private monsterSelectHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
             if (this.data.list.isPlayerTurn) {
-                this.skipButton.setInteractive().setAlpha(1);
+                this.endTurnButton.setInteractive();
+                this.skipButton.setInteractive();
+                this.giveUpButton.setInteractive();
             }
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
@@ -501,6 +541,10 @@ export class Game extends AbstractScene {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
         if (turnEnd) {
+            this.endTurnButton.disableInteractive();
+            this.skipButton.disableInteractive();
+            this.giveUpButton.disableInteractive();
+
             // alert('end turn');
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
             if (this.data.list.isPlayerTurn) {
@@ -612,6 +656,7 @@ export class Game extends AbstractScene {
             });
         } else {
             this.skipButton.disableInteractive().setAlpha(0.6);
+            this.showOpponentTurnMsg();
             this.data.list.opponentMonsters.forEach((monster: Monster) => {
                 if (monster) {
                     monster.resetMoves();
@@ -646,7 +691,8 @@ export class Game extends AbstractScene {
     private pauseResumeInteraction(resume: boolean, skipByUser: boolean = false): void {
 
         if (!resume) {
-            this.skipButton.disableInteractive().setAlpha(0.6);
+            this.skipButton.disableInteractive();
+            this.endTurnButton.disableInteractive();
         } else {
             // this.skipButton.setInteractive().setAlpha(1);
         }

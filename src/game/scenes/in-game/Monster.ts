@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { GAME_SCENE_SCENE_EVENTS, IUnitData } from '../Game';
+import { main_config } from '../../configs/main_config';
 
 export class Monster extends Phaser.GameObjects.Container {
     bg: Phaser.GameObjects.Image;
@@ -511,6 +512,9 @@ export class Monster extends Phaser.GameObjects.Container {
     die() {
         // this.alpha = 0.5;
         this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
+        if (!this.isPlayerMonster) {
+            this.checkFreePackDrop();
+        }
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -519,6 +523,84 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
             }
         })
+    }
+
+    checkFreePackDrop() {
+        const odds = main_config.chanceToDropPack;
+        const randomNumber = Phaser.Math.RND.between(1, 1000);
+        let packDropped = '';
+        let packTexture = '';
+        for (let index = 0; index < odds.length; index++) {
+            const odd = odds[index];
+            if (randomNumber <= odd) {
+                if (index === 0) {
+                    //no pack drop
+                    return;
+                } else if (index === 1) {
+                    packDropped = 'common';
+                    packTexture = 'common-pack';
+                    break;
+                } else if (index === 2) {
+                    packDropped = 'silver';
+                    packTexture = 'silver-pack';
+                    break;
+                } else if (index === 3) {
+                    packDropped = 'gold';
+                    packTexture = 'gold-pack';
+                    break;
+                }
+                // alert(packTexture);
+            }
+        }
+        const pack = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, packTexture).setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+        let storedItem = '';
+        switch (packDropped) {
+            case 'common':
+                storedItem = 'freeCommonPacks';
+                break;
+            case 'silver':
+                storedItem = 'freeSilverPacks';
+                break;
+            case 'gold':
+                storedItem = 'freeGoldPacks';
+                break;
+            default:
+                break;
+        }
+        const data = JSON.parse(localStorage.getItem(storedItem) ?? '0');
+        localStorage.setItem(storedItem, JSON.stringify(+data + 1));
+
+        this.scene.tweens.chain({
+            tweens: [
+                {
+                    targets: pack,
+                    alpha: 1,
+                    scale: 0.15,
+                    duration: 350,
+                    delay: 550,
+                    ease: 'Back.easeOut'
+                },
+                {
+                    targets: pack,
+                    x: 960,
+                    y: 540,
+                    scale: 0.6,
+                    duration: 300
+                },
+                {
+                    targets: pack,
+                    delay: 500,
+                    alpha: 0,
+                    scale: 0.6,
+                    duration: 1000,
+                    ease: 'Back.easeOut',
+                    onComplete: () => {
+                        pack.destroy(true);
+                    }
+                },
+            ]
+        });
+
     }
 
     setIdlePendingMove(): void {

@@ -20,6 +20,21 @@ export class MainMenu extends AbstractScene {
     }
 
     create() {
+
+
+        // add monster manually - for debugging!
+        const addMonster = (type: number, stars: number) => {
+            const STORAGE_KEY = 'playerMonstersData';
+            const storedData = localStorage.getItem(STORAGE_KEY);
+            const dataArray = storedData ? JSON.parse(storedData) : [];
+            const newObject = { type, stars, row: NaN, col: 11 };
+            dataArray.push(newObject);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+        }
+        // addMonster(9,1);
+        // addMonster(9,1);
+
+
         super.create();
         this.createDeckbutton();
         this.createShopbutton();
@@ -39,6 +54,9 @@ export class MainMenu extends AbstractScene {
             localStorage.setItem('coins', JSON.stringify(main_config.playerStartingCoins));
             localStorage.setItem('mapLevel', JSON.stringify(1));
             localStorage.setItem('levelsWon', JSON.stringify([]));
+            localStorage.setItem('freeCommonPacks', JSON.stringify(main_config.playerStartingFreeCommonPacks));
+            localStorage.setItem('freeSilverPacks', JSON.stringify(0));
+            localStorage.setItem('freeGoldPacks', JSON.stringify(0));
         }
 
         if (playerMonstersData.length === 0) {

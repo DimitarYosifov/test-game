@@ -140,12 +140,50 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
+        const freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
+        let freeText: any;
+
         // button
         this.commonPackButton = new Button(this, this.commonPackTexture.x, commonPackCost.y + 120, 'buy', () => {
-            this.onBuy(packCost, 'commonPack');
+
+            const _freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
+            const canBuy = this.onBuy(packCost, 'commonPack', _freeCommonPacks > 0);
+
+            if (!canBuy) return;
+
+            if (_freeCommonPacks > 0) {
+                localStorage.setItem('freeCommonPacks', JSON.stringify(+_freeCommonPacks - 1));
+                freeText.setText(`free x ${+_freeCommonPacks - 1}`);
+            }
+
+            if (_freeCommonPacks - 1 === 0) {
+                freeText.visible = false;
+            }
+
         }, false, 1);
 
-        this.checkPackAffordable(packCost) ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
+        if (freeCommonPacks > 0) {
+            //free text
+            freeText = this.add.text(
+                this.commonPackButton.x,
+                this.commonPackButton.y,
+                `free x ${freeCommonPacks}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#00ff2aff',
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+            freeText.angle = -25;
+            this.tweens.add({
+                targets: freeText,
+                alpha: 1,
+                scale: 1,
+                duration: 300,
+                delay: 200
+            })
+        } else {
+            this.checkPackAffordable(packCost) ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
+        }
     }
 
     private createSilverPack() {
@@ -220,12 +258,50 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
+        const freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
+        let freeText: any;
+
         // button
         this.silverPackButton = new Button(this, this.silverPackTexture.x, silverPackCost.y + 120, 'buy', () => {
-            this.onBuy(packCost, 'silverPack');
-        }, false, 1);
-        this.checkPackAffordable(packCost) ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
 
+            const _freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
+            const canBuy = this.onBuy(packCost, 'silverPack', _freeSilverPacks > 0);
+
+            if (!canBuy) return;
+
+            if (_freeSilverPacks > 0) {
+                localStorage.setItem('freeSilverPacks', JSON.stringify(+_freeSilverPacks - 1));
+                freeText.setText(`free x ${+_freeSilverPacks - 1}`);
+            }
+
+            if (_freeSilverPacks - 1 === 0) {
+                freeText.visible = false;
+            }
+
+        }, false, 1);
+
+        if (freeSilverPacks > 0) {
+            //free text
+            freeText = this.add.text(
+                this.silverPackButton.x,
+                this.silverPackButton.y,
+                `free x ${freeSilverPacks}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#00ff2aff',
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+            freeText.angle = -25;
+            this.tweens.add({
+                targets: freeText,
+                alpha: 1,
+                scale: 1,
+                duration: 300,
+                delay: 200
+            })
+        } else {
+            this.checkPackAffordable(packCost) ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
+        }
     }
 
     private createGoldenrPack() {
@@ -300,11 +376,51 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
+        const freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
+        let freeText: any;
+
         // button
         this.goldenPackButton = new Button(this, this.goldenPackTexture.x, goldenPackCost.y + 120, 'buy', () => {
-            this.onBuy(packCost, 'goldPack');
+
+            const _freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
+            const canBuy = this.onBuy(packCost, 'goldPack', _freeGoldPacks > 0);
+
+            if (!canBuy) return;
+
+            if (_freeGoldPacks > 0) {
+                localStorage.setItem('freeGoldPacks', JSON.stringify(+_freeGoldPacks - 1));
+                freeText.setText(`free x ${+_freeGoldPacks - 1}`);
+            }
+
+            if (_freeGoldPacks - 1 === 0) {
+                freeText.visible = false;
+            }
+
+
         }, false, 1);
-        this.checkPackAffordable(packCost) ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
+
+        if (freeGoldPacks > 0) {
+            //free text
+            freeText = this.add.text(
+                this.goldenPackButton.x,
+                this.goldenPackButton.y,
+                `free x ${freeGoldPacks}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#00ff2aff',
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+            freeText.angle = -25;
+            this.tweens.add({
+                targets: freeText,
+                alpha: 1,
+                scale: 1,
+                duration: 300,
+                delay: 200
+            })
+        } else {
+            this.checkPackAffordable(packCost) ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
+        }
 
     }
 
@@ -329,7 +445,8 @@ export class BuyPacks extends AbstractScene {
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
     }
 
-    private onBuy(cost: number, packName: PackName) {
+    private onBuy(cost: number, packName: PackName, isFree: boolean = false) {
+
         this.overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
         this.overlay.setInteractive();
 
@@ -339,6 +456,7 @@ export class BuyPacks extends AbstractScene {
 
         const playerMonstersCount = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).length;
         if (playerMonstersCount >= 38) {
+
             const msg = this.add.text(
                 960,
                 540,
@@ -385,37 +503,40 @@ export class BuyPacks extends AbstractScene {
                     ]
                 })
             })
-            return;
-        }
-
-        this.createMonsters(packName);
-        this.tweens.chain({
-            tweens: [
-                {
-                    targets: this.overlay,
-                    duration: 500,
-                    alpha: 0.9
-                },
-                {
-                    targets: this.monsters,
-                    scale: 1.5,
-                    duration: 350,
-                    alpha: 1,
-                    onComplete: () => {
-                        this.addClaimButton();
+            return false;
+        } else {
+            this.createMonsters(packName);
+            this.tweens.chain({
+                tweens: [
+                    {
+                        targets: this.overlay,
+                        duration: 500,
+                        alpha: 0.9
+                    },
+                    {
+                        targets: this.monsters,
+                        scale: 1.5,
+                        duration: 350,
+                        alpha: 1,
+                        onComplete: () => {
+                            this.addClaimButton();
+                        }
                     }
-                }
-            ]
-        })
+                ]
+            })
 
-        // UPDATE PLAYER COINS(LOCALE STORAGE) 
-        const playerCoins = localStorage.getItem('coins') || '0';
-        this.coins = +playerCoins - +cost;
-        localStorage.setItem('coins', JSON.stringify(this.coins));
-        this.updateCoinsText(`${this.coins}`);
+            if (!isFree) {
+                // UPDATE PLAYER COINS(LOCALE STORAGE) 
+                const playerCoins = localStorage.getItem('coins') || '0';
+                this.coins = +playerCoins - +cost;
+                localStorage.setItem('coins', JSON.stringify(this.coins));
+                this.updateCoinsText(`${this.coins}`);
+            }
 
-        // // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
-        this.addNewMonsters();
+            // // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
+            this.addNewMonsters();
+            return true;
+        }
     }
 
     private updateCoinsText(value: number | string) {
@@ -453,9 +574,9 @@ export class BuyPacks extends AbstractScene {
 
     private hideRewards() {
 
-        this.checkPackAffordable(PACK_COST[0]) ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[1]) ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[2]) ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[0]) || +JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0') > 0 ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[1]) || +JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0') > 0 ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[2]) || +JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0') > 0 ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
 
         this.tweens.chain({
             tweens: [
