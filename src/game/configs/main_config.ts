@@ -60,9 +60,12 @@ export const main_config = {
 
 
 // TODO:
+// REFACTOR THE CODE FOR SURVIVAL LEVEL TO BE EASIER TO ADD NEW ONES - ADD ANOTHER SURVIVAL LEVEL                                   ^HIGH PRIORITY^
+// ADD DAILY QUESTS                                                                                                                 ^HIGH PRIORITY^
 // add survival level
+// ADD SLOT GAME WITH MONSTERS
 //CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
-// implement info for monsters showing stats for all 5 stars
+// implement info for monsters showing stats for all 5 stars                                                                        ^HIGH PRIORITY^
 // ADD TIME COUNT DOWN FOR SURVIVAL MODE                                                                                            ^HIGH PRIORITY^
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
 // in-game implement drag movement for creatures

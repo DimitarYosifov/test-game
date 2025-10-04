@@ -18,6 +18,8 @@ export class Map extends AbstractScene {
     player: Phaser.GameObjects.Image;
     levelContentContainer: Phaser.GameObjects.Container;
     playerDotSpot: number;
+    survivalLevel1CountDownText: Phaser.GameObjects.Text;
+    unlockSurvivalLevel1Time: number;
 
 
     constructor() {
@@ -312,7 +314,7 @@ export class Map extends AbstractScene {
 
 
         this.createPlayer();
-        this.createBackButton();
+
 
         //========================SURVIVAL 1 LEVEL==========================================================
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
@@ -330,6 +332,7 @@ export class Map extends AbstractScene {
         }
         //===================================================================================================
 
+        this.createBackButton();
         this.createLevels();
         this.createCoins();
     }
@@ -347,11 +350,13 @@ export class Map extends AbstractScene {
     }
 
     private createSurvivalLevel1(introduceToSurvivalLevel: boolean) {
+
         const levelTexture = this.add.image(this.survival1Spots[3].x, this.survival1Spots[3].y, 'survival1')
             .setScale(0.4)
             .setOrigin(0.5)
             .setDepth(88)
             .setAlpha(+!introduceToSurvivalLevel);
+
         const leveltext: Phaser.GameObjects.Text = this.add.text(
             this.survival1Spots[3].x,
             this.survival1Spots[3].y,
@@ -363,11 +368,11 @@ export class Map extends AbstractScene {
             })
             .setOrigin(0.5)
             .setDepth(88)
-            .setAlpha(+!introduceToSurvivalLevel);;
+            .setAlpha(+!introduceToSurvivalLevel);
 
         this.levelContentContainer.add([levelTexture, leveltext]);
 
-        levelTexture.setInteractive();
+        // levelTexture.setInteractive();
         levelTexture.on('pointerdown', () => {
             if (this.confirmPopupOpen) {
                 return;
@@ -419,6 +424,58 @@ export class Map extends AbstractScene {
                     }
                 });
             });
+        }
+
+        // count down text
+        this.survivalLevel1CountDownText = this.add.text(
+            levelTexture.x + 50,
+            levelTexture.y,
+            ``,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
+                align: 'center'
+            })
+            .setOrigin(0, 0.5)
+            .setDepth(88);
+        this.unlockSurvivalLevel1Time = parseInt(localStorage.getItem('SurvivalLevel1') ?? "null") || 0;
+        // this.resetSurvivalLevel1();//test
+        this.updateSurvivalLevel1(levelTexture);
+
+    }
+
+    private resetSurvivalLevel1() {
+        const hoursToReset = survival_level_1_config.hoursToReset
+        this.unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;  
+        // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
+        localStorage.setItem('SurvivalLevel1', this.unlockSurvivalLevel1Time.toString());
+    }
+
+    private updateSurvivalLevel1(levelTexture: Phaser.GameObjects.Image) {
+        const now = Date.now();
+
+        if (!this.unlockSurvivalLevel1Time || now >= this.unlockSurvivalLevel1Time) {
+            // level is unlocked!
+            console.log(`SurvivalLevel1 is unlocked...`)
+            levelTexture.setInteractive();
+            this.survivalLevel1CountDownText.setText('');
+            localStorage.removeItem('SurvivalLevel1');
+        } else {
+            const remaining = this.unlockSurvivalLevel1Time - now;
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+            const formatted = `${hours.toString().padStart(2, '0')}:${minutes
+                .toString()
+                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            this.survivalLevel1CountDownText.setText(`${formatted}`);
+            levelTexture.disableInteractive();
+
+            this.time.delayedCall(1000, () => {
+                this.updateSurvivalLevel1(levelTexture);
+            })
         }
     }
 

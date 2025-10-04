@@ -11,6 +11,7 @@ export const survival_level_1_config = {
     newEnemiesPerRound: 3,
     revealedByLevel: 10,
     totalMonstersCount: 100,
+    hoursToReset: 2,
     newEnemiesStars: [
         50,    // 50% for 1 star  monster
         100,   // 50% for 2 stars monster
@@ -36,6 +37,7 @@ export const survival_level_1_config = {
     ]
 }
 
+// R E G U L A R   M A P   L E V E L S
 export const level_config = [
     // L E V E L   1    - monsters: 1 star x 7   2 stars x 0
     {
@@ -47,12 +49,12 @@ export const level_config = [
             y: 0
         },
         opponentMonstersData: [
-            { type: 1, stars: 1 },
-            { type: 2, stars: 1 },
-            { type: 2, stars: 1 },
-            { type: 5, stars: 1 },
-            { type: 5, stars: 1 },
-            { type: 5, stars: 1 },
+            { type: 7, stars: 1 },
+            { type: 7, stars: 1 },
+            { type: 7, stars: 1 },
+            { type: 7, stars: 1 },
+            { type: 7, stars: 1 },
+            { type: 7, stars: 1 },
             { type: 7, stars: 1 },
         ]
     },

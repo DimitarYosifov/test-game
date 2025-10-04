@@ -4,7 +4,7 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { ILevelConfig, level_config } from '../configs/level_config';
+import { ILevelConfig, level_config, survival_level_1_config } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
@@ -214,7 +214,7 @@ export class Game extends AbstractScene {
     }
 
     private skipButtonHandler(): void {
-        this.skipButton = new Button(this, 1810, 350, 'button', 'skip', this.onSkip.bind(this), true, 1);
+        this.skipButton = new Button(this, 1810, 350, 'button', 'skip\nmove', this.onSkip.bind(this), true, 1);
     }
 
     private onSkip() {
@@ -333,7 +333,11 @@ export class Game extends AbstractScene {
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
             this.updateOpponentMonstersLeft();
-            this.updateSurvivalLevelRewardText();
+
+            if (this.isSurvivalLevel) {
+                this.updateSurvivalLevelRewardText();
+            }
+
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 // alert('player wins');
                 this.levelFinished = true;
@@ -383,7 +387,7 @@ export class Game extends AbstractScene {
                 }).setOrigin(0.5);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0)
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -547,6 +551,17 @@ export class Game extends AbstractScene {
     }
 
     changeScene(nextScene: string): void {
+        console.log(this.isSurvivalLevel)
+
+        //===================RESET SURVIVAL LEVEL 1===========================================
+        if (this.isSurvivalLevel) {
+            const hoursToReset = survival_level_1_config.hoursToReset
+            let unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;
+            // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
+            localStorage.setItem('SurvivalLevel1', unlockSurvivalLevel1Time.toString());
+        }
+        //====================================================================================
+
         Object.values(GAME_SCENE_SCENE_EVENTS).forEach(event => {
             this.events.removeListener(event);
         });
