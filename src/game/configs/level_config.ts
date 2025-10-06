@@ -2,12 +2,14 @@
 // L E V E L  1  S U R V I V A L    T E S T
 export const survivalLevels = [
     {
-        levelName: '',
+        levelName: 'survival_level_1',
         survival: true,
-        mapPosition: {
-            x: 0,
-            y: 0
-        },
+        mapPosition: [
+            { x: 368, y: 944 },
+            { x: 401, y: 979 },
+            { x: 451, y: 998 },
+            { x: 507, y: 1008 }
+        ],
         rewardPerKill: 5,
         newEnemiesPerRound: 3,
         revealedByLevel: 10,
@@ -24,17 +26,63 @@ export const survivalLevels = [
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
-            { type: 9, stars: 1 },
-            // { type: 1, stars: 1 },
-            // { type: 2, stars: 2 },
-            // { type: 2, stars: 1 },
-            // { type: 2, stars: 1 },
-            // { type: 2, stars: 1 },
-            // { type: 5, stars: 1 },
-            // { type: 5, stars: 1 },
-            // { type: 5, stars: 1 },
-            // { type: 5, stars: 1 },
-            // { type: 5, stars: 1 },
+            { type: 9, stars: 1 }
+        ]
+    },
+    {
+        levelName: 'survival_level_2',
+        survival: true,
+        mapPosition: [
+            { x: 831, y: 814 },
+            { x: 807, y: 772 },
+            { x: 837, y: 727 },
+            { x: 892, y: 736 },
+        ],
+        rewardPerKill: 15,
+        newEnemiesPerRound: 3,
+        revealedByLevel: 20,
+        totalMonstersCount: 100,
+        hoursToReset: 4,
+        newEnemiesStars: [
+            25,     // 25% for 1 star  monster
+            75,     // 50% for 2 stars monster
+            100,    // 25% for 3 stars monster
+            0,      //  0% for 4 stars monster
+            0,      //  0% for 5 stars monster
+        ],
+        opponentMonstersData: [
+            { type: 8, stars: 2 },
+            { type: 8, stars: 1 },
+            { type: 9, stars: 2 },
+            { type: 9, stars: 1 }
+        ]
+    },
+    {
+        levelName: 'survival_level_3',
+        survival: true,
+        mapPosition: [
+            { x: 1307, y: 417 },
+            { x: 1259, y: 441 },
+            { x: 1252, y: 491 },
+            { x: 1306, y: 506 },
+        ],
+        rewardPerKill: 15,
+        newEnemiesPerRound: 3,
+        revealedByLevel: 31,
+        totalMonstersCount: 100,
+        hoursToReset: 8,
+        newEnemiesStars: [
+            0,       // 0% for 1 star  monster
+            50,     // 50% for 2 stars monster
+            100,    // 50% for 3 stars monster
+            0,      //  0% for 4 stars monster
+            0,      //  0% for 5 stars monster
+        ],
+        opponentMonstersData: [
+            { type: 2, stars: 2 },
+            { type: 2, stars: 3 },
+            { type: 5, stars: 2 },
+            { type: 7, stars: 3 }
         ]
     }
 ]
@@ -947,6 +995,7 @@ export interface ILevelConfig {
     repeatLevelWinReward?: number;
     opponentMonstersData: IOpponentMonstersData[];
     survival?: boolean;
+    hoursToReset?: number;
     rewardPerKill?: number;
     newEnemiesPerRound?: number;
     revealedByLevel?: number;

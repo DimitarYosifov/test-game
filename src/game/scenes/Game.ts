@@ -552,13 +552,14 @@ export class Game extends AbstractScene {
 
     changeScene(nextScene: string): void {
         console.log(this.isSurvivalLevel)
+        console.log(this.survivalLevelData)
 
         //===================RESET SURVIVAL LEVEL 1===========================================
         if (this.isSurvivalLevel) {
-            const hoursToReset = survivalLevels[0].hoursToReset
+            const hoursToReset = this.survivalLevelData.hoursToReset || 0;
             let unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;
             // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
-            localStorage.setItem('SurvivalLevel1', unlockSurvivalLevel1Time.toString());
+            localStorage.setItem(`${this.survivalLevelData.levelName}`, unlockSurvivalLevel1Time.toString());
         }
         //====================================================================================
 

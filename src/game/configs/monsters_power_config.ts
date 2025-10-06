@@ -42,19 +42,19 @@ export const monsters_power_config = {
 
     // '3': [
     //     { // 1 star
-    //         melee: 0, ranged: 0, magic: 2, health: 4, shield: 0, vision: 1, stars: 1, type: '3', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+    //         melee: 0, ranged: 0, magic: 1, health: 3, shield: 1, vision: 1, stars: 1, type: '3', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
     //     },
     //     { // 2 stars
-    //         melee: 0, ranged: 0, magic: 2, health: 4, shield: 1, vision: 1, stars: 2, type: '3', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+    //         // melee: 0, ranged: 0, magic: 2, health: 4, shield: 1, vision: 1, stars: 2, type: '3', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
     //     },
     //     { // 3 stars
-    //         melee: 0, ranged: 0, magic: 3, health: 5, shield: 1, vision: 1, stars: 3, type: '3', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+    //         // melee: 0, ranged: 0, magic: 3, health: 5, shield: 1, vision: 1, stars: 3, type: '3', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
     //     },
     //     { // 4 stars
-    //         melee: 0, ranged: 0, magic: 3, health: 6, shield: 1, vision: 1, stars: 4, type: '3', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+    //         // melee: 0, ranged: 0, magic: 3, health: 6, shield: 1, vision: 1, stars: 4, type: '3', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
     //     },
     //     { // 5 stars
-    //         melee: 0, ranged: 0, magic: 4, health: 6, shield: 2, vision: 1, stars: 5, type: '3', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
+    //         // melee: 0, ranged: 0, magic: 4, health: 6, shield: 2, vision: 1, stars: 5, type: '3', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
     //     }
     // ],
 
