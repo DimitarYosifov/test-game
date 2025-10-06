@@ -4,7 +4,7 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { ILevelConfig, level_config, survival_level_1_config } from '../configs/level_config';
+import { ILevelConfig, level_config, survivalLevels } from '../configs/level_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
@@ -555,7 +555,7 @@ export class Game extends AbstractScene {
 
         //===================RESET SURVIVAL LEVEL 1===========================================
         if (this.isSurvivalLevel) {
-            const hoursToReset = survival_level_1_config.hoursToReset
+            const hoursToReset = survivalLevels[0].hoursToReset
             let unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;
             // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
             localStorage.setItem('SurvivalLevel1', unlockSurvivalLevel1Time.toString());

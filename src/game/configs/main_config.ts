@@ -60,6 +60,9 @@ export const main_config = {
 
 
 // TODO:
+
+
+// FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
 // REFACTOR THE CODE FOR SURVIVAL LEVEL TO BE EASIER TO ADD NEW ONES - ADD ANOTHER SURVIVAL LEVEL                                   ^HIGH PRIORITY^
 // ADD DAILY QUESTS                                                                                                                 ^HIGH PRIORITY^
 // add survival level
@@ -84,6 +87,15 @@ export const main_config = {
 
 
 //BUGS:
+
+
+
+//CHECK 3 STAR MONSTER  IN THE SELECTED SECTION AND 6 X 1 STAR IN THE MAIN - AND UPGRADE THE 6  - CAUSES BUG ?
+
+
+
+
+
 //1. when i monster with 2 moves hits on its first move, its get locked - PROBABLY FIXED
 
 // below cant be reproduced FOR NOW

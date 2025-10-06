@@ -1,41 +1,46 @@
 
 // L E V E L  1  S U R V I V A L    T E S T
-export const survival_level_1_config = {
-    levelName: '',
-    survival: true,
-    mapPosition: {
-        x: 0,
-        y: 0
-    },
-    rewardPerKill: 5,
-    newEnemiesPerRound: 3,
-    revealedByLevel: 10,
-    totalMonstersCount: 100,
-    hoursToReset: 2,
-    newEnemiesStars: [
-        50,    // 50% for 1 star  monster
-        100,   // 50% for 2 stars monster
-        0,     //  0% for 3 stars monster
-        0,     //  0% for 4 stars monster
-        0,     //  0% for 5 stars monster
-    ],
-    opponentMonstersData: [
-        { type: 9, stars: 1 },
-        { type: 9, stars: 1 },
-        { type: 9, stars: 1 },
-        { type: 9, stars: 1 },
-        // { type: 1, stars: 1 },
-        // { type: 2, stars: 2 },
-        // { type: 2, stars: 1 },
-        // { type: 2, stars: 1 },
-        // { type: 2, stars: 1 },
-        // { type: 5, stars: 1 },
-        // { type: 5, stars: 1 },
-        // { type: 5, stars: 1 },
-        // { type: 5, stars: 1 },
-        // { type: 5, stars: 1 },
-    ]
-}
+export const survivalLevels = [
+    {
+        levelName: '',
+        survival: true,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        rewardPerKill: 5,
+        newEnemiesPerRound: 3,
+        revealedByLevel: 10,
+        totalMonstersCount: 100,
+        hoursToReset: 2,
+        newEnemiesStars: [
+            50,    // 50% for 1 star  monster
+            100,   // 50% for 2 stars monster
+            0,     //  0% for 3 stars monster
+            0,     //  0% for 4 stars monster
+            0,     //  0% for 5 stars monster
+        ],
+        opponentMonstersData: [
+            { type: 9, stars: 1 },
+            { type: 9, stars: 1 },
+            { type: 9, stars: 1 },
+            { type: 9, stars: 1 },
+            // { type: 1, stars: 1 },
+            // { type: 2, stars: 2 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 5, stars: 1 },
+        ]
+    }
+]
+
+
+
 
 // R E G U L A R   M A P   L E V E L S
 export const level_config = [
@@ -49,13 +54,13 @@ export const level_config = [
             y: 0
         },
         opponentMonstersData: [
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
-            { type: 7, stars: 1 },
+            { type: 1, stars: 1 },
+            { type: 2, stars: 1 },
+            { type: 2, stars: 1 },
+            { type: 5, stars: 1 },
+            { type: 5, stars: 1 },
+            { type: 5, stars: 1 },
+            { type: 7, stars: 1 }
         ]
     },
     // L E V E L   2    - monsters: 1 star x 8   2 stars x 0
@@ -394,7 +399,7 @@ export const level_config = [
         },
         opponentMonstersData: [
             { type: 1, stars: 2 },
-            { type: 1, stars: 1 },
+            { type: 2, stars: 1 },
             { type: 2, stars: 2 },
             { type: 2, stars: 1 },
             { type: 5, stars: 1 },
@@ -421,8 +426,8 @@ export const level_config = [
         opponentMonstersData: [
             { type: 1, stars: 2 },
             { type: 1, stars: 1 },
-            { type: 2, stars: 2 },
             { type: 2, stars: 1 },
+            { type: 5, stars: 2 },
             { type: 5, stars: 2 },
             { type: 5, stars: 1 },
             { type: 5, stars: 2 },
@@ -430,7 +435,7 @@ export const level_config = [
             { type: 7, stars: 2 },
             { type: 7, stars: 1 },
             { type: 7, stars: 2 },
-            { type: 9, stars: 1 },
+            { type: 7, stars: 1 },
             { type: 9, stars: 2 },
             { type: 9, stars: 1 },
         ]

@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { MainMenuLevelConfirm } from './in-main-menu/MainMenuLevelConfirm';
-import { ILevelConfig, level_config, survival_level_1_config } from '../configs/level_config';
+import { ILevelConfig, level_config, survivalLevels } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 
@@ -319,15 +319,15 @@ export class Map extends AbstractScene {
         //========================SURVIVAL 1 LEVEL==========================================================
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
         const mapLevel = JSON.parse(localStorage.getItem('mapLevel') ?? "null") || '0';
-        const introduceToSurvivalLevel = currentLevel === survival_level_1_config.revealedByLevel && mapLevel === survival_level_1_config.revealedByLevel + 1
+        const introduceToSurvivalLevel = currentLevel === survivalLevels[0].revealedByLevel && mapLevel === survivalLevels[0].revealedByLevel + 1
 
-        if (!introduceToSurvivalLevel && mapLevel > survival_level_1_config.revealedByLevel) {
+        if (!introduceToSurvivalLevel && mapLevel > survivalLevels[0].revealedByLevel) {
             this.survival1dots.forEach((element: Phaser.GameObjects.Graphics) => {
                 element.setAlpha(1);
             });
         }
 
-        if (mapLevel > survival_level_1_config.revealedByLevel) {
+        if (mapLevel > survivalLevels[0].revealedByLevel) {
             this.createSurvivalLevel1(introduceToSurvivalLevel);
         }
         //===================================================================================================
@@ -360,7 +360,7 @@ export class Map extends AbstractScene {
         const leveltext: Phaser.GameObjects.Text = this.add.text(
             this.survival1Spots[3].x,
             this.survival1Spots[3].y,
-            `${survival_level_1_config.levelName}`,
+            `${survivalLevels[0].levelName}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
@@ -380,15 +380,15 @@ export class Map extends AbstractScene {
             this.confirmPopupOpen = true;
             const onMoveComplete = () => {
 
-                this.levelConfirm = new MainMenuLevelConfirm(this, 0, 0, (survival_level_1_config as ILevelConfig), true);
+                this.levelConfirm = new MainMenuLevelConfirm(this, 0, 0, (survivalLevels[0] as ILevelConfig), true);
                 this.levelContentContainer.add([this.levelConfirm]);
 
                 this.levelConfirm.once('level-selected', (level: number) => {
-                    localStorage.setItem('currentLevel', JSON.stringify(survival_level_1_config.revealedByLevel));
+                    localStorage.setItem('currentLevel', JSON.stringify(survivalLevels[0].revealedByLevel));
                     this.confirmPopupOpen = false;
                     this.levelConfirm.removeAllListeners();
                     this.levelConfirm.destroy(true);
-                    localStorage.setItem('survivalLevelData', JSON.stringify(survival_level_1_config));
+                    localStorage.setItem('survivalLevelData', JSON.stringify(survivalLevels[0]));
                     this.changeScene('Game', true);
                 }, this);
 
@@ -399,7 +399,7 @@ export class Map extends AbstractScene {
                     this.confirmPopupOpen = false;
                 }, this);
             }
-            const targetLvl = survival_level_1_config.revealedByLevel - 1;// first we move the player to the level that revealed the survival level
+            const targetLvl = survivalLevels[0].revealedByLevel - 1;// first we move the player to the level that revealed the survival level
             this.movePlayerToLevel(targetLvl * 6, () => {
                 this.movePlayerToLevel(3, () => {
                     onMoveComplete();
@@ -445,7 +445,7 @@ export class Map extends AbstractScene {
     }
 
     private resetSurvivalLevel1() {
-        const hoursToReset = survival_level_1_config.hoursToReset
+        const hoursToReset = survivalLevels[0].hoursToReset
         this.unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;  
         // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
         localStorage.setItem('SurvivalLevel1', this.unlockSurvivalLevel1Time.toString());
