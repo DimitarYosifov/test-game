@@ -445,9 +445,9 @@ export class Map extends AbstractScene {
 
     private resetSurvivalLevel() {
         const hoursToReset = survivalLevels[0].hoursToReset
-        this.unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;
+       let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
         // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
-        localStorage.setItem('SurvivalLevel1', this.unlockSurvivalLevel1Time.toString());
+        localStorage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
     }
 
     private updateSurvivalLevel(levelTexture: Phaser.GameObjects.Image, unlockSurvivalLevelTime: number, survivalLevelCountDownText: Phaser.GameObjects.Text, levelName: string) {
@@ -473,7 +473,7 @@ export class Map extends AbstractScene {
             levelTexture.disableInteractive();
 
             this.time.delayedCall(1000, () => {
-                this.updateSurvivalLevel(levelTexture, unlockSurvivalLevelTime, survivalLevelCountDownText);
+                this.updateSurvivalLevel(levelTexture, unlockSurvivalLevelTime, survivalLevelCountDownText, levelName);
             })
         }
     }
