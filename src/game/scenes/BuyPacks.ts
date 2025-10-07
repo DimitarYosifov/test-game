@@ -424,14 +424,14 @@ export class BuyPacks extends AbstractScene {
 
     }
 
-    private createBackButton() {
+    createBackButton() {
         this.backButton = new Button(this, 100, 950, 'button', 'back', () => {
             this.changeScene('MainMenu');
         });
         // this.add.existing(this.backButton);
     }
 
-    private createCoins() {
+    createCoins() {
         this.coins = localStorage.getItem('coins') || '0';
         this.coinText = this.add.text(
             1900,

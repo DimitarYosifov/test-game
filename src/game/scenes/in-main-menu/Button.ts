@@ -58,15 +58,13 @@ export class Button extends Phaser.GameObjects.Container {
         }
     }
 
-    setInteractive(hitArea?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
-        super.setInteractive(hitArea, callback, dropZone);
+    setInteractive(): this {
         this.bg.setInteractive();
         this.bg.setAlpha(1);
         return this;
     }
 
-    disableInteractive(resetCursor?: boolean): this {
-        super.disableInteractive(resetCursor);
+    disableInteractive(): this {
         this.bg.disableInteractive();
         this.bg.setAlpha(0.65);
         return this;

@@ -340,7 +340,7 @@ export class Map extends AbstractScene {
         this.player = this.add.image(0, 0, 'location').setScale(1).setOrigin(0.5, 1).setAlpha(0).setDepth(99);
     }
 
-    private createBackButton() {
+    createBackButton() {
         this.backButton = new Button(this, 100, 950, 'button', 'back', () => {
             this.confirmPopupOpen = false;
             this.changeScene('MainMenu');
@@ -445,7 +445,7 @@ export class Map extends AbstractScene {
 
     private resetSurvivalLevel() {
         const hoursToReset = survivalLevels[0].hoursToReset
-       let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
+        let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
         // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
         localStorage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
     }
@@ -623,7 +623,7 @@ export class Map extends AbstractScene {
         moveToNext();
     }
 
-    private createCoins() {
+    createCoins() {
         this.coins = localStorage.getItem('coins') || '0';
         this.coinText = this.add.text(
             1900,

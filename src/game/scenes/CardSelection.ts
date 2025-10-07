@@ -859,7 +859,7 @@ export class CardSelection extends AbstractScene {
         this.changeScene('MainMenu');
     }
 
-    private createCoins() {
+    createCoins() {
         const coins = localStorage.getItem('coins') || '0';
         this.coinText = this.add.text(
             1900,
@@ -884,4 +884,7 @@ export class CardSelection extends AbstractScene {
             this.scene.start(nextScene);
         });
     }
+
+    createBackButton(): void { };
+
 }

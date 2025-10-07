@@ -7,6 +7,7 @@ import { MainMenu } from './scenes/MainMenu';
 import { CardSelection } from './scenes/CardSelection';
 import { Map } from './scenes/Map';
 import { BuyPacks } from './scenes/BuyPacks';
+import { DailyQuests } from './scenes/DailyQuests';
 
 // import main_confi from '../sconfig/main_config.json';
 
@@ -31,6 +32,7 @@ const config: Phaser.Types.Core.GameConfig = {
         MainGame,
         Map,
         BuyPacks,
+        DailyQuests,
         GameOver
     ]
 };

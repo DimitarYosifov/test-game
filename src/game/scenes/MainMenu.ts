@@ -14,6 +14,7 @@ export class MainMenu extends AbstractScene {
     coins: string | null;
     shopButton: Button;
     mapButton: Button;
+    dailyQuestsButton: Button;
 
     constructor() {
         super('MainMenu');
@@ -39,6 +40,7 @@ export class MainMenu extends AbstractScene {
         this.createDeckbutton();
         this.createShopbutton();
         this.createMapbutton();
+        this.createDailyQuestsButton();
         this.createCoins();
 
         const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
@@ -147,7 +149,24 @@ export class MainMenu extends AbstractScene {
             }).setOrigin(0.5);
     }
 
-    private createCoins() {
+    private createDailyQuestsButton(): void {
+        const dailyQuestsButtonClick = () => {
+            this.dailyQuestsButton.disableInteractive();
+            this.changeScene('DailyQuests');
+        }
+        this.dailyQuestsButton = new Button(this, 1650, 200, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.5);
+        const dailyQuestsTitle = this.add.text(
+            1650,
+            350,
+            `daily quests`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+    }
+
+    createCoins() {
         this.coins = localStorage.getItem('coins') || '0';
         this.coinText = this.add.text(
             1900,
@@ -167,5 +186,7 @@ export class MainMenu extends AbstractScene {
             this.scene.start(nextScene);
         });
     }
+
+    createBackButton(): void { };
 
 }

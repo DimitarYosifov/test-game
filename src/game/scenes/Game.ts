@@ -1162,6 +1162,9 @@ export class Game extends AbstractScene {
             this.data.list.gridPositions[row][col] !== undefined &&
             this.data.list.gridPositions[row][col].isEmpty;
     }
+
+    createCoins(): void { };
+    createBackButton(): void { };
 }
 
 export interface IGridDimensions {
