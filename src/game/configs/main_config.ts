@@ -9,7 +9,6 @@ export const main_config = {
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
     "playerStartingFreeCommonPacks": 3,
-
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
         985,   //     2% for common pack
@@ -55,6 +54,14 @@ export const main_config = {
                 0,   //    0% for 5 stars monster
             ]
         }
+    },
+    "dailyQuests": {
+        "questsCount": 5,
+        "monstersKillCountNeededForRewardRange": {
+            "min": 25,
+            "max": 40
+        },
+         
     }
 }
 
@@ -63,11 +70,10 @@ export const main_config = {
 
 
 // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
-// REFACTOR THE CODE FOR SURVIVAL LEVEL TO BE EASIER TO ADD NEW ONES - ADD ANOTHER SURVIVAL LEVEL                                   ^HIGH PRIORITY^
 // ADD DAILY QUESTS                                                                                                                 ^HIGH PRIORITY^
 // add survival level
 // ADD SLOT GAME WITH MONSTERS
-//CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
+// CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
 // implement info for monsters showing stats for all 5 stars                                                                        ^HIGH PRIORITY^
 // ADD TIME COUNT DOWN FOR SURVIVAL MODE                                                                                            ^HIGH PRIORITY^
 // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
