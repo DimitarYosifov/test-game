@@ -69,7 +69,7 @@ export class DailyQuests extends AbstractScene {
 
     getTotalProgress() {
         const dailyQuestsInfo = JSON.parse(localStorage.getItem('questProgress') ?? "null");
-        this.totalProgress = 0.8// = dailyQuestsInfo.filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
+        this.totalProgress = dailyQuestsInfo.filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
     }
 
     showQuests() {
@@ -143,13 +143,13 @@ export class DailyQuests extends AbstractScene {
     showChestRewards(rewardIndex: number) {
         const allPossibleRewards = main_config.dailyQuests.chestRewards[rewardIndex];
 
-        const hasOneStarMonsterReward = true// Phaser.Math.RND.between(0, 100) > allPossibleRewards.oneStarMonsterChance;
-        const hasTwoStarMonsterReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.twoStarMonsterChance;
-        const hasThreeStarMonsterReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.threeStarMonsterChance;
-        const hasFourStarMonsterReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.fourStarMonsterChance;
-        const hasFreeCommonPackReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.commonPackChance;
-        const hasFreeSilverPackReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.silverPackChance;
-        const hasFreeGoldPackReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.goldPackChance;
+        const hasOneStarMonsterReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.oneStarMonsterChance;
+        const hasTwoStarMonsterReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.twoStarMonsterChance;
+        const hasThreeStarMonsterReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.threeStarMonsterChance;
+        const hasFourStarMonsterReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.fourStarMonsterChance;
+        const hasFreeCommonPackReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.commonPackChance;
+        const hasFreeSilverPackReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.silverPackChance;
+        const hasFreeGoldPackReward = Phaser.Math.RND.between(0, 100) <= allPossibleRewards.goldPackChance;
 
         let totalWidthSoFar = 0;
         let lastElementX = 0;
@@ -314,7 +314,7 @@ export class DailyQuests extends AbstractScene {
 
         // claim button
         const claimButton = new Button(this, 960, 850, 'claim', null, () => {
-
+            claimButton.disableInteractive();
             //UPDATE CHEST REWARDS ARRAY
             let chestsReward = JSON.parse(localStorage.getItem('chests') ?? "[]");
             chestsReward[rewardIndex] = true;
@@ -322,7 +322,10 @@ export class DailyQuests extends AbstractScene {
 
             // UPDATE PLAYER COINS(LOCALE STORAGE) 
             const playerCoins = localStorage.getItem('coins') || '0';
-            localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+            this.coins = `${+playerCoins + +coinsWon}`;
+            localStorage.setItem('coins', this.coins);
+            this.coinText.setText(this.coins);
+            this.coinTexture.x = this.coinText.x - this.coinText.width;
 
             // UPDATE FREE COMMON PACKS
             if (hasFreeCommonPackReward) {
@@ -386,6 +389,7 @@ export class DailyQuests extends AbstractScene {
                                 alpha: 1,
                                 onComplete: () => {
                                     overlay.destroy(true);
+                                    rewardtext.destroy(true);
                                     claimButton.destroy(true);
                                     msg.destroy(true);
                                 }
@@ -398,17 +402,23 @@ export class DailyQuests extends AbstractScene {
                 this.tweens.chain({
                     tweens: [
                         {
-                            targets: [overlay, claimButton],
-                            duration: 500,
-                            alpha: 0.9
-                        },
-                        {
                             targets: rewardsContainer,
                             duration: 350,
-                            alpha: 1,
+                            scale: 0
+                        },
+                        {
+                            targets: [claimButton, rewardtext],
+                            duration: 500,
+                            scale: 0
+                        },
+                        {
+                            targets: overlay,
+                            duration: 350,
+                            alpha: 0,
                             onComplete: () => {
                                 overlay.destroy(true);
                                 claimButton.destroy(true);
+                                rewardtext.destroy(true);
                                 rewardsContainer.destroy(true);
                             }
                         }

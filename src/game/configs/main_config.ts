@@ -116,16 +116,12 @@ export const main_config = {
 
 
     // TODO:
-
-
+    // ADD ACHIEVEMENTS !!!                                                                                                             ^HIGH PRIORITY^
+    // ADD 35 MORE LEVELS (MAP 2)
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
-    // ADD DAILY QUESTS                                                                                                                 ^HIGH PRIORITY^
-    // add survival level
     // ADD SLOT GAME WITH MONSTERS
     // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
     // implement info for monsters showing stats for all 5 stars                                                                        ^HIGH PRIORITY^
-    // ADD TIME COUNT DOWN FOR SURVIVAL MODE                                                                                            ^HIGH PRIORITY^
-    // ADD 1 MORE MAGIC MONSTER AND 1 MORE RANGED MONSTER
     // in-game implement drag movement for creatures
     // add loading
     // add total power for opponent before level and for the player
