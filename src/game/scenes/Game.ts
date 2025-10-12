@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { main_config } from '../configs/main_config';
+import { getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
@@ -8,6 +8,7 @@ import { ILevelConfig, level_config, survivalLevels } from '../configs/level_con
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
+import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -331,7 +332,15 @@ export class Game extends AbstractScene {
     }
 
     private monsterDieHandler(): void {
-        this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, () => {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: (Monster | IUnitData)[]) => {
+
+            const monster = data[0] as Monster;
+            const unitData = data[1];
+
+            if (!monster.isPlayerMonster) {
+                DailyQuestDataHandler.checkDataOnMonsterDeath(monster.type)
+            }
+
             this.updateOpponentMonstersLeft();
 
             if (this.isSurvivalLevel) {
@@ -429,7 +438,7 @@ export class Game extends AbstractScene {
             //determine monster type and stars !!!!
             //TODO - add more options in config - main_config.afterLevelMonsterReward
             const odds = main_config.afterLevelMonsterReward;
-            const monsterRewardType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+            const monsterRewardType = getRandomMonsterType();
             let monsterRewardStars = NaN;
             const randomNumber = Phaser.Math.RND.between(1, 100);
             for (let index = 0; index < odds.length; index++) {
@@ -778,7 +787,7 @@ export class Game extends AbstractScene {
             }
 
             const odds = this.survivalLevelData.newEnemiesStars;
-            const monsterRewardType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+            const monsterRewardType = getRandomMonsterType();
             let monsterRewardStars = NaN;
             const randomNumber = Phaser.Math.RND.between(1, 100);
             for (let index = 0; index < odds!.length; index++) {

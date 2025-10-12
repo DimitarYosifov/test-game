@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { DailyQuestTimeHandler } from './in-daily-quest/dailyQuestTimeHandler';
 
 export class Preloader extends Scene {
     constructor() {
@@ -77,6 +78,9 @@ export class Preloader extends Scene {
         this.load.image('button', 'button.png');
         this.load.image('survival1', 'survival1.png');
         this.load.image('clock', 'clock.png');
+        this.load.image('checked', 'checked.png');
+        this.load.image('chest', 'chest.png');
+        this.load.image('mark', 'mark.png');
         this.load.font('main-font', 'Oups.otf');
     }
 
@@ -85,6 +89,8 @@ export class Preloader extends Scene {
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+        DailyQuestTimeHandler.initialCheck();
         this.scene.start('MainMenu');
+
     }
 }

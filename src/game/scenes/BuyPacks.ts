@@ -1,5 +1,5 @@
 import { IOpponentMonstersData } from '../configs/level_config';
-import { main_config } from '../configs/main_config';
+import { getRandomMonsterType, main_config } from '../configs/main_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -632,7 +632,7 @@ export class BuyPacks extends AbstractScene {
         const monsterDataArr = [];
 
         for (let monsterDataIndex = 0; monsterDataIndex < monstersCount; monsterDataIndex++) {
-            const rndMonsterType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+            const rndMonsterType = getRandomMonsterType();
             let rndMonsterStar = NaN;
             const randomNumber = Phaser.Math.RND.between(1, 100);
             for (let index = 0; index < odds.length; index++) {

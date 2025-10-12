@@ -1,9 +1,11 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
+import { getRandomMonsterType, main_config } from '../configs/main_config';
+import { DailyQuestTimeHandler } from './in-daily-quest/dailyQuestTimeHandler';
+import { monsters_power_config } from '../configs/monsters_power_config';
+import { Monster } from './in-game/Monster';
 
-const QUEST_START_TIME_KEY = 'questStartTime';
-const LAST_RESET_TIME_KEY = 'lastResetTime';
 
 export class DailyQuests extends AbstractScene {
 
@@ -12,6 +14,14 @@ export class DailyQuests extends AbstractScene {
     coinText: Phaser.GameObjects.Text;
     coinTexture: Phaser.GameObjects.Image;
     backButton: Button;
+    headerText: Phaser.GameObjects.Text;
+    progressBarBg: Phaser.GameObjects.Graphics;
+    progressBarFill: Phaser.GameObjects.Graphics;
+    progressText: Phaser.GameObjects.Text;
+    progressBarWidth: number;
+    progressBarPosition: { x: number; y: number; };
+    chests: Phaser.GameObjects.Image[] = [];
+    totalProgress: number;
 
     constructor() {
         super('DailyQuests');
@@ -22,44 +32,390 @@ export class DailyQuests extends AbstractScene {
         super.create();
         this.createCoins();
         this.createBackButton();
+        this.createHeaderTexts();
         this.createTimeLeftText();
-        this.createQuests();
+        // const startTime = DailyQuestTimeHandler.getOrCreateStartTime();
+        // if (DailyQuestTimeHandler.shouldResetQuests(startTime)) {
+        //     DailyQuestTimeHandler.resetQuests();
+        //     DailyQuestTimeHandler.setLastResetTime();
+        // }
+        // else {
+        this.showQuests();
+        // }
 
-        const startTime = this.getOrCreateStartTime();
-        if (this.shouldResetQuests(startTime)) {
-            this.resetQuests();
-            this.setLastResetTime();
-        }
+        this.getTotalProgress();
+        this.drawProgressBar();
 
         // Update timer every second
         this.time.addEvent({
             delay: 1000,
             loop: true,
             callback: () => {
-                const updatedStartTime = this.getStoredStartTime();
-                const timeLeft = this.getTimeUntilNextReset(updatedStartTime);
-                this.timeLeftText.setText(`Time left: ${this.formatTime(timeLeft)}`);
+                const updatedStartTime = DailyQuestTimeHandler.getStoredStartTime();
+
+                // ✅ Check if quests should reset
+                if (DailyQuestTimeHandler.shouldResetQuests(updatedStartTime)) {
+                    DailyQuestTimeHandler.resetQuests();
+                    DailyQuestTimeHandler.setLastResetTime();
+                }
+
+                const timeLeft = DailyQuestTimeHandler.getTimeUntilNextReset(updatedStartTime);
+                this.timeLeftText.setText(`Time left: ${DailyQuestTimeHandler.formatTime(timeLeft)}`);
             },
         });
     }
 
     //region QUESTS
-    createQuests() {
-        this.createQuest();
+
+    getTotalProgress() {
+        const dailyQuestsInfo = JSON.parse(localStorage.getItem('questProgress') ?? "null");
+        this.totalProgress = 0.8// = dailyQuestsInfo.filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
     }
 
-    createQuest() {
-
-        const quest = new DailyQuestItem(this, 960, 540);
+    showQuests() {
+        // shows quests stored in local storage
+        const dailyQuestsInfo = JSON.parse(localStorage.getItem('questProgress') ?? "null");
+        for (let index = 0; index < dailyQuestsInfo.length; index++) {
+            const monsterType = dailyQuestsInfo[index].monsterType;
+            const monstersTotalCount = dailyQuestsInfo[index].progress.split('/')[1];
+            const questType = dailyQuestsInfo[index].questType;
+            if (index < 4) {
+                new DailyQuestItem(this, 360 + (index * 300), 340, true, `${monsterType}`, `${questType} ${monstersTotalCount} monsters`, `${dailyQuestsInfo[index].progress}`);
+            } else {
+                const monstersTotalCount = dailyQuestsInfo[index].progress.split('/')[1];
+                new DailyQuestItem(this, 360 + (index * 300), 340, false, `${monsterType}`, `${questType} ${monstersTotalCount} monsters`, `${dailyQuestsInfo[index].progress}`);
+            }
+        }
     }
 
-    // region TIME
-    private setLastResetTime(): void {
-        localStorage.setItem(LAST_RESET_TIME_KEY, Date.now().toString());
+    private drawProgressBar() {
+        this.progressBarPosition = {
+            x: 210,
+            y: 850
+        }
+        this.progressBarWidth = 1500;
+        const height = 30;
+        const radius = 10;
+        // Background  
+        this.progressBarBg = this.add.graphics();
+        this.progressBarBg.fillStyle(0x222222);
+        this.progressBarBg.fillRoundedRect(this.progressBarPosition.x, this.progressBarPosition.y, this.progressBarWidth, height, radius);
+
+        this.progressBarFill = this.add.graphics();
+
+        this.progressBarFill.fillStyle(0x00ff00);
+        const fillWidth = this.progressBarWidth * this.totalProgress;
+        this.progressBarFill.fillRoundedRect(this.progressBarPosition.x, this.progressBarPosition.y, fillWidth, height, radius);
+
+        this.addChests();
     }
 
-    private getLastResetTime(): number {
-        return parseInt(localStorage.getItem(LAST_RESET_TIME_KEY) || '0', 10);
+    private addChests() {
+        const chestsInfo = JSON.parse(localStorage.getItem('chests') ?? "null");
+        for (let index = 0; index < 3; index++) {
+            const x = this.progressBarPosition.x + this.progressBarWidth * ((index + 1) * 0.33);
+            const y = this.progressBarPosition.y;
+            const chest = this.add.image(x, y, 'chest').setOrigin(0.5);
+            this.chests.push(chest);
+
+            const isReached = this.totalProgress > (index + 1) * 0.33;
+            const isClaimed = chestsInfo[index];
+            if (isReached && isClaimed) {
+                chest.setAlpha(0.65).disableInteractive()
+            } else if (isReached) {
+                chest.setInteractive();
+                this.tweens.add({
+                    targets: chest,
+                    duration: 500,
+                    scale: 1.1,
+                    yoyo: true,
+                    repeat: - 1
+                })
+                chest.on('pointerdown', () => {
+                    this.tweens.killTweensOf(chest);
+                    chest.setAlpha(0.65).setScale(1).disableInteractive();
+                    this.showChestRewards(index);
+                })
+            }
+        }
+    }
+
+    showChestRewards(rewardIndex: number) {
+        const allPossibleRewards = main_config.dailyQuests.chestRewards[rewardIndex];
+
+        const hasOneStarMonsterReward = true// Phaser.Math.RND.between(0, 100) > allPossibleRewards.oneStarMonsterChance;
+        const hasTwoStarMonsterReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.twoStarMonsterChance;
+        const hasThreeStarMonsterReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.threeStarMonsterChance;
+        const hasFourStarMonsterReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.fourStarMonsterChance;
+        const hasFreeCommonPackReward = false//Phaser.Math.RND.between(0, 100) > allPossibleRewards.commonPackChance;
+        const hasFreeSilverPackReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.silverPackChance;
+        const hasFreeGoldPackReward = true//Phaser.Math.RND.between(0, 100) > allPossibleRewards.goldPackChance;
+
+        let totalWidthSoFar = 0;
+        let lastElementX = 0;
+
+        let newMonsters = [];
+
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(100);
+        this.add.existing(rewardsContainer);
+
+        console.log(allPossibleRewards)
+
+        //====================================================================================================================================
+        // bg overlay
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        this.tweens.add({
+            targets: overlay,
+            duration: 200,
+            alpha: 0.9
+        })
+        this.add.existing(overlay);
+        overlay.setInteractive();
+        overlay.on('pointerdown', function (pointer: any) {
+            pointer.event.stopPropagation();
+        });
+
+        // REWARD TEXT
+        const rewardtext: Phaser.GameObjects.Text = this.add.text(
+            960,
+            400,
+            'REWARDS: ',
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+        // rewardsContainer.add(rewardtext);
+        //====================================================================================================================================
+
+
+        //coin img
+        let coin = this.add.image(lastElementX, 600, 'coin').setOrigin(0, 0.5).setScale(0.5);
+        rewardsContainer.add(coin);
+        totalWidthSoFar += coin.displayWidth;
+        lastElementX += coin.displayWidth;
+
+        // COIN TEXT
+        let coinsWon = Phaser.Math.RND.between(allPossibleRewards.coins.min, allPossibleRewards.coins.max);
+        const cointext: Phaser.GameObjects.Text = this.add.text(
+            coin.x + coin.displayWidth,
+            600,
+            `x${coinsWon}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0, 0.5);
+        rewardsContainer.add(cointext);
+        totalWidthSoFar += cointext.displayWidth;
+        lastElementX += cointext.displayWidth;
+
+        // one star monster rewawrd
+        if (hasOneStarMonsterReward) {
+            const monsterSize = 150;
+            const monsterPadding = 40;
+            const monsterRewardType = getRandomMonsterType();
+            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][1 - 1] };
+            const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
+            monster.starsContainer.x = monsterSize / -4 + 18;
+            monster.movesLeftContainer.x = monsterSize / 2 + 21;
+            rewardsContainer.add(monster);
+            totalWidthSoFar += monsterPadding + monsterSize;
+            lastElementX += monsterSize + monsterPadding;
+            newMonsters.push({
+                type: monsterRewardType,
+                stars: 1
+            });
+        }
+
+        // two star monster rewawrd
+        if (hasTwoStarMonsterReward) {
+            const monsterSize = 150;
+            const monsterPadding = 40;
+            const monsterRewardType = getRandomMonsterType();
+            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][2 - 1] };
+            const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
+            monster.starsContainer.x = monsterSize / -4 + 18;
+            monster.movesLeftContainer.x = monsterSize / 2 + 21;
+            rewardsContainer.add(monster);
+            totalWidthSoFar += monsterPadding + monsterSize;
+            lastElementX += monsterSize + monsterPadding;
+            newMonsters.push({
+                type: monsterRewardType,
+                stars: 2
+            });
+        }
+
+        // three star monster rewawrd
+        if (hasThreeStarMonsterReward) {
+            const monsterSize = 150;
+            const monsterPadding = 40;
+            const monsterRewardType = getRandomMonsterType();
+            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][3 - 1] };
+            const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
+            monster.starsContainer.x = monsterSize / -4 + 18;
+            monster.movesLeftContainer.x = monsterSize / 2 + 21;
+            rewardsContainer.add(monster);
+            totalWidthSoFar += monsterPadding + monsterSize;
+            lastElementX += monsterSize + monsterPadding;
+            newMonsters.push({
+                type: monsterRewardType,
+                stars: 3
+            });
+        }
+
+        // four star monster rewawrd
+        if (hasFourStarMonsterReward) {
+            const monsterSize = 150;
+            const monsterPadding = 40;
+            const monsterRewardType = getRandomMonsterType();
+            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][4 - 1] };
+            const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
+            monster.starsContainer.x = monsterSize / -4 + 18;
+            monster.movesLeftContainer.x = monsterSize / 2 + 21;
+            rewardsContainer.add(monster);
+            totalWidthSoFar += monsterPadding + monsterSize;
+            lastElementX += monsterSize + monsterPadding;
+            newMonsters.push({
+                type: monsterRewardType,
+                stars: 4
+            });
+        }
+
+        // free common pack
+        if (hasFreeCommonPackReward) {
+            const padding = 20;
+            let pack = this.add.image(lastElementX + padding, 600, 'common-pack').setOrigin(0, 0.5).setScale(0.2);
+            rewardsContainer.add(pack);
+            totalWidthSoFar += pack.displayWidth + padding;
+            lastElementX += pack.displayWidth + padding;
+        }
+
+        // free silver pack
+        if (hasFreeSilverPackReward) {
+            const padding = 20;
+            let pack = this.add.image(lastElementX + padding, 600, 'silver-pack').setOrigin(0, 0.5).setScale(0.2);
+            rewardsContainer.add(pack);
+            totalWidthSoFar += pack.displayWidth + padding;
+            lastElementX += pack.displayWidth + padding;
+        }
+
+        // free gold pack
+        if (hasFreeGoldPackReward) {
+            const padding = 20;
+            let pack = this.add.image(lastElementX + padding, 600, 'gold-pack').setOrigin(0, 0.5).setScale(0.2);
+            rewardsContainer.add(pack);
+            totalWidthSoFar += pack.displayWidth + padding;
+            lastElementX += pack.displayWidth + padding;
+        }
+
+        //center reward container
+        rewardsContainer.x = 960 - totalWidthSoFar / 2;
+
+        // claim button
+        const claimButton = new Button(this, 960, 850, 'claim', null, () => {
+
+            //UPDATE CHEST REWARDS ARRAY
+            let chestsReward = JSON.parse(localStorage.getItem('chests') ?? "[]");
+            chestsReward[rewardIndex] = true;
+            localStorage.setItem('chests', JSON.stringify(chestsReward));
+
+            // UPDATE PLAYER COINS(LOCALE STORAGE) 
+            const playerCoins = localStorage.getItem('coins') || '0';
+            localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+
+            // UPDATE FREE COMMON PACKS
+            if (hasFreeCommonPackReward) {
+                const freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
+                localStorage.setItem('freeCommonPacks', JSON.stringify(+freeCommonPacks + 1));
+            }
+
+            // UPDATE FREE SILVER PACKS
+            if (hasFreeSilverPackReward) {
+                const freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
+                localStorage.setItem('freeSilverPacks', JSON.stringify(+freeSilverPacks + 1));
+            }
+
+            // UPDATE FREE GOLD PACKS
+            if (hasFreeGoldPackReward) {
+                const freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
+                localStorage.setItem('freeGoldPacks', JSON.stringify(+freeGoldPacks + 1));
+            }
+
+            // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
+            let monsterNotClaimed = false;
+            newMonsters.forEach((m: any) => {
+                const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+                if (playerMonstersCount >= 40) {
+                    monsterNotClaimed = true;
+                    return;
+                } else {
+                    const STORAGE_KEY = 'playerMonstersData';
+                    const storedData = localStorage.getItem(STORAGE_KEY);
+                    const dataArray = storedData ? JSON.parse(storedData) : [];
+                    const newObject = { type: m.type, stars: m.stars, row: NaN, col: 11 };
+                    dataArray.push(newObject);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+                }
+            });
+
+            // CONTINUE
+            if (monsterNotClaimed) {
+                rewardsContainer.destroy(true);
+                const msg = this.add.text(
+                    960,
+                    540,
+                    `some monsters not claimed, maximum 40 monsters allowed!`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
+                        align: 'center'
+                    }
+                ).setOrigin(0.5).setAlpha(0);
+                this.time.delayedCall(4000, () => {
+                    this.tweens.chain({
+                        tweens: [
+                            {
+                                targets: overlay,
+                                duration: 500,
+                                alpha: 0.9
+                            },
+                            {
+                                targets: msg,
+                                duration: 350,
+                                alpha: 1,
+                                onComplete: () => {
+                                    overlay.destroy(true);
+                                    claimButton.destroy(true);
+                                    msg.destroy(true);
+                                }
+                            }
+                        ]
+                    })
+                })
+
+            } else {
+                this.tweens.chain({
+                    tweens: [
+                        {
+                            targets: [overlay, claimButton],
+                            duration: 500,
+                            alpha: 0.9
+                        },
+                        {
+                            targets: rewardsContainer,
+                            duration: 350,
+                            alpha: 1,
+                            onComplete: () => {
+                                overlay.destroy(true);
+                                claimButton.destroy(true);
+                                rewardsContainer.destroy(true);
+                            }
+                        }
+                    ]
+                })
+            }
+        });
     }
 
     private createTimeLeftText() {
@@ -74,68 +430,26 @@ export class DailyQuests extends AbstractScene {
             }).setOrigin(0.5);
     }
 
-    private getOrCreateStartTime(): number {
-        const stored = localStorage.getItem(QUEST_START_TIME_KEY);
-        if (stored) return parseInt(stored, 10);
+    private createHeaderTexts() {
+        this.headerText = this.add.text(
+            960,
+            100,
+            `quests:`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 4,
+                align: 'center'
+            }).setOrigin(0.5);
 
-        const now = Date.now();
-        localStorage.setItem(QUEST_START_TIME_KEY, now.toString());
-        return now;
-    }
-
-    private getStoredStartTime(): number {
-        return parseInt(localStorage.getItem(QUEST_START_TIME_KEY) || `${Date.now()}`, 10);
-    }
-
-    private setNewStartTime(): void {
-        const now = Date.now();
-        localStorage.setItem(QUEST_START_TIME_KEY, now.toString());
-    }
-
-    private shouldResetQuests(startTime: number): boolean {
-        const now = new Date();
-        const lastReset = new Date(this.getLastResetTime());
-
-        const baseTime = new Date(startTime);
-        const todayReset = new Date(now);
-        todayReset.setHours(baseTime.getHours(), baseTime.getMinutes(), baseTime.getSeconds(), 0);
-
-        // If now is after today’s reset time and we haven’t reset yet today
-        return now >= todayReset && lastReset < todayReset;
-    }
-
-    private getTimeUntilNextReset(startTime: number): number {
-        const now = new Date();
-        const baseTime = new Date(startTime);
-
-        const nextReset = new Date(now);
-        nextReset.setHours(baseTime.getHours(), baseTime.getMinutes(), baseTime.getSeconds(), 0);
-        nextReset.setMilliseconds(0);
-
-        if (now >= nextReset) {
-            // If current time is past today's reset time, next reset is tomorrow
-            nextReset.setDate(nextReset.getDate() + 1);
-        }
-
-        return nextReset.getTime() - now.getTime();
-    }
-
-    private formatTime(ms: number): string {
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        return `${hours.toString().padStart(2, '0')}:` +
-            `${minutes.toString().padStart(2, '0')}:` +
-            `${seconds.toString().padStart(2, '0')}`;
-    }
-
-    private resetQuests(): void {
-        console.log('%c[Quest Reset] Daily quests have been reset.', 'color: #00ff00');
-
-        // Example: reset quest progress
-        localStorage.setItem('questProgress', '0');
+        this.progressText = this.add.text(
+            960,
+            750,
+            `progress:`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 4,
+                align: 'center'
+            }).setOrigin(0.5);
     }
 
     //region UI

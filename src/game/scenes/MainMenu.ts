@@ -1,7 +1,7 @@
-import { Scene } from 'phaser';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { main_config } from '../configs/main_config';
+import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -21,7 +21,6 @@ export class MainMenu extends AbstractScene {
     }
 
     create() {
-
 
         // add monster manually - for debugging!
         const addMonster = (type: number, stars: number) => {
@@ -164,6 +163,11 @@ export class MainMenu extends AbstractScene {
                 stroke: '#000000', letterSpacing: 4,
                 align: 'center'
             }).setOrigin(0.5);
+
+        if (DailyQuestDataHandler.hasDailyQuestRewardPending()) {
+            let exclaimation = this.add.image(this.dailyQuestsButton.x + 75, this.dailyQuestsButton.y - 75, 'mark');
+        }
+
     }
 
     createCoins() {

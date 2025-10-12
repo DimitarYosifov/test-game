@@ -5,7 +5,7 @@ const MAX_WIDTH = 95;
 export class Button extends Phaser.GameObjects.Container {
 
     private initialScale: number;
-    private bg: Phaser.GameObjects.Image;
+    bg: Phaser.GameObjects.Image;
     text: Phaser.GameObjects.Text;
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string, text: string | null, action: Function, disableInteraction: boolean = false, initialScale: number = 1) {

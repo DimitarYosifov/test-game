@@ -4,6 +4,7 @@ import { monsters_power_config } from '../configs/monsters_power_config';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
+import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
 
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
@@ -749,6 +750,9 @@ export class CardSelection extends AbstractScene {
                 },
             ]
         })
+
+        // notify daily quests that a monster is upgraded
+        DailyQuestDataHandler.onMonsterUpgrade();
 
         console.table(this.playerMonstersData);
         console.log(this.selectedMonsters)
