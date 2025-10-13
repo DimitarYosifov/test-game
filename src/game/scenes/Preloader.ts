@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
-import { DailyQuestTimeHandler } from './in-daily-quest/dailyQuestTimeHandler';
+import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
+import { DataHandler } from './in-daily-quest/DataHandler';
 
 export class Preloader extends Scene {
     constructor() {
@@ -81,6 +82,7 @@ export class Preloader extends Scene {
         this.load.image('checked', 'checked.png');
         this.load.image('chest', 'chest.png');
         this.load.image('mark', 'mark.png');
+        this.load.image('achievements', 'achievements.png');
         this.load.font('main-font', 'Oups.otf');
     }
 
@@ -90,6 +92,7 @@ export class Preloader extends Scene {
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         DailyQuestTimeHandler.initialCheck();
+        DataHandler.setInitialAchievements();
         this.scene.start('MainMenu');
 
     }

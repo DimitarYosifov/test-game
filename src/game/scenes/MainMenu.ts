@@ -1,7 +1,7 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { main_config } from '../configs/main_config';
-import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
+import { DataHandler } from './in-daily-quest/DataHandler';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -15,6 +15,7 @@ export class MainMenu extends AbstractScene {
     shopButton: Button;
     mapButton: Button;
     dailyQuestsButton: Button;
+    achievementsButton: Button;
 
     constructor() {
         super('MainMenu');
@@ -40,6 +41,7 @@ export class MainMenu extends AbstractScene {
         this.createShopbutton();
         this.createMapbutton();
         this.createDailyQuestsButton();
+        this.createAchievementsButton();
         this.createCoins();
 
         const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
@@ -49,6 +51,7 @@ export class MainMenu extends AbstractScene {
         const playerMonstersData = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []);
 
         if (coins === null) {
+            //TODO - MOVE THIS TO PRELOADER!!!!!!!!!!!!!!!!
             //new game is started
             this.coins = main_config.playerStartingCoins.toString();
             this.updateCoinsText(this.coins);
@@ -164,8 +167,30 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(0.5);
 
-        if (DailyQuestDataHandler.hasDailyQuestRewardPending()) {
-            let exclaimation = this.add.image(this.dailyQuestsButton.x + 75, this.dailyQuestsButton.y - 75, 'mark');
+        if (DataHandler.hasDailyQuestRewardPending()) {
+            let exclaimation = this.add.image(this.dailyQuestsButton.x + 75, this.dailyQuestsButton.y - 75, 'mark').setScale(0.5);
+        }
+
+    }
+
+    private createAchievementsButton() {
+        const achievementsButtonClick = () => {
+            this.achievementsButton.disableInteractive();
+            this.changeScene('Achievements');
+        }
+        this.achievementsButton = new Button(this, 300, 200, 'achievements', null, achievementsButtonClick.bind(this), false, 1);
+        const achievementsTitle = this.add.text(
+            300,
+            350,
+            `achievements`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+
+        if (DataHandler.hasAchievementRewardPending()) {
+            let exclaimation = this.add.image(this.achievementsButton.x + 75, this.dailyQuestsButton.y - 90, 'mark').setScale(0.5);
         }
 
     }

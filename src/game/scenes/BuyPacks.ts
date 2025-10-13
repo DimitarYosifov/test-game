@@ -1,5 +1,5 @@
 import { IOpponentMonstersData } from '../configs/level_config';
-import { getRandomMonsterType, main_config } from '../configs/main_config';
+import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { monsters_power_config } from '../configs/monsters_power_config';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -615,7 +615,7 @@ export class BuyPacks extends AbstractScene {
         for (let index = 0; index < monstersCount; index++) {
             const newMonsterType = rewardsCfg[index].type;
             const newMonsterStars = rewardsCfg[index].stars;
-            const config = { ...(monsters_power_config as any)[newMonsterType][newMonsterStars - 1] };
+            const config = getMonsterDataConfig(newMonsterType, newMonsterStars - 1);
             const x = [460, 960, 1460];
             const newMonster = new Monster(this, x[index], 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0).setScale(2);
             newMonster.starsContainer.x = MONSTER_SIZE / -4 + 10;

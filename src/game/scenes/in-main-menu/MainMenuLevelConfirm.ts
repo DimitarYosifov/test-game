@@ -1,8 +1,8 @@
 import { Scene } from "phaser";
-import { monsters_power_config } from "../../configs/monsters_power_config";
 import { Monster } from "../in-game/Monster";
 import { ILevelConfig } from "../../configs/level_config";
 import { Button } from "./Button";
+import { getMonsterDataConfig } from "../../configs/main_config";
 
 
 const MONSTER_SIZE = 150;
@@ -147,7 +147,8 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             index++;
 
             const parsedKey = JSON.parse(key);
-            const config = { ...(monsters_power_config as any)[parsedKey.type][parsedKey.stars - 1] };
+            const config = getMonsterDataConfig(+parsedKey.type, parsedKey.stars - 1);
+
             const monster = new Monster(this.scene, x, 700, 150, 150, config, 0, true);
             monster.starsContainer.x = MONSTER_SIZE / -4 + 18;
             monster.movesLeftContainer.x = MONSTER_SIZE / 2 + 18;

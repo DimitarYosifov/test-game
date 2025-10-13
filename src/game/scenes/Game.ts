@@ -1,14 +1,13 @@
 import { Scene } from 'phaser';
-import { getRandomMonsterType, main_config } from '../configs/main_config';
+import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
 import { ILevelConfig, level_config, survivalLevels } from '../configs/level_config';
-import { monsters_power_config } from '../configs/monsters_power_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
+import { DataHandler } from './in-daily-quest/DataHandler';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -338,7 +337,7 @@ export class Game extends AbstractScene {
             const unitData = data[1];
 
             if (!monster.isPlayerMonster) {
-                DailyQuestDataHandler.checkDataOnMonsterDeath(monster.type)
+                DataHandler.checkDataOnMonsterDeath(monster)
             }
 
             this.updateOpponentMonstersLeft();
@@ -454,7 +453,7 @@ export class Game extends AbstractScene {
                 monsterSize = 150;
                 monsterPadding = 40;
 
-                const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][monsterRewardStars - 1] };
+                const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, monsterRewardStars - 1);
                 const monster = new Monster(this, cointext.x + cointext.displayWidth + monsterSize / 2 + monsterPadding, 500, monsterSize, monsterSize, newMonsterConfig, 0, true)
                 monster.starsContainer.x = monsterSize / -4 + 18;
                 monster.movesLeftContainer.x = monsterSize / 2 + 21;
@@ -714,6 +713,9 @@ export class Game extends AbstractScene {
                 }
             });
         } else {
+            // //test
+            // this.data.list.opponentMonsters[0].takeDamege(55)
+            // return;
             this.skipButton.disableInteractive();
             this.showOpponentTurnMsg();
             if (this.isSurvivalLevel) {
@@ -797,7 +799,8 @@ export class Game extends AbstractScene {
                     break;
                 }
             }
-            let unit = { ...(monsters_power_config as any)[monsterRewardType][monsterRewardStars] };
+            let unit = getMonsterDataConfig(+monsterRewardType, monsterRewardStars - 1);
+
             unit.row = Phaser.Math.RND.between(0, 6);
             unit.col = 0;
 

@@ -1,4 +1,4 @@
-import { monsters_power_config } from "../../configs/monsters_power_config";
+import { getMonsterDataConfig } from "../../configs/main_config";
 import { IUnitData } from "../Game";
 
 export class TestPlayerTeam {
@@ -10,27 +10,27 @@ export class TestPlayerTeam {
         });
         let playerMonstersData = playerMonstersDataFromStorage ||
             [
-                {
-                    type: 1, stars: 1, row: 0, col: 11
-                },
-                {
-                    type: 1, stars: 1, row: 1, col: 11
-                },
-                {
-                    type: 2, stars: 1, row: 2, col: 11
-                },
-                {
-                    type: 2, stars: 1, row: 3, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: 4, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: 5, col: 11
-                },
-                {
-                    type: 7, stars: 1, row: 6, col: 11
-                },
+                // {
+                //     type: 1, stars: 1, row: 0, col: 11
+                // },
+                // {
+                //     type: 1, stars: 1, row: 1, col: 11
+                // },
+                // {
+                //     type: 2, stars: 1, row: 2, col: 11
+                // },
+                // {
+                //     type: 2, stars: 1, row: 3, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: 4, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: 5, col: 11
+                // },
+                // {
+                //     type: 7, stars: 1, row: 6, col: 11
+                // },
                 // {
                 //     type: 7, stars: 1, row: NaN, col: 11
                 // },
@@ -46,7 +46,7 @@ export class TestPlayerTeam {
                 // {
                 //     type: 9, stars: 1, row: NaN, col: 11
                 // },
-                
+
             ]
 
         playerMonstersData = playerMonstersData.filter(x => !isNaN(x.row));
@@ -54,7 +54,8 @@ export class TestPlayerTeam {
         let result: IUnitData[] = [];
 
         playerMonstersData.forEach((monstersData: IPlayerMonstersData) => {
-            let data = { ...(monsters_power_config as any)[monstersData.type][monstersData.stars - 1] };
+            let data = getMonsterDataConfig(+monstersData.type, monstersData.stars - 1);
+
             data.row = monstersData.row;
             data.col = monstersData.col;
             result.push(data);

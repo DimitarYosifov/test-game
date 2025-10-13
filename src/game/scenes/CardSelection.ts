@@ -4,7 +4,8 @@ import { monsters_power_config } from '../configs/monsters_power_config';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { DailyQuestDataHandler } from './in-daily-quest/DailyQuestDataHandler';
+import { getMonsterDataConfig } from '../configs/main_config';
+import { DataHandler } from './in-daily-quest/DataHandler';
 
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
@@ -82,105 +83,105 @@ export class CardSelection extends AbstractScene {
         });
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
+                {
+                    type: 3, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 3, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 3, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 3, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 6, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 6, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 6, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 8, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
             ]
 
         this.sortMonsters();
@@ -197,7 +198,7 @@ export class CardSelection extends AbstractScene {
 
     private initializeMonsters() {
         this.playerMonstersData.forEach((monsterData, index) => {
-            const config = { ...(monsters_power_config as any)[monsterData.type][monsterData.stars - 1] };
+            const config = getMonsterDataConfig(+monsterData.type, monsterData.stars - 1);
 
             if (isNaN(monsterData.row)) {
                 const x = MONSTER_INITIAL_X + index * MONSTER_GAP;
@@ -564,6 +565,9 @@ export class CardSelection extends AbstractScene {
         console.log(this.playerMonstersData)
         console.log(this.monstersContainer.list)
 
+        // notify daily quests that a monster is sold
+        DataHandler.onMonsterSold();
+
     }
     //end region
 
@@ -687,7 +691,7 @@ export class CardSelection extends AbstractScene {
         overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
         });
-        const config = { ...(monsters_power_config as any)[newMonsterType][newMonsterStars - 1] };
+        const config = getMonsterDataConfig(+newMonsterType, newMonsterStars - 1);
         const newMonster = new Monster(this, 960, 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0);
         newMonster.starsContainer.x = MONSTER_SIZE / -4 + 10;
         newMonster.movesLeftContainer.x = MONSTER_SIZE / 2 + 10;
@@ -752,7 +756,7 @@ export class CardSelection extends AbstractScene {
         })
 
         // notify daily quests that a monster is upgraded
-        DailyQuestDataHandler.onMonsterUpgrade();
+        DataHandler.onMonsterUpgrade();
 
         console.table(this.playerMonstersData);
         console.log(this.selectedMonsters)

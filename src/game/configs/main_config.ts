@@ -112,6 +112,116 @@ export const main_config = {
                 "goldPackChance": 15,         // %
             }
         ]
+    },
+    "achievements": {
+        "monsters": {
+            "description": "kill monsters",
+            "hasIMage": true,
+            "steps": [// 100, 500, 2000
+                {
+                    "count": 100,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 100
+                    }
+                },
+                {
+                    "count": 500,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 500
+                    }
+                },
+                {
+                    "count": 2000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 2000
+                    }
+                }
+            ]
+        },
+        "upgrades": {
+            "description": "upgrade monsters",
+            "hasIMage": false,
+            "steps": [//50, 250, 1000
+                {
+                    "count": 50,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 500
+                    }
+                },
+                {
+                    "count": 250,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 2500
+                    }
+                },
+                {
+                    "count": 1000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 10000
+                    }
+                }
+            ]
+        },
+        "sells": {
+            "description": "sell monsters",
+            "hasIMage": false,
+            "steps": [ // 20, 100, 5000
+                {
+                    "count": 20,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 200
+                    }
+                },
+                {
+                    "count": 100,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 1000
+                    }
+                },
+                {
+                    "count": 5000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 50000
+                    }
+                }
+            ]
+        },
+        "damageDone": {
+            "description": "damage done",
+            "hasIMage": false,
+            "steps": [// 5000, 50000, 500000
+                {
+                    "count": 5000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 500
+                    }
+                },
+                {
+                    "count": 50000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 5000
+                    }
+                },
+                {
+                    "count": 500000,
+                    "progress": 0,
+                    "rewards": {
+                        "coins": 50000
+                    }
+                }
+            ]
+        }
     }
 
 
@@ -174,7 +284,14 @@ export const main_config = {
 
 }
 
-
 export const getRandomMonsterType = () => {
     return Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+}
+
+export const getAllMonsterTypes = () => {
+    return Object.keys(monsters_power_config);
+}
+
+export const getMonsterDataConfig = (type: number, stars: number) => {
+    return { ...(monsters_power_config as any)[type][stars] };
 } 

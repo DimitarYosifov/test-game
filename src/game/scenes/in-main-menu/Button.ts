@@ -66,7 +66,7 @@ export class Button extends Phaser.GameObjects.Container {
 
     disableInteractive(): this {
         this.bg.disableInteractive();
-        this.bg.setAlpha(0.65);
+        this.bg.setAlpha(0.45);
         return this;
     }
 }

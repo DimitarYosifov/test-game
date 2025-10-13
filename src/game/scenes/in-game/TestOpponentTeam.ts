@@ -1,6 +1,6 @@
 
 import { level_config } from "../../configs/level_config";
-import { monsters_power_config } from "../../configs/monsters_power_config"
+import { getMonsterDataConfig } from "../../configs/main_config";
 import { IUnitData } from "../Game";
 
 export class TestOpponentTeam {
@@ -101,7 +101,8 @@ export class TestOpponentTeam {
         let result: IUnitData[] = [];
 
         opponentMonstersData.forEach((monstersData: IOpponentMonstersData) => {
-            let data = { ...(monsters_power_config as any)[monstersData.type][monstersData.stars - 1] };
+            let data = getMonsterDataConfig(+monstersData.type, monstersData.stars - 1);
+
             insertNextElement(data);
             result.push(data);
         });

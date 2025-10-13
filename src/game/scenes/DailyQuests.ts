@@ -1,9 +1,8 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
-import { getRandomMonsterType, main_config } from '../configs/main_config';
-import { DailyQuestTimeHandler } from './in-daily-quest/dailyQuestTimeHandler';
-import { monsters_power_config } from '../configs/monsters_power_config';
+import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
 import { Monster } from './in-game/Monster';
 
 
@@ -215,7 +214,7 @@ export class DailyQuests extends AbstractScene {
             const monsterSize = 150;
             const monsterPadding = 40;
             const monsterRewardType = getRandomMonsterType();
-            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][1 - 1] };
+            const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, 1 - 1);
             const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
             monster.starsContainer.x = monsterSize / -4 + 18;
             monster.movesLeftContainer.x = monsterSize / 2 + 21;
@@ -233,7 +232,7 @@ export class DailyQuests extends AbstractScene {
             const monsterSize = 150;
             const monsterPadding = 40;
             const monsterRewardType = getRandomMonsterType();
-            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][2 - 1] };
+            const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, 2 - 1);
             const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
             monster.starsContainer.x = monsterSize / -4 + 18;
             monster.movesLeftContainer.x = monsterSize / 2 + 21;
@@ -251,7 +250,7 @@ export class DailyQuests extends AbstractScene {
             const monsterSize = 150;
             const monsterPadding = 40;
             const monsterRewardType = getRandomMonsterType();
-            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][3 - 1] };
+            const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, 3 - 1);
             const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
             monster.starsContainer.x = monsterSize / -4 + 18;
             monster.movesLeftContainer.x = monsterSize / 2 + 21;
@@ -269,7 +268,7 @@ export class DailyQuests extends AbstractScene {
             const monsterSize = 150;
             const monsterPadding = 40;
             const monsterRewardType = getRandomMonsterType();
-            const newMonsterConfig = { ...(monsters_power_config as any)[monsterRewardType][4 - 1] };
+            const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, 4 - 1);
             const monster = new Monster(this, lastElementX + monsterSize / 2 + monsterPadding, 600, monsterSize, monsterSize, newMonsterConfig, 0, true)
             monster.starsContainer.x = monsterSize / -4 + 18;
             monster.movesLeftContainer.x = monsterSize / 2 + 21;
@@ -444,7 +443,7 @@ export class DailyQuests extends AbstractScene {
         this.headerText = this.add.text(
             960,
             100,
-            `quests:`,
+            `daily quests:`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 4,
