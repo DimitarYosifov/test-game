@@ -52,15 +52,6 @@ export class CardSelection extends AbstractScene {
 
     create() {
         super.create();
-        // this.input.once('pointerdown', () => {
-        //     this.scene.start('Game');
-        // });
-        // return;
-
-        // this.cameras.main.fadeIn(500, 0, 0, 0);
-        // this.cameras.main.once('camerafadeincomplete', () => {
-
-        // });
 
         this.monstersContainer = this.add.container().setDepth(100);
         this.hitRects = [];
@@ -81,6 +72,8 @@ export class CardSelection extends AbstractScene {
         const playerMonstersDataFromStorage = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null", (key, value) => {
             return key === 'row' && value === null ? NaN : value;
         });
+
+        //for testing when starting new game - start with the monsters below
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
                 // {

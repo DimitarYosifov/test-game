@@ -88,7 +88,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 unit.melee.toString(),
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                    stroke: '#000000', letterSpacing: 4,
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                     align: 'center'
                 });
             this.melee_text.setOrigin(0);
@@ -109,7 +109,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 unit.ranged.toString(),
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                    stroke: '#000000', letterSpacing: 4,
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                     align: 'center'
                 });
             this.ranged_text.setOrigin(0);
@@ -130,7 +130,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 unit.magic.toString(),
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                    stroke: '#000000', letterSpacing: 4,
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                     align: 'center'
                 });
             this.magic_text.setOrigin(0);
@@ -144,7 +144,7 @@ export class Monster extends Phaser.GameObjects.Container {
             unit.health.toString(),
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
         this.health_text.setOrigin(1, 0);
@@ -167,7 +167,7 @@ export class Monster extends Phaser.GameObjects.Container {
             unit.shield.toString(),
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
         this.shield_text.setOrigin(0, 1);
@@ -180,7 +180,7 @@ export class Monster extends Phaser.GameObjects.Container {
             unit.vision.toString(),
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
         this.vision_text.setOrigin(1);
@@ -487,7 +487,7 @@ export class Monster extends Phaser.GameObjects.Container {
             (dmg * -1).toString(),
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
-                stroke: '#000000', strokeThickness: 2, letterSpacing: 4,
+                stroke: '#000000', strokeThickness: 4, strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
         lostHealth.setOrigin(0.5);

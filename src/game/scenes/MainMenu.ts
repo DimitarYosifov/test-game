@@ -18,6 +18,7 @@ export class MainMenu extends AbstractScene {
     dailyQuestsButton: Button;
     achievementsButton: Button;
     deleteButton: Button;
+    infoButton: Button;
 
     constructor() {
         super('MainMenu');
@@ -44,6 +45,7 @@ export class MainMenu extends AbstractScene {
         this.createMapbutton();
         this.createDailyQuestsButton();
         this.createAchievementsButton();
+        this.createInfoButton();
         this.createDeleteButton();
         this.createCoins();
 
@@ -97,7 +99,25 @@ export class MainMenu extends AbstractScene {
             })
         }
     }
-    createDeleteButton() {
+
+    private createInfoButton() {
+        const infoButtonClick = () => {
+            this.infoButton.disableInteractive();
+            this.changeScene('MonstersInfo');
+        }
+        this.infoButton = new Button(this, 960, 625, 'info', null, infoButtonClick.bind(this), false, 0.65);
+        const infoTitle = this.add.text(
+            960,
+            800,
+            `monsters info`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+    }
+
+    private createDeleteButton() {
         const deleteButtonClick = () => {
             this.deleteButton.disableInteractive();
             const startOverPopupConfirm = new StartOverConfirm(this, 960, 540);

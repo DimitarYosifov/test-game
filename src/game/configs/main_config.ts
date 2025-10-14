@@ -226,21 +226,25 @@ export const main_config = {
 
 
     // TODO:
-    // ADD 35 MORE LEVELS (MAP 2)
+    // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
+    // ADD BUFFS AT THE BEGINNING OF THE LEVEL AND AT RANDOM EACH ROUND                                                                 ^HIGH PRIORITY^
+    // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
     // ADD SLOT GAME WITH MONSTERS
     // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
     // implement info for monsters showing stats for all 5 stars                                                                        ^HIGH PRIORITY^
-    // in-game implement drag movement for creatures
+    // in-game implement drag movement for creatures                                                                                    ^HIGH PRIORITY^
     // add loading
     // add total power for opponent before level and for the player
     // add text "drag here" to hit rects in card selection
     // add blink tween for the bulbs
     // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
     //ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
-    // add level number to in game-lvl
     // add space skip for move
     // add some conffetti particles whrn getting a reward
+    // ADD SOME ENCRYPTION BEFORE STORING TO LOCAL STORAGE                                                                              ^HIGH PRIORITY^
+    // ADD SOME MORE LEVEL BACKGROUNDS
+    // ADD 3 MORE MONSTERE - 1 OF EACH TYPE
 
 
 
