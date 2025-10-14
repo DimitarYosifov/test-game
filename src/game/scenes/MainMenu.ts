@@ -105,10 +105,10 @@ export class MainMenu extends AbstractScene {
             this.infoButton.disableInteractive();
             this.changeScene('MonstersInfo');
         }
-        this.infoButton = new Button(this, 960, 625, 'info', null, infoButtonClick.bind(this), false, 0.65);
+        this.infoButton = new Button(this, 960, 725, 'info', null, infoButtonClick.bind(this), false, 0.65);
         const infoTitle = this.add.text(
             960,
-            800,
+            900,
             `monsters info`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -126,7 +126,7 @@ export class MainMenu extends AbstractScene {
                 startOverPopupConfirm.destroy(true);
             })
         }
-        this.deleteButton = new Button(this, 100, 950, 'button', 'start\nagain', deleteButtonClick.bind(this), false, 1);
+        this.deleteButton = new Button(this, 100, 75, 'button', 'start\nagain', deleteButtonClick.bind(this), false, 1);
     }
 
     private updateCoinsText(value: number | string) {
@@ -139,10 +139,10 @@ export class MainMenu extends AbstractScene {
             this.mapButton.disableInteractive();
             this.changeScene('Map');
         }
-        this.mapButton = new Button(this, 250, 600, 'map', null, mapButtonClick.bind(this), false, 0.5);
+        this.mapButton = new Button(this, 250, 700, 'map', null, mapButtonClick.bind(this), false, 0.5);
         const mapTitle = this.add.text(
             250,
-            780,
+            880,
             `adventures`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -156,10 +156,10 @@ export class MainMenu extends AbstractScene {
             this.shopButton.disableInteractive();
             this.changeScene('BuyPacks');
         }
-        this.shopButton = new Button(this, 960, 250, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
+        this.shopButton = new Button(this, 960, 350, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
         const shopTitle = this.add.text(
             960,
-            380,
+            480,
             `get new monsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -173,10 +173,10 @@ export class MainMenu extends AbstractScene {
             this.deckButton.disableInteractive();
             this.changeScene('CardSelection');
         }
-        this.deckButton = new Button(this, 1650, 600, 'deck', null, deckButtonClick.bind(this), false, 0.5);
+        this.deckButton = new Button(this, 1650, 700, 'deck', null, deckButtonClick.bind(this), false, 0.5);
         const deckTitle = this.add.text(
             1650,
-            780,
+            880,
             `edit monsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -190,10 +190,10 @@ export class MainMenu extends AbstractScene {
             this.dailyQuestsButton.disableInteractive();
             this.changeScene('DailyQuests');
         }
-        this.dailyQuestsButton = new Button(this, 1650, 200, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.5);
+        this.dailyQuestsButton = new Button(this, 1650, 300, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.5);
         const dailyQuestsTitle = this.add.text(
             1650,
-            350,
+            450,
             `daily quests`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -212,10 +212,10 @@ export class MainMenu extends AbstractScene {
             this.achievementsButton.disableInteractive();
             this.changeScene('Achievements');
         }
-        this.achievementsButton = new Button(this, 300, 200, 'achievements', null, achievementsButtonClick.bind(this), false, 1);
+        this.achievementsButton = new Button(this, 300, 300, 'achievements', null, achievementsButtonClick.bind(this), false, 1);
         const achievementsTitle = this.add.text(
             300,
-            350,
+            450,
             `achievements`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',

@@ -230,9 +230,9 @@ export const main_config = {
     // ADD BUFFS AT THE BEGINNING OF THE LEVEL AND AT RANDOM EACH ROUND                                                                 ^HIGH PRIORITY^
     // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
+    // ADD ENERY MECHANIC TO THE GAME
     // ADD SLOT GAME WITH MONSTERS
     // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
-    // implement info for monsters showing stats for all 5 stars                                                                        ^HIGH PRIORITY^
     // in-game implement drag movement for creatures                                                                                    ^HIGH PRIORITY^
     // add loading
     // add total power for opponent before level and for the player

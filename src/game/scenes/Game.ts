@@ -86,9 +86,63 @@ export class Game extends AbstractScene {
         this.monsterSelectHandler();
         this.directionSelectHandler();
         this.targetSelectHandler();
-        this.checkEndTurnHandler(); // it calls  this.addInteraction
+        // this.checkEndTurnHandler(); // it calls  this.addInteraction
 
         localStorage.removeItem('survivalLevelData');
+
+
+
+
+        // //================================== create a buff ==================================
+        // let container = this.add.container(this.data.list.gridPositions[3][5].x + this.mainGridContainer.x, this.data.list.gridPositions[3][5].y + this.mainGridContainer.y);
+        // container.setDepth(9);
+        // let plate = this.add.image(0, 0, 'lvl-plate').setOrigin(0.5).setScale(0.75);
+        // container.add(plate);
+        // const buffText = this.add.text(
+        //     0,
+        //     -25,
+        //     `+1`,
+        //     {
+        //         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ffffff',
+        //         stroke: '#000000', letterSpacing: 4, strokeThickness: 2,
+        //         align: 'center'
+        //     }).setOrigin(0.5).setName('buffText');
+        // container.add(buffText);
+        // let buffType = this.add.image(0, 25, 'health').setOrigin(0.5).setScale(0.35);
+        // container.add(buffType);
+
+
+        // //================================== add and tween parachute ==================================
+        // let parachute = this.add.image(960, -100, 'parachute').setScale(1).setOrigin(0.5).setAlpha(1).setOrigin(0.5, 0.25);
+        // parachute.angle = 15;
+        // let tween = this.tweens.add({
+        //     targets: parachute,
+        //     angle: -15,
+        //     duration: 600,
+        //     // ease: 'Cubic.easeInOut',
+        //     yoyo: true,
+        //     repeat: -1
+        // })
+        // this.tweens.chain({
+        //     tweens: [
+        //         {
+        //             targets: parachute,
+        //             y: 770,
+        //             duration: 2750,
+        //             onComplete: () => {
+        //                 tween.remove();
+        //             }
+        //         },
+        //         {
+        //             targets: parachute,
+        //             alpha: 0,
+        //             duration: 750,
+        //             onComplete: () => { }
+        //         }
+        //     ]
+        // })
+
+
     }
     private createLevelTitle() {
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
@@ -702,7 +756,7 @@ export class Game extends AbstractScene {
                 const x = this.gridDimensions.cellSize * col + this.gridDimensions.cellSize / 2;
                 const y = this.gridDimensions.cellSize * row + this.gridDimensions.cellSize / 2;
                 const cloud = new Cloud(this, x, y, row, col);
-                this.cloudsContainer.add(cloud);
+                this.cloudsContainer.add(cloud).setDepth(10);
                 cloudPositionsData.push(cloud)
             }
             clouds.push(cloudPositionsData);
