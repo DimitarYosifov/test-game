@@ -4,7 +4,6 @@ import { ILevelConfig } from "../../configs/level_config";
 import { Button } from "./Button";
 import { getMonsterDataConfig } from "../../configs/main_config";
 
-
 const MONSTER_SIZE = 150;
 const PADDING = 50;
 

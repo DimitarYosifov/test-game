@@ -1,10 +1,8 @@
 import { IOpponentMonstersData } from '../configs/level_config';
 import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
-import { monsters_power_config } from '../configs/monsters_power_config';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
 import { Button } from './in-main-menu/Button';
-
 
 export type PackName = keyof typeof main_config.packData;
 const MONSTER_SIZE = 200;

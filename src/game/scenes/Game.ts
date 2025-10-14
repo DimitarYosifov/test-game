@@ -72,6 +72,7 @@ export class Game extends AbstractScene {
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
         this.addClouds();
         this.createBulbs();
+        this.createLevelTitle();
         this.createGiveUpButton();
         this.createEndTurnButton();
         this.createOpponentTurnMsg();
@@ -88,6 +89,18 @@ export class Game extends AbstractScene {
         this.checkEndTurnHandler(); // it calls  this.addInteraction
 
         localStorage.removeItem('survivalLevelData');
+    }
+    private createLevelTitle() {
+        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+        const levelTitle = this.add.text(
+            960,
+            50,
+            `level ${currentLevel}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 60, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 0,
+                align: 'center'
+            }).setOrigin(0.5).setName('level title');
     }
 
     private createSurvivalLevelRewardText() {

@@ -2,6 +2,7 @@ import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { main_config } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
+import { StartOverConfirm } from './in-main-menu/StartOverConfirm';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -16,6 +17,7 @@ export class MainMenu extends AbstractScene {
     mapButton: Button;
     dailyQuestsButton: Button;
     achievementsButton: Button;
+    deleteButton: Button;
 
     constructor() {
         super('MainMenu');
@@ -42,6 +44,7 @@ export class MainMenu extends AbstractScene {
         this.createMapbutton();
         this.createDailyQuestsButton();
         this.createAchievementsButton();
+        this.createDeleteButton();
         this.createCoins();
 
         const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
@@ -94,6 +97,17 @@ export class MainMenu extends AbstractScene {
             })
         }
     }
+    createDeleteButton() {
+        const deleteButtonClick = () => {
+            this.deleteButton.disableInteractive();
+            const startOverPopupConfirm = new StartOverConfirm(this, 960, 540);
+            startOverPopupConfirm.once('start-again-declined', () => {
+                this.deleteButton.setInteractive();
+                startOverPopupConfirm.destroy(true);
+            })
+        }
+        this.deleteButton = new Button(this, 100, 950, 'button', 'start\nagain', deleteButtonClick.bind(this), false, 1);
+    }
 
     private updateCoinsText(value: number | string) {
         this.coinText.setText(`${value}`);
@@ -105,10 +119,10 @@ export class MainMenu extends AbstractScene {
             this.mapButton.disableInteractive();
             this.changeScene('Map');
         }
-        this.mapButton = new Button(this, 250, 750, 'map', null, mapButtonClick.bind(this), false, 0.5);
+        this.mapButton = new Button(this, 250, 600, 'map', null, mapButtonClick.bind(this), false, 0.5);
         const mapTitle = this.add.text(
             250,
-            930,
+            780,
             `adventures`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -139,10 +153,10 @@ export class MainMenu extends AbstractScene {
             this.deckButton.disableInteractive();
             this.changeScene('CardSelection');
         }
-        this.deckButton = new Button(this, 1650, 750, 'deck', null, deckButtonClick.bind(this), false, 0.5);
+        this.deckButton = new Button(this, 1650, 600, 'deck', null, deckButtonClick.bind(this), false, 0.5);
         const deckTitle = this.add.text(
             1650,
-            930,
+            780,
             `edit monsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',

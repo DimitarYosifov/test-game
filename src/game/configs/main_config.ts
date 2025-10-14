@@ -226,7 +226,6 @@ export const main_config = {
 
 
     // TODO:
-    // ADD ACHIEVEMENTS !!!                                                                                                             ^HIGH PRIORITY^
     // ADD 35 MORE LEVELS (MAP 2)
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
     // ADD SLOT GAME WITH MONSTERS
@@ -235,7 +234,6 @@ export const main_config = {
     // in-game implement drag movement for creatures
     // add loading
     // add total power for opponent before level and for the player
-    // add delete progress button
     // add text "drag here" to hit rects in card selection
     // add blink tween for the bulbs
     // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
