@@ -259,6 +259,8 @@ export const main_config = {
     // ADD SOME ENCRYPTION BEFORE STORING TO LOCAL STORAGE                                                                              ^HIGH PRIORITY^
     // ADD SOME MORE LEVEL BACKGROUNDS
     // ADD 3 MORE MONSTERE - 1 OF EACH TYPE
+    // add some kinda welcome screen
+    
 
 
 

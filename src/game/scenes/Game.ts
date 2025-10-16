@@ -151,7 +151,7 @@ export class Game extends AbstractScene {
             const row = Phaser.Math.Between(0, main_config.gridSizeVertical - 1);
             const col = Phaser.Math.Between(main_config.buffs.buffsStartLevelColumn.min, main_config.buffs.buffsStartLevelColumn.max);
 
-            if (this.data.list.gridPositions[row][col].occupied || this.data.list.gridPositions[row][col].buff) {
+            if (this.data.list.gridPositions[row][col].occupiedBy || this.data.list.gridPositions[row][col].buff) {
 
                 if (!isNaN(buffsCount)) {
                     this.addInteraction();
