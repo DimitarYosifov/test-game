@@ -260,13 +260,16 @@ export const main_config = {
     // ADD SOME MORE LEVEL BACKGROUNDS
     // ADD 3 MORE MONSTERE - 1 OF EACH TYPE
     // add some kinda welcome screen
-    
+
 
 
 
 
     //BUGS:
 
+
+    /// when two tabs with the game are open. after buy pack in one tab, you still 
+    // have cash to buy - fix check local storage coins on on Buy                                                   ^HIGHEST PRIORITY^!!!!
 
 
     //CHECK 3 STAR MONSTER  IN THE SELECTED SECTION AND 6 X 1 STAR IN THE MAIN - AND UPGRADE THE 6  - CAUSES BUG ?
