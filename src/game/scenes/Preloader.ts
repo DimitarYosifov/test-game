@@ -85,6 +85,7 @@ export class Preloader extends Scene {
         this.load.image('achievements', 'achievements.png');
         this.load.image('info', 'info.png');
         this.load.image('parachute', 'parachute.png');
+        this.load.image('question-mark', 'question-mark.png');
         this.load.font('main-font', 'Oups.otf');
     }
 

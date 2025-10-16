@@ -10,6 +10,7 @@ export const main_config = {
     "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
+    "maxMonstersAllowedInDeck": 40,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
@@ -222,15 +223,28 @@ export const main_config = {
                 }
             ]
         }
+    },
+    "buffs": {
+        "quality": 1,
+        "quantityAtLevelStart": {
+            "min": 1,
+            "max": 4
+        },
+        "buffsStartLevelColumn": {
+            "min": 5,
+            "max": 6
+        },
+        "chanceForBuffAfterRound": 15 // 15 %
     }
 
 
     // TODO:
+
+    // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                  ^HIGHEST PRIORITY^!!!!
     // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
-    // ADD BUFFS AT THE BEGINNING OF THE LEVEL AND AT RANDOM EACH ROUND                                                                 ^HIGH PRIORITY^
-    // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
+     // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
-    // ADD ENERY MECHANIC TO THE GAME
+    // ADD ENERY MECHANIC TO THE GAME                                                                                                   ^HIGH PRIORITY^
     // ADD SLOT GAME WITH MONSTERS
     // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
     // in-game implement drag movement for creatures                                                                                    ^HIGH PRIORITY^

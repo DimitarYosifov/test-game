@@ -12,6 +12,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         super(scene, x, y);
         this.scene = scene;
         this.scene.add.existing(this);
+        this.setDepth(10);
     }
 
     createArrows(data: IUnitData): void {

@@ -1,10 +1,9 @@
-import { Scene } from 'phaser';
 import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { ILevelConfig, level_config, survivalLevels } from '../configs/level_config';
+import { ILevelConfig, level_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
@@ -16,6 +15,16 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'MONSTER_SELECTED' = 'monster-selected',
     'DIRECTION_SELECTED' = 'direction-selected',
     'MONSTER_DIED' = 'monster-died'
+}
+
+export enum BUFF_TYPES {
+    'ATTACK' = 'attack',
+    'BOW' = 'bow',
+    'BALL' = 'ball',
+    'HEALTH' = 'health',
+    'SHIELD' = 'shield',
+    'VISION' = 'vision',
+    'GREEN_DOT' = 'green-dot'
 }
 
 export class Game extends AbstractScene {
@@ -41,6 +50,7 @@ export class Game extends AbstractScene {
     survivalLevelRewardImage: Phaser.GameObjects.Image;
     survivalTotalMonstersCount: number | undefined;
     survivalLevelKilledMonsters: number;
+    questionMarkContainer: Phaser.GameObjects.Container | null;
 
     constructor() {
         super('Game');
@@ -86,64 +96,141 @@ export class Game extends AbstractScene {
         this.monsterSelectHandler();
         this.directionSelectHandler();
         this.targetSelectHandler();
-        // this.checkEndTurnHandler(); // it calls  this.addInteraction
+        // this.checkEndTurnHandler(); // it calls  this.addInteraction // BEING CALLED AFTER INITIAL BUFFS HAVE LANDED
 
         localStorage.removeItem('survivalLevelData');
 
-
-
-
-        // //================================== create a buff ==================================
-        // let container = this.add.container(this.data.list.gridPositions[3][5].x + this.mainGridContainer.x, this.data.list.gridPositions[3][5].y + this.mainGridContainer.y);
-        // container.setDepth(9);
-        // let plate = this.add.image(0, 0, 'lvl-plate').setOrigin(0.5).setScale(0.75);
-        // container.add(plate);
-        // const buffText = this.add.text(
-        //     0,
-        //     -25,
-        //     `+1`,
-        //     {
-        //         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ffffff',
-        //         stroke: '#000000', letterSpacing: 4, strokeThickness: 2,
-        //         align: 'center'
-        //     }).setOrigin(0.5).setName('buffText');
-        // container.add(buffText);
-        // let buffType = this.add.image(0, 25, 'health').setOrigin(0.5).setScale(0.35);
-        // container.add(buffType);
-
-
-        // //================================== add and tween parachute ==================================
-        // let parachute = this.add.image(960, -100, 'parachute').setScale(1).setOrigin(0.5).setAlpha(1).setOrigin(0.5, 0.25);
-        // parachute.angle = 15;
-        // let tween = this.tweens.add({
-        //     targets: parachute,
-        //     angle: -15,
-        //     duration: 600,
-        //     // ease: 'Cubic.easeInOut',
-        //     yoyo: true,
-        //     repeat: -1
-        // })
-        // this.tweens.chain({
-        //     tweens: [
-        //         {
-        //             targets: parachute,
-        //             y: 770,
-        //             duration: 2750,
-        //             onComplete: () => {
-        //                 tween.remove();
-        //             }
-        //         },
-        //         {
-        //             targets: parachute,
-        //             alpha: 0,
-        //             duration: 750,
-        //             onComplete: () => { }
-        //         }
-        //     ]
-        // })
-
+        this.addBuffs();
+        this.time.delayedCall(5000, () => {
+            //TODO - fix this magic here - 5000 ms
+            this.checkEndTurnHandler();
+        })
 
     }
+
+    private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
+        if (!this.questionMarkContainer && addQuestionMarks) {
+            this.addQuestionMarks();
+        }
+        const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
+        const randomBuffQuantity = main_config.buffs.quality;
+        let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
+        container.setDepth(7);
+        let plate = this.add.image(0, 0, 'lvl-plate').setOrigin(0.5).setScale(0.75);
+        container.add(plate);
+        const buffText = this.add.text(
+            0,
+            -25,
+            `+1`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 2,
+                align: 'center'
+            }).setOrigin(0.5).setName('buffText');
+        container.add(buffText);
+        let buffTypeImage = this.add.image(0, 25, randomBuffType).setOrigin(0.5).setScale(0.35);
+        container.add(buffTypeImage);
+
+        console.log(this.data.list.gridPositions)
+
+        let buffData = (this.data.list.gridPositions[row][col] as any).buff = {
+            buffType: randomBuffType,
+            quantity: randomBuffQuantity,
+            buffContainer: container
+        };
+    }
+
+    private addBuffs(buffsCount: number = NaN) {
+
+        this.questionMarkContainer = this.add.container().setDepth(13);
+        this.addQuestionMarks();
+
+        const totalBuffsCount = isNaN(buffsCount) ? Phaser.Math.Between(main_config.buffs.quantityAtLevelStart.min, main_config.buffs.quantityAtLevelStart.max) : buffsCount;
+        let parachutesSoFar = totalBuffsCount - 1;
+        for (let index = 0; index < totalBuffsCount; index++) {
+            const row = Phaser.Math.Between(0, main_config.gridSizeVertical - 1);
+            const col = Phaser.Math.Between(main_config.buffs.buffsStartLevelColumn.min, main_config.buffs.buffsStartLevelColumn.max);
+
+            if (this.data.list.gridPositions[row][col].occupied || this.data.list.gridPositions[row][col].buff) {
+
+                if (!isNaN(buffsCount)) {
+                    this.addInteraction();
+                }
+                //no luck :(  position has a buff or is occupied by monster
+                continue;
+            } else {
+
+                this.data.list.gridPositions[row][col].buff = true; //??
+
+                this.addParachute(() => {
+                    this.addBuff(row, col, false);
+                    if (!isNaN(buffsCount) && parachutesSoFar === 0) {
+                        this.addInteraction();
+                        this.removeQuestionMarks();
+                    }
+                    parachutesSoFar--;
+                });
+            }
+        }
+    }
+
+    private addQuestionMarks() {
+        for (let col = main_config.buffs.buffsStartLevelColumn.min; col <= main_config.buffs.buffsStartLevelColumn.max; col++) {
+            for (let row = 0; row < main_config.gridSizeVertical; row++) {
+
+                const x = this.data.list.gridPositions[row][col].x + this.mainGridContainer.x;
+                const y = this.data.list.gridPositions[row][col].y + this.mainGridContainer.y
+
+                let questionMark = this.add.image(x, y, 'question-mark').setScale(0.75).setOrigin(0.5).setAlpha(1);
+                (this.questionMarkContainer as Phaser.GameObjects.Container).add(questionMark);
+            }
+        }
+    }
+
+    private removeQuestionMarks() {
+        this.questionMarkContainer?.destroy(true);
+        this.questionMarkContainer = null;
+    }
+
+    private addParachute(onComplete: Function) {
+
+        let parachute = this.add.image(Phaser.Math.RND.between(850, 1070), -100, 'parachute').setScale(1).setOrigin(0.5).setAlpha(1).setDepth(14);
+        let duration = Phaser.Math.RND.between(2500, 3500)
+        let targetY = Phaser.Math.RND.between(500, 800)
+
+
+        parachute.angle = 15;
+        let tween = this.tweens.add({
+            targets: parachute,
+            angle: -15,
+            duration: 600,
+            // ease: 'Cubic.easeInOut',
+            yoyo: true,
+            repeat: -1
+        })
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: parachute,
+                    y: targetY,
+                    duration,
+                    onComplete: () => {
+                        tween.remove();
+                    }
+                },
+                {
+                    targets: parachute,
+                    alpha: 0,
+                    duration: 750,
+                    onComplete: () => {
+                        parachute.destroy(true);
+                        onComplete();
+                    }
+                }
+            ]
+        })
+    }
+
     private createLevelTitle() {
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
         const levelTitle = this.add.text(
@@ -207,7 +294,7 @@ export class Game extends AbstractScene {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
-            }).setOrigin(0.5).setAlpha(0);
+            }).setOrigin(0.5).setAlpha(0).setDepth(13);
     }
 
     private showOpponentTurnMsg() {
@@ -436,7 +523,7 @@ export class Game extends AbstractScene {
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
 
         // bg overlay
-        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(15);
         this.tweens.add({
             targets: overlay,
             duration: 200,
@@ -459,10 +546,10 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0.5);
+                }).setOrigin(0.5).setDepth(15);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(15);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -475,7 +562,7 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0, 0.5);
+                }).setOrigin(0, 0.5).setDepth(15);
             rewardsContainer.add(rewardtext);
 
             //coin img
@@ -553,7 +640,7 @@ export class Game extends AbstractScene {
                 }
 
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
-                if (playerMonstersCount >= 40) {
+                if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     // leveltext.destroy(true);
                     // rewardsContainer.destroy(true);
                     // overlay.destroy(true);
@@ -567,17 +654,17 @@ export class Game extends AbstractScene {
                     this.changeScene('MainMenu');
                 }
 
-            });
+            }).setDepth(15);
         } else {
             // try again button
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
-            }, false);
+            }, false).setDepth(15);
 
             // giveUp button
             const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
-            })
+            }).setDepth(15)
         }
     }
 
@@ -658,7 +745,12 @@ export class Game extends AbstractScene {
         this.opponentBulb.setAlpha(isPlayerTurn ? 0.4 : 1);
     }
 
+    private checkShouldAddBuffs() {
+        return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
+    }
+
     private checkNextTurn(skipByUser: boolean): void {
+
         let turnEnd = false;
         if (this.data.list.isPlayerTurn) {
             turnEnd = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
@@ -666,6 +758,7 @@ export class Game extends AbstractScene {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
         if (turnEnd) {
+            this.changeBulbIndicators(this.data.list.isPlayerTurn);
             this.endTurnButton.disableInteractive();
             this.skipButton.disableInteractive();
             this.giveUpButton.disableInteractive();
@@ -674,13 +767,17 @@ export class Game extends AbstractScene {
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
             if (this.data.list.isPlayerTurn) {
                 // this.skipButton.setInteractive().setAlpha(1);
-                this.addInteraction();
+                if (this.checkShouldAddBuffs()) {
+                    this.addBuffs(1);
+                } else {
+                    this.addInteraction();
+                }
+
             } else {
                 this.skipButton.disableInteractive();
                 this.addInteraction();
                 this.getRandomOpponentMonster();
             }
-            this.changeBulbIndicators(this.data.list.isPlayerTurn);
         } else if (this.data.list.isPlayerTurn) {
             this.pauseResumeInteraction(true, skipByUser);
         } else {
@@ -725,7 +822,7 @@ export class Game extends AbstractScene {
         const x = sceneWidth / 2 - this.gridDimensions.totalSizeHorizontal / 2;
         const y = sceneHeight / 2 - this.gridDimensions.totalSizeVertical / 2;
 
-        this.mainGridContainer = this.add.container(x, y);
+        this.mainGridContainer = this.add.container(x, y).setDepth(9);
         this.mainGridContainer.add(this.gridLines);
 
         this.movementArrowsContainer = new MovementArrowsContainer(this, x, y);
@@ -756,7 +853,7 @@ export class Game extends AbstractScene {
                 const x = this.gridDimensions.cellSize * col + this.gridDimensions.cellSize / 2;
                 const y = this.gridDimensions.cellSize * row + this.gridDimensions.cellSize / 2;
                 const cloud = new Cloud(this, x, y, row, col);
-                this.cloudsContainer.add(cloud).setDepth(10);
+                this.cloudsContainer.add(cloud).setDepth(11);
                 cloudPositionsData.push(cloud)
             }
             clouds.push(cloudPositionsData);
@@ -772,6 +869,9 @@ export class Game extends AbstractScene {
 
     // called after every player/opponent moves end
     private addInteraction(): void {
+        if (this.questionMarkContainer) {
+            this.removeQuestionMarks();
+        }
 
         if (this.data.list.isPlayerTurn) {
             this.data.list.playerMonsters.forEach((monster: Monster) => {
@@ -1269,4 +1369,10 @@ export interface IUnitData {
     movesLeft: number;
     upgradeCost?: number;
     sellsFor?: number;
+}
+
+export interface IBuff {
+    buffType: string;
+    quantity: number;
+    buffContainer: Phaser.GameObjects.Container;
 }

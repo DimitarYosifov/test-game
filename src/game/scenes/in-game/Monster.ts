@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { GAME_SCENE_SCENE_EVENTS, IUnitData } from '../Game';
+import { BUFF_TYPES, GAME_SCENE_SCENE_EVENTS, IBuff, IUnitData } from '../Game';
 import { main_config } from '../../configs/main_config';
 
 export class Monster extends Phaser.GameObjects.Container {
@@ -32,6 +32,7 @@ export class Monster extends Phaser.GameObjects.Container {
     originalIndex: number;
     addedForSale: boolean = false;
     isPlayerMonster: boolean;
+    private _displayWidth: number;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -41,6 +42,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.unitData.movesLeft = this.unitData.moves;
         this.index = index;
         this.isPlayerMonster = isPlayerMonster;
+        this._displayWidth = displayWidth;
 
         //bg
         this.bg = scene.add.image(0, 0, unit.type).setOrigin(0.5);
@@ -88,7 +90,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 unit.melee.toString(),
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: displayWidth * 15 / 100, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    stroke: '#000000ff', strokeThickness: 4, letterSpacing: 4,
                     align: 'center'
                 });
             this.melee_text.setOrigin(0);
@@ -304,6 +306,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.setInteraction(false);
             },
             onComplete: () => {
+                this.checkForBuff(row, col);
                 this.decreaseMoves();
                 const movesLeft = this.unitData.movesLeft;
                 this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
@@ -312,6 +315,109 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
             }
         })
+    }
+
+    checkForBuff(row: number, col: number) {
+        const buff: IBuff = this.scene.data.list.gridPositions[row][col].buff;
+        if (buff) {
+            //hass buff on new position
+            if (
+                (buff.buffType === 'attack' && this.unitData.melee === 0) || // monster not suitable for attack buff
+                (buff.buffType === 'bow' && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
+                (buff.buffType === 'ball' && this.unitData.magic === 0)      // monster not suitable for magic buff
+            ) {
+                return;
+            } else {
+                //add buff
+                let buffImageKey = '';
+                switch (buff.buffType) {
+                    case BUFF_TYPES.ATTACK:
+                        this.unitData.melee++;
+                        this.melee_text.setText(`${this.unitData.melee}`);
+                        this.melee_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.ATTACK;
+                        break;
+                    case BUFF_TYPES.BOW:
+                        this.unitData.ranged++;
+                        this.ranged_text.setText(`${this.unitData.ranged}`);
+                        this.ranged_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.BOW;
+                        break;
+                    case BUFF_TYPES.BALL:
+                        this.unitData.magic++;
+                        this.magic_text.setText(`${this.unitData.magic}`);
+                        this.magic_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.BALL;
+                        break;
+                    case BUFF_TYPES.HEALTH:
+                        this.unitData.health++;
+                        this.health_text.setText(`${this.unitData.health}`);
+                        this.health_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.HEALTH;
+                        break;
+                    case BUFF_TYPES.SHIELD:
+                        this.unitData.shield++;
+                        this.shield_text.setText(`${this.unitData.shield}`);
+                        this.shield_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.SHIELD;
+                        break;
+                    case BUFF_TYPES.VISION:
+                        this.unitData.vision++;
+                        this.vision_text.setText(`${this.unitData.vision}`);
+                        this.vision_text.tint = 0x4bcc0f;
+                        buffImageKey = BUFF_TYPES.VISION;
+                        break;
+                    case BUFF_TYPES.GREEN_DOT:
+                        this.unitData.moves++;
+                        const dot = this.scene.add.image(0, 0, 'grey-dot').setScale(this._displayWidth * 0.15 / 100).setOrigin(0, 0.5);
+                        this.movesLeftContainer.add(dot);
+                        Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
+                            width: 0,
+                            height: this.movesLeftContainer.list.length,
+                            cellWidth: 0,
+                            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+                            position: Phaser.Display.Align.CENTER
+                        });
+                        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+                        this.movesLeftContainer.x = this.bg.displayWidth - 32;
+                        buffImageKey = BUFF_TYPES.GREEN_DOT;
+                        break;
+                    default:
+                        break;
+                }
+
+                // add visual  display of the buff and tween
+                const glbPos = this.bg.getBounds()
+                const x = glbPos.x + this.bg.displayWidth / 2;
+                const y = glbPos.y + this.bg.displayHeight / 2;
+                let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(12);
+                const buffQuantityText = this.scene.add.text(
+                    x,
+                    y,
+                    `+${buff.quantity}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#4bcc0f',
+                        stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                        align: 'center'
+                    });
+                buffQuantityText.setOrigin(1, 0.5).setDepth(12);
+                this.scene.tweens.add({
+                    targets: [buffQuantityText, buffImage],
+                    y: y - 75,
+                    duration: 1500,
+                    onComplete: () => {
+                        buffQuantityText.destroy(true);
+                        buffImage.destroy(true);
+                    }
+                })
+
+                //remove buff data and visually
+                buff.buffContainer.destroy(true);
+                delete this.scene.data.list.gridPositions[row][col].buff;
+                console.log(this.scene.data.list.gridPositions[row][col]);
+            }
+
+        }
     }
 
     skipMove(skipByUser: boolean = false): void {
@@ -335,7 +441,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const targetX = targetGlobalPos.x + target!.bg.displayWidth / 2;
 
         const targetY = targetGlobalPos.y + target!.bg.displayHeight / 2;
-        const weaponImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5);
+        const weaponImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5).setDepth(12);
         const startAngle = isTargetToTheLeft ? 45 : -45;
         const endAngle = isTargetToTheLeft ? -45 : 45;
         const isRangedAttack = this.unitData.ranged > 0;
@@ -487,10 +593,10 @@ export class Monster extends Phaser.GameObjects.Container {
             (dmg * -1).toString(),
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
-                stroke: '#000000', strokeThickness: 4, strokeThickness: 4, letterSpacing: 4,
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
-        lostHealth.setOrigin(0.5);
+        lostHealth.setOrigin(0.5).setDepth(12);
         // this.add(lostHealth);
         this.scene.tweens.add({
             targets: lostHealth,

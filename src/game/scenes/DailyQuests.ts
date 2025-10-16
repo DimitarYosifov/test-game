@@ -348,7 +348,7 @@ export class DailyQuests extends AbstractScene {
             let monsterNotClaimed = false;
             newMonsters.forEach((m: any) => {
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
-                if (playerMonstersCount >= 40) {
+                if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     monsterNotClaimed = true;
                     return;
                 } else {
