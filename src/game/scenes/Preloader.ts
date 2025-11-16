@@ -86,6 +86,16 @@ export class Preloader extends Scene {
         this.load.image('info', 'info.png');
         this.load.image('parachute', 'parachute.png');
         this.load.image('question-mark', 'question-mark.png');
+        this.load.image('flare', 'flare.png');
+
+        this.load.image('confetti-yellow', 'confetti-yellow.png');
+        this.load.image('confetti-orange', 'confetti-orange.png');
+        this.load.image('confetti-red', 'confetti-red.png');
+        this.load.image('confetti-green', 'confetti-green.png');
+        this.load.image('confetti-blue', 'confetti-blue.png');
+
+        this.load.image('world-arrow', 'world-arrow.png');
+
         this.load.font('main-font', 'Oups.otf');
     }
 

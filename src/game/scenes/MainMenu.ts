@@ -35,8 +35,8 @@ export class MainMenu extends AbstractScene {
             dataArray.push(newObject);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
         }
-        // addMonster(9,1);
-        // addMonster(9,1);
+        // addMonster(7,3);
+        // addMonster(9,4);
 
 
         super.create();
@@ -66,6 +66,8 @@ export class MainMenu extends AbstractScene {
             localStorage.setItem('freeCommonPacks', JSON.stringify(main_config.playerStartingFreeCommonPacks));
             localStorage.setItem('freeSilverPacks', JSON.stringify(0));
             localStorage.setItem('freeGoldPacks', JSON.stringify(0));
+            localStorage.setItem('currentWorld', JSON.stringify(1));
+            localStorage.setItem('worldReached', JSON.stringify(1));
         }
 
         if (playerMonstersData.length === 0) {

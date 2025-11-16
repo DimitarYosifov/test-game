@@ -453,7 +453,7 @@ export class Monster extends Phaser.GameObjects.Container {
             scale: { start: 0.5, end: 0 },
             gravityY: 100,
             emitting: false
-        })
+        }).setDepth(15)
 
         // A R R O W   A T T A C K
         if (isRangedAttack) {
@@ -596,7 +596,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
-        lostHealth.setOrigin(0.5).setDepth(12);
+        lostHealth.setOrigin(0.5).setDepth(15);
         // this.add(lostHealth);
         this.scene.tweens.add({
             targets: lostHealth,

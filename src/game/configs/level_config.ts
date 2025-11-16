@@ -1,6 +1,6 @@
 
-// L E V E L  1  S U R V I V A L    T E S T
-export const survivalLevels = [
+// W O R L D    1   S U R V I V A L   L E V E L S
+export const survivalLevelsWorld1 = [
     {
         levelName: 'survival_level_1',
         survival: true,
@@ -87,7 +87,9 @@ export const survivalLevels = [
     }
 ]
 
+export const survivalLevelsWorld2 = [];
 
+//region WORLD 1
 // R E G U L A R   M A P   L E V E L S
 export const level_config = [
     // L E V E L   1    - monsters: 1 star x 7   2 stars x 0
@@ -980,6 +982,42 @@ export const level_config = [
             { type: 9, stars: 3 },
         ]
     },
+    // T R A N S I T I O N   T O   W O R L D   2
+    {
+        isTransition: true
+    },
+    // T R A N S I T I O N   T O   W O R L D   1
+    {
+        isTransition: true,
+        isFlipped: true
+    },
+    //region WORLD 2
+    // L E V E L  36     - monsters: 1 star x 0   2 stars x 1   3 stars x 13 
+    {
+        levelName: 36,
+        firstWinReward: 160,
+        repeatLevelWinReward: 40,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 2 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 9, stars: 3 },
+        ]
+    },
 ]
 
 export interface IOpponentMonstersData {
@@ -988,10 +1026,10 @@ export interface IOpponentMonstersData {
 }
 
 export interface ILevelConfig {
-    levelName: number | string;
+    levelName?: number | string;
     firstWinReward?: number;
     repeatLevelWinReward?: number;
-    opponentMonstersData: IOpponentMonstersData[];
+    opponentMonstersData?: IOpponentMonstersData[];
     survival?: boolean;
     hoursToReset?: number;
     rewardPerKill?: number;
@@ -999,4 +1037,6 @@ export interface ILevelConfig {
     revealedByLevel?: number;
     newEnemiesStars?: number[];
     totalMonstersCount?: number;
+    isTransition?: boolean;
+    isFlipped?: boolean;
 }

@@ -18,7 +18,7 @@ export const main_config = {
         995,   //     1% for silver pack
         1000,  //   0.5% for golden pack
     ],
-    "chanceToGetMonsterOnLevelWin": 25, // 25%
+    "chanceToGetMonsterOnLevelWin": 25, // 25% - first time win only
     "afterLevelMonsterReward": [
         89,   // 89% for 1 star  monster
         99,   // 10% for 2 stars monster
@@ -234,7 +234,7 @@ export const main_config = {
             "min": 5,
             "max": 6
         },
-        "chanceForBuffAfterRound": 15 // 15 %
+        "chanceForBuffAfterRound": 30 // 30 %
     }
 
 
@@ -269,7 +269,7 @@ export const main_config = {
 
 
     /// when two tabs with the game are open. after buy pack in one tab, you still 
-    // have cash to buy - fix check local storage coins on on Buy                                                   ^HIGHEST PRIORITY^!!!!
+    // have cash to buy - fix check local storage coins on on Buy   - same for update and sell cards                                    ^HIGHEST PRIORITY^!!!!
 
 
     //CHECK 3 STAR MONSTER  IN THE SELECTED SECTION AND 6 X 1 STAR IN THE MAIN - AND UPGRADE THE 6  - CAUSES BUG ?

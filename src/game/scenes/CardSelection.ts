@@ -76,24 +76,27 @@ export class CardSelection extends AbstractScene {
         //for testing when starting new game - start with the monsters below
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
+                {
+                    type: 9, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 9, stars: 1, row: NaN, col: 11
+                },
+
+
+
                 // {
                 //     type: 6, stars: 3, row: NaN, col: 11
                 // },
@@ -636,7 +639,7 @@ export class CardSelection extends AbstractScene {
     private onUpgradeMonster() {
         console.log(this.playerMonstersData);
         console.log(this.monstersContainer.list);
-        // this.hasDuplicates();
+        this.hasDuplicates();
 
 
         // remove and destroy monsters in the upgrade section and set monsters as null in playerMonstersData for this monsters
@@ -846,8 +849,8 @@ export class CardSelection extends AbstractScene {
             this.playerMonstersData[monster!.originalIndex].row = monster!.positionIndex;
             monster.addedForSale = false;
             monster.positionIndex = NaN;
-            monster.upgradePostionIndex - NaN;
-            monster.originalIndex - NaN;
+            monster.upgradePostionIndex = NaN;
+            monster.originalIndex = NaN;
 
         });
         this.hasDuplicates();

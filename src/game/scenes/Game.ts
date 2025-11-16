@@ -51,6 +51,7 @@ export class Game extends AbstractScene {
     survivalTotalMonstersCount: number | undefined;
     survivalLevelKilledMonsters: number;
     questionMarkContainer: Phaser.GameObjects.Container | null;
+    confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
 
     constructor() {
         super('Game');
@@ -82,7 +83,9 @@ export class Game extends AbstractScene {
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
         this.addClouds();
         this.createBulbs();
-        this.createLevelTitle();
+        if (!this.isSurvivalLevel) {
+            this.createLevelTitle();
+        }
         this.createGiveUpButton();
         this.createEndTurnButton();
         this.createOpponentTurnMsg();
@@ -106,6 +109,8 @@ export class Game extends AbstractScene {
             this.checkEndTurnHandler();
         })
 
+        // TEST
+        // this.createLevelOutroPopup(true)
     }
 
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
@@ -239,7 +244,7 @@ export class Game extends AbstractScene {
             `level ${currentLevel}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 60, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4, strokeThickness: 0,
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
             }).setOrigin(0.5).setName('level title');
     }
@@ -266,7 +271,7 @@ export class Game extends AbstractScene {
     private createGiveUpButton() {
         this.giveUpButton = new Button(this, 1810, 1000, 'button', 'give\nup', () => {
             this.createLevelOutroPopup();
-        })
+        }, true)
     }
 
     private createEndTurnButton() {
@@ -282,7 +287,7 @@ export class Game extends AbstractScene {
                 }
             });
             this.checkNextTurn(false);
-        })
+        }, true)
     }
 
     private createOpponentTurnMsg() {
@@ -328,7 +333,7 @@ export class Game extends AbstractScene {
             `enemies left: ${this.data.list.opponentMonsters.length}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
             }).setOrigin(0, 0.5);
     }
@@ -517,7 +522,7 @@ export class Game extends AbstractScene {
 
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
         const currentLevelData = level_config[+currentLevel - 1];
-        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+currentLevelData.levelName) === false;
+        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
 
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
@@ -549,7 +554,7 @@ export class Game extends AbstractScene {
                 }).setOrigin(0.5).setDepth(15);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(15);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(16);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -617,14 +622,26 @@ export class Game extends AbstractScene {
             //center reward container
             const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize;
             rewardsContainer.x -= totalWidth / 2;
-            console.log()
+
+            // particles
+            let emitParticles = true;
+            this.startConfettiEmitter();
+            this.addLevelWonParticles();
+            this.time.addEvent({
+                delay: 500,
+                loop: true,
+                callback: () => {
+                    this.addLevelWonParticles();
+                },
+            });
 
             // claim button
             const claimButton = new Button(this, 960, 700, 'claim', null, () => {
+                emitParticles = false;
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';
-                localStorage.setItem('coins', JSON.stringify(+playerCoins + +coinsWon));
+                localStorage.setItem('coins', JSON.stringify(+playerCoins + +(coinsWon as number)));
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
                 const mapLevel = localStorage.getItem('mapLevel') || '1';
@@ -634,8 +651,8 @@ export class Game extends AbstractScene {
 
                 // UPDATE LEVELS WON(LOCAL STORAGE)
                 const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
-                if (!levelsWon.includes(+currentLevelData.levelName)) {
-                    levelsWon.push(+currentLevelData.levelName);
+                if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
+                    levelsWon.push(+(currentLevelData.levelName as number));
                     localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
                 }
 
@@ -654,7 +671,7 @@ export class Game extends AbstractScene {
                     this.changeScene('MainMenu');
                 }
 
-            }).setDepth(15);
+            }).setDepth(16);
         } else {
             // try again button
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
@@ -666,6 +683,42 @@ export class Game extends AbstractScene {
                 this.changeScene('MainMenu');
             }).setDepth(15)
         }
+    }
+
+    private startConfettiEmitter() {
+        ['confetti-blue', 'confetti-red', 'confetti-green', 'confetti-yellow', 'confetti-orange'].forEach(element => {
+            let emitter = this.add.particles(0, 0, element, {
+                x: { random: [0, 1920] },
+                y: -50,
+                lifespan: 4000,
+                scale: { min: 0.1, max: 0.3 },
+                rotate: { min: 0, max: 360 },
+                gravityY: 200,
+                blendMode: 'ADD',
+                frequency: 150,
+                advance: 2000
+            }).setDepth(15)
+            this.confettiEmitters.push(emitter);
+        });
+    }
+
+    private addLevelWonParticles() {
+        // return;
+        let emitter = this.add.particles(Phaser.Math.RND.between(400, 1500), Phaser.Math.RND.between(50, 600), 'flare', {
+            x: 0,
+            y: 0,
+            lifespan: 4000,
+            speed: { min: 150, max: 250 },
+            scale: { start: 0.4, end: 0 },
+            gravityY: 150,
+            blendMode: 'ADD',
+            emitting: false
+        }).setDepth(15 + 0.1)
+        emitter.explode(55);
+        emitter.once('complete', () => {
+            emitter.destroy();
+            console.log('Emitter destroyed');
+        });
     }
 
     private monsterNotClaimedPopup() {
@@ -730,6 +783,9 @@ export class Game extends AbstractScene {
         });
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.confettiEmitters.forEach(element => {
+                element.destroy(true);
+            });
             this.scene.start(nextScene);
         });
     }
@@ -959,14 +1015,14 @@ export class Game extends AbstractScene {
             const monsterRewardType = getRandomMonsterType();
             let monsterRewardStars = NaN;
             const randomNumber = Phaser.Math.RND.between(1, 100);
-            for (let index = 0; index < odds!.length; index++) {
-                const odd = odds![index];
+            for (let oddIndex = 0; oddIndex < odds!.length; oddIndex++) {
+                const odd = odds![oddIndex];
                 if (randomNumber <= odd) {
-                    monsterRewardStars = index;
+                    monsterRewardStars = oddIndex;
                     break;
                 }
             }
-            let unit = getMonsterDataConfig(+monsterRewardType, monsterRewardStars - 1);
+            let unit = getMonsterDataConfig(+monsterRewardType, monsterRewardStars);
 
             unit.row = Phaser.Math.RND.between(0, 6);
             unit.col = 0;
