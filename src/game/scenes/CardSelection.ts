@@ -81,24 +81,24 @@ export class CardSelection extends AbstractScene {
         //for testing when starting new game - start with the monsters below
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
-                {
-                    type: 9, stars: 3, row: NaN, col: 11
-                },
-                {
-                    type: 9, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 9, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 9, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 9, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 9, stars: 1, row: NaN, col: 11
-                },
+                // {
+                //     type: 9, stars: 3, row: NaN, col: 11
+                // },
+                // {
+                //     type: 9, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 9, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 9, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 9, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 9, stars: 1, row: NaN, col: 11
+                // },
 
 
 

@@ -247,7 +247,7 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = localStorage.getItem('gems') || '1';
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
