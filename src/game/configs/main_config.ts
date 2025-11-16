@@ -12,6 +12,8 @@ export const main_config = {
     "playerStartingCoins": 50,
     "maxMonstersAllowedInDeck": 40,
     "playerStartingFreeCommonPacks": 3,
+    "chanceToDropGem": 985, // 1.5% for gem drop
+    "chanceToGetGemOnLevelWin": 90, // 10% for gem reward on level win(including repeat level)
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
         985,   //     2% for common pack
@@ -242,7 +244,7 @@ export const main_config = {
 
     // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                  ^HIGHEST PRIORITY^!!!!
     // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
-     // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
+    // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
     // ADD ENERY MECHANIC TO THE GAME                                                                                                   ^HIGH PRIORITY^
     // ADD SLOT GAME WITH MONSTERS

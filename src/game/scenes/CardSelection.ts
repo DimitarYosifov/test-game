@@ -40,6 +40,11 @@ export class CardSelection extends AbstractScene {
     sellCardText: GameObjects.Text;
     coinText: GameObjects.Text;
     coinTexture: GameObjects.Image;
+    gems: string;
+    gemsText: GameObjects.Text;
+    gemsTexture: GameObjects.Image;
+    upgradeCostGemsText: GameObjects.Text;
+    upgradeCostGems: number = 0;
     ;
 
     constructor() {
@@ -601,6 +606,18 @@ export class CardSelection extends AbstractScene {
 
         this.add.existing(this.upgradeCostText);
 
+        this.upgradeCostGemsText = this.add.text(
+            1000,
+            870,
+            `${this.upgradeCostGems} `,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+
+        this.add.existing(this.upgradeCostGemsText);
+        let gemsTexture = this.add.image(this.upgradeCostGemsText.x - this.upgradeCostGemsText.width + 15, this.upgradeCostGemsText.y + 5, 'gem').setScale(0.1).setOrigin(1, 0.5);
         this.upgradeButton = new Button(this, 970, 970, 'upgrade', null, this.onUpgradeMonster.bind(this), true);
     }
 
@@ -609,7 +626,9 @@ export class CardSelection extends AbstractScene {
         if (this.upgradeSelectedMonsters.filter((m: Monster | null) => m !== null).length !== 3) {
             // less than 3 monstars
             this.upgradeCost = 0;
-            this.upgradeCostText.setText(`cost: ${this.upgradeCost} `)
+            this.upgradeCostGems = 0;
+            this.upgradeCostText.setText(`cost: ${this.upgradeCost} `);
+            this.upgradeCostGemsText.setText(`${this.upgradeCostGems}`)
             this.toggleUpgradeButtonEnable(false);
             return;
         }
@@ -624,10 +643,14 @@ export class CardSelection extends AbstractScene {
         }
 
         const playerCoins = localStorage.getItem('coins') || '0';
+        const playerGems = localStorage.getItem('gems') || '0';
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
-        this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
+        this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
 
-        if (+playerCoins < this.upgradeCost) {
+        this.upgradeCostText.setText(`cost: ${this.upgradeCost}`)
+        this.upgradeCostGemsText.setText(`${this.upgradeCostGems}`)
+
+        if (+playerCoins < this.upgradeCost || +playerGems < this.upgradeCostGems) {
             // not enough coin to upgrade
             this.toggleUpgradeButtonEnable(false);
             return;
@@ -666,15 +689,22 @@ export class CardSelection extends AbstractScene {
 
         // update coins and upgrade cost text
         const playerCoins = localStorage.getItem('coins') || '0';
+        const playerGems = localStorage.getItem('gems') || '0';
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
+        this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
+
         const playerCoinsAfterUpgrade = +playerCoins - this.upgradeCost;
-        // this.coinText.setText(`${playerCoinsAfterUpgrade}`);
-        this.updateCoinsText(playerCoinsAfterUpgrade);
+        const playerGemsAfterUpgrade = +playerGems - this.upgradeCostGems;
+        this.updateCoinsText(playerCoinsAfterUpgrade, playerGemsAfterUpgrade);
         localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
+        localStorage.setItem('gems', JSON.stringify(playerGemsAfterUpgrade));
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.toggleUpgradeButtonEnable(false);
         this.upgradeCost = 0;
+        this.upgradeCostGems = 0;
+
         this.upgradeCostText.setText(`cost: ${this.upgradeCost} `);
+        this.upgradeCostGemsText.setText(`${this.upgradeCostGems} `);
 
         // set stats for the new monster
         const newMonsterType = this.upgradeSelectedMonsters[0]?.unitData.type!;
@@ -875,11 +905,27 @@ export class CardSelection extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
+        this.gems = localStorage.getItem('gems') || '0';
+        this.gemsText = this.add.text(
+            this.coinTexture.x - this.coinTexture.displayWidth - 25,
+            30,
+            `${this.gems}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(1, 0.5);
+        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
-    private updateCoinsText(value: number | string) {
+    private updateCoinsText(value: number | string, playerGemsAfterUpgrade: number | null = null) {
         this.coinText.setText(`${value}`);
         this.coinTexture.x = this.coinText.x - this.coinText.width;
+        if (typeof playerGemsAfterUpgrade === 'number') {
+            this.gemsText.setText(`${playerGemsAfterUpgrade}`);
+            this.gemsText.x = this.coinTexture.x - this.coinTexture.displayWidth - 20;
+            this.gemsTexture.x = this.gemsText.x - this.gemsText.displayWidth;
+        }
     }
 
     changeScene(nextScene: string): void {

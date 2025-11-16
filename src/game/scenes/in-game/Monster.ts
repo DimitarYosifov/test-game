@@ -618,7 +618,9 @@ export class Monster extends Phaser.GameObjects.Container {
         // this.alpha = 0.5;
         this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         if (!this.isPlayerMonster) {
-            this.checkFreePackDrop();
+            if (!this.checkFreePackDrop()) {// if no pack drop, check gem drop
+                this.checkGemDrop();
+            };
         }
         this.scene.tweens.add({
             targets: this,
@@ -630,7 +632,48 @@ export class Monster extends Phaser.GameObjects.Container {
         })
     }
 
-    checkFreePackDrop() {
+    checkGemDrop() {
+        const odds = main_config.chanceToDropGem;
+        const randomNumber = Phaser.Math.RND.between(1, 1000);
+        if (randomNumber >= odds) {
+            const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+            const data = JSON.parse(localStorage.getItem('gems') ?? '0');
+            localStorage.setItem('gems', JSON.stringify(+data + 1));
+
+            this.scene.tweens.chain({
+                tweens: [
+                    {
+                        targets: gem,
+                        alpha: 1,
+                        scale: 0.15,
+                        duration: 350,
+                        delay: 550,
+                        ease: 'Back.easeOut'
+                    },
+                    {
+                        targets: gem,
+                        x: 960,
+                        y: 540,
+                        scale: 0.75,
+                        duration: 300
+                    },
+                    {
+                        targets: gem,
+                        delay: 1100,
+                        alpha: 0,
+                        scale: 0,
+                        duration: 300,
+                        ease: 'Back.easeOut',
+                        onComplete: () => {
+                            gem.destroy(true);
+                        }
+                    },
+                ]
+            });
+        }
+    }
+
+    checkFreePackDrop(): boolean {
         const odds = main_config.chanceToDropPack;
         const randomNumber = Phaser.Math.RND.between(1, 1000);
         let packDropped = '';
@@ -640,7 +683,7 @@ export class Monster extends Phaser.GameObjects.Container {
             if (randomNumber <= odd) {
                 if (index === 0) {
                     //no pack drop
-                    return;
+                    return false;
                 } else if (index === 1) {
                     packDropped = 'common';
                     packTexture = 'common-pack';
@@ -706,6 +749,7 @@ export class Monster extends Phaser.GameObjects.Container {
             ]
         });
 
+        return true;
     }
 
     setIdlePendingMove(): void {

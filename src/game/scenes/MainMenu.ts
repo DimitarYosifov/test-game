@@ -19,6 +19,9 @@ export class MainMenu extends AbstractScene {
     achievementsButton: Button;
     deleteButton: Button;
     infoButton: Button;
+    gems: string;
+    gemsTexture: Phaser.GameObjects.Image;
+    gemsText: Phaser.GameObjects.Text;
 
     constructor() {
         super('MainMenu');
@@ -68,6 +71,7 @@ export class MainMenu extends AbstractScene {
             localStorage.setItem('freeGoldPacks', JSON.stringify(0));
             localStorage.setItem('currentWorld', JSON.stringify(1));
             localStorage.setItem('worldReached', JSON.stringify(1));
+            localStorage.setItem('gems', JSON.stringify(1));
         }
 
         if (playerMonstersData.length === 0) {
@@ -243,6 +247,17 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
+        this.gems = localStorage.getItem('gems') || '0';
+        this.gemsText = this.add.text(
+            this.coinTexture.x - this.coinTexture.displayWidth - 25,
+            30,
+            `${this.gems}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(1, 0.5);
+        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     changeScene(nextScene: string): void {

@@ -109,7 +109,7 @@ export class Game extends AbstractScene {
             this.checkEndTurnHandler();
         })
 
-        // TEST
+        // TEST - jump straight to level won
         // this.createLevelOutroPopup(true)
     }
 
@@ -526,6 +526,8 @@ export class Game extends AbstractScene {
 
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
+        const rndNum2 = Phaser.Math.RND.between(1, 100);
+        const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(15);
@@ -618,9 +620,17 @@ export class Game extends AbstractScene {
                 monster.movesLeftContainer.x = monsterSize / 2 + 21;
                 rewardsContainer.add(monster);
             }
+            let gem;
+            let gemPadding = 0;
+            if (hasGemReward) {
+                //gem reward
+                gemPadding = 20;
+                gem = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + gemPadding, 500, 'gem').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(gem);
+            }
 
             //center reward container
-            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize;
+            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize + gemPadding + (gem?.displayWidth || 0);
             rewardsContainer.x -= totalWidth / 2;
 
             // particles
@@ -638,6 +648,12 @@ export class Game extends AbstractScene {
             // claim button
             const claimButton = new Button(this, 960, 700, 'claim', null, () => {
                 emitParticles = false;
+
+                // UPDATE PLAYER GEMS(LOCALE STORAGE) 
+                if (hasGemReward) {
+                    const playerGems = localStorage.getItem('gems') || '0';
+                    localStorage.setItem('gems', JSON.stringify(+playerGems + 1));
+                }
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = localStorage.getItem('coins') || '0';

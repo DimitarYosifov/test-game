@@ -95,6 +95,7 @@ export class Preloader extends Scene {
         this.load.image('confetti-blue', 'confetti-blue.png');
 
         this.load.image('world-arrow', 'world-arrow.png');
+        this.load.image('gem', 'gem.png');
 
         this.load.font('main-font', 'Oups.otf');
     }
