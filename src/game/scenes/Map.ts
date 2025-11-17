@@ -290,7 +290,12 @@ export class Map extends AbstractScene {
 
             // TODO - fix hardcoded 35 as last level for the world
             if ((+levelData.levelName! <= +mapLevel) || levelData.isTransition) {
-                levelTexture.setInteractive();
+
+                if (+mapLevel < 36 && levelData.isTransition) {
+                    //fuck off
+                } else {
+                    levelTexture.setInteractive();
+                }
             } else {
                 levelTexture.disableInteractive();
                 levelTexture.setAlpha(0.65);
