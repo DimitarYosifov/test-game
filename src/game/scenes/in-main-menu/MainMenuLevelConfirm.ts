@@ -18,6 +18,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
         this.scene = scene;
         this.levelData = levelData;
         this.scene.add.existing(this);
+        this.setDepth(102);
 
         this.createBGOverlay();
         if (isSurvivalLevel) {
@@ -46,7 +47,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     }
 
     private createBGOverlay() {
-        let overlay = this.scene.add.graphics();
+        let overlay = this.scene.add.graphics().setDepth(102);
         overlay.fillStyle(0x000000, 0.95);
         overlay.fillRect(0, 0, 1920, 1080);
         overlay.setInteractive();
@@ -78,7 +79,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             }).setOrigin(0.5);
         this.add(levelHeader);
 
-        if (JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+this.levelData.levelName)) {
+        if (JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(this.levelData.levelName as number))) {
             //completed text
             const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
                 levelHeader.x,
@@ -126,7 +127,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             }).setOrigin(0.5);
         this.add(enemies);
 
-        const enemyData = this.levelData.opponentMonstersData;
+        const enemyData: any = this.levelData.opponentMonstersData;
 
         const counts = new Map();
         for (const obj of enemyData) {

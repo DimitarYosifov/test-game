@@ -121,6 +121,7 @@ export class Map extends AbstractScene {
             repeat: -1,
             // ease: 'Sine.easeOut',
         })
+        this.levelContentContainer.add(light);
     }
 
     private addParticles() {
@@ -159,8 +160,6 @@ export class Map extends AbstractScene {
             .setDepth(88)
             .setAlpha(+!introduceToSurvivalLevel);
 
-        this.addLight(levelTexture);
-
         const leveltext: Phaser.GameObjects.Text = this.add.text(
             lvl.survivalSpots[3].x,
             lvl.survivalSpots[3].y,
@@ -175,7 +174,7 @@ export class Map extends AbstractScene {
             .setAlpha(+!introduceToSurvivalLevel);
 
         this.levelContentContainer.add([levelTexture, leveltext]);
-
+        this.addLight(levelTexture);
         // levelTexture.setInteractive();
         levelTexture.on('pointerdown', () => {
             if (this.confirmPopupOpen) {
