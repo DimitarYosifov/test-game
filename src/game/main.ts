@@ -10,6 +10,7 @@ import { BuyPacks } from './scenes/BuyPacks';
 import { DailyQuests } from './scenes/DailyQuests';
 import { Achievements } from './scenes/Achievements';
 import { MonstersInfo } from './scenes/MonstersInfo';
+import { Gamble } from './scenes/Gamble';
 
 // import main_confi from '../sconfig/main_config.json';
 
@@ -37,7 +38,8 @@ const config: Phaser.Types.Core.GameConfig = {
         DailyQuests,
         Achievements,
         MonstersInfo,
-        GameOver
+        GameOver,
+        Gamble
     ]
 };
 

@@ -58,6 +58,7 @@ export class CardSelection extends AbstractScene {
     create() {
         super.create();
 
+        this.add.image(0, 0, 'bg-card-selection').setOrigin(0);
         this.monstersContainer = this.add.container().setDepth(100);
         this.hitRects = [];
         this.upgradeHitRects = [];

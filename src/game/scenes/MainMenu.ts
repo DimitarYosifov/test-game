@@ -22,12 +22,15 @@ export class MainMenu extends AbstractScene {
     gems: string;
     gemsTexture: Phaser.GameObjects.Image;
     gemsText: Phaser.GameObjects.Text;
+    gambleButton: Button;
 
     constructor() {
         super('MainMenu');
     }
 
     create() {
+
+        this.add.image(0, 0, 'bg-main-menu').setOrigin(0);
 
         // add monster manually - for debugging!
         const addMonster = (type: number, stars: number) => {
@@ -50,6 +53,7 @@ export class MainMenu extends AbstractScene {
         this.createAchievementsButton();
         this.createInfoButton();
         this.createDeleteButton();
+        this.createGambleButton();
         this.createCoins();
 
         const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
@@ -111,11 +115,28 @@ export class MainMenu extends AbstractScene {
             this.infoButton.disableInteractive();
             this.changeScene('MonstersInfo');
         }
-        this.infoButton = new Button(this, 960, 725, 'info', null, infoButtonClick.bind(this), false, 0.65);
+        this.infoButton = new Button(this, 750, 625, 'info', null, infoButtonClick.bind(this), false, 0.65);
         const infoTitle = this.add.text(
-            960,
-            900,
+            750,
+            800,
             `monsters info`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+    }
+
+    private createGambleButton() {
+        const gambleButtonClick = () => {
+            this.gambleButton.disableInteractive();
+            this.changeScene('Gamble');
+        }
+        this.gambleButton = new Button(this, 1200, 575, 'slot-machine', null, gambleButtonClick.bind(this), false, 0.65);
+        const gambleTitle = this.add.text(
+            1200,
+            700,
+            `gamble`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,
@@ -162,10 +183,10 @@ export class MainMenu extends AbstractScene {
             this.shopButton.disableInteractive();
             this.changeScene('BuyPacks');
         }
-        this.shopButton = new Button(this, 960, 350, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
+        this.shopButton = new Button(this, 790, 220, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
         const shopTitle = this.add.text(
-            960,
-            480,
+            790,
+            350,
             `get new monsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -179,10 +200,10 @@ export class MainMenu extends AbstractScene {
             this.deckButton.disableInteractive();
             this.changeScene('CardSelection');
         }
-        this.deckButton = new Button(this, 1650, 700, 'deck', null, deckButtonClick.bind(this), false, 0.5);
+        this.deckButton = new Button(this, 1650, 450, 'deck', null, deckButtonClick.bind(this), false, 0.5);
         const deckTitle = this.add.text(
             1650,
-            880,
+            630,
             `edit monsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
@@ -196,10 +217,10 @@ export class MainMenu extends AbstractScene {
             this.dailyQuestsButton.disableInteractive();
             this.changeScene('DailyQuests');
         }
-        this.dailyQuestsButton = new Button(this, 1650, 300, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.5);
+        this.dailyQuestsButton = new Button(this, 1300, 100, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.5);
         const dailyQuestsTitle = this.add.text(
-            1650,
-            450,
+            1300,
+            250,
             `daily quests`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',

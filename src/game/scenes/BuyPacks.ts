@@ -51,6 +51,9 @@ export class BuyPacks extends AbstractScene {
 
     create() {
         super.create();
+
+        this.add.image(0, 0, 'bg-buy-packs').setOrigin(0);
+
         this.monstersContainer = this.add.container(0, 0).setDepth(100).setAlpha(1);
         this.monsters = [];
 

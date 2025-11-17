@@ -47,6 +47,12 @@ export class Preloader extends Scene {
         this.load.image('arrow', 'arrow.png');
         this.load.image('sword', 'sward.png');
         this.load.image('bg', 'bg3.jpg');
+        this.load.image('bg-buy-packs', 'bg11.jpg');
+        this.load.image('bg-card-selection', 'bg22.jpg');
+        this.load.image('bg-main-menu', 'bg33.jpg');
+        this.load.image('bg-map', 'bg44.jpg');
+        this.load.image('bg-achievments', 'bg44.jpg');
+        this.load.image('bg-casino', 'casino.jpg');
         this.load.image('bow', 'bow.png');
         this.load.image('cloud', 'cloud.png');
         this.load.image('circle', 'circle.png');
@@ -96,6 +102,8 @@ export class Preloader extends Scene {
 
         this.load.image('world-arrow', 'world-arrow.png');
         this.load.image('gem', 'gem.png');
+        this.load.image('slot-circle', 'slot-circle.png');
+        this.load.image('slot-machine', 'slot-machine.png');
 
         this.load.font('main-font', 'Oups.otf');
     }

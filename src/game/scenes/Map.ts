@@ -37,6 +37,9 @@ export class Map extends AbstractScene {
     create() {
         super.create();
 
+        this.add.image(0, 0, 'bg-achievments').setOrigin(0);
+        this.addParticles();
+
         this.survivalLevels = [];
         this.spots = [];
         this.survival1Spots = [];
@@ -108,6 +111,34 @@ export class Map extends AbstractScene {
         this.createCoins();
     }
 
+    private addLight(texture: Phaser.GameObjects.Image) {
+        let light = this.lights.addPointLight(texture.x, texture.y, 0xffffff, 100, 4, 0.05).setAlpha(0.06).setDepth(this.levelContentContainer.depth + 0.1);
+        this.tweens.add({
+            targets: light,
+            alpha: 0.12,
+            duration: 2000,
+            yoyo: true,
+            repeat: -1,
+            // ease: 'Sine.easeOut',
+        })
+    }
+
+    private addParticles() {
+        let emitter = this.add.particles(0, 0, 'flare', {
+            x: { random: [0, 1920] },
+            y: { random: [0, 540] },
+            lifespan: { random: [20000, 30000] },
+            scale: { min: 0.05, max: 0.2 },
+            gravityY: 2,
+            blendMode: 'ADD',
+            frequency: 250,
+            quantity: 1,
+            maxAliveParticles: 75,
+            advance: 20000
+
+        }).setDepth(15 + 0.1)
+    }
+
     private createPlayer() {
         this.player = this.add.image(0, 0, 'location').setScale(1).setOrigin(0.5, 1).setAlpha(0).setDepth(99);
     }
@@ -127,6 +158,8 @@ export class Map extends AbstractScene {
             .setOrigin(0.5)
             .setDepth(88)
             .setAlpha(+!introduceToSurvivalLevel);
+
+        this.addLight(levelTexture);
 
         const leveltext: Phaser.GameObjects.Text = this.add.text(
             lvl.survivalSpots[3].x,

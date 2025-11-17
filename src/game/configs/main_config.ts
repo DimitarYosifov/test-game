@@ -237,7 +237,20 @@ export const main_config = {
             "max": 6
         },
         "chanceForBuffAfterRound": 30 // 30 %
-    }
+    },
+    "slotCoins": {
+        "min": 50,
+        "max": 500,
+    },
+    "slotGems": {
+        "min": 5,
+        "max": 10,
+    },
+    "slotMonsterStars": {
+        "min": 1,
+        "max": 3,
+    },
+    "slotSpinCost": 3
 
 
     // TODO:
@@ -268,7 +281,7 @@ export const main_config = {
 
 
     //BUGS:
-
+    // AFTER SUCCESSFUL UPGRADE COIN COST AND GEMS COST ARE NOT CLEARED !!!!! 
 
     /// when two tabs with the game are open. after buy pack in one tab, you still 
     // have cash to buy - fix check local storage coins on on Buy   - same for update and sell cards                                    ^HIGHEST PRIORITY^!!!!

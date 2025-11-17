@@ -109,7 +109,7 @@ export class Game extends AbstractScene {
             this.checkEndTurnHandler();
         })
 
-        // TEST - jump straight to level won
+        // TEST - jump straight to level
         // this.createLevelOutroPopup(true)
     }
 

@@ -25,6 +25,10 @@ export class Achievements extends AbstractScene {
 
     create() {
         super.create();
+
+        this.add.image(0, 0, 'bg-map').setOrigin(0);
+
+
         this.createBackButton();
         this.createCoins();
 
