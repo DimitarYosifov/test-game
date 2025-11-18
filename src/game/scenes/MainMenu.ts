@@ -229,7 +229,7 @@ export class MainMenu extends AbstractScene {
             }).setOrigin(0.5);
 
         if (DataHandler.hasDailyQuestRewardPending()) {
-            let exclaimation = this.add.image(this.dailyQuestsButton.x + 75, this.dailyQuestsButton.y - 75, 'mark').setScale(0.5);
+            let exclaimation = this.add.image(this.dailyQuestsButton.x + 75, this.dailyQuestsButton.y - 45, 'mark').setScale(0.5);
         }
 
     }
@@ -251,7 +251,7 @@ export class MainMenu extends AbstractScene {
             }).setOrigin(0.5);
 
         if (DataHandler.hasAchievementRewardPending()) {
-            let exclaimation = this.add.image(this.achievementsButton.x + 75, this.dailyQuestsButton.y - 90, 'mark').setScale(0.5);
+            let exclaimation = this.add.image(this.achievementsButton.x + 75, this.achievementsButton.y - 100, 'mark').setScale(0.5);
         }
 
     }

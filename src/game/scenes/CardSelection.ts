@@ -629,7 +629,7 @@ export class CardSelection extends AbstractScene {
             this.upgradeCost = 0;
             this.upgradeCostGems = 0;
             this.upgradeCostText.setText(`cost: ${this.upgradeCost} `);
-            this.upgradeCostGemsText.setText(`${this.upgradeCostGems}`)
+            this.upgradeCostGemsText.setText(`${this.upgradeCostGems}`);
             this.toggleUpgradeButtonEnable(false);
             return;
         }
@@ -930,8 +930,12 @@ export class CardSelection extends AbstractScene {
     }
 
     changeScene(nextScene: string): void {
+        this.upgradeCost = 0;
+        this.upgradeCostGems = 0;
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.upgradeCostText.setText(`cost: ${this.upgradeCost} `);
+            this.upgradeCostGemsText.setText(`${this.upgradeCostGems}`)
             this.scene.start(nextScene);
         });
     }

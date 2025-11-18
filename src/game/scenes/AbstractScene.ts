@@ -14,6 +14,16 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
         this.cameras.main.once('camerafadeincomplete', () => { });
     }
 
+    shutdown() {
+        this.time.removeAllEvents();
+        this.tweens.killAll();
+    }
+
+    destroy() {
+        this.input.removeAllListeners();
+        this.anims.removeAllListeners();
+    }
+
     abstract changeScene(nextScene: string, isSurvivalLevel: boolean): void;
     abstract createCoins(): void;
     abstract createBackButton(): void;

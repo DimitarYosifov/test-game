@@ -259,7 +259,7 @@ export class Map extends AbstractScene {
 
         if (!unlockSurvivalLevelTime || now >= unlockSurvivalLevelTime) {
             // level is unlocked!
-            console.log(`SurvivalLevel1 is unlocked...`)
+            console.log(`SurvivalLevel ${levelName} is unlocked...`)
             levelTexture.setInteractive();
             survivalLevelCountDownText.setText('');
             localStorage.removeItem(`${levelName}`);

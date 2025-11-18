@@ -20,7 +20,7 @@ export class Gamble extends AbstractScene {
     private gemsToBeWonText: Phaser.GameObjects.Text;
     private coinsToBeWonText: Phaser.GameObjects.Text;
     private stars: Phaser.GameObjects.Image[];
-    private updateRewardsEvent: Phaser.Time.TimerEvent;
+    private updateRewardsEvent: Phaser.Time.TimerEvent | null;
     private coinsToBeWon: number;
     private gemsToBeWon: number;
     private monsterStarsToBeWon: number;
@@ -31,6 +31,8 @@ export class Gamble extends AbstractScene {
     private gemsText: Phaser.GameObjects.Text;
     private gems: string;
     private gemsTexture: Phaser.GameObjects.Image;
+    private slowDownEvent: Phaser.Time.TimerEvent | null;
+    private slowDownTween: Phaser.Tweens.Tween | null;
 
     constructor() {
         super('Gamble');
@@ -158,14 +160,15 @@ export class Gamble extends AbstractScene {
     private spin() {
         this.spinSpeed.speed = SPIN_SPEED;
         this.updateCoinsText();
-        this.backButton.disableInteractive();
-        this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
-        // this.winningSymbols = ['coin', 'coin', 'coin']; //// test
+        // this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
+        this.winningSymbols = ['coin', 'coin', 'coin']; //// test
         this.isWinningSpin = this.winningSymbols[0] === this.winningSymbols[1] && this.winningSymbols[0] === this.winningSymbols[2];
         this.shouldSpin = true;
         this.spinFinished = false;
 
-        this.time.delayedCall(2500, () => {
+        this.slowDownEvent = this.time.delayedCall(2500, () => {
+            this.slowDownEvent?.destroy();
+            this.slowDownEvent = null;
             this.slowDown();
         })
 
@@ -176,6 +179,8 @@ export class Gamble extends AbstractScene {
                 this.updateRewards();
             }
         });
+
+        this.enableStop();
     }
 
     private updateRewards() {
@@ -190,8 +195,26 @@ export class Gamble extends AbstractScene {
         this.stars[2].alpha = this.monsterStarsToBeWon > 2 ? 1 : 0.45;
     }
 
+    skip() {
+        if (this.slowDownEvent) {
+            this.slowDownEvent.remove();
+            this.slowDownEvent = null;
+        }
+
+        if (this.slowDownTween) {
+            this.slowDownTween.destroy();
+            this.slowDownTween = null;
+        }
+
+        this.spinSpeed.speed = 100;
+        this.shouldSpin = false;
+    }
+
     private spinComplete() {
-        this.updateRewardsEvent.destroy();
+        if (this.updateRewardsEvent) {
+            this.updateRewardsEvent.destroy();
+            this.updateRewardsEvent = null;
+        };
         if (this.isWinningSpin) {
             if (this.winningSymbols[0] === 'coin') {
                 this.onCoinsWin();
@@ -316,7 +339,7 @@ export class Gamble extends AbstractScene {
                     targets: [overlay, newMonster],
                     duration: 200,
                     alpha: 0,
-                    delay: 1250,
+                    delay: 2750,
                     onComplete: () => {
                         overlay.destroy(true);
                         newMonster.destroy(true);
@@ -330,10 +353,21 @@ export class Gamble extends AbstractScene {
     private reset() {
         this.backButton.setInteractive();
         this.spinButton.setInteractive();
+        this.spinButton.text.setText('spin');
+    }
+
+    private enableStop() {
+        this.backButton.disableInteractive();
+        this.spinButton.text.setText('stop');
+        this.spinButton.setInteractive();
+    }
+
+    private disableStop() {
+
     }
 
     private slowDown() {
-        this.tweens.add({
+        this.slowDownTween = this.tweens.add({
             targets: this.spinSpeed,
             speed: 5,
             duration: 3500,
@@ -342,11 +376,12 @@ export class Gamble extends AbstractScene {
             }
         })
     }
-
+    // 4599  3
     update(time: number, delta: number): void {
         if (this.spinFinished) {
             return;
         }
+
         this.reels.forEach((element, index) => {
             const monster1 = element.monster1;
             const monster2 = element.monster2;
@@ -364,6 +399,7 @@ export class Gamble extends AbstractScene {
                 }
                 if (!this.shouldSpin) {
                     this.spinFinished = true;
+                    monster1.y = -250;
                     monster2.y = 0;
                     if (index === 2) {
                         this.spinComplete();
@@ -401,8 +437,12 @@ export class Gamble extends AbstractScene {
 
     private createSpinButton(): void {
         this.spinButton = new Button(this, 1800, 970, 'button', 'spin', () => {
-            this.spin();
-            this.spinButton.disableInteractive();
+            if (this.spinFinished) {
+                this.spin();
+            } else {
+                this.skip();
+                this.spinButton.disableInteractive();
+            }
         });
     }
 

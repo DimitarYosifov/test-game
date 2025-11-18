@@ -256,7 +256,7 @@ export class Game extends AbstractScene {
             `reward: ${this.survivalLevelReward}`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
             }).setOrigin(0.5).setName('survivalLevelRewardText');
         this.survivalLevelRewardImage = this.add.image(this.survivalLevelRewardText.x + this.survivalLevelRewardText.width / 2 + 15, 55, 'coin').setScale(0.35).setOrigin(0, 0.5);
