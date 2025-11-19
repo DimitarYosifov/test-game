@@ -1018,6 +1018,875 @@ export const level_config = [
             { type: 9, stars: 3 },
         ]
     },
+    // L E V E L  37     - monsters: 1 star x 0   2 stars x 0   3 stars x 14 
+    {
+        levelName: 37,
+        firstWinReward: 164,
+        repeatLevelWinReward: 41,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 3 },
+            { type: 1, stars: 3 },
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 3 },
+        ]
+    },
+    // L E V E L  38     - monsters: 1 star x 0   2 stars x 0   3 stars x 13   4 stars x 1
+    {
+        levelName: 38,
+        firstWinReward: 168,
+        repeatLevelWinReward: 42,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 9, stars: 3 },
+        ]
+    },
+    // L E V E L  39     - monsters: 1 star x 0   2 stars x 0   3 stars x 12   4 stars x 2
+    {
+        levelName: 39,
+        firstWinReward: 172,
+        repeatLevelWinReward: 43,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 3 },
+            { type: 8, stars: 3 },
+        ]
+    },
+    // L E V E L  40     - monsters: 1 star x 0   2 stars x 0   3 stars x 11   4 stars x 3
+    {
+        levelName: 40,
+        firstWinReward: 176,
+        repeatLevelWinReward: 44,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  41     - monsters: 1 star x 0   2 stars x 0   3 stars x 10   4 stars x 4
+    {
+        levelName: 41,
+        firstWinReward: 180,
+        repeatLevelWinReward: 45,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 3 },
+            { type: 2, stars: 3 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 3 },
+        ]
+    },
+    // L E V E L  42     - monsters: 1 star x 0   2 stars x 0   3 stars x 9   4 stars x 5
+    {
+        levelName: 42,
+        firstWinReward: 184,
+        repeatLevelWinReward: 46,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 3 },
+            { type: 1, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 3 },
+        ]
+    },
+    // L E V E L  43     - monsters: 1 star x 0   2 stars x 0   3 stars x 8   4 stars x 6
+    {
+        levelName: 43,
+        firstWinReward: 188,
+        repeatLevelWinReward: 47,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 3 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  44     - monsters: 1 star x 0   2 stars x 0   3 stars x 7   4 stars x 7
+    {
+        levelName: 44,
+        firstWinReward: 192,
+        repeatLevelWinReward: 48,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 3 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  45     - monsters: 1 star x 0   2 stars x 0   3 stars x 6   4 stars x 8
+    {
+        levelName: 45,
+        firstWinReward: 196,
+        repeatLevelWinReward: 49,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 3 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  46     - monsters: 1 star x 0   2 stars x 0   3 stars x 5   4 stars x 9
+    {
+        levelName: 46,
+        firstWinReward: 200,
+        repeatLevelWinReward: 50,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 3 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  47     - monsters: 1 star x 0   2 stars x 0   3 stars x 4   4 stars x 10
+    {
+        levelName: 47,
+        firstWinReward: 204,
+        repeatLevelWinReward: 51,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 3 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  48     - monsters: 1 star x 0   2 stars x 0   3 stars x 3   4 stars x 11
+    {
+        levelName: 48,
+        firstWinReward: 208,
+        repeatLevelWinReward: 52,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 3 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 3 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  49     - monsters: 1 star x 0   2 stars x 0   3 stars x 2   4 stars x 12
+    {
+        levelName: 49,
+        firstWinReward: 212,
+        repeatLevelWinReward: 53,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+        ]
+    },
+    // L E V E L  50     - monsters: 1 star x 0   2 stars x 0   3 stars x 1   4 stars x 13
+    {
+        levelName: 50,
+        firstWinReward: 212,
+        repeatLevelWinReward: 53,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  51     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 14
+    {
+        levelName: 51,
+        firstWinReward: 216,
+        repeatLevelWinReward: 54,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  52     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 13   5 stars x 1
+    {
+        levelName: 52,
+        firstWinReward: 220,
+        repeatLevelWinReward: 55,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 2, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  53     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 12   5 stars x 2
+    {
+        levelName: 53,
+        firstWinReward: 224,
+        repeatLevelWinReward: 56,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  54     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 11   5 stars x 3
+    {
+        levelName: 54,
+        firstWinReward: 228,
+        repeatLevelWinReward: 57,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  55     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 10   5 stars x 4
+    {
+        levelName: 55,
+        firstWinReward: 232,
+        repeatLevelWinReward: 58,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 4 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  56     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 9   5 stars x 5
+    {
+        levelName: 56,
+        firstWinReward: 236,
+        repeatLevelWinReward: 59,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 4 },
+            { type: 9, stars: 4 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  57     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 8   5 stars x 6
+    {
+        levelName: 57,
+        firstWinReward: 240,
+        repeatLevelWinReward: 60,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 4 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  58     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 7   5 stars x 7
+    {
+        levelName: 58,
+        firstWinReward: 244,
+        repeatLevelWinReward: 61,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  59     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 6   5 stars x 8
+    {
+        levelName: 59,
+        firstWinReward: 248,
+        repeatLevelWinReward: 62,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  60     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 5   5 stars x 9
+    {
+        levelName: 60,
+        firstWinReward: 252,
+        repeatLevelWinReward: 63,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 4 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  61     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 4   5 stars x 10
+    {
+        levelName: 61,
+        firstWinReward: 256,
+        repeatLevelWinReward: 64,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  62     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 3   5 stars x 11
+    {
+        levelName: 62,
+        firstWinReward: 260,
+        repeatLevelWinReward: 65,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 4 },
+        ]
+    },
+    // L E V E L  63     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 2   5 stars x 12
+    {
+        levelName: 63,
+        firstWinReward: 264,
+        repeatLevelWinReward: 66,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  64     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 1   5 stars x 13
+    {
+        levelName: 64,
+        firstWinReward: 268,
+        repeatLevelWinReward: 67,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 4 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  65     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 14
+    {
+        levelName: 65,
+        firstWinReward: 272,
+        repeatLevelWinReward: 68,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  66     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 15
+    {
+        levelName: 66,
+        firstWinReward: 276,
+        repeatLevelWinReward: 69,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  67     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 16
+    {
+        levelName: 67,
+        firstWinReward: 280,
+        repeatLevelWinReward: 70,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  68     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 17
+    {
+        levelName: 68,
+        firstWinReward: 284,
+        repeatLevelWinReward: 71,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+    // L E V E L  69     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 18
+    {
+        levelName: 69,
+        firstWinReward: 288,
+        repeatLevelWinReward: 72,
+        mapPosition: {
+            x: 0,
+            y: 0
+        },
+        opponentMonstersData: [
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 1, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 2, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 3, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 5, stars: 5 },
+            { type: 6, stars: 5 },
+            { type: 7, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 8, stars: 5 },
+            { type: 9, stars: 5 },
+        ]
+    },
+
 ]
 
 export interface IOpponentMonstersData {
