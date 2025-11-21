@@ -520,8 +520,9 @@ export class Game extends AbstractScene {
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
-        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
-        const currentLevelData = level_config[+currentLevel - 1];
+        let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+        currentLevel = JSON.parse(localStorage.getItem('currentWorld') ?? 'null') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
+        const currentLevelData = level_config[currentLevel];
         const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
 
         const rndNum = Phaser.Math.RND.between(1, 100);

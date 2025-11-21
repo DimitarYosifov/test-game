@@ -160,8 +160,8 @@ export class Gamble extends AbstractScene {
     private spin() {
         this.spinSpeed.speed = SPIN_SPEED;
         this.updateCoinsText();
-        // this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
-        this.winningSymbols = ['coin', 'coin', 'coin']; //// test
+        this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
+        // this.winningSymbols = ['coin', 'coin', 'coin']; //// test
         this.isWinningSpin = this.winningSymbols[0] === this.winningSymbols[1] && this.winningSymbols[0] === this.winningSymbols[2];
         this.shouldSpin = true;
         this.spinFinished = false;
@@ -180,7 +180,10 @@ export class Gamble extends AbstractScene {
             }
         });
 
+        // this.disableStop();
+        // this.time.delayedCall(500, () => {
         this.enableStop();
+        // })
     }
 
     private updateRewards() {
@@ -363,7 +366,8 @@ export class Gamble extends AbstractScene {
     }
 
     private disableStop() {
-
+        this.backButton.disableInteractive();
+        this.spinButton.disableInteractive();
     }
 
     private slowDown() {
@@ -376,7 +380,7 @@ export class Gamble extends AbstractScene {
             }
         })
     }
-    // 4599  3
+
     update(time: number, delta: number): void {
         if (this.spinFinished) {
             return;
@@ -401,6 +405,14 @@ export class Gamble extends AbstractScene {
                     this.spinFinished = true;
                     monster1.y = -250;
                     monster2.y = 0;
+                    monster2.setTexture(this.winningSymbols[index]); //??????
+                    if (monster2.texture.key === 'coin') {
+                        monster2.setScale(1.7);
+                    } else if (monster2.texture.key === 'gem') {
+                        monster2.setScale(0.4);
+                    } else {
+                        monster2.setScale(1);
+                    }
                     if (index === 2) {
                         this.spinComplete();
                     }

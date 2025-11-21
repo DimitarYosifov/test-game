@@ -1,5 +1,4 @@
 import { Scene } from 'phaser';
-import { IOpponentMonstersData } from '../configs/level_config';
 
 export abstract class AbstractScene extends Scene implements IAbstractScene {
 

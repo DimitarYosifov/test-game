@@ -1,4 +1,4 @@
-
+// region SURVIVAL LEVELS
 // W O R L D    1   S U R V I V A L   L E V E L S
 export const survivalLevelsWorld1 = [
     {
@@ -14,7 +14,7 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 10,
         totalMonstersCount: 100,
-        hoursToReset: 2,
+        hoursToReset: 8,
         newEnemiesStars: [
             50,    // 50% for 1 star  monster
             100,   // 50% for 2 stars monster
@@ -42,7 +42,7 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 20,
         totalMonstersCount: 100,
-        hoursToReset: 4,
+        hoursToReset: 12,
         newEnemiesStars: [
             25,     // 25% for 1 star  monster
             75,     // 50% for 2 stars monster
@@ -70,7 +70,7 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 31,
         totalMonstersCount: 100,
-        hoursToReset: 8,
+        hoursToReset: 16,
         newEnemiesStars: [
             0,       // 0% for 1 star  monster
             50,     // 50% for 2 stars monster
@@ -87,7 +87,64 @@ export const survivalLevelsWorld1 = [
     }
 ]
 
-export const survivalLevelsWorld2 = [];
+export const survivalLevelsWorld2 = [
+    {
+        levelName: 'survival_level_4',
+        survival: true,
+        mapPosition: [
+            { x: 188, y: 249 },
+            { x: 219, y: 287 },
+            { x: 238, y: 335 },
+            { x: 293, y: 378 },
+        ],
+        rewardPerKill: 40,
+        newEnemiesPerRound: 3,
+        revealedByLevel: 40,
+        totalMonstersCount: 100,
+        hoursToReset: 20,
+        newEnemiesStars: [
+            0,       // 0% for 1 star  monster
+            0,       // 0% for 2 stars monster
+            50,      // 50% for 3 stars monster
+            100,     // 50% for 4 stars monster
+            0,      //  0% for 5 stars monster
+        ],
+        opponentMonstersData: [
+            { type: 3, stars: 3 },
+            { type: 1, stars: 4 },
+            { type: 9, stars: 3 },
+            { type: 7, stars: 4 }
+        ]
+    },
+    {
+        levelName: 'survival_level_5',
+        survival: true,
+        mapPosition: [
+            { x: 1031, y: 780 },
+            { x: 1052, y: 826 },
+            { x: 1098, y: 874 },
+            { x: 1163, y: 928 },
+        ],
+        rewardPerKill: 40,
+        newEnemiesPerRound: 3,
+        revealedByLevel: 58,
+        totalMonstersCount: 100,
+        hoursToReset: 24,
+        newEnemiesStars: [
+            0,       // 0% for 1 star  monster
+            0,       // 0% for 2 stars monster
+            0,      //  0% for 3 stars monster
+            50,      // 50% for 4 stars monster
+            100,     // 50% for 5 stars monster
+        ],
+        opponentMonstersData: [
+            { type: 2, stars: 5 },
+            { type: 6, stars: 4 },
+            { type: 8, stars: 5 },
+            { type: 5, stars: 4 }
+        ]
+    }
+];
 
 //region WORLD 1
 // R E G U L A R   M A P   L E V E L S
@@ -1134,17 +1191,17 @@ export const level_config = [
         opponentMonstersData: [
             { type: 1, stars: 3 },
             { type: 2, stars: 3 },
-            { type: 3, stars: 4 },
+            { type: 3, stars: 3 },
             { type: 3, stars: 3 },
             { type: 3, stars: 3 },
             { type: 5, stars: 4 },
-            { type: 5, stars: 3 },
+            { type: 5, stars: 4 },
             { type: 6, stars: 3 },
-            { type: 6, stars: 4 },
+            { type: 6, stars: 3 },
             { type: 7, stars: 3 },
             { type: 7, stars: 3 },
             { type: 8, stars: 4 },
-            { type: 8, stars: 3 },
+            { type: 8, stars: 4 },
             { type: 9, stars: 3 },
         ]
     },
@@ -1185,18 +1242,18 @@ export const level_config = [
         },
         opponentMonstersData: [
             { type: 1, stars: 4 },
-            { type: 2, stars: 3 },
+            { type: 2, stars: 4 },
             { type: 2, stars: 4 },
             { type: 3, stars: 3 },
             { type: 5, stars: 3 },
-            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
             { type: 6, stars: 3 },
             { type: 6, stars: 3 },
             { type: 7, stars: 4 },
             { type: 7, stars: 3 },
             { type: 8, stars: 3 },
-            { type: 8, stars: 4 },
-            { type: 9, stars: 3 },
+            { type: 8, stars: 3 },
+            { type: 9, stars: 4 },
             { type: 9, stars: 4 },
         ]
     },
@@ -1211,14 +1268,14 @@ export const level_config = [
         },
         opponentMonstersData: [
             { type: 1, stars: 4 },
-            { type: 1, stars: 3 },
+            { type: 1, stars: 4 },
             { type: 2, stars: 4 },
             { type: 2, stars: 4 },
             { type: 3, stars: 3 },
             { type: 3, stars: 4 },
             { type: 3, stars: 3 },
             { type: 5, stars: 3 },
-            { type: 5, stars: 4 },
+            { type: 5, stars: 3 },
             { type: 5, stars: 3 },
             { type: 5, stars: 3 },
             { type: 8, stars: 4 },
@@ -1886,7 +1943,6 @@ export const level_config = [
             { type: 9, stars: 5 },
         ]
     },
-
 ]
 
 export interface IOpponentMonstersData {

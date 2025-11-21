@@ -86,7 +86,7 @@ export class Map extends AbstractScene {
         });
         //===================================================================================================
 
-        this.createPlayer();
+        this.createPlayer();// this should be exactly here, between the 2  phases of creating survival levels! - TODO - check to fix it
 
         //========================SURVIVAL LEVEL==========================================================
         const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
@@ -202,7 +202,8 @@ export class Map extends AbstractScene {
                     this.confirmPopupOpen = false;
                 }, this);
             }
-            const targetLvl = lvl.revealedByLevel - 1;// first we move the player to the level that revealed the survival level
+            let targetLvl = lvl.revealedByLevel - 1;// first we move the player to the level that revealed the survival level
+            if (this.world === 2) targetLvl -= 34; // TODO - 34 is world1Levels.length - 1 -------- fix this
             this.movePlayerToLevel(targetLvl * 6, () => {
                 this.movePlayerToLevel(3, () => {
                     onMoveComplete();
@@ -363,12 +364,15 @@ export class Map extends AbstractScene {
                     if (levelData.isFlipped) {// move to world 1
                         this.changeScene('Map');
                     } else if (levelData.isTransition) { // MOVE TO NEXT WORLD
-                        if (+JSON.parse(localStorage.getItem('mapLevel') ?? "0") === 35) {
-                            localStorage.setItem('mapLevel', JSON.stringify(36));
-                        }
-                        if (+JSON.parse(localStorage.getItem('currentLevel') ?? "0") === 35) {
-                            localStorage.setItem('currentLevel', JSON.stringify(36));
-                        }
+                        // if (+JSON.parse(localStorage.getItem('mapLevel') ?? "0") === 35) {
+                        localStorage.setItem('currentLevel', JSON.stringify(36));
+                        // }
+                        // if (+JSON.parse(localStorage.getItem('mapLevel') ?? "0") === 35) {
+                        //     localStorage.setItem('mapLevel', JSON.stringify(36));
+                        // }
+                        // if (+JSON.parse(localStorage.getItem('currentLevel') ?? "0") === 35) {
+                        //     localStorage.setItem('currentLevel', JSON.stringify(36));
+                        // }
 
                         // TODO - change this hardcoded  2 as next world. it could be 3,4...
                         localStorage.setItem('currentWorld', JSON.stringify(2));
@@ -393,7 +397,8 @@ export class Map extends AbstractScene {
                     }
                 }
 
-                if (currentLevel === 0 || +currentLevel === 36) {
+                // if (currentLevel === 0 || +currentLevel === 36) {
+                if (currentLevel === 0) {
                     if (this.player.alpha !== 0) {
                         onMoveComplete();
                         return;

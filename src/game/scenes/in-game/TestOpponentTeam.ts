@@ -93,10 +93,11 @@ export class TestOpponentTeam {
         //     //     type: 1, stars: 1
         //     // },
         // ]
-
-        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null");
+        console.log(level_config);
+        let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null");
+        currentLevel = JSON.parse(localStorage.getItem('currentWorld') ?? 'null') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
         const survivalLevelData = JSON.parse(localStorage.getItem('survivalLevelData') ?? "null");
-        const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel - 1].opponentMonstersData;
+        const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;
 
         let result: IUnitData[] = [];
 
