@@ -104,6 +104,8 @@ export class Preloader extends Scene {
         this.load.image('gem', 'gem.png');
         this.load.image('slot-circle', 'slot-circle.png');
         this.load.image('slot-machine', 'slot-machine.png');
+        this.load.image('on', 'on.png');
+        this.load.image('off', 'off.png');
 
         this.load.font('main-font', 'Oups.otf');
     }

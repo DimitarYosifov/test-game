@@ -33,6 +33,9 @@ export class Gamble extends AbstractScene {
     private gemsTexture: Phaser.GameObjects.Image;
     private slowDownEvent: Phaser.Time.TimerEvent | null;
     private slowDownTween: Phaser.Tweens.Tween | null;
+    private autoButton: Phaser.GameObjects.Image;
+    private autoText: Phaser.GameObjects.Text;
+    private isInAutoMode: boolean = false;
 
     constructor() {
         super('Gamble');
@@ -52,6 +55,7 @@ export class Gamble extends AbstractScene {
         this.createStarsSection();
         this.createBackButton();
         this.createSpinButton();
+        this.createAutoButton();
         this.createCoins();
         this.shouldSpin = false;
         this.spinFinished = true;
@@ -166,6 +170,18 @@ export class Gamble extends AbstractScene {
         this.shouldSpin = true;
         this.spinFinished = false;
 
+        if (this.isInAutoMode) {
+            this.backButton.disableInteractive();
+            this.spinButton.disableInteractive();
+            this.time.delayedCall(250, () => {
+                this.shouldSpin = false;
+                this.skip();
+                this.spinButton.disableInteractive();
+            })
+            return;
+        }
+
+
         this.slowDownEvent = this.time.delayedCall(2500, () => {
             this.slowDownEvent?.destroy();
             this.slowDownEvent = null;
@@ -179,11 +195,7 @@ export class Gamble extends AbstractScene {
                 this.updateRewards();
             }
         });
-
-        // this.disableStop();
-        // this.time.delayedCall(500, () => {
         this.enableStop();
-        // })
     }
 
     private updateRewards() {
@@ -219,6 +231,7 @@ export class Gamble extends AbstractScene {
             this.updateRewardsEvent = null;
         };
         if (this.isWinningSpin) {
+            this.isInAutoMode = false;
             if (this.winningSymbols[0] === 'coin') {
                 this.onCoinsWin();
             } else if (this.winningSymbols[0] === 'gem') {
@@ -227,7 +240,13 @@ export class Gamble extends AbstractScene {
                 this.onMonsterWin();
             }
         } else {
-            this.reset();
+            if (this.isInAutoMode) {
+                this.time.delayedCall(250, () => {
+                    this.spin();
+                })
+            } else {
+                this.reset();
+            }
         }
     }
 
@@ -456,6 +475,30 @@ export class Gamble extends AbstractScene {
                 this.spinButton.disableInteractive();
             }
         });
+    }
+
+
+    private toggleAutoMode() {
+        this.isInAutoMode = !this.isInAutoMode;
+        const texture = this.isInAutoMode ? 'on' : 'off';
+        this.autoButton.setTexture(texture);
+    }
+
+    private createAutoButton(): void {
+        this.autoButton = this.add.image(1800, 830, 'off').setScale(0.35).setOrigin(0.5);
+        this.autoButton.setInteractive();
+        this.autoButton.on('pointerdown', () => {
+            this.toggleAutoMode();
+        });
+        this.autoText = this.add.text(
+            1740,
+            825,
+            `auto`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(1, 0.5);
     }
 
     createBackButton(): void {
