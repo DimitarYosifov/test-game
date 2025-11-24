@@ -36,6 +36,7 @@ export class Gamble extends AbstractScene {
     private autoButton: Phaser.GameObjects.Image;
     private autoText: Phaser.GameObjects.Text;
     private isInAutoMode: boolean = false;
+    private playerCoins: number;
 
     constructor() {
         super('Gamble');
@@ -57,10 +58,21 @@ export class Gamble extends AbstractScene {
         this.createSpinButton();
         this.createAutoButton();
         this.createCoins();
+        this.checkSpinAffordable();
         this.shouldSpin = false;
         this.spinFinished = true;
 
         // this.spin();
+    }
+
+    private checkSpinAffordable() {
+        this.playerCoins = +(localStorage.getItem('coins') || '0');
+        if (this.playerCoins < main_config.slotSpinCost) {
+            this.spinButton.disableInteractive();
+            this.isInAutoMode = false;
+            return false;
+        }
+        return true;
     }
 
     private createHeader() {
@@ -181,7 +193,6 @@ export class Gamble extends AbstractScene {
             return;
         }
 
-
         this.slowDownEvent = this.time.delayedCall(2500, () => {
             this.slowDownEvent?.destroy();
             this.slowDownEvent = null;
@@ -232,6 +243,7 @@ export class Gamble extends AbstractScene {
         };
         if (this.isWinningSpin) {
             this.isInAutoMode = false;
+            this.autoButton.setTexture('off');
             if (this.winningSymbols[0] === 'coin') {
                 this.onCoinsWin();
             } else if (this.winningSymbols[0] === 'gem') {
@@ -240,7 +252,7 @@ export class Gamble extends AbstractScene {
                 this.onMonsterWin();
             }
         } else {
-            if (this.isInAutoMode) {
+            if (this.isInAutoMode && this.checkSpinAffordable()) {
                 this.time.delayedCall(250, () => {
                     this.spin();
                 })
@@ -376,6 +388,7 @@ export class Gamble extends AbstractScene {
         this.backButton.setInteractive();
         this.spinButton.setInteractive();
         this.spinButton.text.setText('spin');
+        this.checkSpinAffordable();
     }
 
     private enableStop() {
@@ -533,9 +546,10 @@ export class Gamble extends AbstractScene {
     }
 
     private updateCoinsText() {
-        const playerCoins = localStorage.getItem('coins') || '0';
-        localStorage.setItem('coins', JSON.stringify(+playerCoins - main_config.slotSpinCost));
-        this.coinText.setText(`${+playerCoins - main_config.slotSpinCost}`);
+        this.playerCoins = +(localStorage.getItem('coins') || '0');
+        this.playerCoins -= main_config.slotSpinCost;
+        localStorage.setItem('coins', JSON.stringify(this.playerCoins));
+        this.coinText.setText(`${this.playerCoins}`);
         this.coinTexture.x = this.coinText.x - this.coinText.width;
         this.gemsText.x = this.coinTexture.x - this.coinTexture.displayWidth - 20;
         this.gemsTexture.x = this.gemsText.x - this.gemsText.displayWidth;
