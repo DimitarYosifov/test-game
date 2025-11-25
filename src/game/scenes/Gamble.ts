@@ -177,7 +177,7 @@ export class Gamble extends AbstractScene {
         this.spinSpeed.speed = SPIN_SPEED;
         this.updateCoinsText();
         this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
-        // this.winningSymbols = ['coin', 'coin', 'coin']; //// test
+        // this.winningSymbols = ['gem', 'gem', 'gem']; //// test
         this.isWinningSpin = this.winningSymbols[0] === this.winningSymbols[1] && this.winningSymbols[0] === this.winningSymbols[2];
         this.shouldSpin = true;
         this.spinFinished = false;
@@ -186,6 +186,7 @@ export class Gamble extends AbstractScene {
             this.backButton.disableInteractive();
             this.spinButton.disableInteractive();
             this.time.delayedCall(250, () => {
+                this.updateRewards();
                 this.shouldSpin = false;
                 this.skip();
                 this.spinButton.disableInteractive();
