@@ -1,10 +1,10 @@
-import { Scene } from 'phaser';
 import { MainMenuLevelConfirm } from './in-main-menu/MainMenuLevelConfirm';
 import { ILevelConfig, level_config, survivalLevelsWorld1, survivalLevelsWorld2 } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { world1points } from './in-map/world_1_points';
 import { world2points } from './in-map/world_2_points';
+import { SpriteAnimation } from './SpriteAnimation';
 
 export class Map extends AbstractScene {
     confirmPopupOpen: boolean;
@@ -39,6 +39,7 @@ export class Map extends AbstractScene {
 
         this.add.image(0, 0, 'bg-achievments').setOrigin(0);
         this.addParticles();
+        this.createFireAnimation();
 
         this.survivalLevels = [];
         this.spots = [];
@@ -111,6 +112,16 @@ export class Map extends AbstractScene {
         this.createCoins();
     }
 
+    private createFireAnimation() {
+        const fireAnimation = new SpriteAnimation(this, 0, 1350, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 6.5, 5, 5);
+        fireAnimation.animation.setOrigin(0, 1);
+        fireAnimation.animation.setDepth(1).setAlpha(1);
+        // const fireAnimation2 = new SpriteAnimation(this, fireAnimation.animation.x + fireAnimation.animation.displayWidth, 1080, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 3.5, 3, 5);
+        // fireAnimation2.animation.setOrigin(0, 1);
+        // fireAnimation2.animation.setDepth(1).setAlpha(1);
+
+    }
+
     private addLight(texture: Phaser.GameObjects.Image) {
         let light = this.lights.addPointLight(texture.x, texture.y, 0xffffff, 100, 4, 0.05).setAlpha(0.06).setDepth(this.levelContentContainer.depth + 0.1);
         this.tweens.add({
@@ -127,14 +138,14 @@ export class Map extends AbstractScene {
     private addParticles() {
         let emitter = this.add.particles(0, 0, 'flare', {
             x: { random: [0, 1920] },
-            y: { random: [0, 540] },
-            lifespan: { random: [20000, 30000] },
+            y: { random: [340, 880] },
+            lifespan: { random: [3000, 7000] },
             scale: { min: 0.05, max: 0.2 },
-            gravityY: 2,
+            gravityY: -55,
             blendMode: 'ADD',
-            frequency: 250,
+            frequency: 150,
             quantity: 1,
-            maxAliveParticles: 75,
+            maxAliveParticles: 175,
             advance: 20000
 
         }).setDepth(15 + 0.1)
@@ -150,6 +161,7 @@ export class Map extends AbstractScene {
             this.changeScene('MainMenu');
         });
         this.add.existing(this.backButton);
+        this.backButton.setDepth(15);
     }
 
     private createSurvivalLevel(introduceToSurvivalLevel: boolean, lvl: any) {

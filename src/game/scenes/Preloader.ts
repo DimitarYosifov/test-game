@@ -33,10 +33,10 @@ export class Preloader extends Scene {
         this.load.image('1', '1.png');
         this.load.image('2', '2.png');
         this.load.image('3', '3.png');
-        this.load.image('5', '5.jpg');
+        this.load.image('5', '5.png');
         this.load.image('6', '6.png');
-        this.load.image('7', '7.jpg');
-        this.load.image('8', '8.jpg');
+        this.load.image('7', '7.png');
+        this.load.image('8', '8.png');
         this.load.image('9', '9.png');
         this.load.image('logo', 'logo.png');
         this.load.image('attack', 'attack.png');
@@ -107,7 +107,12 @@ export class Preloader extends Scene {
         this.load.image('on', 'on.png');
         this.load.image('off', 'off.png');
 
+        //  F O N T S
         this.load.font('main-font', 'Oups.otf');
+
+        //  A N I M A T I O N S
+        this.load.atlas('meterbox', 'meter-box-win.png', 'meter-box-win.json');
+        this.load.atlas('bg-fire', 'bg-fire.png', 'bg-fire.json');
     }
 
     create() {

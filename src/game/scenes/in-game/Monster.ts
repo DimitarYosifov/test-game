@@ -253,7 +253,7 @@ export class Monster extends Phaser.GameObjects.Container {
         // skipByUser is false for the currentlySelectedMonster when skipped
         interactive ? this.bg.setInteractive() : this.bg.disableInteractive();
         if (interactive && !skipByUser) {
-            this.setIdlePendingMove();
+            // this.setIdlePendingMove(); // do not use scale tween for now...
         } else {
             if (this.idleTween && !skipByUser) {
                 this.scale = 1;
@@ -321,6 +321,11 @@ export class Monster extends Phaser.GameObjects.Container {
         const buff: IBuff = this.scene.data.list.gridPositions[row][col].buff;
         if (buff) {
             //hass buff on new position
+
+            if (this.scene.data.list.isPlayerTurn) {
+                this.scene.cameras.main.shake(1000, 0.002)
+            }
+
             if (
                 (buff.buffType === 'attack' && this.unitData.melee === 0) || // monster not suitable for attack buff
                 (buff.buffType === 'bow' && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
@@ -448,10 +453,10 @@ export class Monster extends Phaser.GameObjects.Container {
         const isMagicAttack = this.unitData.magic > 0;
 
         const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
-            lifespan: 1000,
+            lifespan: 1400,
             speed: { random: [75, 150] },
-            scale: { start: 0.5, end: 0 },
-            gravityY: 100,
+            scale: { start: 0.75, end: 0.2 },
+            gravityY: 125,
             emitting: false
         }).setDepth(15)
 
@@ -481,7 +486,7 @@ export class Monster extends Phaser.GameObjects.Container {
                     },
                     {
                         alpha: { value: 0, duration: 1000 },
-                        delay: 750,
+                        delay: 1250,
                         onComplete: () => {
                             emitter.destroy(true);
                             weaponImg.destroy(true);

@@ -230,7 +230,7 @@ export const main_config = {
         "quality": 1,
         "quantityAtLevelStart": {
             "min": 1,
-            "max": 4
+            "max": 5
         },
         "buffsStartLevelColumn": {
             "min": 5,

@@ -7,6 +7,7 @@ import { ILevelConfig, level_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
+import { SpriteAnimation } from './SpriteAnimation';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -52,6 +53,7 @@ export class Game extends AbstractScene {
     survivalLevelKilledMonsters: number;
     questionMarkContainer: Phaser.GameObjects.Container | null;
     confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
+    currentlySelectedMonsterAnimation: SpriteAnimation;
 
     constructor() {
         super('Game');
@@ -109,7 +111,10 @@ export class Game extends AbstractScene {
             this.checkEndTurnHandler();
         })
 
-        // TEST - jump straight to level
+        this.currentlySelectedMonsterAnimation = new SpriteAnimation(this, 400, 300, 'meterbox', 'meterbox', 'meterbox_win_fx_', true, 15, 0.41, 1.5, 5)
+            .pause()
+            .hide();
+        // TEST - jump straight to level outro
         // this.createLevelOutroPopup(true)
     }
 
@@ -156,7 +161,7 @@ export class Game extends AbstractScene {
             const row = Phaser.Math.Between(0, main_config.gridSizeVertical - 1);
             const col = Phaser.Math.Between(main_config.buffs.buffsStartLevelColumn.min, main_config.buffs.buffsStartLevelColumn.max);
 
-            if (this.data.list.gridPositions[row][col].occupiedBy || this.data.list.gridPositions[row][col].buff) {
+            if (this.data.list.gridPositions[row][col].occupiedBy?.length || this.data.list.gridPositions[row][col].buff) {
 
                 if (!isNaN(buffsCount)) {
                     this.addInteraction();
@@ -183,11 +188,26 @@ export class Game extends AbstractScene {
         for (let col = main_config.buffs.buffsStartLevelColumn.min; col <= main_config.buffs.buffsStartLevelColumn.max; col++) {
             for (let row = 0; row < main_config.gridSizeVertical; row++) {
 
+                if (this.data.list.gridPositions[row][col].occupiedBy?.length || this.data.list.gridPositions[row][col].buff) {
+                    if (this.data.list.clouds[row][col].alpha === 0) {
+                        continue;
+                    }
+                }
+
                 const x = this.data.list.gridPositions[row][col].x + this.mainGridContainer.x;
                 const y = this.data.list.gridPositions[row][col].y + this.mainGridContainer.y
 
                 let questionMark = this.add.image(x, y, 'question-mark').setScale(0.75).setOrigin(0.5).setAlpha(1);
                 (this.questionMarkContainer as Phaser.GameObjects.Container).add(questionMark);
+
+                this.tweens.add({
+                    targets: questionMark,
+                    repeat: 5,
+                    yoyo: true,
+                    duration: 400,// Phaser.Math.RND.between(350, 450),
+                    alpha: 0,
+                    ease: 'Sine.easeInOut',
+                })
             }
         }
     }
@@ -406,9 +426,17 @@ export class Game extends AbstractScene {
     private monsterSelectHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
             if (this.data.list.isPlayerTurn) {
+                const monsterBounds = (data[0] as Monster).bg.getBounds();
+                this.currentlySelectedMonsterAnimation
+                    .moveTo(monsterBounds.x + monsterBounds.width / 2, monsterBounds.y + monsterBounds.height / 2)
+                    .show()
+                    .resume();
+
                 this.endTurnButton.setInteractive();
                 this.skipButton.setInteractive();
                 this.giveUpButton.setInteractive();
+            } else {
+                this.currentlySelectedMonsterAnimation.hide().pause();
             }
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
@@ -424,6 +452,10 @@ export class Game extends AbstractScene {
     private directionSelectHandler(): void {
         this.skipButton.disableInteractive();
         this.events.on(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, (data: number[]) => {
+
+            if (this.currentlySelectedMonsterAnimation?.animation.alpha === 1) {
+                this.currentlySelectedMonsterAnimation.pause().hide();
+            }
 
             const newRow = data[0];
             const newCol = data[1];
@@ -448,6 +480,10 @@ export class Game extends AbstractScene {
 
     private targetSelectHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, (data: number[]) => {
+
+            if (this.currentlySelectedMonsterAnimation?.animation.alpha === 1) {
+                this.currentlySelectedMonsterAnimation.pause().hide();
+            }
 
             const newRow = data[0];
             const newCol = data[1];

@@ -3,6 +3,7 @@ import { AbstractScene } from './AbstractScene';
 import { main_config } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { StartOverConfirm } from './in-main-menu/StartOverConfirm';
+import { SpriteAnimation } from './SpriteAnimation';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
