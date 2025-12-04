@@ -7,8 +7,8 @@ const LAST_RESET_TIME_KEY = 'lastResetTime';
 
 
 export class DailyQuestTimeHandler {
+  
     scene: Scene;
-
 
     static initialCheck() {
         const startTime = this.getOrCreateStartTime();
