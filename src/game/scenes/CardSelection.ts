@@ -83,24 +83,63 @@ export class CardSelection extends AbstractScene {
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
                 // {
-                //     type: 9, stars: 3, row: NaN, col: 11
+                //     type: 5, stars: 4, row: NaN, col: 11
                 // },
                 // {
-                //     type: 9, stars: 2, row: NaN, col: 11
+                //     type: 5, stars: 3, row: NaN, col: 11
                 // },
                 // {
-                //     type: 9, stars: 2, row: NaN, col: 11
+                //     type: 5, stars: 3, row: NaN, col: 11
                 // },
                 // {
-                //     type: 9, stars: 1, row: NaN, col: 11
+                //     type: 5, stars: 3, row: NaN, col: 11
                 // },
                 // {
-                //     type: 9, stars: 1, row: NaN, col: 11
+                //     type: 5, stars: 3, row: NaN, col: 11
                 // },
                 // {
-                //     type: 9, stars: 1, row: NaN, col: 11
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
                 // },
 
+                // {
+                //     type: 1, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 2, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 3, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 7, stars: 1, row: NaN, col: 11
+                // },
+                // // {
+                // //     type: 5, stars: 1, row: NaN, col: 11
+                // // },
+                // {
+                //     type: 6, stars: 1, row: NaN, col: 11
+                // },
 
 
                 // {
@@ -699,7 +738,7 @@ export class CardSelection extends AbstractScene {
         this.updateCoinsText(playerCoinsAfterUpgrade, playerGemsAfterUpgrade);
         localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
         localStorage.setItem('gems', JSON.stringify(playerGemsAfterUpgrade));
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));// test - UNCOMMENT
         this.toggleUpgradeButtonEnable(false);
         this.upgradeCost = 0;
         this.upgradeCostGems = 0;
@@ -728,14 +767,18 @@ export class CardSelection extends AbstractScene {
         // reset upgrade section
         this.upgradeSelectedMonsters = [null, null, null];
 
+        // get the index where new monster should be placed and move it there
+        const newMonsterIndex = this.playerMonstersData.filter(x =>
+            +x.type < +newMonsterType || (+x.type === +newMonsterType && +x.stars > +newMonsterStars)
+        ).length;
+
+
         // add new monster to playerMonstersData
-        this.addNewMonster(+newMonsterType, newMonsterStars);
+        this.addNewMonster(+newMonsterType, newMonsterStars, newMonsterIndex);
 
         // sort monsters in the container
         this.sortMonsters();
 
-        // get the index where new monster should be placed and move it there
-        const newMonsterIndex = this.playerMonstersData.findIndex(i => i.type === +newMonsterType && i.stars === +newMonsterStars);
         this.monstersContainer.moveTo(newMonster, newMonsterIndex);
 
         // update all indexes for monsters in the container
@@ -793,9 +836,11 @@ export class CardSelection extends AbstractScene {
     }
     // end region
 
-    private addNewMonster(type: number, stars: number) {
-        const newObject = { type, stars, row: NaN, col: 11 };
+    private addNewMonster(type: number, stars: number, newMonsterIndex: number) {
+        const newObject = { type, stars, row: NaN, col: 11, new: true };
         this.playerMonstersData.push(newObject);
+        Phaser.Utils.Array.MoveTo(this.playerMonstersData, newObject, newMonsterIndex);
+
     }
 
     private reposition(moveImmediately: boolean = false) {
