@@ -82,64 +82,64 @@ export class CardSelection extends AbstractScene {
         //for testing when starting new game - start with the monsters below
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
-                // {
-                //     type: 5, stars: 4, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
+                {
+                    type: 5, stars: 4, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 3, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 5, stars: 1, row: NaN, col: 11
+                },
 
+                {
+                    type: 1, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 2, stars: 2, row: NaN, col: 11
+                },
+                {
+                    type: 3, stars: 1, row: NaN, col: 11
+                },
+                {
+                    type: 7, stars: 1, row: NaN, col: 11
+                },
                 // {
-                //     type: 1, stars: 2, row: NaN, col: 11
+                //     type: 5, stars: 1, row: NaN, col: 11
                 // },
-                // {
-                //     type: 2, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // // {
-                // //     type: 5, stars: 1, row: NaN, col: 11
-                // // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
+                {
+                    type: 6, stars: 1, row: NaN, col: 11
+                },
 
 
                 // {
@@ -704,7 +704,6 @@ export class CardSelection extends AbstractScene {
         console.log(this.monstersContainer.list);
         this.hasDuplicates();
 
-
         // remove and destroy monsters in the upgrade section and set monsters as null in playerMonstersData for this monsters
         this.upgradeSelectedMonsters.forEach((m: Monster | null, index: number) => {
             if (!isNaN(m!.upgradePostionIndex)) {
@@ -738,7 +737,7 @@ export class CardSelection extends AbstractScene {
         this.updateCoinsText(playerCoinsAfterUpgrade, playerGemsAfterUpgrade);
         localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
         localStorage.setItem('gems', JSON.stringify(playerGemsAfterUpgrade));
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));// test - UNCOMMENT
+        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
         this.toggleUpgradeButtonEnable(false);
         this.upgradeCost = 0;
         this.upgradeCostGems = 0;
@@ -784,10 +783,6 @@ export class CardSelection extends AbstractScene {
         // update all indexes for monsters in the container
         this.updateMonstersOrder();
 
-        // set interaction for the new monster
-        this.setupMonsterInteractions(newMonster, newMonsterIndex);
-        this.setupMonsterDrag(newMonster, newMonsterIndex);
-
         // update local storage with the data including the new monster
         localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
 
@@ -818,6 +813,12 @@ export class CardSelection extends AbstractScene {
                     onComplete: () => {
                         // this.monstersContainer.moveTo(newMonster, newMonster.originalIndex);
                         this.monstersContainer.moveTo(newMonster, newMonsterIndex);
+
+                        // set interaction for the new monster
+                        this.setupMonsterInteractions(newMonster, newMonsterIndex);
+                        this.setupMonsterDrag(newMonster, newMonsterIndex);
+
+
                         overlay.destroy();
                         this.reposition();
                     }
