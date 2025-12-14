@@ -236,7 +236,7 @@ export const main_config = {
             "min": 5,
             "max": 6
         },
-        "chanceForBuffAfterRound": 30 // 30 %
+        "chanceForBuffAfterRound": 33 // 30 %
     },
     "slotCoins": {
         "min": 50,
@@ -281,6 +281,17 @@ export const main_config = {
 
 
     //BUGS:
+
+
+
+
+     // after attacking enemy monster s- somethimes the enemy monster is selected  !!!!!!
+
+
+
+
+
+
     // AFTER SUCCESSFUL UPGRADE COIN COST AND GEMS COST ARE NOT CLEARED !!!!! 
 
     /// when two tabs with the game are open. after buy pack in one tab, you still 

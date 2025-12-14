@@ -82,64 +82,64 @@ export class CardSelection extends AbstractScene {
         //for testing when starting new game - start with the monsters below
         this.playerMonstersData = playerMonstersDataFromStorage ||
             [
-                {
-                    type: 5, stars: 4, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 3, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 3, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 3, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 3, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 5, stars: 1, row: NaN, col: 11
-                },
-
-                {
-                    type: 1, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 2, stars: 2, row: NaN, col: 11
-                },
-                {
-                    type: 3, stars: 1, row: NaN, col: 11
-                },
-                {
-                    type: 7, stars: 1, row: NaN, col: 11
-                },
+                // {
+                //     type: 5, stars: 4, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 3, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 3, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 3, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 3, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 2, row: NaN, col: 11
+                // },
                 // {
                 //     type: 5, stars: 1, row: NaN, col: 11
                 // },
-                {
-                    type: 6, stars: 1, row: NaN, col: 11
-                },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+
+                // {
+                //     type: 1, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 2, stars: 2, row: NaN, col: 11
+                // },
+                // {
+                //     type: 3, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 7, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 5, stars: 1, row: NaN, col: 11
+                // },
+                // {
+                //     type: 6, stars: 1, row: NaN, col: 11
+                // },
 
 
                 // {

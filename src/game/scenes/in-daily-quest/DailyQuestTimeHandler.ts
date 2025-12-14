@@ -7,7 +7,7 @@ const LAST_RESET_TIME_KEY = 'lastResetTime';
 
 
 export class DailyQuestTimeHandler {
-  
+
     scene: Scene;
 
     static initialCheck() {
@@ -48,12 +48,18 @@ export class DailyQuestTimeHandler {
         const now = new Date();
         const lastReset = new Date(this.getLastResetTime());
 
+        //----------fix for not reseting---------------
+        const lastResetPlus24Hours = new Date(lastReset);
+        lastResetPlus24Hours.setHours(lastResetPlus24Hours.getHours() + 24);
+        //---------------------------------------------
+
         const baseTime = new Date(startTime);
         const todayReset = new Date(now);
         todayReset.setHours(baseTime.getHours(), baseTime.getMinutes(), baseTime.getSeconds(), 0);
 
         // If now is after today’s reset time and we haven’t reset yet today
-        return now >= todayReset && lastReset < todayReset;
+        return (now >= todayReset && lastReset < todayReset) || (now > lastResetPlus24Hours);  
+
     }
 
     static getTimeUntilNextReset(startTime: number): number {
@@ -90,7 +96,7 @@ export class DailyQuestTimeHandler {
 
 
     static createQuests() {
-        //creates newly random quests and stres them in local storage
+        //creates newly random quests and stоres them in local storage
         const dailyQuestsInfo = main_config.dailyQuests;
         const quests = [];
         let questsData = [];

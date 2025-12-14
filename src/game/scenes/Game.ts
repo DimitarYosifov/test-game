@@ -15,7 +15,9 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'REPEAT_OPPONENT_MOVE' = 'repeat-opponent-move',
     'MONSTER_SELECTED' = 'monster-selected',
     'DIRECTION_SELECTED' = 'direction-selected',
-    'MONSTER_DIED' = 'monster-died'
+    'MONSTER_DIED' = 'monster-died',
+    'DROPPED_PACK_COLLECTED' = 'dropped-pack-collected',
+    'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected'
 }
 
 export enum BUFF_TYPES {
@@ -557,8 +559,9 @@ export class Game extends AbstractScene {
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
         let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
-        currentLevel = JSON.parse(localStorage.getItem('currentWorld') ?? 'null') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
-        const currentLevelData = level_config[currentLevel];
+        const currentWorld = JSON.parse(localStorage.getItem('currentWorld') ?? 'null');
+        currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel;  //TODO check world, it could be 3,4.....
+        const currentLevelData = level_config[currentLevel - 1];
         const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
 
         const rndNum = Phaser.Math.RND.between(1, 100);
@@ -567,7 +570,7 @@ export class Game extends AbstractScene {
         const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
         // bg overlay
-        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(15);
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23);
         this.tweens.add({
             targets: overlay,
             duration: 200,
@@ -590,10 +593,10 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0.5).setDepth(15);
+                }).setOrigin(0.5).setDepth(23);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(16);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(23);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -606,7 +609,7 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0, 0.5).setDepth(15);
+                }).setOrigin(0, 0.5).setDepth(23);
             rewardsContainer.add(rewardtext);
 
             //coin img
@@ -724,17 +727,17 @@ export class Game extends AbstractScene {
                     this.changeScene('MainMenu');
                 }
 
-            }).setDepth(16);
+            }).setDepth(23);
         } else {
             // try again button
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
-            }, false).setDepth(15);
+            }, false).setDepth(23);
 
             // giveUp button
             const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
-            }).setDepth(15)
+            }).setDepth(23)
         }
     }
 
@@ -775,7 +778,7 @@ export class Game extends AbstractScene {
     }
 
     private monsterNotClaimedPopup() {
-        const overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
+        const overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(25);
         overlay.setInteractive();
         overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
@@ -789,7 +792,7 @@ export class Game extends AbstractScene {
                 stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
                 align: 'center'
             }
-        ).setOrigin(0.5).setAlpha(0);
+        ).setOrigin(0.5).setAlpha(0).setDepth(25);
         this.tweens.chain({
             tweens: [
                 {
@@ -867,13 +870,14 @@ export class Game extends AbstractScene {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
         if (turnEnd) {
-            this.changeBulbIndicators(this.data.list.isPlayerTurn);
             this.endTurnButton.disableInteractive();
             this.skipButton.disableInteractive();
             this.giveUpButton.disableInteractive();
 
             // alert('end turn');
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
+            this.changeBulbIndicators(this.data.list.isPlayerTurn);
+
             if (this.data.list.isPlayerTurn) {
                 // this.skipButton.setInteractive().setAlpha(1);
                 if (this.checkShouldAddBuffs()) {

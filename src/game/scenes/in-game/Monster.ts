@@ -622,17 +622,35 @@ export class Monster extends Phaser.GameObjects.Container {
     die() {
         // this.alpha = 0.5;
         this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
+        let waitForPackDropped = false;
+        let waitForGemDropped = false;
         if (!this.isPlayerMonster) {
-            if (!this.checkFreePackDrop()) {// if no pack drop, check gem drop
-                this.checkGemDrop();
-            };
+            const checkFreePackDrop = this.checkFreePackDrop();
+            if (!checkFreePackDrop) {// if no pack drop, check gem drop
+                waitForGemDropped = this.checkGemDrop();
+            } else {
+                waitForPackDropped = true;
+            }
         }
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
             duration: 1000,
             onComplete: () => {
-                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                if (waitForPackDropped) {
+                    // SOMETIMES THERES A BUG HERE - this.scene is undefined !!!!
+                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    })
+                }
+                else if (waitForGemDropped) {
+                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    })
+                }
+                else {
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                }
             }
         })
     }
@@ -641,6 +659,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const odds = main_config.chanceToDropGem;
         const randomNumber = Phaser.Math.RND.between(1, 1000);
         if (randomNumber >= odds) {
+
             const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
             const data = JSON.parse(localStorage.getItem('gems') ?? '0');
             localStorage.setItem('gems', JSON.stringify(+data + 1));
@@ -670,11 +689,15 @@ export class Monster extends Phaser.GameObjects.Container {
                         duration: 300,
                         ease: 'Back.easeOut',
                         onComplete: () => {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
                             gem.destroy(true);
                         }
                     },
                 ]
             });
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -748,6 +771,7 @@ export class Monster extends Phaser.GameObjects.Container {
                     duration: 300,
                     ease: 'Back.easeOut',
                     onComplete: () => {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED);
                         pack.destroy(true);
                     }
                 },
