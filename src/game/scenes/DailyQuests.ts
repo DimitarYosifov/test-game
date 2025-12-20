@@ -53,16 +53,17 @@ export class DailyQuests extends AbstractScene {
             delay: 1000,
             loop: true,
             callback: () => {
-                const updatedStartTime = DailyQuestTimeHandler.getStoredStartTime();
+                const startTime = DailyQuestTimeHandler.getOrCreateStartTime();
 
-                // ✅ Check if quests should reset
-                if (DailyQuestTimeHandler.shouldResetQuests(updatedStartTime)) {
+                if (DailyQuestTimeHandler.shouldResetQuests(startTime)) {
                     DailyQuestTimeHandler.resetQuests();
                     DailyQuestTimeHandler.setLastResetTime();
                 }
 
-                const timeLeft = DailyQuestTimeHandler.getTimeUntilNextReset(updatedStartTime);
-                this.timeLeftText.setText(`Time left: ${DailyQuestTimeHandler.formatTime(timeLeft)}`);
+                const timeLeft = DailyQuestTimeHandler.getTimeUntilNextReset(startTime);
+                this.timeLeftText.setText(
+                    `Time left: ${DailyQuestTimeHandler.formatTime(timeLeft)}`
+                );
             },
         });
     }

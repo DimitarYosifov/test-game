@@ -570,7 +570,7 @@ export class Game extends AbstractScene {
         const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
         // bg overlay
-        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23);
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23 - 0.1);
         this.tweens.add({
             targets: overlay,
             duration: 200,
@@ -596,7 +596,7 @@ export class Game extends AbstractScene {
                 }).setOrigin(0.5).setDepth(23);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(23);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(23 + 0.1);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -609,7 +609,7 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0, 0.5).setDepth(23);
+                }).setOrigin(0, 0.5).setDepth(23 + 0.1);
             rewardsContainer.add(rewardtext);
 
             //coin img
@@ -727,17 +727,17 @@ export class Game extends AbstractScene {
                     this.changeScene('MainMenu');
                 }
 
-            }).setDepth(23);
+            }).setDepth(23 + 0.1);
         } else {
             // try again button
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
-            }, false).setDepth(23);
+            }, false).setDepth(23 + 0.1);
 
             // giveUp button
             const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
-            }).setDepth(23)
+            }).setDepth(23 + 0.1)
         }
     }
 
@@ -753,7 +753,7 @@ export class Game extends AbstractScene {
                 blendMode: 'ADD',
                 frequency: 150,
                 advance: 2000
-            }).setDepth(15)
+            }).setDepth(23)
             this.confettiEmitters.push(emitter);
         });
     }

@@ -322,9 +322,7 @@ export class Monster extends Phaser.GameObjects.Container {
         if (buff) {
             //hass buff on new position
 
-            if (this.scene.data.list.isPlayerTurn) {
-                this.scene.cameras.main.shake(1000, 0.002)
-            }
+
 
             if (
                 (buff.buffType === 'attack' && this.unitData.melee === 0) || // monster not suitable for attack buff
@@ -334,6 +332,10 @@ export class Monster extends Phaser.GameObjects.Container {
                 return;
             } else {
                 //add buff
+                if (this.scene.data.list.isPlayerTurn) {
+                    this.scene.cameras.main.shake(1000, 0.002)
+                }
+
                 let buffImageKey = '';
                 switch (buff.buffType) {
                     case BUFF_TYPES.ATTACK:

@@ -3,20 +3,27 @@ import { getRandomMonsterType, main_config } from '../../configs/main_config';
 
 const QUEST_START_TIME_KEY = 'questStartTime';
 const LAST_RESET_TIME_KEY = 'lastResetTime';
-// const TEST_DURATION_MS = 3 * 60 * 1000; // 5 minutes in milliseconds
-
 
 export class DailyQuestTimeHandler {
 
     scene: Scene;
 
-    static initialCheck() {
+    /* -------------------------------------------------------------------------- */
+    /*                                  BOOTSTRAP                                 */
+    /* -------------------------------------------------------------------------- */
+
+    static initialCheck(): void {
         const startTime = this.getOrCreateStartTime();
+
         if (this.shouldResetQuests(startTime)) {
             this.resetQuests();
-            DailyQuestTimeHandler.setLastResetTime();
+            this.setLastResetTime();
         }
     }
+
+    /* -------------------------------------------------------------------------- */
+    /*                               STORAGE HELPERS                               */
+    /* -------------------------------------------------------------------------- */
 
     static setLastResetTime(): void {
         localStorage.setItem(LAST_RESET_TIME_KEY, Date.now().toString());
@@ -35,48 +42,77 @@ export class DailyQuestTimeHandler {
         return now;
     }
 
-    static getStoredStartTime(): number {
-        return parseInt(localStorage.getItem(QUEST_START_TIME_KEY) || `${Date.now()}`, 10);
-    }
+    /* -------------------------------------------------------------------------- */
+    /*                             RESET TIME LOGIC                                */
+    /* -------------------------------------------------------------------------- */
 
-    static setNewStartTime(): void {
-        const now = Date.now();
-        localStorage.setItem(QUEST_START_TIME_KEY, now.toString());
-    }
-
-    static shouldResetQuests(startTime: number): boolean {
+    /** Returns today's scheduled reset time (anchored to first launch clock) */
+    static getTodayResetTime(startTime: number): Date {
         const now = new Date();
-        const lastReset = new Date(this.getLastResetTime());
+        const base = new Date(startTime);
 
-        //----------fix for not reseting---------------
-        const lastResetPlus24Hours = new Date(lastReset);
-        lastResetPlus24Hours.setHours(lastResetPlus24Hours.getHours() + 24);
-        //---------------------------------------------
+        const reset = new Date(now);
+        reset.setHours(
+            base.getHours(),
+            base.getMinutes(),
+            base.getSeconds(),
+            0
+        );
 
-        const baseTime = new Date(startTime);
-        const todayReset = new Date(now);
-        todayReset.setHours(baseTime.getHours(), baseTime.getMinutes(), baseTime.getSeconds(), 0);
-
-        // If now is after today’s reset time and we haven’t reset yet today
-        return (now >= todayReset && lastReset < todayReset) || (now > lastResetPlus24Hours);  
-
+        return reset;
     }
 
+    /** Returns the most recent reset that should have occurred */
+    static getMostRecentScheduledReset(startTime: number): Date {
+        const now = new Date();
+        const todayReset = this.getTodayResetTime(startTime);
+
+        // If today's reset hasn't happened yet, the most recent was yesterday
+        if (now < todayReset) {
+            todayReset.setDate(todayReset.getDate() - 1);
+        }
+
+        return todayReset;
+    }
+
+    /** Determines whether quests must be reset */
+    static shouldResetQuests(startTime: number): boolean {
+        const lastResetTime = this.getLastResetTime();
+
+        // First launch → reset immediately
+        if (lastResetTime === 0) return true;
+
+        const lastReset = new Date(lastResetTime);
+        const mostRecentReset = this.getMostRecentScheduledReset(startTime);
+
+        return lastReset < mostRecentReset;
+    }
+
+    /** Returns milliseconds until the next scheduled reset */
     static getTimeUntilNextReset(startTime: number): number {
         const now = new Date();
-        const baseTime = new Date(startTime);
+        const base = new Date(startTime);
 
         const nextReset = new Date(now);
-        nextReset.setHours(baseTime.getHours(), baseTime.getMinutes(), baseTime.getSeconds(), 0);
+        nextReset.setHours(
+            base.getHours(),
+            base.getMinutes(),
+            base.getSeconds(),
+            0
+        );
         nextReset.setMilliseconds(0);
 
+        // If today's reset already passed, next reset is tomorrow
         if (now >= nextReset) {
-            // If current time is past today's reset time, next reset is tomorrow
             nextReset.setDate(nextReset.getDate() + 1);
         }
 
         return nextReset.getTime() - now.getTime();
     }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                FORMATTING                                   */
+    /* -------------------------------------------------------------------------- */
 
     static formatTime(ms: number): string {
         const totalSeconds = Math.floor(ms / 1000);
@@ -85,55 +121,60 @@ export class DailyQuestTimeHandler {
         const seconds = totalSeconds % 60;
 
         return `${hours.toString().padStart(2, '0')}:` +
-            `${minutes.toString().padStart(2, '0')}:` +
-            `${seconds.toString().padStart(2, '0')}`;
+               `${minutes.toString().padStart(2, '0')}:` +
+               `${seconds.toString().padStart(2, '0')}`;
     }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                QUEST LOGIC                                  */
+    /* -------------------------------------------------------------------------- */
 
     static resetQuests(): void {
         console.log('%c[Quest Reset] Daily quests have been reset.', 'color: #00ff00');
         this.createQuests();
     }
 
-
-    static createQuests() {
-        //creates newly random quests and stоres them in local storage
+    static createQuests(): void {
         const dailyQuestsInfo = main_config.dailyQuests;
-        const quests = [];
-        let questsData = [];
+        const questsData: any[] = [];
         const monsterTypesCreated: number[] = [];
 
         for (let index = 0; index < dailyQuestsInfo.questsCount; index++) {
+
             let randomMonsterType = getRandomMonsterType();
             while (monsterTypesCreated.includes(randomMonsterType)) {
                 randomMonsterType = getRandomMonsterType();
             }
-            monsterTypesCreated.push(randomMonsterType)
-            let quest;
-            let questData;
+            monsterTypesCreated.push(randomMonsterType);
+
             if (index < 4) {
-                // first 4 quests are killing certrain amount of monsters
-                const randomMonstersCount = Phaser.Math.RND.between(dailyQuestsInfo.monstersKillCountNeededForRewardRange.min, dailyQuestsInfo.monstersKillCountNeededForRewardRange.max);
-                // quest = new DailyQuestItem(this, 360 + (index * 300), 200, true, `${randomMonsterType}`, `kill ${randomMonstersCount} monsters`, `0/${randomMonstersCount}`);
-                questData = {
+                const count = Phaser.Math.RND.between(
+                    dailyQuestsInfo.monstersKillCountNeededForRewardRange.min,
+                    dailyQuestsInfo.monstersKillCountNeededForRewardRange.max
+                );
+
+                questsData.push({
                     questType: 'kill',
                     monsterType: randomMonsterType,
-                    progress: `0/${randomMonstersCount}`,
+                    progress: `0/${count}`,
                     isClaimed: false
-                }
+                });
+
             } else {
-                //5-th quest is to update monsters certain times
-                const randomMonstersCount = Phaser.Math.RND.between(dailyQuestsInfo.monstersUpgradeCountNeededForRewardRange.min, dailyQuestsInfo.monstersUpgradeCountNeededForRewardRange.max);
-                // quest = new DailyQuestItem(this, 360 + (index * 300), 200, false, `${randomMonsterType}`, `upgrade ${randomMonstersCount} monsters`, `0/${randomMonstersCount}`, true);
-                questData = {
+                const count = Phaser.Math.RND.between(
+                    dailyQuestsInfo.monstersUpgradeCountNeededForRewardRange.min,
+                    dailyQuestsInfo.monstersUpgradeCountNeededForRewardRange.max
+                );
+
+                questsData.push({
                     questType: 'upgrade',
                     monsterType: randomMonsterType,
-                    progress: `0/${randomMonstersCount}`,
+                    progress: `0/${count}`,
                     isClaimed: false
-                }
+                });
             }
-            quests.push(quest);
-            questsData.push(questData);
         }
+
         localStorage.setItem('questProgress', JSON.stringify(questsData));
         localStorage.setItem('chests', JSON.stringify([false, false, false]));
     }
