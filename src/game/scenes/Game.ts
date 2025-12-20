@@ -561,9 +561,18 @@ export class Game extends AbstractScene {
         let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
         const currentWorld = JSON.parse(localStorage.getItem('currentWorld') ?? 'null');
         currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel;  //TODO check world, it could be 3,4.....
-        const currentLevelData = level_config[currentLevel - 1];
-        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
+        console.log(level_config);
+        let currentLevelData = null;
 
+        // ---------------- hot hacky fix for playing lvl 36, winning and levelData  = undefined, since it gets the two pseudo levels data between maps
+        if (currentLevel !== 37) {
+            currentLevelData = level_config[currentLevel - 1];
+        } else {
+            currentLevelData = level_config[37];
+        }
+        //----------------------------------------------------------------------------------------------------------------------------
+
+        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
         const rndNum2 = Phaser.Math.RND.between(1, 100);
