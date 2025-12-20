@@ -501,7 +501,7 @@ export class CardSelection extends AbstractScene {
             'SELECTED MONSTERS',
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6,
                 align: 'center'
             }).setOrigin(0);
 
@@ -513,6 +513,16 @@ export class CardSelection extends AbstractScene {
             graphics.lineStyle(2, 0xffffff);
             graphics.strokeRectShape(hitRect);
             this.hitRects.push(hitRect);
+
+            const dragHereText: Phaser.GameObjects.Text = this.add.text(
+                hitRect.x + MONSTER_SIZE / 2,
+                hitRect.y + MONSTER_SIZE / 2,
+                'drag here',
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4, strokeThickness: 6,
+                    align: 'center'
+                }).setOrigin(0.5).setAngle(-45);
         }
     }
 
@@ -523,8 +533,7 @@ export class CardSelection extends AbstractScene {
             'MONSTERS (40 max)',
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'
             }).setOrigin(0);
 
         this.add.existing(allMonsters);
@@ -533,6 +542,16 @@ export class CardSelection extends AbstractScene {
         const graphics = this.add.graphics();
         graphics.lineStyle(2, 0xffffff);
         graphics.strokeRectShape(this.mainDeckHitRect);
+
+        const dragHereText: Phaser.GameObjects.Text = this.add.text(
+            this.mainDeckHitRect.x + MAIN_DECK_WIDTH / 2,
+            this.mainDeckHitRect.y + MAIN_DECK_HEIGHT / 2,
+            'drag here',
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6,
+                align: 'center'
+            }).setOrigin(0.5).setAngle(0);
     }
 
     // region SELL
@@ -543,8 +562,7 @@ export class CardSelection extends AbstractScene {
             `sell monster for: ${this.sellsFor} `,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'
             }).setOrigin(0.5);
 
         this.add.existing(this.sellCardText);
@@ -556,6 +574,16 @@ export class CardSelection extends AbstractScene {
         this.sellHitRect = hitRect;
 
         this.sellButton = new Button(this, 1470, 970, 'button', 'sell', this.onSellMonster.bind(this), true, 1);
+
+        const dragHereText: Phaser.GameObjects.Text = this.add.text(
+            hitRect.x + MONSTER_SIZE / 2,
+            hitRect.y + MONSTER_SIZE / 2,
+            'drag here',
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6,
+                align: 'center'
+            }).setOrigin(0.5).setAngle(-45);
     }
 
     private toggleSellButtonEnable(enable: boolean) {
@@ -620,8 +648,7 @@ export class CardSelection extends AbstractScene {
             'UPGRADE MONSTER',
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'
             }).setOrigin(0);
 
         this.add.existing(upgradeMonsters);
@@ -632,6 +659,16 @@ export class CardSelection extends AbstractScene {
             graphics.lineStyle(2, 0xffffff);
             graphics.strokeRectShape(hitRect);
             this.upgradeHitRects.push(hitRect);
+
+            const dragHereText: Phaser.GameObjects.Text = this.add.text(
+                hitRect.x + MONSTER_SIZE / 2,
+                hitRect.y + MONSTER_SIZE / 2,
+                'drag here',
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4, strokeThickness: 6,
+                    align: 'center'
+                }).setOrigin(0.5).setAngle(-45);
         }
 
         this.upgradeCostText = this.add.text(
@@ -640,8 +677,7 @@ export class CardSelection extends AbstractScene {
             `cost: ${this.upgradeCost} `,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'
             }).setOrigin(0.5);
 
         this.add.existing(this.upgradeCostText);
@@ -652,8 +688,7 @@ export class CardSelection extends AbstractScene {
             `${this.upgradeCostGems} `,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'
             }).setOrigin(0.5);
 
         this.add.existing(this.upgradeCostGemsText);
