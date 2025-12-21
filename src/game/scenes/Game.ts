@@ -321,7 +321,7 @@ export class Game extends AbstractScene {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
-            }).setOrigin(0.5).setAlpha(0).setDepth(13);
+            }).setOrigin(0.5).setAlpha(0).setDepth(25);
     }
 
     private showOpponentTurnMsg() {
@@ -572,6 +572,15 @@ export class Game extends AbstractScene {
         }
         //----------------------------------------------------------------------------------------------------------------------------
 
+
+        // UPDATE LEVELS WON(LOCAL STORAGE)
+        const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
+        if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
+            levelsWon.push(+(currentLevelData.levelName as number));
+            localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
+        }
+
+
         const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
@@ -714,12 +723,12 @@ export class Game extends AbstractScene {
                     localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
                 }
 
-                // UPDATE LEVELS WON(LOCAL STORAGE)
-                const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
-                if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
-                    levelsWon.push(+(currentLevelData.levelName as number));
-                    localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
-                }
+                // // UPDATE LEVELS WON(LOCAL STORAGE)
+                // const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
+                // if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
+                //     levelsWon.push(+(currentLevelData.levelName as number));
+                //     localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
+                // }
 
                 const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
                 if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
@@ -778,7 +787,7 @@ export class Game extends AbstractScene {
             gravityY: 150,
             blendMode: 'ADD',
             emitting: false
-        }).setDepth(15 + 0.1)
+        }).setDepth(23)
         emitter.explode(55);
         emitter.once('complete', () => {
             emitter.destroy();
