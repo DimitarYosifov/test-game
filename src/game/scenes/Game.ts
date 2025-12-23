@@ -55,7 +55,7 @@ export class Game extends AbstractScene {
     survivalLevelKilledMonsters: number;
     questionMarkContainer: Phaser.GameObjects.Container | null;
     confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
-    currentlySelectedMonsterAnimation: SpriteAnimation;
+    currentlySelectedMonsterAnimation: SpriteAnimation | null;
 
     constructor() {
         super('Game');
@@ -117,7 +117,7 @@ export class Game extends AbstractScene {
             .pause()
             .hide();
         // TEST - jump straight to level outro
-        // this.createLevelOutroPopup(true)
+        this.createLevelOutroPopup(true)
     }
 
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
@@ -291,7 +291,7 @@ export class Game extends AbstractScene {
     }
 
     private createGiveUpButton() {
-        this.giveUpButton = new Button(this, 1810, 1000, 'button', 'give\nup', () => {
+        this.giveUpButton = new Button(this, 100, 1000, 'button', 'give\nup', () => {
             this.createLevelOutroPopup();
         }, true)
     }
@@ -429,7 +429,7 @@ export class Game extends AbstractScene {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
             if (this.data.list.isPlayerTurn) {
                 const monsterBounds = (data[0] as Monster).bg.getBounds();
-                this.currentlySelectedMonsterAnimation
+                this.currentlySelectedMonsterAnimation!
                     .moveTo(monsterBounds.x + monsterBounds.width / 2, monsterBounds.y + monsterBounds.height / 2)
                     .show()
                     .resume();
@@ -438,7 +438,7 @@ export class Game extends AbstractScene {
                 this.skipButton.setInteractive();
                 this.giveUpButton.setInteractive();
             } else {
-                this.currentlySelectedMonsterAnimation.hide().pause();
+                this.currentlySelectedMonsterAnimation!.hide().pause();
             }
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
@@ -455,7 +455,7 @@ export class Game extends AbstractScene {
         this.skipButton.disableInteractive();
         this.events.on(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, (data: number[]) => {
 
-            if (this.currentlySelectedMonsterAnimation?.animation.alpha === 1) {
+            if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
             }
 
@@ -483,7 +483,7 @@ export class Game extends AbstractScene {
     private targetSelectHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, (data: number[]) => {
 
-            if (this.currentlySelectedMonsterAnimation?.animation.alpha === 1) {
+            if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
             }
 
@@ -566,11 +566,18 @@ export class Game extends AbstractScene {
 
         // ---------------- hot hacky fix for playing lvl 36, winning and levelData  = undefined, since it gets the two pseudo levels data between maps
         if (currentLevel !== 37) {
-            currentLevelData = level_config[currentLevel - 1];
+            currentLevelData = level_config[currentLevel];
+            // currentLevelData = level_config[currentLevel - 1];
         } else {
             currentLevelData = level_config[37];
         }
         //----------------------------------------------------------------------------------------------------------------------------
+
+        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
+        const rndNum = Phaser.Math.RND.between(1, 100);
+        const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
+        const rndNum2 = Phaser.Math.RND.between(1, 100);
+        const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
 
         // UPDATE LEVELS WON(LOCAL STORAGE)
@@ -580,12 +587,6 @@ export class Game extends AbstractScene {
             localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
         }
 
-
-        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
-        const rndNum = Phaser.Math.RND.between(1, 100);
-        const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
-        const rndNum2 = Phaser.Math.RND.between(1, 100);
-        const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23 - 0.1);
@@ -804,7 +805,7 @@ export class Game extends AbstractScene {
         const msg = this.add.text(
             960,
             540,
-            `monster not claimed, maximum 40 monsters allowed!`,
+            `monster not claimed, maximum ${main_config.maxMonstersAllowedInDeck} monsters allowed!`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
@@ -851,6 +852,11 @@ export class Game extends AbstractScene {
             localStorage.setItem(`${this.survivalLevelData.levelName}`, unlockSurvivalLevel1Time.toString());
         }
         //====================================================================================
+
+        // this.currentlySelectedMonsterAnimation!.animation!.anims.destroy();
+        // this.currentlySelectedMonsterAnimation!.animation!.destroy(true);
+        // this.currentlySelectedMonsterAnimation!.animation = null;
+        // this.currentlySelectedMonsterAnimation = null;
 
         Object.values(GAME_SCENE_SCENE_EVENTS).forEach(event => {
             this.events.removeListener(event);

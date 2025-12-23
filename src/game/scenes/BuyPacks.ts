@@ -475,7 +475,7 @@ export class BuyPacks extends AbstractScene {
             const msg = this.add.text(
                 960,
                 540,
-                `40 monsters maximum allowed, sell some monsters!`,
+                `${main_config.maxMonstersAllowedInDeck} monsters maximum allowed, sell some monsters!`,
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },

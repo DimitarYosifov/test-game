@@ -1,7 +1,7 @@
 
 export class SpriteAnimation {
 
-    animation: Phaser.GameObjects.Sprite;
+    animation: Phaser.GameObjects.Sprite | null;
 
     constructor(
         scene: Phaser.Scene,
@@ -38,30 +38,30 @@ export class SpriteAnimation {
     }
 
     pause(): SpriteAnimation {
-        this.animation.anims.pause();
+        this.animation!.anims.pause();
         return this;
     }
 
     resume(): SpriteAnimation {
-        this.animation.anims.resume();
+        this.animation!.anims.resume();
         return this;
 
     }
 
     hide(): SpriteAnimation {
-        this.animation.setAlpha(0);
+        this.animation!.setAlpha(0);
         return this;
 
     }
 
     show(): SpriteAnimation {
-        this.animation.setAlpha(1);
+        this.animation!.setAlpha(1);
         return this;
 
     }
 
     moveTo(x: number, y: number): SpriteAnimation {
-        this.animation.setPosition(x, y);
+        this.animation!.setPosition(x, y);
         return this;
 
     }

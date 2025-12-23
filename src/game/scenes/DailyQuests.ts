@@ -371,7 +371,7 @@ export class DailyQuests extends AbstractScene {
                 const msg = this.add.text(
                     960,
                     540,
-                    `some monsters not claimed, maximum 40 monsters allowed!`,
+                    `some monsters not claimed, maximum ${main_config.maxMonstersAllowedInDeck} monsters allowed!`,
                     {
                         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                         stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
