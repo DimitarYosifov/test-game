@@ -10,7 +10,7 @@ export const main_config = {
     "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
-    "maxMonstersAllowedInDeck": 40,
+    "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 985, // 1.5% for gem drop
     "chanceToGetGemOnLevelWin": 90, // 10% for gem reward on level win(including repeat level)

@@ -530,7 +530,7 @@ export class CardSelection extends AbstractScene {
         const allMonsters: Phaser.GameObjects.Text = this.add.text(
             65,
             280,
-            'MONSTERS (40 max)',
+            'MONSTERS (49 max)',
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 50, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 6, align: 'center'

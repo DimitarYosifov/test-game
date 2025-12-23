@@ -470,7 +470,7 @@ export class BuyPacks extends AbstractScene {
         });
 
         const playerMonstersCount = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).length;
-        if (playerMonstersCount >= 38) {
+        if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck - 2) {
 
             const msg = this.add.text(
                 960,
