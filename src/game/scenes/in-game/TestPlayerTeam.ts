@@ -1,13 +1,18 @@
 import { getMonsterDataConfig } from "../../configs/main_config";
+import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 import { IUnitData } from "../Game";
 
 export class TestPlayerTeam {
 
     static get team() {
 
-        const playerMonstersDataFromStorage: IPlayerMonstersData[] = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null", (key, value) => {
-            return key === 'row' && value === null ? NaN : value;
+        const playerMonstersDataFromStorage: IPlayerMonstersData[] = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
+        playerMonstersDataFromStorage.forEach(element => {
+            if (element.row === null) {
+                element.row = NaN;
+            }
         });
+
         let playerMonstersData = playerMonstersDataFromStorage ||
             [
                 // {

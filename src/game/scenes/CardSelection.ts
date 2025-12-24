@@ -1,11 +1,11 @@
-import { Scene, GameObjects } from 'phaser';
+import { GameObjects } from 'phaser';
 import { Monster } from './in-game/Monster';
-import { monsters_power_config } from '../configs/monsters_power_config';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { getMonsterDataConfig } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 const MONSTER_SIZE = 200;
 const HORIZONTAL_DISTANCE = 65;
@@ -74,9 +74,11 @@ export class CardSelection extends AbstractScene {
     }
 
     private loadPlayerMonsters() {
-
-        const playerMonstersDataFromStorage = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null", (key, value) => {
-            return key === 'row' && value === null ? NaN : value;
+        const playerMonstersDataFromStorage = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
+        playerMonstersDataFromStorage.forEach(element => {
+            if (element.row === null) {
+                element.row = NaN;
+            }
         });
 
         //for testing when starting new game - start with the monsters below
@@ -601,11 +603,11 @@ export class CardSelection extends AbstractScene {
         console.log(this.playerMonstersData)
         console.log(this.monstersContainer.list)
 
-        const playerCoins = localStorage.getItem('coins') || '0';
+        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
         // this.coinText.setText(`${+playerCoins + this.sellsFor}`);
         this.updateCoinsText(+playerCoins + this.sellsFor);
 
-        localStorage.setItem('coins', JSON.stringify(+playerCoins + this.sellsFor));
+        LOCAL_STORAGE_MANAGER.set('coins', +playerCoins + this.sellsFor);
 
         const originalIndex = this.monsterAddedForSale?.originalIndex || 0;
         (this.playerMonstersData as any)[originalIndex] = null;
@@ -616,7 +618,7 @@ export class CardSelection extends AbstractScene {
         this.monsterAddedForSale = null;
 
         this.playerMonstersData = this.playerMonstersData.filter((x: any) => x !== null);
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+        LOCAL_STORAGE_MANAGER.set('playerMonstersData', this.playerMonstersData);
 
         this.sortMonsters();
         this.updateMonstersOrder();
@@ -717,8 +719,8 @@ export class CardSelection extends AbstractScene {
             }
         }
 
-        const playerCoins = localStorage.getItem('coins') || '0';
-        const playerGems = localStorage.getItem('gems') || '0';
+        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+        const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
 
@@ -762,17 +764,19 @@ export class CardSelection extends AbstractScene {
         console.log(this.monstersContainer.list);
 
         // update coins and upgrade cost text
-        const playerCoins = localStorage.getItem('coins') || '0';
-        const playerGems = localStorage.getItem('gems') || '0';
+        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+        const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
 
         const playerCoinsAfterUpgrade = +playerCoins - this.upgradeCost;
         const playerGemsAfterUpgrade = +playerGems - this.upgradeCostGems;
         this.updateCoinsText(playerCoinsAfterUpgrade, playerGemsAfterUpgrade);
-        localStorage.setItem('coins', JSON.stringify(playerCoinsAfterUpgrade));
-        localStorage.setItem('gems', JSON.stringify(playerGemsAfterUpgrade));
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+
+        LOCAL_STORAGE_MANAGER.set('coins', playerCoinsAfterUpgrade);
+        LOCAL_STORAGE_MANAGER.set('gems', playerGemsAfterUpgrade);
+        LOCAL_STORAGE_MANAGER.set('playerMonstersData', this.playerMonstersData);
+
         this.toggleUpgradeButtonEnable(false);
         this.upgradeCost = 0;
         this.upgradeCostGems = 0;
@@ -819,7 +823,7 @@ export class CardSelection extends AbstractScene {
         this.updateMonstersOrder();
 
         // update local storage with the data including the new monster
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+        LOCAL_STORAGE_MANAGER.set('playerMonstersData', this.playerMonstersData)
 
         // introduce new card
         this.tweens.chain({
@@ -971,12 +975,13 @@ export class CardSelection extends AbstractScene {
         this.selectedMonsters = [null, null, null, null, null, null, null];
         this.upgradeSelectedMonsters = [null, null, null];
         this.monsterAddedForSale = null;
-        localStorage.setItem('playerMonstersData', JSON.stringify(this.playerMonstersData));
+        LOCAL_STORAGE_MANAGER.set('playerMonstersData', this.playerMonstersData)
         this.changeScene('MainMenu');
     }
 
     createCoins() {
-        const coins = localStorage.getItem('coins') || '0';
+        const coins = LOCAL_STORAGE_MANAGER.get('coins');
+
         this.coinText = this.add.text(
             1900,
             30,
@@ -987,7 +992,7 @@ export class CardSelection extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

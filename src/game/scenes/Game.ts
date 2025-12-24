@@ -8,6 +8,7 @@ import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { SpriteAnimation } from './SpriteAnimation';
+import { IGameData, LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -68,7 +69,7 @@ export class Game extends AbstractScene {
         this.data.list.isPlayerTurn = true;
 
         this.isSurvivalLevel = (this.scene.settings.data as any).isSurvivalLevel;
-        this.survivalLevelData = JSON.parse(localStorage.getItem('survivalLevelData') ?? "null");
+        this.survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         this.survivalLevelReward = 0;
         this.survivalLevelKilledMonsters = 0;
         if (this.isSurvivalLevel) {
@@ -105,7 +106,7 @@ export class Game extends AbstractScene {
         this.targetSelectHandler();
         // this.checkEndTurnHandler(); // it calls  this.addInteraction // BEING CALLED AFTER INITIAL BUFFS HAVE LANDED
 
-        localStorage.removeItem('survivalLevelData');
+        LOCAL_STORAGE_MANAGER.remove('survivalLevelData');
 
         this.addBuffs();
         this.time.delayedCall(5000, () => {
@@ -259,7 +260,7 @@ export class Game extends AbstractScene {
     }
 
     private createLevelTitle() {
-        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
+        const currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
         const levelTitle = this.add.text(
             960,
             50,
@@ -558,8 +559,8 @@ export class Game extends AbstractScene {
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
-        let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
-        const currentWorld = JSON.parse(localStorage.getItem('currentWorld') ?? 'null');
+        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        const currentWorld = LOCAL_STORAGE_MANAGER.get('currentWorld');
         currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel;  //TODO check world, it could be 3,4.....
         console.log(level_config);
         let currentLevelData = null;
@@ -573,7 +574,7 @@ export class Game extends AbstractScene {
         }
         //----------------------------------------------------------------------------------------------------------------------------
 
-        const isFirstTimeReward = JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(currentLevelData.levelName as number)) === false;
+        const isFirstTimeReward = LOCAL_STORAGE_MANAGER.get('levelsWon').includes(+(currentLevelData.levelName as number)) === false;
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
         const rndNum2 = Phaser.Math.RND.between(1, 100);
@@ -581,10 +582,10 @@ export class Game extends AbstractScene {
 
 
         // UPDATE LEVELS WON(LOCAL STORAGE)
-        const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
+        const levelsWon = LOCAL_STORAGE_MANAGER.get('levelsWon');
         if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
             levelsWon.push(+(currentLevelData.levelName as number));
-            localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
+            LOCAL_STORAGE_MANAGER.set('levelsWon', levelsWon);
         }
 
 
@@ -710,28 +711,21 @@ export class Game extends AbstractScene {
 
                 // UPDATE PLAYER GEMS(LOCALE STORAGE) 
                 if (hasGemReward) {
-                    const playerGems = localStorage.getItem('gems') || '0';
-                    localStorage.setItem('gems', JSON.stringify(+playerGems + 1));
+                    const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
+                    LOCAL_STORAGE_MANAGER.set('gems', +playerGems + 1);
                 }
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
-                const playerCoins = localStorage.getItem('coins') || '0';
-                localStorage.setItem('coins', JSON.stringify(+playerCoins + +(coinsWon as number)));
+                const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+                LOCAL_STORAGE_MANAGER.set('coins', +playerCoins + +(coinsWon as number));
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
-                const mapLevel = localStorage.getItem('mapLevel') || '1';
+                const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
                 if ((+currentLevel + 1) > +mapLevel) {
-                    localStorage.setItem('mapLevel', JSON.stringify(+mapLevel + 1));
+                    LOCAL_STORAGE_MANAGER.set('mapLevel', +mapLevel + 1);
                 }
 
-                // // UPDATE LEVELS WON(LOCAL STORAGE)
-                // const levelsWon = JSON.parse(localStorage.getItem('levelsWon') || '[]');
-                // if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
-                //     levelsWon.push(+(currentLevelData.levelName as number));
-                //     localStorage.setItem('levelsWon', JSON.stringify(levelsWon));
-                // }
-
-                const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+                const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
                 if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     // leveltext.destroy(true);
                     // rewardsContainer.destroy(true);
@@ -833,11 +827,11 @@ export class Game extends AbstractScene {
 
     private addNewMonster(type: number, stars: number) {
         const STORAGE_KEY = 'playerMonstersData';
-        const storedData = localStorage.getItem(STORAGE_KEY);
-        const dataArray = storedData ? JSON.parse(storedData) : [];
+        const storedData = LOCAL_STORAGE_MANAGER.get(STORAGE_KEY);
+        const dataArray = storedData ? storedData : [];
         const newObject = { type, stars, row: NaN, col: 11 };
         dataArray.push(newObject);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+        LOCAL_STORAGE_MANAGER.set(STORAGE_KEY, dataArray);
     }
 
     changeScene(nextScene: string): void {
@@ -849,7 +843,7 @@ export class Game extends AbstractScene {
             const hoursToReset = this.survivalLevelData.hoursToReset || 0;
             let unlockSurvivalLevel1Time = Date.now() + hoursToReset * 60 * 60 * 1000;
             // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
-            localStorage.setItem(`${this.survivalLevelData.levelName}`, unlockSurvivalLevel1Time.toString());
+            LOCAL_STORAGE_MANAGER.set((`${this.survivalLevelData.levelName}`) as keyof IGameData, unlockSurvivalLevel1Time.toString());
         }
         //====================================================================================
 

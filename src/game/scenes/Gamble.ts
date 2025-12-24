@@ -1,4 +1,5 @@
 import { getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
 import { Button } from './in-main-menu/Button';
@@ -66,7 +67,7 @@ export class Gamble extends AbstractScene {
     }
 
     private checkSpinAffordable() {
-        this.playerCoins = +(localStorage.getItem('coins') || '0');
+        this.playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
         if (this.playerCoins < main_config.slotSpinCost) {
             this.spinButton.disableInteractive();
             this.isInAutoMode = false;
@@ -265,9 +266,9 @@ export class Gamble extends AbstractScene {
 
     private onCoinsWin() {
         let emitted = 0;
-        let coins = localStorage.getItem('coins') || '0';
+        let coins = LOCAL_STORAGE_MANAGER.get('coins');
         const finalCoinsAmount = +coins + this.coinsToBeWon;
-        localStorage.setItem('coins', `${finalCoinsAmount}`);
+        LOCAL_STORAGE_MANAGER.set('coins', finalCoinsAmount);
 
         let emitter = this.add.particles(0, 0, 'coin', {
             x: { start: this.coinsToBeWonText.x - 30, end: this.coinText.x, ease: 'sine.in' },
@@ -317,8 +318,8 @@ export class Gamble extends AbstractScene {
                 }
             },
             deathCallback: () => {
-                localStorage.setItem('gems', `${+this.gems + 1}`);
-                this.gems = localStorage.getItem('gems') || '0';
+                LOCAL_STORAGE_MANAGER.set('gems', +this.gems + 1);
+                this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
                 this.gemsText.setText(`${this.gems}`);
             },
             emitCallbackScope: this
@@ -343,11 +344,11 @@ export class Gamble extends AbstractScene {
 
         const addMonster = (type: number, stars: number) => {
             const STORAGE_KEY = 'playerMonstersData';
-            const storedData = localStorage.getItem(STORAGE_KEY);
-            const dataArray = storedData ? JSON.parse(storedData) : [];
+            const storedData = LOCAL_STORAGE_MANAGER.get(STORAGE_KEY);
+            const dataArray = storedData ? storedData : [];
             const newObject = { type, stars, row: NaN, col: 11 };
             dataArray.push(newObject);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+            LOCAL_STORAGE_MANAGER.set(STORAGE_KEY, dataArray);
         }
 
         addMonster(+newMonsterType, newMonsterStars);
@@ -522,7 +523,7 @@ export class Gamble extends AbstractScene {
     }
 
     createCoins(): void {
-        const coins = localStorage.getItem('coins') || '0';
+        const coins = LOCAL_STORAGE_MANAGER.get('coins');
         this.coinText = this.add.text(
             1900,
             30,
@@ -533,7 +534,7 @@ export class Gamble extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
@@ -547,9 +548,9 @@ export class Gamble extends AbstractScene {
     }
 
     private updateCoinsText() {
-        this.playerCoins = +(localStorage.getItem('coins') || '0');
+        this.playerCoins = +(LOCAL_STORAGE_MANAGER.get('coins'));
         this.playerCoins -= main_config.slotSpinCost;
-        localStorage.setItem('coins', JSON.stringify(this.playerCoins));
+        LOCAL_STORAGE_MANAGER.set('coins', this.playerCoins);
         this.coinText.setText(`${this.playerCoins}`);
         this.coinTexture.x = this.coinText.x - this.coinText.width;
         this.gemsText.x = this.coinTexture.x - this.coinTexture.displayWidth - 20;

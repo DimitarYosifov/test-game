@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { BUFF_TYPES, GAME_SCENE_SCENE_EVENTS, IBuff, IUnitData } from '../Game';
 import { main_config } from '../../configs/main_config';
+import { IGameData, LOCAL_STORAGE_MANAGER } from '../../LOCAL_STORAGE_MANAGER';
 
 export class Monster extends Phaser.GameObjects.Container {
     bg: Phaser.GameObjects.Image;
@@ -663,8 +664,8 @@ export class Monster extends Phaser.GameObjects.Container {
         if (randomNumber >= odds) {
 
             const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
-            const data = JSON.parse(localStorage.getItem('gems') ?? '0');
-            localStorage.setItem('gems', JSON.stringify(+data + 1));
+            const data = LOCAL_STORAGE_MANAGER.get('gems');
+            LOCAL_STORAGE_MANAGER.set('gems', +data + 1);
 
             this.scene.tweens.chain({
                 tweens: [
@@ -745,8 +746,8 @@ export class Monster extends Phaser.GameObjects.Container {
             default:
                 break;
         }
-        const data = JSON.parse(localStorage.getItem(storedItem) ?? '0');
-        localStorage.setItem(storedItem, JSON.stringify(+data + 1));
+        const data = LOCAL_STORAGE_MANAGER.get(storedItem as keyof IGameData);
+        LOCAL_STORAGE_MANAGER.set(storedItem as keyof IGameData, +data + 1);
 
         this.scene.tweens.chain({
             tweens: [

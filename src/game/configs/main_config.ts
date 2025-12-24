@@ -1,6 +1,7 @@
 import { monsters_power_config } from "./monsters_power_config";
 
 export const main_config = {
+    "cryptData": true, //should local storage data be crypted
     "gridSizeHorizontal": 12,
     "gridSizeVertical": 7,
     "cellSize": 125,
@@ -10,6 +11,7 @@ export const main_config = {
     "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
+    "playerStartingGems": 1,
     "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 985, // 1.5% for gem drop
@@ -285,7 +287,7 @@ export const main_config = {
 
 
 
-     // after attacking enemy monster s- somethimes the enemy monster is selected  !!!!!!
+    // after attacking enemy monster s- somethimes the enemy monster is selected  !!!!!!
 
 
 

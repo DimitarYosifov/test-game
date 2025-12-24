@@ -1,12 +1,14 @@
+import { LOCAL_STORAGE_MANAGER } from './game/LOCAL_STORAGE_MANAGER';
 import StartGame from './game/main';
 
-if (JSON.parse(localStorage.getItem('gameOpen') || 'null') === false || JSON.parse(localStorage.getItem('gameOpen') || 'null') === null) {
+const gameOpen = LOCAL_STORAGE_MANAGER.get('gameOpen');
+if (gameOpen === false || gameOpen === null) {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log(JSON.parse(localStorage.getItem('gameOpen') || 'null'));
+        console.log(`gameOpen => ${gameOpen}`);
         StartGame('game-container');
-        localStorage.setItem('gameOpen', 'true');
+        LOCAL_STORAGE_MANAGER.set('gameOpen', true);
     });
     window.addEventListener("pagehide", () => {
-        localStorage.setItem('gameOpen', 'false');
+        LOCAL_STORAGE_MANAGER.set('gameOpen', false);
     });
 }

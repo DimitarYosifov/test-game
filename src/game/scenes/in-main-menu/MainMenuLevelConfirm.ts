@@ -3,6 +3,7 @@ import { Monster } from "../in-game/Monster";
 import { ILevelConfig } from "../../configs/level_config";
 import { Button } from "./Button";
 import { getMonsterDataConfig } from "../../configs/main_config";
+import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 
 const MONSTER_SIZE = 150;
 const PADDING = 50;
@@ -79,7 +80,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             }).setOrigin(0.5);
         this.add(levelHeader);
 
-        if (JSON.parse(localStorage.getItem('levelsWon') ?? "[]").includes(+(this.levelData.levelName as number))) {
+        if (LOCAL_STORAGE_MANAGER.get('levelsWon')) {
             //completed text
             const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
                 levelHeader.x,

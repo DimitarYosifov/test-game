@@ -1,6 +1,7 @@
 
 import { level_config } from "../../configs/level_config";
 import { getMonsterDataConfig } from "../../configs/main_config";
+import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 import { IUnitData } from "../Game";
 
 export class TestOpponentTeam {
@@ -43,7 +44,7 @@ export class TestOpponentTeam {
             currentInsertIndex++;
         }
 
-        // TODO - opponentMonstersData should be taken from localstorage!
+        // TODO - opponentMonstersData should be taken from local storage!
         // const opponentMonstersData: IOpponentMonstersData[] = [
         //     {
         //         type: Phaser.Math.RND.pick([1, 2, 5, 7, 8, 9]), stars: 1
@@ -94,9 +95,9 @@ export class TestOpponentTeam {
         //     // },
         // ]
         console.log(level_config);
-        let currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null");
-        currentLevel = JSON.parse(localStorage.getItem('currentWorld') ?? 'null') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
-        const survivalLevelData = JSON.parse(localStorage.getItem('survivalLevelData') ?? "null");
+        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        currentLevel = LOCAL_STORAGE_MANAGER.get('currentWorld') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
+        const survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;
 
         let result: IUnitData[] = [];

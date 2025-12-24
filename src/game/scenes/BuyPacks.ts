@@ -1,5 +1,6 @@
 import { IOpponentMonstersData } from '../configs/level_config';
 import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
 import { Button } from './in-main-menu/Button';
@@ -144,19 +145,19 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
+        const freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
         let freeText: any;
 
         // button
         this.commonPackButton = new Button(this, this.commonPackTexture.x, commonPackCost.y + 120, 'buy', null, () => {
 
-            const _freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
+            const _freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
             const canBuy = this.onBuy(packCost, 'commonPack', _freeCommonPacks > 0);
 
             if (!canBuy) return;
 
             if (_freeCommonPacks > 0) {
-                localStorage.setItem('freeCommonPacks', JSON.stringify(+_freeCommonPacks - 1));
+                LOCAL_STORAGE_MANAGER.set('freeCommonPacks', _freeCommonPacks - 1);
                 freeText.setText(`free x ${+_freeCommonPacks - 1}`);
             }
 
@@ -262,19 +263,19 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
+        const freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
         let freeText: any;
 
         // button
         this.silverPackButton = new Button(this, this.silverPackTexture.x, silverPackCost.y + 120, 'buy', null, () => {
 
-            const _freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
+            const _freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
             const canBuy = this.onBuy(packCost, 'silverPack', _freeSilverPacks > 0);
 
             if (!canBuy) return;
 
             if (_freeSilverPacks > 0) {
-                localStorage.setItem('freeSilverPacks', JSON.stringify(+_freeSilverPacks - 1));
+                LOCAL_STORAGE_MANAGER.set('freeSilverPacks', +_freeSilverPacks - 1);
                 freeText.setText(`free x ${+_freeSilverPacks - 1}`);
             }
 
@@ -380,19 +381,19 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
+        const freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
         let freeText: any;
 
         // button
         this.goldenPackButton = new Button(this, this.goldenPackTexture.x, goldenPackCost.y + 120, 'buy', null, () => {
 
-            const _freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
+            const _freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
             const canBuy = this.onBuy(packCost, 'goldPack', _freeGoldPacks > 0);
 
             if (!canBuy) return;
 
             if (_freeGoldPacks > 0) {
-                localStorage.setItem('freeGoldPacks', JSON.stringify(+_freeGoldPacks - 1));
+                LOCAL_STORAGE_MANAGER.set('freeGoldPacks', +_freeGoldPacks - 1)
                 freeText.setText(`free x ${+_freeGoldPacks - 1}`);
             }
 
@@ -436,7 +437,7 @@ export class BuyPacks extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins');
         this.coinText = this.add.text(
             1900,
             30,
@@ -447,7 +448,7 @@ export class BuyPacks extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
@@ -468,8 +469,8 @@ export class BuyPacks extends AbstractScene {
         this.overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
         });
-
-        const playerMonstersCount = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).length;
+        console.log(LOCAL_STORAGE_MANAGER.get('playerMonstersData'))
+        const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
         if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck - 2) {
 
             const msg = this.add.text(
@@ -542,9 +543,9 @@ export class BuyPacks extends AbstractScene {
 
             if (!isFree) {
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
-                const playerCoins = localStorage.getItem('coins') || '0';
+                const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
                 this.coins = +playerCoins - +cost;
-                localStorage.setItem('coins', JSON.stringify(this.coins));
+                LOCAL_STORAGE_MANAGER.set('coins', this.coins);
                 this.updateCoinsText(`${this.coins}`);
             }
 
@@ -561,13 +562,13 @@ export class BuyPacks extends AbstractScene {
 
     private addNewMonsters() {
         const STORAGE_KEY = 'playerMonstersData';
-        const storedData = localStorage.getItem(STORAGE_KEY);
-        const dataArray = storedData ? JSON.parse(storedData) : [];
+        const storedData = LOCAL_STORAGE_MANAGER.get(STORAGE_KEY);
+        const dataArray = storedData ? storedData : [];
         this.monsters.forEach(element => {
             const newObject = { type: +element.unitData.type, stars: +element.unitData.stars, row: NaN, col: 11 };
             dataArray.push(newObject);
         });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+        LOCAL_STORAGE_MANAGER.set(STORAGE_KEY, dataArray);
     }
 
     private addClaimButton() {
@@ -588,10 +589,10 @@ export class BuyPacks extends AbstractScene {
     }
 
     private hideRewards() {
-
-        this.checkPackAffordable(PACK_COST[0]) || +JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0') > 0 ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[1]) || +JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0') > 0 ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[2]) || +JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0') > 0 ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
+        LOCAL_STORAGE_MANAGER.get('freeCommonPacks')
+        this.checkPackAffordable(PACK_COST[0]) || LOCAL_STORAGE_MANAGER.get('freeCommonPacks') > 0 ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[1]) || LOCAL_STORAGE_MANAGER.get('freeSilverPacks') > 0 ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[2]) || LOCAL_STORAGE_MANAGER.get('freeGoldPacks') > 0 ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
 
         this.tweens.chain({
             tweens: [

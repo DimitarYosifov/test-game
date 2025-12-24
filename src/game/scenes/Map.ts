@@ -5,6 +5,7 @@ import { AbstractScene } from './AbstractScene';
 import { world1points } from './in-map/world_1_points';
 import { world2points } from './in-map/world_2_points';
 import { SpriteAnimation } from './SpriteAnimation';
+import { LOCAL_STORAGE_MANAGER, IGameData } from '../LOCAL_STORAGE_MANAGER';
 
 export class Map extends AbstractScene {
     confirmPopupOpen: boolean;
@@ -50,7 +51,7 @@ export class Map extends AbstractScene {
         this.add.existing(this.levelContentContainer);
 
         //TODO check world, it could be 3,4.....
-        this.world = JSON.parse(localStorage.getItem('currentWorld') ?? 'null');
+        this.world = LOCAL_STORAGE_MANAGER.get('currentWorld');
         const points = this.world === 1 ? world1points : world2points;
 
         for (let index = 0; index < points.length; index++) {
@@ -90,8 +91,8 @@ export class Map extends AbstractScene {
         this.createPlayer();// this should be exactly here, between the 2  phases of creating survival levels! - TODO - check to fix it
 
         //========================SURVIVAL LEVEL==========================================================
-        const currentLevel = JSON.parse(localStorage.getItem('currentLevel') ?? "null") || '0';
-        const mapLevel = JSON.parse(localStorage.getItem('mapLevel') ?? "null") || '0';
+        const currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
 
         this.survivalLevels.forEach((lvl: any) => {
             const introduceToSurvivalLevel = currentLevel === lvl.revealedByLevel && mapLevel === lvl.revealedByLevel + 1
@@ -114,8 +115,8 @@ export class Map extends AbstractScene {
 
     private createFireAnimation() {
         const fireAnimation = new SpriteAnimation(this, 0, 1350, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 6.5, 5, 5);
-        fireAnimation.animation.setOrigin(0, 1);
-        fireAnimation.animation.setDepth(1).setAlpha(1);
+        fireAnimation.animation!.setOrigin(0, 1);
+        fireAnimation.animation!.setDepth(1).setAlpha(1);
         // const fireAnimation2 = new SpriteAnimation(this, fireAnimation.animation.x + fireAnimation.animation.displayWidth, 1080, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 3.5, 3, 5);
         // fireAnimation2.animation.setOrigin(0, 1);
         // fireAnimation2.animation.setDepth(1).setAlpha(1);
@@ -199,11 +200,11 @@ export class Map extends AbstractScene {
                 this.levelContentContainer.add([this.levelConfirm]);
 
                 this.levelConfirm.once('level-selected', (level: number) => {
-                    localStorage.setItem('currentLevel', JSON.stringify(lvl.revealedByLevel));
+                    LOCAL_STORAGE_MANAGER.set('currentLevel', lvl.revealedByLevel);
                     this.confirmPopupOpen = false;
                     this.levelConfirm.removeAllListeners();
                     this.levelConfirm.destroy(true);
-                    localStorage.setItem('survivalLevelData', JSON.stringify(lvl));
+                    LOCAL_STORAGE_MANAGER.set('survivalLevelData', lvl);
                     this.changeScene('Game', true);
                 }, this);
 
@@ -254,7 +255,7 @@ export class Map extends AbstractScene {
             })
             .setOrigin(0, 0.5)
             .setDepth(88);
-        let unlockSurvivalLevel1Time = parseInt(localStorage.getItem(`${lvl.levelName}`) ?? "null") || 0;
+        let unlockSurvivalLevel1Time = parseInt(LOCAL_STORAGE_MANAGER.get(`${lvl.levelName}` as keyof IGameData));
         // this.resetSurvivalLevel1();//test
         this.updateSurvivalLevel(levelTexture, unlockSurvivalLevel1Time, survivalLevelCountDownText, lvl.levelName);
 
@@ -264,7 +265,7 @@ export class Map extends AbstractScene {
         // const hoursToReset = survivalLevels[0].hoursToReset
         // let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
         // // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
-        // localStorage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
+        // local-Storage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
     }
 
     private updateSurvivalLevel(levelTexture: Phaser.GameObjects.Image, unlockSurvivalLevelTime: number, survivalLevelCountDownText: Phaser.GameObjects.Text, levelName: string) {
@@ -275,7 +276,7 @@ export class Map extends AbstractScene {
             console.log(`SurvivalLevel ${levelName} is unlocked...`)
             levelTexture.setInteractive();
             survivalLevelCountDownText.setText('');
-            localStorage.removeItem(`${levelName}`);
+            LOCAL_STORAGE_MANAGER.remove(`${levelName}` as keyof IGameData);
         } else {
             const remaining = unlockSurvivalLevelTime - now;
             const hours = Math.floor(remaining / (1000 * 60 * 60));
@@ -297,8 +298,8 @@ export class Map extends AbstractScene {
 
     private createLevels(): void {
 
-        const mapLevel = localStorage.getItem('mapLevel') || 1;
-        let currentLevel = localStorage.getItem('currentLevel') || 0;
+        const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
+        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
 
         //test!
         // level_config.length = 10
@@ -364,10 +365,10 @@ export class Map extends AbstractScene {
                 }
 
                 if (levelData.isFlipped) {// arrow to world 1 is clicked
-                    localStorage.setItem('currentLevel', '35');
-                    currentLevel = localStorage.getItem('currentLevel') || 0;
-                    localStorage.setItem('currentWorld', '1');
-                    this.world = JSON.parse(localStorage.getItem('currentWorld') ?? 'null');
+                    LOCAL_STORAGE_MANAGER.set('currentLevel', 35);
+                    currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+                    LOCAL_STORAGE_MANAGER.set('currentWorld', 1);
+                    this.world = LOCAL_STORAGE_MANAGER.get('currentWorld');
                 }
 
                 this.confirmPopupOpen = true;
@@ -376,25 +377,25 @@ export class Map extends AbstractScene {
                     if (levelData.isFlipped) {// move to world 1
                         this.changeScene('Map');
                     } else if (levelData.isTransition) { // MOVE TO NEXT WORLD
-                        // if (+JSON.parse(localStorage.getItem('mapLevel') ?? "0") === 35) {
-                        localStorage.setItem('currentLevel', JSON.stringify(36));
+                        // if (+JSON.parse(local-Storage.getItem('mapLevel') ?? "0") === 35) {
+                        LOCAL_STORAGE_MANAGER.set('currentLevel', 36);
                         // }
-                        // if (+JSON.parse(localStorage.getItem('mapLevel') ?? "0") === 35) {
-                        //     localStorage.setItem('mapLevel', JSON.stringify(36));
+                        // if (+JSON.parse(loca0lStorage.getItem('mapLevel') ?? "0") === 35) {
+                        //     localS-torage.setItem('mapLevel', JSON.stringify(36));
                         // }
-                        // if (+JSON.parse(localStorage.getItem('currentLevel') ?? "0") === 35) {
-                        //     localStorage.setItem('currentLevel', JSON.stringify(36));
+                        // if (+JSON.parse(local0Storage.getItem('currentLevel') ?? "0") === 35) {
+                        //     localSt-orage.setItem('currentLevel', JSON.stringify(36));
                         // }
 
                         // TODO - change this hardcoded  2 as next world. it could be 3,4...
-                        localStorage.setItem('currentWorld', JSON.stringify(2));
+                        LOCAL_STORAGE_MANAGER.set('currentWorld', 2);
                         this.changeScene('Map');
                     } else {
                         this.levelConfirm = new MainMenuLevelConfirm(this, 0, 0, levelData);
                         this.levelContentContainer.add([this.levelConfirm]);
 
                         this.levelConfirm.once('level-selected', (level: number) => {
-                            localStorage.setItem('currentLevel', JSON.stringify(level));
+                            LOCAL_STORAGE_MANAGER.set('currentLevel', level);
                             this.confirmPopupOpen = false;
                             this.levelConfirm.removeAllListeners();
                             this.levelConfirm.destroy(true);
@@ -488,7 +489,7 @@ export class Map extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -499,7 +500,7 @@ export class Map extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_MANAGER } from "../LOCAL_STORAGE_MANAGER";
 import { AbstractScene } from "./AbstractScene";
 import { Button } from "./in-main-menu/Button";
 
@@ -32,7 +33,7 @@ export class Achievements extends AbstractScene {
         this.createBackButton();
         this.createCoins();
 
-        this.storedAchievementsData = JSON.parse(localStorage.getItem('achievements') ?? 'null');
+        this.storedAchievementsData = LOCAL_STORAGE_MANAGER.get('achievements');
         this.achievementsData = [];
 
         if (this.storedAchievementsData) {
@@ -117,7 +118,7 @@ export class Achievements extends AbstractScene {
             }
 
             //set new local storage data
-            localStorage.setItem('achievements', JSON.stringify(this.storedAchievementsData));
+            LOCAL_STORAGE_MANAGER.set('achievements', this.storedAchievementsData);
 
             //refresh the whole view with new data
             this.mainContainer.destroy(true);
@@ -148,9 +149,9 @@ export class Achievements extends AbstractScene {
     }
 
     private updateCoinsText(coinsWon: number | string) {
-        const playerCoins = localStorage.getItem('coins') || '0';
+        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
         this.coins = `${+playerCoins + +coinsWon}`;
-        localStorage.setItem('coins', this.coins);
+        LOCAL_STORAGE_MANAGER.set('coins', +this.coins);
         this.coinText.setText(this.coins);
         this.coinTexture.x = this.coinText.x - this.coinText.width;
     }
@@ -169,7 +170,7 @@ export class Achievements extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -180,7 +181,7 @@ export class Achievements extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

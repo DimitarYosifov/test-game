@@ -4,6 +4,7 @@ import { main_config } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { StartOverConfirm } from './in-main-menu/StartOverConfirm';
 import { SpriteAnimation } from './SpriteAnimation';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -36,11 +37,11 @@ export class MainMenu extends AbstractScene {
         // add monster manually - for debugging!
         const addMonster = (type: number, stars: number) => {
             const STORAGE_KEY = 'playerMonstersData';
-            const storedData = localStorage.getItem(STORAGE_KEY);
-            const dataArray = storedData ? JSON.parse(storedData) : [];
+            const storedData = LOCAL_STORAGE_MANAGER.get(STORAGE_KEY);
+            const dataArray = storedData ? storedData : [];
             const newObject = { type, stars, row: NaN, col: 11 };
             dataArray.push(newObject);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+            LOCAL_STORAGE_MANAGER.set(STORAGE_KEY, dataArray);
         }
         // addMonster(7,3);
         // addMonster(9,4);
@@ -57,26 +58,14 @@ export class MainMenu extends AbstractScene {
         this.createGambleButton();
         this.createCoins();
 
-        const playerSelectedMonsters = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []).filter((x: any) => x.row !== null).length;
-        playerSelectedMonsters === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
+        const playerMonstersData = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
+        playerMonstersData.length === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
 
-        const coins = localStorage.getItem('coins') || null;
-        const playerMonstersData = (JSON.parse(localStorage.getItem('playerMonstersData') ?? "null") || []);
+        const isNewGame = localStorage.getItem(LOCAL_STORAGE_MANAGER.STORAGE_KEY) === null;
 
-        if (coins === null) {
-            //TODO - MOVE THIS TO PRELOADER!!!!!!!!!!!!!!!!
-            //new game is started
-            this.coins = main_config.playerStartingCoins.toString();
-            this.updateCoinsText(this.coins);
-            localStorage.setItem('coins', JSON.stringify(main_config.playerStartingCoins));
-            localStorage.setItem('mapLevel', JSON.stringify(1));
-            localStorage.setItem('levelsWon', JSON.stringify([]));
-            localStorage.setItem('freeCommonPacks', JSON.stringify(main_config.playerStartingFreeCommonPacks));
-            localStorage.setItem('freeSilverPacks', JSON.stringify(0));
-            localStorage.setItem('freeGoldPacks', JSON.stringify(0));
-            localStorage.setItem('currentWorld', JSON.stringify(1));
-            localStorage.setItem('worldReached', JSON.stringify(1));
-            localStorage.setItem('gems', JSON.stringify(1));
+        if (isNewGame) {
+            // set defaults to local storage
+            LOCAL_STORAGE_MANAGER.ensureData();
         }
 
         if (playerMonstersData.length === 0) {
@@ -258,7 +247,7 @@ export class MainMenu extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -269,7 +258,7 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '1';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { Button } from "./Button";
+import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 
 export class StartOverConfirm extends Phaser.GameObjects.Container {
 
@@ -44,7 +45,7 @@ export class StartOverConfirm extends Phaser.GameObjects.Container {
 
     private createOkButton() {
         this.okButton = new Button(this.scene, 150, 250, 'button', 'yes', () => {
-            localStorage.clear();
+            LOCAL_STORAGE_MANAGER.clear();
             location.reload();
         });
         this.add(this.okButton);

@@ -4,6 +4,7 @@ import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
 import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
 import { Monster } from './in-game/Monster';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 
 export class DailyQuests extends AbstractScene {
@@ -71,13 +72,13 @@ export class DailyQuests extends AbstractScene {
     //region QUESTS
 
     getTotalProgress() {
-        const dailyQuestsInfo = JSON.parse(localStorage.getItem('questProgress') ?? "null");
+        const dailyQuestsInfo = LOCAL_STORAGE_MANAGER.get('questProgress');
         this.totalProgress = dailyQuestsInfo.filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
     }
 
     showQuests() {
         // shows quests stored in local storage
-        const dailyQuestsInfo = JSON.parse(localStorage.getItem('questProgress') ?? "null");
+        const dailyQuestsInfo = LOCAL_STORAGE_MANAGER.get('questProgress');
         for (let index = 0; index < dailyQuestsInfo.length; index++) {
             const monsterType = dailyQuestsInfo[index].monsterType;
             const monstersTotalCount = dailyQuestsInfo[index].progress.split('/')[1];
@@ -109,12 +110,12 @@ export class DailyQuests extends AbstractScene {
         this.progressBarFill.fillStyle(0x00ff00);
         const fillWidth = this.progressBarWidth * this.totalProgress;
         this.progressBarFill.fillRoundedRect(this.progressBarPosition.x, this.progressBarPosition.y, fillWidth, height, radius);
-
+        this.progressBarFill.visible = this.totalProgress !== 0;
         this.addChests();
     }
 
     private addChests() {
-        const chestsInfo = JSON.parse(localStorage.getItem('chests') ?? "null");
+        const chestsInfo = LOCAL_STORAGE_MANAGER.get('chests');
         for (let index = 0; index < 3; index++) {
             const x = this.progressBarPosition.x + this.progressBarWidth * ((index + 1) * 0.33);
             const y = this.progressBarPosition.y;
@@ -319,49 +320,49 @@ export class DailyQuests extends AbstractScene {
         const claimButton = new Button(this, 960, 850, 'claim', null, () => {
             claimButton.disableInteractive();
             //UPDATE CHEST REWARDS ARRAY
-            let chestsReward = JSON.parse(localStorage.getItem('chests') ?? "[]");
+            let chestsReward = LOCAL_STORAGE_MANAGER.get('chests');
             chestsReward[rewardIndex] = true;
-            localStorage.setItem('chests', JSON.stringify(chestsReward));
+            LOCAL_STORAGE_MANAGER.set('chests', chestsReward);
 
             // UPDATE PLAYER COINS(LOCALE STORAGE) 
-            const playerCoins = localStorage.getItem('coins') || '0';
+            const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
             this.coins = `${+playerCoins + +coinsWon}`;
-            localStorage.setItem('coins', this.coins);
+            LOCAL_STORAGE_MANAGER.set('coins', +this.coins);
             this.coinText.setText(this.coins);
             this.coinTexture.x = this.coinText.x - this.coinText.width;
 
             // UPDATE FREE COMMON PACKS
             if (hasFreeCommonPackReward) {
-                const freeCommonPacks = JSON.parse(localStorage.getItem('freeCommonPacks') ?? '0');
-                localStorage.setItem('freeCommonPacks', JSON.stringify(+freeCommonPacks + 1));
+                const freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
+                LOCAL_STORAGE_MANAGER.set('freeCommonPacks', +freeCommonPacks + 1);
             }
 
             // UPDATE FREE SILVER PACKS
             if (hasFreeSilverPackReward) {
-                const freeSilverPacks = JSON.parse(localStorage.getItem('freeSilverPacks') ?? '0');
-                localStorage.setItem('freeSilverPacks', JSON.stringify(+freeSilverPacks + 1));
+                const freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
+                LOCAL_STORAGE_MANAGER.set('freeSilverPacks', +freeSilverPacks + 1);
             }
 
             // UPDATE FREE GOLD PACKS
             if (hasFreeGoldPackReward) {
-                const freeGoldPacks = JSON.parse(localStorage.getItem('freeGoldPacks') ?? '0');
-                localStorage.setItem('freeGoldPacks', JSON.stringify(+freeGoldPacks + 1));
+                const freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
+                LOCAL_STORAGE_MANAGER.set('freeGoldPacks', +freeGoldPacks + 1);
             }
 
             // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
             let monsterNotClaimed = false;
             newMonsters.forEach((m: any) => {
-                const playerMonstersCount = JSON.parse(localStorage.getItem('playerMonstersData') ?? "null").length;
+                const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
                 if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     monsterNotClaimed = true;
                     return;
                 } else {
                     const STORAGE_KEY = 'playerMonstersData';
-                    const storedData = localStorage.getItem(STORAGE_KEY);
-                    const dataArray = storedData ? JSON.parse(storedData) : [];
+                    const storedData = LOCAL_STORAGE_MANAGER.get(STORAGE_KEY);
+                    const dataArray = storedData ? storedData : [];
                     const newObject = { type: m.type, stars: m.stars, row: NaN, col: 11 };
                     dataArray.push(newObject);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataArray));
+                    LOCAL_STORAGE_MANAGER.set(STORAGE_KEY, dataArray);
                 }
             });
 
@@ -474,7 +475,7 @@ export class DailyQuests extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -485,7 +486,7 @@ export class DailyQuests extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

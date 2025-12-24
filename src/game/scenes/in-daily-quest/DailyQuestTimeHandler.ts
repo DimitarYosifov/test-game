@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { getRandomMonsterType, main_config } from '../../configs/main_config';
+import { LOCAL_STORAGE_MANAGER } from '../../LOCAL_STORAGE_MANAGER';
 
 const QUEST_START_TIME_KEY = 'questStartTime';
 const LAST_RESET_TIME_KEY = 'lastResetTime';
@@ -26,19 +27,19 @@ export class DailyQuestTimeHandler {
     /* -------------------------------------------------------------------------- */
 
     static setLastResetTime(): void {
-        localStorage.setItem(LAST_RESET_TIME_KEY, Date.now().toString());
+        LOCAL_STORAGE_MANAGER.set(LAST_RESET_TIME_KEY, Date.now().toString());
     }
 
     static getLastResetTime(): number {
-        return parseInt(localStorage.getItem(LAST_RESET_TIME_KEY) || '0', 10);
+        return parseInt(LOCAL_STORAGE_MANAGER.get(LAST_RESET_TIME_KEY) || '0', 10);
     }
 
     static getOrCreateStartTime(): number {
-        const stored = localStorage.getItem(QUEST_START_TIME_KEY);
+        const stored = LOCAL_STORAGE_MANAGER.get(QUEST_START_TIME_KEY);
         if (stored) return parseInt(stored, 10);
 
         const now = Date.now();
-        localStorage.setItem(QUEST_START_TIME_KEY, now.toString());
+        LOCAL_STORAGE_MANAGER.set(QUEST_START_TIME_KEY, now.toString());
         return now;
     }
 
@@ -121,8 +122,8 @@ export class DailyQuestTimeHandler {
         const seconds = totalSeconds % 60;
 
         return `${hours.toString().padStart(2, '0')}:` +
-               `${minutes.toString().padStart(2, '0')}:` +
-               `${seconds.toString().padStart(2, '0')}`;
+            `${minutes.toString().padStart(2, '0')}:` +
+            `${seconds.toString().padStart(2, '0')}`;
     }
 
     /* -------------------------------------------------------------------------- */
@@ -175,7 +176,7 @@ export class DailyQuestTimeHandler {
             }
         }
 
-        localStorage.setItem('questProgress', JSON.stringify(questsData));
-        localStorage.setItem('chests', JSON.stringify([false, false, false]));
+        LOCAL_STORAGE_MANAGER.set('questProgress', questsData);
+        LOCAL_STORAGE_MANAGER.set('chests', [false, false, false]);
     }
 }

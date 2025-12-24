@@ -2,6 +2,7 @@ import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { getAllMonsterTypes, getMonsterDataConfig } from '../configs/main_config';
 import { Monster } from './in-game/Monster';
+import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 const MONSTER_SIZE = 165;
 const START_X = 960;
@@ -76,7 +77,7 @@ export class MonstersInfo extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = localStorage.getItem('coins') || '0';
+        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -87,7 +88,7 @@ export class MonstersInfo extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = localStorage.getItem('gems') || '0';
+        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
