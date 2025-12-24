@@ -117,8 +117,13 @@ export class Game extends AbstractScene {
         this.currentlySelectedMonsterAnimation = new SpriteAnimation(this, 400, 300, 'meterbox', 'meterbox', 'meterbox_win_fx_', true, 15, 0.41, 1.5, 5)
             .pause()
             .hide();
-        // TEST - jump straight to level outro
-        this.createLevelOutroPopup(true)
+
+
+
+        if (main_config.jumpToOutroPopup) {
+            // test debug
+            this.createLevelOutroPopup(true)
+        }
     }
 
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
@@ -559,7 +564,7 @@ export class Game extends AbstractScene {
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
 
-        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         const currentWorld = LOCAL_STORAGE_MANAGER.get('currentWorld');
         currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel;  //TODO check world, it could be 3,4.....
         console.log(level_config);
@@ -574,7 +579,7 @@ export class Game extends AbstractScene {
         }
         //----------------------------------------------------------------------------------------------------------------------------
 
-        const isFirstTimeReward = LOCAL_STORAGE_MANAGER.get('levelsWon').includes(+(currentLevelData.levelName as number)) === false;
+        const isFirstTimeReward = (LOCAL_STORAGE_MANAGER.get('levelsWon') as any).includes(+(currentLevelData.levelName as number)) === false;
         const rndNum = Phaser.Math.RND.between(1, 100);
         const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
         const rndNum2 = Phaser.Math.RND.between(1, 100);
@@ -582,12 +587,11 @@ export class Game extends AbstractScene {
 
 
         // UPDATE LEVELS WON(LOCAL STORAGE)
-        const levelsWon = LOCAL_STORAGE_MANAGER.get('levelsWon');
+        const levelsWon: any = LOCAL_STORAGE_MANAGER.get('levelsWon');
         if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
             levelsWon.push(+(currentLevelData.levelName as number));
             LOCAL_STORAGE_MANAGER.set('levelsWon', levelsWon);
         }
-
 
         // bg overlay
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23 - 0.1);
@@ -711,21 +715,21 @@ export class Game extends AbstractScene {
 
                 // UPDATE PLAYER GEMS(LOCALE STORAGE) 
                 if (hasGemReward) {
-                    const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
+                    const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
                     LOCAL_STORAGE_MANAGER.set('gems', +playerGems + 1);
                 }
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
-                const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+                const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
                 LOCAL_STORAGE_MANAGER.set('coins', +playerCoins + +(coinsWon as number));
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
-                const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
+                const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
                 if ((+currentLevel + 1) > +mapLevel) {
                     LOCAL_STORAGE_MANAGER.set('mapLevel', +mapLevel + 1);
                 }
 
-                const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
+                const playerMonstersCount = (LOCAL_STORAGE_MANAGER.get('playerMonstersData') as []).length;
                 if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     // leveltext.destroy(true);
                     // rewardsContainer.destroy(true);

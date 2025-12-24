@@ -67,7 +67,7 @@ export class Gamble extends AbstractScene {
     }
 
     private checkSpinAffordable() {
-        this.playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+        this.playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
         if (this.playerCoins < main_config.slotSpinCost) {
             this.spinButton.disableInteractive();
             this.isInAutoMode = false;
@@ -266,7 +266,7 @@ export class Gamble extends AbstractScene {
 
     private onCoinsWin() {
         let emitted = 0;
-        let coins = LOCAL_STORAGE_MANAGER.get('coins');
+        let coins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
         const finalCoinsAmount = +coins + this.coinsToBeWon;
         LOCAL_STORAGE_MANAGER.set('coins', finalCoinsAmount);
 
@@ -319,7 +319,7 @@ export class Gamble extends AbstractScene {
             },
             deathCallback: () => {
                 LOCAL_STORAGE_MANAGER.set('gems', +this.gems + 1);
-                this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+                this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
                 this.gemsText.setText(`${this.gems}`);
             },
             emitCallbackScope: this
@@ -534,7 +534,7 @@ export class Gamble extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
@@ -548,7 +548,7 @@ export class Gamble extends AbstractScene {
     }
 
     private updateCoinsText() {
-        this.playerCoins = +(LOCAL_STORAGE_MANAGER.get('coins'));
+        this.playerCoins = +(LOCAL_STORAGE_MANAGER.get('coins') as number);
         this.playerCoins -= main_config.slotSpinCost;
         LOCAL_STORAGE_MANAGER.set('coins', this.playerCoins);
         this.coinText.setText(`${this.playerCoins}`);

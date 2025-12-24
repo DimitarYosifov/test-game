@@ -2,6 +2,11 @@ import { monsters_power_config } from "./monsters_power_config";
 
 export const main_config = {
     "cryptData": true, //should local storage data be crypted
+
+    //---------DEBUG---------
+    "jumpToOutroPopup": false,
+    //-----------------------
+
     "gridSizeHorizontal": 12,
     "gridSizeVertical": 7,
     "cellSize": 125,

@@ -8,10 +8,10 @@ export class DataHandler {
 
     static checkDataOnMonsterDeath(monster: Monster) {
         //DAILY QUEST
-        const dailyQuestsInfo = LOCAL_STORAGE_MANAGER.get('questProgress');
-        const monterFoundInDailyQuest = dailyQuestsInfo.find((x: any) => +x.monsterType === +monster.type && x.questType === 'kill')
+        const dailyQuestsInfo = (LOCAL_STORAGE_MANAGER.get('questProgress') as []);
+        const monterFoundInDailyQuest: any = dailyQuestsInfo.find((x: any) => +x.monsterType === +monster.type && x.questType === 'kill')
         if (monterFoundInDailyQuest) {
-            const killedMonsters = monterFoundInDailyQuest.progress.split('/')[0];
+            const killedMonsters = monterFoundInDailyQuest?.progress.split('/')[0];
             const totalMonstersCount = monterFoundInDailyQuest.progress.split('/')[1];
             if (+killedMonsters < +totalMonstersCount) {
                 monterFoundInDailyQuest.progress = `${+killedMonsters + 1}/${+totalMonstersCount}`;
@@ -22,7 +22,7 @@ export class DataHandler {
         //ACHIEVEMENTS
         //check monster kill achievement
         const achievements = LOCAL_STORAGE_MANAGER.get('achievements');
-        const killMonsterAchievement: any = achievements.find((a: any) => a.type === monster.type);
+        const killMonsterAchievement: any = (achievements as []).find((a: any) => a.type === monster.type);
 
         if (killMonsterAchievement) {
             const currentAchievementLevel = killMonsterAchievement.data.steps[0];
@@ -36,7 +36,7 @@ export class DataHandler {
         }
 
         //check damage done achievement
-        const damageDoneAchievement: any = achievements.find((a: any) => a.data.description === 'damage done');
+        const damageDoneAchievement: any = (achievements as []).find((a: any) => a.data.description === 'damage done');
         if (damageDoneAchievement) {
             const currentAchievementLevel = damageDoneAchievement.data.steps[0];
             const damageDoneSoFar = currentAchievementLevel.progress;
@@ -55,11 +55,11 @@ export class DataHandler {
         const chestsInfo = LOCAL_STORAGE_MANAGER.get('chests');
         let pendingReward = false;
 
-        const totalProgress = dailyQuestsInfo.filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
+        const totalProgress = (dailyQuestsInfo as []).filter((p: any) => p.progress.split('/')[0] === p.progress.split('/')[1]).length / dailyQuestsInfo.length;
 
         for (let index = 0; index < 3; index++) {
             const isReached = totalProgress > (index + 1) * 0.33;
-            const isClaimed = chestsInfo[index];
+            const isClaimed = (chestsInfo as [])[index];
             if (isReached && !isClaimed) {
                 pendingReward = true;
                 break;
@@ -71,7 +71,7 @@ export class DataHandler {
     static onMonsterUpgrade() {
         // check daily quest upgrades
         const dailyQuestsInfo = LOCAL_STORAGE_MANAGER.get('questProgress');
-        const monterFoundInDailyQuest = dailyQuestsInfo.find((x: any) => x.questType === 'upgrade')
+        const monterFoundInDailyQuest: any = (dailyQuestsInfo as []).find((x: any) => x.questType === 'upgrade')
         if (monterFoundInDailyQuest) {
             const upgradedMonsters = monterFoundInDailyQuest.progress.split('/')[0];
             const totalMonstersCount = monterFoundInDailyQuest.progress.split('/')[1];
@@ -83,7 +83,7 @@ export class DataHandler {
 
         // check achievement upgrades
         const achievements = LOCAL_STORAGE_MANAGER.get('achievements');
-        const upgradeAchievement: any = achievements.find((a: any) => a.data.description === 'upgrade monsters');
+        const upgradeAchievement: any = (achievements as []).find((a: any) => a.data.description === 'upgrade monsters');
         if (upgradeAchievement) {
             const currentAchievementLevel = upgradeAchievement.data.steps[0];
             const upgradesSoFar = currentAchievementLevel.progress;
@@ -97,7 +97,7 @@ export class DataHandler {
 
     static onMonsterSold() {
         const achievements = LOCAL_STORAGE_MANAGER.get('achievements');
-        const sellMonstersAchievement: any = achievements.find((a: any) => a.data.description === 'sell monsters');
+        const sellMonstersAchievement: any = (achievements as []).find((a: any) => a.data.description === 'sell monsters');
         if (sellMonstersAchievement) {
             const currentAchievementLevel = sellMonstersAchievement.data.steps[0];
             const soldSoFar = currentAchievementLevel.progress;
@@ -154,7 +154,7 @@ export class DataHandler {
 
     static hasAchievementRewardPending() {
         const achievementsInfo = LOCAL_STORAGE_MANAGER.get('achievements');
-        let pendingReward = achievementsInfo.some((x: any) => x.data.steps && x.data.steps[0].progress >= x.data.steps[0].count);
+        let pendingReward = (achievementsInfo as []).some((x: any) => x.data.steps && x.data.steps[0].progress >= x.data.steps[0].count);
         return pendingReward;
     }
 }

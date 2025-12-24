@@ -123,7 +123,7 @@ export class DailyQuests extends AbstractScene {
             this.chests.push(chest);
 
             const isReached = this.totalProgress > (index + 1) * 0.33;
-            const isClaimed = chestsInfo[index];
+            const isClaimed = (chestsInfo as [])[index];
             if (isReached && isClaimed) {
                 chest.setAlpha(0.65).disableInteractive()
             } else if (isReached) {
@@ -320,12 +320,12 @@ export class DailyQuests extends AbstractScene {
         const claimButton = new Button(this, 960, 850, 'claim', null, () => {
             claimButton.disableInteractive();
             //UPDATE CHEST REWARDS ARRAY
-            let chestsReward = LOCAL_STORAGE_MANAGER.get('chests');
+            let chestsReward = (LOCAL_STORAGE_MANAGER.get('chests') as boolean[]);
             chestsReward[rewardIndex] = true;
             LOCAL_STORAGE_MANAGER.set('chests', chestsReward);
 
             // UPDATE PLAYER COINS(LOCALE STORAGE) 
-            const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+            const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
             this.coins = `${+playerCoins + +coinsWon}`;
             LOCAL_STORAGE_MANAGER.set('coins', +this.coins);
             this.coinText.setText(this.coins);
@@ -334,25 +334,25 @@ export class DailyQuests extends AbstractScene {
             // UPDATE FREE COMMON PACKS
             if (hasFreeCommonPackReward) {
                 const freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
-                LOCAL_STORAGE_MANAGER.set('freeCommonPacks', +freeCommonPacks + 1);
+                LOCAL_STORAGE_MANAGER.set('freeCommonPacks', +(freeCommonPacks as number) + 1);
             }
 
             // UPDATE FREE SILVER PACKS
             if (hasFreeSilverPackReward) {
                 const freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
-                LOCAL_STORAGE_MANAGER.set('freeSilverPacks', +freeSilverPacks + 1);
+                LOCAL_STORAGE_MANAGER.set('freeSilverPacks', +(freeSilverPacks as number) + 1);
             }
 
             // UPDATE FREE GOLD PACKS
             if (hasFreeGoldPackReward) {
                 const freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
-                LOCAL_STORAGE_MANAGER.set('freeGoldPacks', +freeGoldPacks + 1);
+                LOCAL_STORAGE_MANAGER.set('freeGoldPacks', +(freeGoldPacks as number) + 1);
             }
 
             // ADDING NEW MONSTER REWARD TO THE PLAYER DESK(LOCALE STORAGE )
             let monsterNotClaimed = false;
             newMonsters.forEach((m: any) => {
-                const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
+                const playerMonstersCount = (LOCAL_STORAGE_MANAGER.get('playerMonstersData') as any).length;
                 if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck) {
                     monsterNotClaimed = true;
                     return;
@@ -475,7 +475,7 @@ export class DailyQuests extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -486,7 +486,7 @@ export class DailyQuests extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

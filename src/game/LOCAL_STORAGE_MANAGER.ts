@@ -16,11 +16,10 @@ export interface IGameData {
     currentWorld: number;
     worldReached: number;
     gems: number;
-    gameOpen: boolean | null;
     currentLevel: number;
-    achievements: []; //???
-    questProgress: any[]; //???
-    chests: any[]; //???
+    achievements: [] | null; //???
+    questProgress: any; //???
+    chests: boolean[]; //???
     survivalLevelData: any; //???
 
     survival_level_1: any; //?????
@@ -47,9 +46,8 @@ export class LOCAL_STORAGE_MANAGER {
         currentWorld: 1,
         worldReached: 1,
         gems: main_config.playerStartingGems,
-        gameOpen: null,
         currentLevel: 0,
-        achievements: [], //????
+        achievements: null, //????
         questProgress: [], //????
         chests: [], //????
         survivalLevelData: {},//???????
@@ -67,26 +65,24 @@ export class LOCAL_STORAGE_MANAGER {
     static data?: IGameData; // undefined until first access
 
     static ensureData() {
-        if (!this.data) {
-            const stored = localStorage.getItem(this.STORAGE_KEY);
-            if (stored) {
-                try {
-                    if (main_config.cryptData) {
-                        const bytes = CryptoJS.AES.decrypt(stored, this.SECRET_KEY);
-                        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-                        this.data = { ...this.defaultData, ...JSON.parse(decrypted) };
-                    } else {
-                        this.data = { ...this.defaultData, ...JSON.parse(stored) };
-                    }
-
-                } catch {
-                    console.warn('Failed to parse localStorage data, using defaults.');
-                    this.data = { ...this.defaultData };
+        const stored = localStorage.getItem(this.STORAGE_KEY);
+        if (stored) {
+            try {
+                if (main_config.cryptData) {
+                    const bytes = CryptoJS.AES.decrypt(stored, this.SECRET_KEY);
+                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                    this.data = { ...this.defaultData, ...JSON.parse(decrypted) };
+                } else {
+                    this.data = { ...this.defaultData, ...JSON.parse(stored) };
                 }
-            } else {
+
+            } catch {
+                console.warn('Failed to parse localStorage data, using defaults.');
                 this.data = { ...this.defaultData };
-                this.save();
             }
+        } else {
+            this.data = { ...this.defaultData };
+            this.save();
         }
     }
 
@@ -103,23 +99,25 @@ export class LOCAL_STORAGE_MANAGER {
     }
 
     public static set<T extends keyof IGameData>(key: T, value: IGameData[T]) {
-        this.ensureData();
+        // this.ensureData();
         this.data![key] = value;
         this.save();
     }
 
-    public static get<T extends keyof IGameData>(key: T): IGameData[T] {
-        this.ensureData();
-        return this.data![key];
+    public static get<T extends keyof IGameData>(key: T): IGameData[T] | null {
+        if (this.data) {
+            return this.data![key];
+        }
+        return null;
     }
 
     public static getAll(): IGameData {
-        this.ensureData();
+        // this.ensureData();
         return { ...this.data! };
     }
 
     public static setAll(newData: Partial<IGameData>) {
-        this.ensureData();
+        // this.ensureData();
         this.data = { ...this.data!, ...newData };
         this.save();
     }
@@ -130,7 +128,7 @@ export class LOCAL_STORAGE_MANAGER {
     }
 
     public static remove<T extends keyof IGameData>(key: T) {
-        this.ensureData();
+        // this.ensureData();
         if (key in this.data!) {
             delete this.data![key];
             this.save();

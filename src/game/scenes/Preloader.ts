@@ -17,10 +17,10 @@ export class Preloader extends Scene {
             console.log(progress)
         });
 
-        this.add.rectangle(960, 540 - 16, 600, 32).setStrokeStyle(1, 0xffffff);
-        const bar = this.add.rectangle(960 - 300, 540 - 16, 4, 28, 0xffffff);
+        this.add.rectangle(960, 1050 - 16, 720, 24).setStrokeStyle(3, 0x000000);
+        const bar = this.add.rectangle(960 - 360 + 3, 1050 - 16, 4, 20, 0xff0000);
         this.load.on('progress', (progress: number) => {
-            bar.width = 4 + (600 * progress);
+            bar.width = (720 * progress);
         });
 
         this.load.image('1', '1.png');
@@ -109,11 +109,13 @@ export class Preloader extends Scene {
     }
 
     create() {
-        DailyQuestTimeHandler.initialCheck();
-        DataHandler.setInitialAchievements();
+        // DailyQuestTimeHandler.initialCheck();
+        // DataHandler.setInitialAchievements();
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start('MainMenu');
+            DailyQuestTimeHandler.initialCheck();
+            DataHandler.setInitialAchievements();
         });
     }
 }
