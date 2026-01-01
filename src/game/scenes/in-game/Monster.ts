@@ -664,7 +664,7 @@ export class Monster extends Phaser.GameObjects.Container {
         if (randomNumber >= odds) {
 
             const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
-            const data = LOCAL_STORAGE_MANAGER.get('gems');
+            const data = (LOCAL_STORAGE_MANAGER.get('gems') as number);
             LOCAL_STORAGE_MANAGER.set('gems', +data + 1);
 
             this.scene.tweens.chain({
