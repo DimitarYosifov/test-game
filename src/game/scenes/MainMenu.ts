@@ -32,6 +32,10 @@ export class MainMenu extends AbstractScene {
 
     create() {
 
+        this.input.once('pointerdown', () => {
+            window.scrollTo(0, 100);
+
+        });
         this.add.image(0, 0, 'bg-main-menu').setOrigin(0);
 
         // add monster manually - for debugging!

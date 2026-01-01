@@ -12,27 +12,7 @@ export class Boot extends Scene {
         this.load.image('background', 'assets/bg3.jpg');
     }
 
-    resizeGame() {
-        const vv = window.visualViewport;
-
-        const width = Math.floor(vv ? vv.width : window.innerWidth);
-        const height = Math.floor(vv ? vv.height : window.innerHeight);
-
-        this.game.scale.resize(width, height);
-    }
-
     create() {
-
-        window.addEventListener('resize', this.resizeGame);
-        window.addEventListener('orientationchange', this.resizeGame);
-
-        // visualViewport fires when address bar collapses
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', this.resizeGame);
-            window.visualViewport.addEventListener('scroll', this.resizeGame);
-        }
-
-
         this.scene.start('Preloader');
     }
 }
