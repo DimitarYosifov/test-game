@@ -6,9 +6,10 @@
     "browserslist": "> 0.25%, last 2 versions, not dead",
     "scripts": {
         "dev": "node log.js dev &parcel index.html --no-cache --config ./parcel/.parcel.dev --open",
-        "build": "node log.js build &parcel build index.html --public-url _relativeroute_ --no-source-maps --log-level error --config ./parcel/.parcel.prod",
+        "build": "node log.js build &parcel build index.html --no-source-maps --log-level error --config ./parcel/.parcel.prod",
         "dev-nolog": "parcel index.html --no-cache --config ./parcel/.parcel.dev --open",
-        "build-nolog": "parcel build index.html --public-url _relativeroute_ --no-source-maps --log-level error --config ./parcel/.parcel.prod"
+        "build-nolog": "parcel build index.html --public-url _relativeroute_ --no-source-maps --log-level error --config ./parcel/.parcel.prod",
+        "deploy": "gh-pages -d dist"
     },
     "repository": {
         "type": "git",
@@ -26,6 +27,7 @@
         "@parcel/transformer-typescript-tsc": "2.14.4",
         "@types/crypto-js": "^4.2.2",
         "express": "5.1.0",
+        "gh-pages": "^6.3.0",
         "parcel": "2.14.4",
         "parcel-reporter-clean-dist": "^1.0.4",
         "parcel-reporter-static-files-copy": "^1.5.3",
