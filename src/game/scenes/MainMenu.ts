@@ -34,6 +34,7 @@ export class MainMenu extends AbstractScene {
 
         this.input.once('pointerdown', () => {
             this.scale.startFullscreen();
+            // this.scale.stopFullscreen();
         });
         this.add.image(0, 0, 'bg-main-menu').setOrigin(0);
 
