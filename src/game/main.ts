@@ -22,13 +22,13 @@ const config: Phaser.Types.Core.GameConfig = {
     parent: 'game-container',
     backgroundColor: '#000000',
     scale: {
-        mode: Phaser.Scale.RESIZE,
-        width: '100%',
-        height: '100%',
-        // mode: Phaser.Scale.FIT,
+        // mode: Phaser.Scale.RESIZE,
+        // width: '100%',
+        // height: '100%',
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        // width: 1920,
-        // height: 1080
+        width: 1920,
+        height: 1080
     },
     scene: [
         Boot,
