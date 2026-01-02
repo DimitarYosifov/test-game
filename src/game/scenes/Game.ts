@@ -725,7 +725,7 @@ export class Game extends AbstractScene {
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
                 const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
-                if ((+currentLevel + 1) > +mapLevel) {
+                if (((currentLevelData.levelName as number) + 1) > +mapLevel) {
                     LOCAL_STORAGE_MANAGER.set('mapLevel', +mapLevel + 1);
                 }
 

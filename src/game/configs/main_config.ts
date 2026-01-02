@@ -336,6 +336,13 @@ export const main_config = {
     // ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)
 
 
+    //   D E P L O Y    T O   G H - P A G E S
+    /**
+     * close all open terminals - very important
+     * npm run build - make sure assets folder is present in the dist folder
+     * npm run deploy
+     */
+
 }
 
 export const getRandomMonsterType = () => {
