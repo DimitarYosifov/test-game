@@ -118,7 +118,9 @@ export class DataHandler {
         let achievementsData: any = [];
         //CREATE MONSTERS ACHIEVEMENTS
         getAllMonsterTypes().forEach((type: string, index: number) => {
-            const data = main_config.achievements.monsters;
+            const data = JSON.parse(
+                JSON.stringify(main_config.achievements.monsters)
+            );
             totalRowsSoFar++;
             achievementsData.push({
                 data,
