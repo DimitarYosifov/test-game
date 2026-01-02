@@ -1,6 +1,6 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { getAllMonsterTypes, getMonsterDataConfig } from '../configs/main_config';
+import { addFullscreenFunctionality, getAllMonsterTypes, getMonsterDataConfig } from '../configs/main_config';
 import { Monster } from './in-game/Monster';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
@@ -31,7 +31,7 @@ export class MonstersInfo extends AbstractScene {
         super.create();
         this.createCoins();
         this.createBackButton();
-
+        addFullscreenFunctionality(this, 100, 75);
 
         this.mainContainer = this.add.container(0, 0);
 
@@ -77,7 +77,7 @@ export class MonstersInfo extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -88,7 +88,7 @@ export class MonstersInfo extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

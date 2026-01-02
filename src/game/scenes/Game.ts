@@ -1,4 +1,4 @@
-import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
@@ -96,6 +96,8 @@ export class Game extends AbstractScene {
         this.createOpponentTurnMsg();
         this.addOpponentMonstersLeftText();
         this.checkMapVisibility(true);
+        addFullscreenFunctionality(this, 100, 170);
+
 
         // event handlers
         this.skipButtonHandler();
@@ -117,8 +119,6 @@ export class Game extends AbstractScene {
         this.currentlySelectedMonsterAnimation = new SpriteAnimation(this, 400, 300, 'meterbox', 'meterbox', 'meterbox_win_fx_', true, 15, 0.41, 1.5, 5)
             .pause()
             .hide();
-
-
 
         if (main_config.jumpToOutroPopup) {
             // test debug
@@ -566,7 +566,7 @@ export class Game extends AbstractScene {
 
         let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         const currentWorld = LOCAL_STORAGE_MANAGER.get('currentWorld');
-        currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel;  //TODO check world, it could be 3,4.....
+        currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
         console.log(level_config);
         let currentLevelData = null;
 

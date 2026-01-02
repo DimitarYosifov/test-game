@@ -348,4 +348,23 @@ export const getAllMonsterTypes = () => {
 
 export const getMonsterDataConfig = (type: number, stars: number) => {
     return { ...(monsters_power_config as any)[type][stars] };
+}
+
+export const addFullscreenFunctionality = (scene: Phaser.Scene, x: number = 250, y: number = 75, fullscreenImg?: Phaser.GameObjects.Image) => {
+
+    if (!fullscreenImg) {
+        fullscreenImg = scene.add.image(x, y, 'fullscreen').setOrigin(0.5).setScale(0.85).setName('fullscreen');
+    }
+
+    fullscreenImg.setInteractive();
+    fullscreenImg.setTexture(scene.game.scale.isFullscreen ? 'exit-fullscreen' : 'fullscreen');
+    fullscreenImg.on('pointerdown', () => {
+        if (scene.game.scale.isFullscreen) {
+            fullscreenImg.setTexture('fullscreen');
+            scene.game.scale.stopFullscreen();
+        } else {
+            fullscreenImg.setTexture('exit-fullscreen');
+            scene.game.scale.startFullscreen();
+        }
+    });
 } 

@@ -80,7 +80,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
             }).setOrigin(0.5);
         this.add(levelHeader);
 
-        if (LOCAL_STORAGE_MANAGER.get('levelsWon')) {
+        if ((LOCAL_STORAGE_MANAGER.get('levelsWon') as number[]).includes(+(this.levelData.levelName as number))) {
             //completed text
             const levelCompletedText: Phaser.GameObjects.Text = this.scene.add.text(
                 levelHeader.x,

@@ -1,4 +1,4 @@
-import { getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -59,6 +59,8 @@ export class Gamble extends AbstractScene {
         this.createSpinButton();
         this.createAutoButton();
         this.createCoins();
+        addFullscreenFunctionality(this, 100, 75);
+
         this.checkSpinAffordable();
         this.shouldSpin = false;
         this.spinFinished = true;

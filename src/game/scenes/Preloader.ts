@@ -17,8 +17,8 @@ export class Preloader extends Scene {
             console.log(progress)
         });
 
-        this.add.rectangle(960, 1050 - 16, 720, 24).setStrokeStyle(3, 0x000000);
-        const bar = this.add.rectangle(960 - 360 + 3, 1050 - 16, 4, 20, 0xff0000);
+        this.add.rectangle(960, 600 - 16, 720, 24).setStrokeStyle(3, 0x000000);
+        const bar = this.add.rectangle(960 - 360 + 3, 600 - 16, 4, 20, 0xff0000);
         this.load.on('progress', (progress: number) => {
             bar.width = (720 * progress);
         });
@@ -99,6 +99,10 @@ export class Preloader extends Scene {
         this.load.image('slot-machine', 'slot-machine.png');
         this.load.image('on', 'on.png');
         this.load.image('off', 'off.png');
+
+        this.load.image('fullscreen', 'fullscreen.png');
+        this.load.image('exit-fullscreen', 'exit-fullscreen.png');
+
 
         //  F O N T S
         this.load.font('main-font', 'Oups.otf');

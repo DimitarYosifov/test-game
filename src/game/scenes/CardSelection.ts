@@ -3,7 +3,7 @@ import { Monster } from './in-game/Monster';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { getMonsterDataConfig } from '../configs/main_config';
+import { addFullscreenFunctionality, getMonsterDataConfig } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
@@ -69,12 +69,13 @@ export class CardSelection extends AbstractScene {
         this.createSellCardSlot();
         this.createOkButton();
         this.createCoins();
+        addFullscreenFunctionality(this, 1635, 970);
 
         this.initializeMonsters();
     }
 
     private loadPlayerMonsters() {
-        const playerMonstersDataFromStorage = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
+        const playerMonstersDataFromStorage = LOCAL_STORAGE_MANAGER.get('playerMonstersData') as IPlayerMonstersData[];
         playerMonstersDataFromStorage.forEach(element => {
             if (element.row === null) {
                 element.row = NaN;
@@ -603,7 +604,7 @@ export class CardSelection extends AbstractScene {
         console.log(this.playerMonstersData)
         console.log(this.monstersContainer.list)
 
-        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+        const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
         // this.coinText.setText(`${+playerCoins + this.sellsFor}`);
         this.updateCoinsText(+playerCoins + this.sellsFor);
 
@@ -719,8 +720,8 @@ export class CardSelection extends AbstractScene {
             }
         }
 
-        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
-        const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
+        const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
+        const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
 
@@ -764,8 +765,8 @@ export class CardSelection extends AbstractScene {
         console.log(this.monstersContainer.list);
 
         // update coins and upgrade cost text
-        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
-        const playerGems = LOCAL_STORAGE_MANAGER.get('gems');
+        const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
+        const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
         this.upgradeCost = this.upgradeSelectedMonsters[0]?.unitData.upgradeCost || 0;
         this.upgradeCostGems = this.upgradeSelectedMonsters[0]?.unitData.stars as number;
 
@@ -992,7 +993,7 @@ export class CardSelection extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

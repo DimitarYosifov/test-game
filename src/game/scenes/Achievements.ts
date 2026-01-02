@@ -1,3 +1,4 @@
+import { addFullscreenFunctionality } from "../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../LOCAL_STORAGE_MANAGER";
 import { AbstractScene } from "./AbstractScene";
 import { Button } from "./in-main-menu/Button";
@@ -28,10 +29,9 @@ export class Achievements extends AbstractScene {
         super.create();
 
         this.add.image(0, 0, 'bg-map').setOrigin(0);
-
-
         this.createBackButton();
         this.createCoins();
+        addFullscreenFunctionality(this, 100, 75);
 
         this.storedAchievementsData = LOCAL_STORAGE_MANAGER.get('achievements');
         this.achievementsData = [];
@@ -149,7 +149,7 @@ export class Achievements extends AbstractScene {
     }
 
     private updateCoinsText(coinsWon: number | string) {
-        const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+        const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
         this.coins = `${+playerCoins + +coinsWon}`;
         LOCAL_STORAGE_MANAGER.set('coins', +this.coins);
         this.coinText.setText(this.coins);
@@ -170,7 +170,7 @@ export class Achievements extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -181,7 +181,7 @@ export class Achievements extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

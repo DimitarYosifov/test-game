@@ -6,6 +6,7 @@ import { world1points } from './in-map/world_1_points';
 import { world2points } from './in-map/world_2_points';
 import { SpriteAnimation } from './SpriteAnimation';
 import { LOCAL_STORAGE_MANAGER, IGameData } from '../LOCAL_STORAGE_MANAGER';
+import { addFullscreenFunctionality } from '../configs/main_config';
 
 export class Map extends AbstractScene {
     confirmPopupOpen: boolean;
@@ -51,7 +52,7 @@ export class Map extends AbstractScene {
         this.add.existing(this.levelContentContainer);
 
         //TODO check world, it could be 3,4.....
-        this.world = LOCAL_STORAGE_MANAGER.get('currentWorld');
+        this.world = (LOCAL_STORAGE_MANAGER.get('currentWorld') as number);
         const points = this.world === 1 ? world1points : world2points;
 
         for (let index = 0; index < points.length; index++) {
@@ -91,8 +92,8 @@ export class Map extends AbstractScene {
         this.createPlayer();// this should be exactly here, between the 2  phases of creating survival levels! - TODO - check to fix it
 
         //========================SURVIVAL LEVEL==========================================================
-        const currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
-        const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
+        const currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
+        const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
 
         this.survivalLevels.forEach((lvl: any) => {
             const introduceToSurvivalLevel = currentLevel === lvl.revealedByLevel && mapLevel === lvl.revealedByLevel + 1
@@ -111,6 +112,8 @@ export class Map extends AbstractScene {
         this.createBackButton();
         this.createLevels();
         this.createCoins();
+        addFullscreenFunctionality(this, 100, 75);
+
     }
 
     private createFireAnimation() {
@@ -298,8 +301,8 @@ export class Map extends AbstractScene {
 
     private createLevels(): void {
 
-        const mapLevel = LOCAL_STORAGE_MANAGER.get('mapLevel');
-        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
+        let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
 
         //test!
         // level_config.length = 10
@@ -366,9 +369,9 @@ export class Map extends AbstractScene {
 
                 if (levelData.isFlipped) {// arrow to world 1 is clicked
                     LOCAL_STORAGE_MANAGER.set('currentLevel', 35);
-                    currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+                    currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
                     LOCAL_STORAGE_MANAGER.set('currentWorld', 1);
-                    this.world = LOCAL_STORAGE_MANAGER.get('currentWorld');
+                    this.world = (LOCAL_STORAGE_MANAGER.get('currentWorld') as number);
                 }
 
                 this.confirmPopupOpen = true;
@@ -489,7 +492,7 @@ export class Map extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = LOCAL_STORAGE_MANAGER.get('coins').toString();
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
         this.coinText = this.add.text(
             1900,
             30,
@@ -500,7 +503,7 @@ export class Map extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,

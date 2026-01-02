@@ -1,7 +1,7 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
-import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
 import { Monster } from './in-game/Monster';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
@@ -37,6 +37,8 @@ export class DailyQuests extends AbstractScene {
         this.createBackButton();
         this.createHeaderTexts();
         this.createTimeLeftText();
+        addFullscreenFunctionality(this, 100, 75);
+
         // const startTime = DailyQuestTimeHandler.getOrCreateStartTime();
         // if (DailyQuestTimeHandler.shouldResetQuests(startTime)) {
         //     DailyQuestTimeHandler.resetQuests();

@@ -1,5 +1,5 @@
 import { IOpponentMonstersData } from '../configs/level_config';
-import { getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -63,6 +63,8 @@ export class BuyPacks extends AbstractScene {
         this.createSilverPack();
         this.createGoldenrPack();
         this.createBackButton();
+        addFullscreenFunctionality(this, 100, 75);
+
     }
 
     changeScene(nextScene: string): void {
@@ -145,13 +147,13 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
+        const freeCommonPacks = (LOCAL_STORAGE_MANAGER.get('freeCommonPacks') as number);
         let freeText: any;
 
         // button
         this.commonPackButton = new Button(this, this.commonPackTexture.x, commonPackCost.y + 120, 'buy', null, () => {
 
-            const _freeCommonPacks = LOCAL_STORAGE_MANAGER.get('freeCommonPacks');
+            const _freeCommonPacks = (LOCAL_STORAGE_MANAGER.get('freeCommonPacks') as number);
             const canBuy = this.onBuy(packCost, 'commonPack', _freeCommonPacks > 0);
 
             if (!canBuy) return;
@@ -263,13 +265,13 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
+        const freeSilverPacks = (LOCAL_STORAGE_MANAGER.get('freeSilverPacks') as number);
         let freeText: any;
 
         // button
         this.silverPackButton = new Button(this, this.silverPackTexture.x, silverPackCost.y + 120, 'buy', null, () => {
 
-            const _freeSilverPacks = LOCAL_STORAGE_MANAGER.get('freeSilverPacks');
+            const _freeSilverPacks = (LOCAL_STORAGE_MANAGER.get('freeSilverPacks') as number);
             const canBuy = this.onBuy(packCost, 'silverPack', _freeSilverPacks > 0);
 
             if (!canBuy) return;
@@ -381,13 +383,13 @@ export class BuyPacks extends AbstractScene {
             }
         ).setOrigin(0.5);
 
-        const freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
+        const freeGoldPacks = (LOCAL_STORAGE_MANAGER.get('freeGoldPacks') as number);
         let freeText: any;
 
         // button
         this.goldenPackButton = new Button(this, this.goldenPackTexture.x, goldenPackCost.y + 120, 'buy', null, () => {
 
-            const _freeGoldPacks = LOCAL_STORAGE_MANAGER.get('freeGoldPacks');
+            const _freeGoldPacks = (LOCAL_STORAGE_MANAGER.get('freeGoldPacks') as number);
             const canBuy = this.onBuy(packCost, 'goldPack', _freeGoldPacks > 0);
 
             if (!canBuy) return;
@@ -437,7 +439,7 @@ export class BuyPacks extends AbstractScene {
     }
 
     createCoins() {
-        this.coins = LOCAL_STORAGE_MANAGER.get('coins');
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
         this.coinText = this.add.text(
             1900,
             30,
@@ -448,7 +450,7 @@ export class BuyPacks extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = LOCAL_STORAGE_MANAGER.get('gems').toString();
+        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
         this.gemsText = this.add.text(
             this.coinTexture.x - this.coinTexture.displayWidth - 25,
             30,
@@ -470,7 +472,7 @@ export class BuyPacks extends AbstractScene {
             pointer.event.stopPropagation();
         });
         console.log(LOCAL_STORAGE_MANAGER.get('playerMonstersData'))
-        const playerMonstersCount = LOCAL_STORAGE_MANAGER.get('playerMonstersData').length;
+        const playerMonstersCount = (LOCAL_STORAGE_MANAGER.get('playerMonstersData') as any).length;
         if (playerMonstersCount >= main_config.maxMonstersAllowedInDeck - 2) {
 
             const msg = this.add.text(
@@ -543,7 +545,7 @@ export class BuyPacks extends AbstractScene {
 
             if (!isFree) {
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
-                const playerCoins = LOCAL_STORAGE_MANAGER.get('coins');
+                const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
                 this.coins = +playerCoins - +cost;
                 LOCAL_STORAGE_MANAGER.set('coins', this.coins);
                 this.updateCoinsText(`${this.coins}`);
@@ -590,9 +592,9 @@ export class BuyPacks extends AbstractScene {
 
     private hideRewards() {
         LOCAL_STORAGE_MANAGER.get('freeCommonPacks')
-        this.checkPackAffordable(PACK_COST[0]) || LOCAL_STORAGE_MANAGER.get('freeCommonPacks') > 0 ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[1]) || LOCAL_STORAGE_MANAGER.get('freeSilverPacks') > 0 ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
-        this.checkPackAffordable(PACK_COST[2]) || LOCAL_STORAGE_MANAGER.get('freeGoldPacks') > 0 ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[0]) || (LOCAL_STORAGE_MANAGER.get('freeCommonPacks') as number) > 0 ? this.commonPackButton.setInteractive() : this.commonPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[1]) || (LOCAL_STORAGE_MANAGER.get('freeSilverPacks') as number) > 0 ? this.silverPackButton.setInteractive() : this.silverPackButton.disableInteractive();
+        this.checkPackAffordable(PACK_COST[2]) || (LOCAL_STORAGE_MANAGER.get('freeGoldPacks') as number) > 0 ? this.goldenPackButton.setInteractive() : this.goldenPackButton.disableInteractive();
 
         this.tweens.chain({
             tweens: [

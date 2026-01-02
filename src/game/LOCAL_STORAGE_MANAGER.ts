@@ -59,7 +59,7 @@ export class LOCAL_STORAGE_MANAGER {
         survival_level_5: null,  //?????
 
         lastResetTime: '0',
-        questStartTime: '0',
+        questStartTime: '',
     };
 
     static data?: IGameData; // undefined until first access
@@ -90,6 +90,7 @@ export class LOCAL_STORAGE_MANAGER {
         if (this.data) {
             if (main_config.cryptData) {
                 const stringData = JSON.stringify(this.data);
+                console.log(this.data);
                 const encrypted = CryptoJS.AES.encrypt(stringData, this.SECRET_KEY).toString();
                 localStorage.setItem(this.STORAGE_KEY, encrypted);
             } else {

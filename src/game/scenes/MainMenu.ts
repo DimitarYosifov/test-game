@@ -1,6 +1,6 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, main_config } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { StartOverConfirm } from './in-main-menu/StartOverConfirm';
 import { SpriteAnimation } from './SpriteAnimation';
@@ -32,10 +32,6 @@ export class MainMenu extends AbstractScene {
 
     create() {
 
-        this.input.once('pointerdown', () => {
-            this.scale.startFullscreen();
-            // this.scale.stopFullscreen();
-        });
         this.add.image(0, 0, 'bg-main-menu').setOrigin(0);
 
         // add monster manually - for debugging!
@@ -62,8 +58,21 @@ export class MainMenu extends AbstractScene {
         this.createGambleButton();
         this.createCoins();
 
+
+        const fullscreenImg = this.add.image(250, 75, 'fullscreen').setOrigin(0.5).setScale(0.85);
+        if (!(window as any).userHasInteracted) {
+            (window as any).userHasInteracted = true;
+            this.input.once('pointerdown', () => {
+                addFullscreenFunctionality(this, 250, 75, fullscreenImg);
+            });
+        } else {
+            addFullscreenFunctionality(this, 250, 75, fullscreenImg);
+        }
+
         const playerMonstersData = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
-        (playerMonstersData as []).length === 0 ? this.mapButton.disableInteractive().setAlpha(0.4) : this.mapButton.setInteractive().setAlpha(1);
+        (playerMonstersData as []).every((x: any) => x.row === null) || (playerMonstersData as []).length === 0 || (playerMonstersData as []).every((x: any) => Number.isNaN(x.row)) ?
+            this.mapButton.disableInteractive().setAlpha(0.4) :
+            this.mapButton.setInteractive().setAlpha(1);
 
         if ((playerMonstersData as []).length === 0) {
             // no player monsters
