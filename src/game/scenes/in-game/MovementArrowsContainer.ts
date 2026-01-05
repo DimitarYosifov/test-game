@@ -115,7 +115,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             } else {
                 img = 'sword';
             }
-            const arrow = new DirectionArrow(this.scene, pos.x, pos.y, angle, row, col, img, target, isRanged);
+            const arrow = new DirectionArrow(this.scene, pos.x, pos.y, angle, row, col, img, target, isRanged, this);
             this.add(arrow);
             this.arrows.push(arrow);
         });
