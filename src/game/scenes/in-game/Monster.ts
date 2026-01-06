@@ -246,7 +246,9 @@ export class Monster extends Phaser.GameObjects.Container {
 
     private addInteraction(): void {
         this.bg.on('pointerdown', () => {
-            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
+            if (!this.scene.data.list.selectedMonsterDragged) {// monster is already selected, no need to emit
+                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
+            }
         });
     }
 

@@ -124,6 +124,17 @@ export class Game extends AbstractScene {
             // test debug
             this.createLevelOutroPopup(true)
         }
+
+        this.input.on('pointerdown', (pointer: any) => {
+            if (this.data.list.isPlayerTurn && this.currentlySelectedMonster?.bg.getBounds().contains(pointer.x, pointer.y)) {
+                console.log(pointer.position.x);
+                this.data.list.selectedMonsterDragged = true;
+            }
+        })
+
+        this.input.on('pointerup', () => {
+            this.data.list.selectedMonsterDragged = false;
+        })
     }
 
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
@@ -585,10 +596,10 @@ export class Game extends AbstractScene {
         const rndNum2 = Phaser.Math.RND.between(1, 100);
         const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
 
-
-        // UPDATE LEVELS WON(LOCAL STORAGE)
+        // UPDATE LEVELS WON(LOCAL STORAGE) -- bug fixed - update only if level won!
+        // THERE COULD BE PROBLEMS WHEN CHANGING WORLDS!!!!!!!
         const levelsWon: any = LOCAL_STORAGE_MANAGER.get('levelsWon');
-        if (!levelsWon.includes(+(currentLevelData.levelName as number))) {
+        if (!levelsWon.includes(+(currentLevelData.levelName as number)) && levelWon) {
             levelsWon.push(+(currentLevelData.levelName as number));
             LOCAL_STORAGE_MANAGER.set('levelsWon', levelsWon);
         }
