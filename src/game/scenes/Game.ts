@@ -611,6 +611,12 @@ export class Game extends AbstractScene {
             duration: 200,
             alpha: 0.85
         })
+
+        overlay.setInteractive();
+        overlay.on('pointerdown', function (pointer: any) {
+            pointer.event.stopPropagation();
+        });
+
         this.add.existing(overlay);
         overlay.setInteractive();
         overlay.on('pointerdown', function (pointer: any) {
@@ -619,6 +625,7 @@ export class Game extends AbstractScene {
 
         //   HEADER
         if (!this.isSurvivalLevel) {
+
             const msg = levelWon ? 'LEVEL WON' : 'LEVEL LOST';
             const leveltext: Phaser.GameObjects.Text = this.add.text(
                 960,
@@ -757,6 +764,14 @@ export class Game extends AbstractScene {
 
             }).setDepth(23 + 0.1);
         } else {
+
+            // disable alll after player has given up
+            this.data.list.playerMonsters.forEach((m: Monster) => {
+                m.pendingAction = false;
+                m.disableInteractive();
+                this.movementArrowsContainer.removeArrows();
+            });
+
             // try again button
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
