@@ -38,7 +38,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
         const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
             960,
             540,
-            `survive as long as you can!`,
+            `face 100 monsters, \n survive as long as you can!`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,

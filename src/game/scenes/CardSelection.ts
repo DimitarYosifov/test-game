@@ -83,7 +83,8 @@ export class CardSelection extends AbstractScene {
         });
 
         //for testing when starting new game - start with the monsters below
-        this.playerMonstersData = playerMonstersDataFromStorage ||
+        this.playerMonstersData =
+            playerMonstersDataFromStorage.length ? playerMonstersDataFromStorage :
             [
                 // {
                 //     type: 5, stars: 4, row: NaN, col: 11
