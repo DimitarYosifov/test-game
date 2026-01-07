@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { BUFF_TYPES, GAME_SCENE_SCENE_EVENTS, IBuff, IUnitData } from '../Game';
 import { main_config } from '../../configs/main_config';
 import { IGameData, LOCAL_STORAGE_MANAGER } from '../../LOCAL_STORAGE_MANAGER';
+import { SpriteAnimation } from '../SpriteAnimation';
 
 export class Monster extends Phaser.GameObjects.Container {
     bg: Phaser.GameObjects.Image;
@@ -506,12 +507,12 @@ export class Monster extends Phaser.GameObjects.Container {
             weaponImg.setTexture('ball');
             weaponImg.setScale(this.bg.displayWidth * 0.4 / 100);
             this.scene.tweens.chain({
-                targets: weaponImg,
                 tweens: [
                     {
+                        targets: weaponImg,
                         x: targetX,
                         y: targetY,
-                        duration: 300,
+                        duration: 200,
                         ease: 'Cubic.easeIn',
                         onStart: () => {
                             this.emitter.emitting = false;
@@ -520,14 +521,15 @@ export class Monster extends Phaser.GameObjects.Container {
                             complete();
                             this.emitter.emitting = false;
                             emitter.explode(48);
-                        }
-                    },
-                    {
-                        alpha: { value: 0, duration: 1000 },
-                        delay: 750,
-                        onComplete: () => {
-                            emitter.destroy(true);
                             weaponImg.destroy(true);
+
+                            let magicAnimation = new SpriteAnimation(this.scene, targetX, targetY, 'magic-animation', 'magic-animation', 'spinrevelfx_', false, 16, 1, 1, 5)
+                            magicAnimation.animation!.once('animationcomplete', () => {
+                                magicAnimation.animation?.destroy(true);
+                                this.scene.time.delayedCall(2000, () => {
+                                    emitter.destroy(true);
+                                })
+                            });
                         }
                     }
                 ]
