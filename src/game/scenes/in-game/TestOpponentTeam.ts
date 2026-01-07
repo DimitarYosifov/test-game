@@ -13,7 +13,7 @@ export class TestOpponentTeam {
         const cols = 3;
         const totalPositions = rows * cols;
 
-        let numberOfElements = 15;
+        let numberOfElements = 21;
         numberOfElements = Math.min(numberOfElements, totalPositions);
 
         const allPositions: number[][] = [];
