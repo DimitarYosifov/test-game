@@ -95,7 +95,7 @@ export class TestOpponentTeam {
         //     // },
         // ]
         console.log(level_config);
-        let currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         currentLevel = LOCAL_STORAGE_MANAGER.get('currentWorld') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
         const survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;

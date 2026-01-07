@@ -4,7 +4,8 @@ export const main_config = {
     "cryptData": true, //should local storage data be crypted
 
     //---------DEBUG---------
-    "jumpToOutroPopup": false,
+    "allowDebugPanel": true, //shoiuld allow debug panel to be used
+    "jumpToOutroPopup": false, // should any level on the map be automatically won withot playing it
     //-----------------------
 
     "gridSizeHorizontal": 12,

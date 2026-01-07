@@ -6,7 +6,7 @@ export class TestPlayerTeam {
 
     static get team() {
 
-        const playerMonstersDataFromStorage: IPlayerMonstersData[] = LOCAL_STORAGE_MANAGER.get('playerMonstersData');
+        const playerMonstersDataFromStorage: IPlayerMonstersData[] = (LOCAL_STORAGE_MANAGER.get('playerMonstersData') as IPlayerMonstersData[]);
         playerMonstersDataFromStorage.forEach(element => {
             if (element.row === null) {
                 element.row = NaN;

@@ -71,12 +71,10 @@ export class LOCAL_STORAGE_MANAGER {
                 if (main_config.cryptData) {
                     const bytes = CryptoJS.AES.decrypt(stored, this.SECRET_KEY);
                     const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-                    // decrypted.survival_level_1 = null;   // test - rest survival lvl 1
                     this.data = { ...this.defaultData, ...decrypted };
                 } else {
                     this.data = { ...this.defaultData, ...JSON.parse(stored) };
                 }
-
             } catch {
                 console.warn('Failed to parse localStorage data, using defaults.');
                 this.data = { ...this.defaultData };
