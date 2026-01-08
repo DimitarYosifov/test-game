@@ -9,8 +9,8 @@ export const createDebugPanel = () => {
     const app = document.getElementById('app');
 
     const mainContainer = document.createElement('div');
-    mainContainer.style.width = '80vw';
-    mainContainer.style.height = '60vh';
+    // mainContainer.style.width = '80vw';
+    // mainContainer.style.height = '60vh';
     mainContainer.style.background = '#c6b6b6';
     mainContainer.style.position = 'absolute';
     mainContainer.style.color = 'black';

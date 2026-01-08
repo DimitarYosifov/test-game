@@ -191,6 +191,12 @@ export class Map extends AbstractScene {
 
         this.levelContentContainer.add([levelTexture, leveltext]);
         this.addLight(levelTexture);
+
+        let magicAnimation = new SpriteAnimation(this, levelTexture.x, levelTexture.y, 'survival-level-animation', 'survival-level-animation', 'anticipation_', true, 30, 1, 0.42, 5)
+        this.levelContentContainer.add((magicAnimation.animation as Phaser.GameObjects.Sprite));
+
+
+
         // levelTexture.setInteractive();
         levelTexture.on('pointerdown', () => {
             if (this.confirmPopupOpen) {

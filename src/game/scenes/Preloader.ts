@@ -111,6 +111,7 @@ export class Preloader extends Scene {
         this.load.atlas('meterbox', 'meter-box-win.png', 'meter-box-win.json');
         this.load.atlas('bg-fire', 'bg-fire.png', 'bg-fire.json');
         this.load.atlas('magic-animation', 'spin-reveal.png', 'spin-reveal.json');
+        this.load.atlas('survival-level-animation', 'anticipation.png', 'anticipation.json');
     }
 
     create() {
