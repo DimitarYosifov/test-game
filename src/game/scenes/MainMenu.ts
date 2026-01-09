@@ -25,6 +25,10 @@ export class MainMenu extends AbstractScene {
     gemsTexture: Phaser.GameObjects.Image;
     gemsText: Phaser.GameObjects.Text;
     gambleButton: Button;
+    defeatMonstersButton: Button;
+    keys: string;
+    keysText: Phaser.GameObjects.Text;
+    keysTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('MainMenu');
@@ -56,6 +60,7 @@ export class MainMenu extends AbstractScene {
         this.createInfoButton();
         this.createDeleteButton();
         this.createGambleButton();
+        this.createDefeatGiantsButton();
         this.createCoins();
 
 
@@ -133,6 +138,22 @@ export class MainMenu extends AbstractScene {
             1200,
             700,
             `gamble`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+    }
+    private createDefeatGiantsButton() {
+        const defeatMonstersButtonClick = () => {
+            this.defeatMonstersButton.disableInteractive();
+            this.changeScene('DefeatGiants');
+        }
+        this.defeatMonstersButton = new Button(this, 1550, 825, 'attack', null, defeatMonstersButtonClick.bind(this), false, 1.65);
+        const defeatMonstersTitle = this.add.text(
+            this.defeatMonstersButton.x,
+            this.defeatMonstersButton.y + 150,
+            `defeat\nmonsters`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,
@@ -275,6 +296,18 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(1, 0.5);
         this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
+
+        this.keys = (LOCAL_STORAGE_MANAGER.get('keys') as number).toString();
+        this.keysText = this.add.text(
+            this.gemsTexture.x - this.gemsTexture.displayWidth - 25,
+            30,
+            `${this.keys}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(1, 0.5);
+        this.keysTexture = this.add.image(this.keysText.x - this.keysText.displayWidth, 30, 'key').setScale(0.65).setOrigin(1, 0.5);
     }
 
     changeScene(nextScene: string): void {

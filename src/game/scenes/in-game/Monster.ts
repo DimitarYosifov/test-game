@@ -35,12 +35,15 @@ export class Monster extends Phaser.GameObjects.Container {
     addedForSale: boolean = false;
     isPlayerMonster: boolean;
     private _displayWidth: number;
+    isGiant: boolean | undefined;
+    movesLeftContainer2: Phaser.GameObjects.Container;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
         this.scene = scene;
         this.unitData = unit;
         this.type = this.unitData.type;
+        this.isGiant = unit.isGiant;
         this.unitData.movesLeft = this.unitData.moves;
         this.index = index;
         this.isPlayerMonster = isPlayerMonster;
@@ -215,6 +218,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
         //moves
         this.movesLeftContainer = scene.add.container(0, 0);
+        this.movesLeftContainer2 = scene.add.container(0, 0);
         for (let index = 0; index < unit.moves; index++) {
             const dot = scene.add.image(0, 0, 'green-dot').setScale(displayWidth * 0.15 / 100).setOrigin(0, 0.5);
             this.movesLeftContainer.add(dot);
@@ -227,9 +231,21 @@ export class Monster extends Phaser.GameObjects.Container {
             cellHeight: displayWidth * 0.15, // spacing between items vertically
             position: Phaser.Display.Align.CENTER
         });
-        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+
+        Phaser.Actions.GridAlign(this.movesLeftContainer2.list, {
+            width: 0,
+            height: this.movesLeftContainer2.list.length,
+            cellWidth: 0,
+            cellHeight: displayWidth * 0.15, // spacing between items vertically
+            position: Phaser.Display.Align.CENTER
+        });
+
         this.movesLeftContainer.x = this.bg.displayWidth - 32;
-        this.add([this.movesLeftContainer])
+        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+
+        this.movesLeftContainer2.x = this.bg.displayWidth - 150;
+        this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
+        this.add([this.movesLeftContainer, this.movesLeftContainer2])
 
         this.addInteraction();
     }
@@ -293,7 +309,14 @@ export class Monster extends Phaser.GameObjects.Container {
 
         this.emitter.emitting = isVisible;
         this.pendingAction = false;
-        const position = this.scene.data.list.gridPositions[row][col];
+        let position_x = this.scene.data.list.gridPositions[row][col].x;
+        let position_y = this.scene.data.list.gridPositions[row][col].y;
+
+        if (this.isGiant) {
+            position_x += (main_config.cellSize) / 2;
+            position_y += (main_config.cellSize) / 2;
+        }
+
         this.unitData.row = row;
         this.unitData.col = col;
 
@@ -301,8 +324,8 @@ export class Monster extends Phaser.GameObjects.Container {
             delay: this.scene.data.list.isPlayerTurn ? 250 : 100,
             targets: this,
             scale: { value: scaleWhileMoving, yoyo: true, duration: duration / 2 },
-            x: position.x,
-            y: position.y,
+            x: position_x,
+            y: position_y,
             duration,
             ease: 'Cubic.easeInOut',
             onStart: () => {
@@ -311,6 +334,13 @@ export class Monster extends Phaser.GameObjects.Container {
             },
             onComplete: () => {
                 this.checkForBuff(row, col);
+
+                if (this.isGiant) {// if monster is a  giant - check the other positions
+                    this.checkForBuff(row, col + 1);
+                    this.checkForBuff(row + 1, col);
+                    this.checkForBuff(row + 1, col + 1);
+                }
+
                 this.decreaseMoves();
                 const movesLeft = this.unitData.movesLeft;
                 this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
@@ -325,9 +355,6 @@ export class Monster extends Phaser.GameObjects.Container {
         const buff: IBuff = this.scene.data.list.gridPositions[row][col].buff;
         if (buff) {
             //hass buff on new position
-
-
-
             if (
                 (buff.buffType === 'attack' && this.unitData.melee === 0) || // monster not suitable for attack buff
                 (buff.buffType === 'bow' && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
@@ -381,7 +408,12 @@ export class Monster extends Phaser.GameObjects.Container {
                     case BUFF_TYPES.GREEN_DOT:
                         this.unitData.moves++;
                         const dot = this.scene.add.image(0, 0, 'grey-dot').setScale(this._displayWidth * 0.15 / 100).setOrigin(0, 0.5);
-                        this.movesLeftContainer.add(dot);
+                        if (this.unitData.moves > 4) {
+                            this.movesLeftContainer2.add(dot);
+                        } else {
+                            this.movesLeftContainer.add(dot);
+                        }
+
                         Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
                             width: 0,
                             height: this.movesLeftContainer.list.length,
@@ -389,8 +421,23 @@ export class Monster extends Phaser.GameObjects.Container {
                             cellHeight: this._displayWidth * 0.15, // spacing between items vertically
                             position: Phaser.Display.Align.CENTER
                         });
+
+                        Phaser.Actions.GridAlign(this.movesLeftContainer2.list, {
+                            width: 0,
+                            height: this.movesLeftContainer2.list.length,
+                            cellWidth: 0,
+                            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+                            position: Phaser.Display.Align.CENTER
+                        });
+
                         this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
-                        this.movesLeftContainer.x = this.bg.displayWidth - 32;
+                        this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
+                        if (this.isGiant) {
+
+                        } else {
+                            this.movesLeftContainer.x = this.bg.displayWidth - 32;
+                            this.movesLeftContainer2.x = this.bg.displayWidth - 55;
+                        }
                         buffImageKey = BUFF_TYPES.GREEN_DOT;
                         break;
                     default:
@@ -399,8 +446,8 @@ export class Monster extends Phaser.GameObjects.Container {
 
                 // add visual  display of the buff and tween
                 const glbPos = this.bg.getBounds()
-                const x = glbPos.x + this.bg.displayWidth / 2;
-                const y = glbPos.y + this.bg.displayHeight / 2;
+                const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
+                const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
                 let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(12);
                 const buffQuantityText = this.scene.add.text(
                     x,
@@ -820,11 +867,19 @@ export class Monster extends Phaser.GameObjects.Container {
         //====================================================================||
 
         this.unitData.movesLeft--;
-        (this.movesLeftContainer.list[this.unitData.movesLeft] as Phaser.GameObjects.Image).setTexture('grey-dot');
+        if (this.unitData.movesLeft > 3) {
+            (this.movesLeftContainer2.list[this.unitData.movesLeft - 4] as Phaser.GameObjects.Image).setTexture('grey-dot');
+        } else {
+            (this.movesLeftContainer.list[this.unitData.movesLeft] as Phaser.GameObjects.Image).setTexture('grey-dot');
+        }
+
     }
 
     resetMoves(): void {
         this.movesLeftContainer.list.forEach(dot => {
+            (dot as Phaser.GameObjects.Image).setTexture('green-dot');
+        });
+        this.movesLeftContainer2.list.forEach(dot => {
             (dot as Phaser.GameObjects.Image).setTexture('green-dot');
         });
         this.unitData.movesLeft = this.unitData.moves;

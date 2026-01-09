@@ -1,10 +1,12 @@
 
-import { level_config } from "../../configs/level_config";
+import { defeatGiantsLevelConfig, level_config } from "../../configs/level_config";
 import { getMonsterDataConfig } from "../../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 import { IUnitData } from "../Game";
 
 export class TestOpponentTeam {
+
+    static isGiantFightLevel = false;
 
     static get team() {
 
@@ -13,13 +15,25 @@ export class TestOpponentTeam {
         const cols = 3;
         const totalPositions = rows * cols;
 
-        let numberOfElements = 21;
+        let numberOfElements = totalPositions;
         numberOfElements = Math.min(numberOfElements, totalPositions);
 
-        const allPositions: number[][] = [];
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                allPositions.push([r, c]);
+        let allPositions: number[][] = [];
+
+        if (this.isGiantFightLevel) {
+            allPositions = [
+                [0, 0],
+                [2, 0],
+                [4, 0],
+                [1, 2],
+                [3, 2],
+                [5, 2]
+            ]
+        } else {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    allPositions.push([r, c]);
+                }
             }
         }
 
@@ -97,14 +111,16 @@ export class TestOpponentTeam {
         console.log(level_config);
         let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         currentLevel = LOCAL_STORAGE_MANAGER.get('currentWorld') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
+        const currentDefeatGiantsLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel')
+        const giantFightLevelData = this.isGiantFightLevel ? defeatGiantsLevelConfig[currentDefeatGiantsLevel! - 1] : null;
         const survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
-        const opponentMonstersData = survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;
+        const opponentMonstersData = giantFightLevelData?.opponentMonstersData || survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;
 
         let result: IUnitData[] = [];
 
         opponentMonstersData.forEach((monstersData: IOpponentMonstersData) => {
             let data = getMonsterDataConfig(+monstersData.type, monstersData.stars - 1);
-
+            data.isGiant = monstersData.isGiant;
             insertNextElement(data);
             result.push(data);
         });
@@ -116,4 +132,5 @@ export class TestOpponentTeam {
 interface IOpponentMonstersData {
     type: string | number;
     stars: number;
+    isGiant?: boolean;
 }

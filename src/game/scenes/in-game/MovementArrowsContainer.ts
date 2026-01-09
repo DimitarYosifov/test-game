@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { IUnitData } from '../Game';
 import { DirectionArrow } from './DirectionArrow';
 import { main_config } from '../../configs/main_config';
+import { Monster } from './Monster';
 
 export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
@@ -18,7 +19,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
     createArrows(data: IUnitData): void {
         this.removeArrows();
         this.neighborCells = this.getNeighborCells(data.row, data.col, data.vision, data.ranged, data.magic);
-        this.displayArrows(this.neighborCells); // TODO - check if enemy, do not add arrow but attack image
+        this.displayArrows(this.neighborCells, data); // TODO - check if enemy, do not add arrow but attack image
     }
 
     private getNeighborCells(row: number, col: number, radius: number, range: number, magic: number) {
@@ -96,12 +97,12 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         return direction * 45;
     }
 
-    private displayArrows(emptyNeighborCells: INeighborCells[]): void {
+    private displayArrows(emptyNeighborCells: INeighborCells[], data: IUnitData): void {
         emptyNeighborCells.forEach((emptyCell: INeighborCells) => {
-            const row = emptyCell.row;
-            const col = emptyCell.col;
-            const pos = this.scene.data.list.gridPositions[row][col];
-            const angle = this.getAngle(emptyCell.direction);
+            let row = emptyCell.row;
+            let col = emptyCell.col;
+            let pos = this.scene.data.list.gridPositions[row][col];
+            let angle = this.getAngle(emptyCell.direction);
             const target = emptyCell.target === true;
             const isRanged = emptyCell.isRanged
             const isMagic = emptyCell.isMagic
@@ -115,6 +116,25 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             } else {
                 img = 'sword';
             }
+
+            const giantData = this.scene.data.list.gridPositions[row][col].giantData;
+            if (giantData) {
+                // attackingMonster should be set here because row and col are changed below
+                const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
+                row = giantData.row;
+                col = giantData.col;
+                const mainGiantPosition = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === row && m.unitData.col === col);
+                pos.x = mainGiantPosition.x;
+                pos.y = mainGiantPosition.y;
+                angle = Phaser.Math.Angle.Between(
+                    mainGiantPosition.x,
+                    mainGiantPosition.y,
+                    atackingMonster.x,
+                    atackingMonster.y
+                )
+                angle = Phaser.Math.RadToDeg(angle) - 90;
+            }
+
             const arrow = new DirectionArrow(this.scene, pos.x, pos.y, angle, row, col, img, target, isRanged, this);
             this.add(arrow);
             this.arrows.push(arrow);

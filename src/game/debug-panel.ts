@@ -59,6 +59,27 @@ export const createDebugPanel = () => {
     addGemsContainer.appendChild(addGemsInput);
     addGemsContainer.appendChild(addGemsButton);
 
+    //add keys-------------------------------------------------------------------------
+    const addKeysContainer = document.createElement('div');
+    addKeysContainer.style.margin = '0.4em'
+    addKeysContainer.style.display = 'flex';
+    addKeysContainer.style['justify-content' as any] = 'center';
+    const addKeysText = document.createElement('span');
+    addKeysText.innerText = 'add keys';
+    const addKeysInput = document.createElement('input');
+    addKeysInput.type = 'number';
+    addKeysInput.value = '1';
+    const addKeysButton = document.createElement('button');
+    addKeysButton.innerText = 'add';
+    addKeysButton.onclick = () => {
+        const keys = LOCAL_STORAGE_MANAGER.get('keys');
+        LOCAL_STORAGE_MANAGER.set('keys', +(keys as number) + +addKeysInput.value);
+    }
+    mainContainer.appendChild(addKeysContainer);
+    addKeysContainer.appendChild(addKeysText);
+    addKeysContainer.appendChild(addKeysInput);
+    addKeysContainer.appendChild(addKeysButton);
+
     //add free common pack-------------------------------------------------------------------------
     const addFreeCommonPackContainer = document.createElement('div');
     addFreeCommonPackContainer.style.margin = '0.4em'
@@ -224,12 +245,7 @@ export const createDebugPanel = () => {
     resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsText);
     resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsButton);
 
-
-
-
-
     //add monster-------------------------------------------------------------------------
-
     const addMonsterContainer = document.createElement('div');
     addMonsterContainer.style.margin = '0.4em'
     addMonsterContainer.style.display = 'flex';

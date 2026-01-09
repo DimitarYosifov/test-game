@@ -3,7 +3,7 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { ILevelConfig, level_config } from '../configs/level_config';
+import { defeatGiantsLevelConfig, ILevelConfig, level_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
@@ -57,18 +57,20 @@ export class Game extends AbstractScene {
     questionMarkContainer: Phaser.GameObjects.Container | null;
     confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
     currentlySelectedMonsterAnimation: SpriteAnimation | null;
+    isGiantFightLevel: any;
 
     constructor() {
         super('Game');
     }
 
-    create() {
+    create(d: any) {
         super.create();
 
         this.add.image(0, 0, 'bg').setOrigin(0);
         this.data.list.isPlayerTurn = true;
 
         this.isSurvivalLevel = (this.scene.settings.data as any).isSurvivalLevel;
+        this.isGiantFightLevel = d.isGiantFightLevel;
         this.survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         this.survivalLevelReward = 0;
         this.survivalLevelKilledMonsters = 0;
@@ -85,7 +87,7 @@ export class Game extends AbstractScene {
         this.setGridPositions();
         this.setInitialMonsters();
 
-        Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions);
+        Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions, d.isGiantFightLevel);
         this.addClouds();
         this.createBulbs();
         if (!this.isSurvivalLevel) {
@@ -131,6 +133,7 @@ export class Game extends AbstractScene {
                 this.data.list.selectedMonsterDragged = true;
             }
         })
+
 
         this.input.on('pointerup', () => {
             this.data.list.selectedMonsterDragged = false;
@@ -209,6 +212,8 @@ export class Game extends AbstractScene {
 
                 if (this.data.list.gridPositions[row][col].occupiedBy?.length || this.data.list.gridPositions[row][col].buff) {
                     if (this.data.list.clouds[row][col].alpha === 0) {
+                        // if a tile is not revealed by the player show question mark, even thou buff can not be on this spot.
+                        // otherwise it would be obvious that there is a buff already
                         continue;
                     }
                 }
@@ -482,6 +487,19 @@ export class Game extends AbstractScene {
             const currentData = this.currentlySelectedMonster.unitData;
             this.data.list.gridPositions[currentData.row][currentData.col].isEmpty = true;
             delete this.data.list.gridPositions[currentData.row][currentData.col].occupiedBy;
+            if (this.currentlySelectedMonster.isGiant) {
+                delete this.data.list.gridPositions[currentData.row][currentData.col + 1].occupiedBy;
+                delete this.data.list.gridPositions[currentData.row + 1][currentData.col].occupiedBy;
+                delete this.data.list.gridPositions[currentData.row + 1][currentData.col + 1].occupiedBy;
+                this.data.list.gridPositions[currentData.row][currentData.col + 1].isEmpty = true;
+                this.data.list.gridPositions[currentData.row + 1][currentData.col].isEmpty = true;
+                this.data.list.gridPositions[currentData.row + 1][currentData.col + 1].isEmpty = true;
+
+                delete this.data.list.gridPositions[currentData.row][currentData.col].giantData;
+                delete this.data.list.gridPositions[currentData.row][currentData.col + 1].giantData;
+                delete this.data.list.gridPositions[currentData.row + 1][currentData.col].giantData;
+                delete this.data.list.gridPositions[currentData.row + 1][currentData.col + 1].giantData;
+            }
 
             this.movementArrowsContainer.removeArrows();
             this.currentlySelectedMonster.move(newRow, newCol);
@@ -489,7 +507,21 @@ export class Game extends AbstractScene {
             this.data.list.gridPositions[newRow][newCol].isEmpty = false;
             const isPlayerTurn = this.data.list.isPlayerTurn;
             this.data.list.gridPositions[newRow][newCol].occupiedBy = isPlayerTurn ? 'player' : 'opponent';
+            if (this.currentlySelectedMonster.isGiant) {
+                this.data.list.gridPositions[newRow][newCol + 1].occupiedBy = 'opponent';
+                this.data.list.gridPositions[newRow + 1][newCol].occupiedBy = 'opponent';
+                this.data.list.gridPositions[newRow + 1][newCol + 1].occupiedBy = 'opponent';
+                this.data.list.gridPositions[newRow][newCol + 1].isEmpty = false;
+                this.data.list.gridPositions[newRow + 1][newCol].isEmpty = false;
+                this.data.list.gridPositions[newRow + 1][newCol + 1].isEmpty = false;
+
+                this.data.list.gridPositions[newRow][newCol].giantData = { row: newRow, col: newCol };
+                this.data.list.gridPositions[newRow][newCol + 1].giantData = { row: newRow, col: newCol };
+                this.data.list.gridPositions[newRow + 1][newCol].giantData = { row: newRow, col: newCol };
+                this.data.list.gridPositions[newRow + 1][newCol + 1].giantData = { row: newRow, col: newCol };
+            }
             this.checkMapVisibility(false);
+            console.log(this.data.list.gridPositions);
 
             if (isPlayerTurn) {
                 this.pauseResumeInteraction(false);
@@ -524,7 +556,12 @@ export class Game extends AbstractScene {
             let target: null | Monster = null;
             if (isPlayerTurn) {
                 console.log(this.data.list.opponentMonsters)
-                target = this.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                const giantData = this.data.list.gridPositions[newRow][newCol].giantData;
+                if (giantData) {
+                    target = this.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === giantData.row && m.unitData.col === giantData.col);
+                } else {
+                    target = this.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                }
             } else {
                 target = this.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
             }
@@ -590,11 +627,27 @@ export class Game extends AbstractScene {
         }
         //----------------------------------------------------------------------------------------------------------------------------
 
-        const isFirstTimeReward = (LOCAL_STORAGE_MANAGER.get('levelsWon') as any).includes(+(currentLevelData.levelName as number)) === false;
-        const rndNum = Phaser.Math.RND.between(1, 100);
-        const hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
-        const rndNum2 = Phaser.Math.RND.between(1, 100);
-        const hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
+        let isFirstTimeReward;
+        if (currentLevelData?.levelName) {
+            isFirstTimeReward = (LOCAL_STORAGE_MANAGER.get('levelsWon') as any).includes(+(currentLevelData.levelName as number)) === false;
+        }
+
+        let rndNum = Phaser.Math.RND.between(1, 100);
+        let hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
+        let rndNum2 = Phaser.Math.RND.between(1, 100);
+        let hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
+        let monstersReward = undefined;
+        console.log(this.isGiantFightLevel);
+
+        if (this.isGiantFightLevel) {
+            const currentDefeatGiantsLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel')
+            currentLevelData = defeatGiantsLevelConfig[currentDefeatGiantsLevel! - 1];
+            isFirstTimeReward = true;
+            monstersReward = currentLevelData!.monstersReward;
+            hasMonsterReweard = monstersReward.length > 0;
+            hasGemReward = currentLevelData.gemsReward > 0;
+        }
+
 
         // UPDATE LEVELS WON(LOCAL STORAGE) -- bug fixed - update only if level won!
         // THERE COULD BE PROBLEMS WHEN CHANGING WORLDS!!!!!!!
@@ -662,6 +715,8 @@ export class Game extends AbstractScene {
             let coinsWon = isFirstTimeReward ? currentLevelData.firstWinReward : currentLevelData.repeatLevelWinReward;
             if (this.isSurvivalLevel) {
                 coinsWon = this.survivalLevelReward;
+            } else if (this.isGiantFightLevel) {
+                coinsWon = currentLevelData.firstWinReward;
             }
             const cointext: Phaser.GameObjects.Text = this.add.text(
                 coin.x + coin.displayWidth,
@@ -680,7 +735,7 @@ export class Game extends AbstractScene {
             //determine monster type and stars !!!!
             //TODO - add more options in config - main_config.afterLevelMonsterReward
             const odds = main_config.afterLevelMonsterReward;
-            const monsterRewardType = getRandomMonsterType();
+            let monsterRewardType = getRandomMonsterType();
             let monsterRewardStars = NaN;
             const randomNumber = Phaser.Math.RND.between(1, 100);
             for (let index = 0; index < odds.length; index++) {
@@ -689,6 +744,11 @@ export class Game extends AbstractScene {
                     monsterRewardStars = index + 1;
                     break;
                 }
+            }
+
+            if (this.isGiantFightLevel) {
+                monsterRewardType = (currentLevelData as any).monstersReward[0].type;
+                monsterRewardStars = (currentLevelData as any).monstersReward[0].stars;
             }
 
             if (hasMonsterReweard) {
@@ -711,8 +771,23 @@ export class Game extends AbstractScene {
                 rewardsContainer.add(gem);
             }
 
+            //get count
+            let gemstext;
+            if (this.isGiantFightLevel) {
+                gemstext = this.add.text(
+                    gem!.x + gem!.displayWidth,
+                    500,
+                    `x${(currentLevelData as any).gemsReward}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(gemstext);
+            }
+
             //center reward container
-            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize + gemPadding + (gem?.displayWidth || 0);
+            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize + gemPadding + (gem?.displayWidth || 0) + (gemstext?.displayWidth || 0);
             rewardsContainer.x -= totalWidth / 2;
 
             // particles
@@ -734,7 +809,7 @@ export class Game extends AbstractScene {
                 // UPDATE PLAYER GEMS(LOCALE STORAGE) 
                 if (hasGemReward) {
                     const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
-                    LOCAL_STORAGE_MANAGER.set('gems', +playerGems + 1);
+                    LOCAL_STORAGE_MANAGER.set('gems', +playerGems + ((currentLevelData as any).gemsReward || 1));
                 }
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
@@ -745,6 +820,13 @@ export class Game extends AbstractScene {
                 const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
                 if (((currentLevelData.levelName as number) + 1) > +mapLevel) {
                     LOCAL_STORAGE_MANAGER.set('mapLevel', +mapLevel + 1);
+                }
+
+                // UPDATE GIANT LEVEL DATA
+                if (this.isGiantFightLevel) {
+                    const defeatGiantlevel = (LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel') as number);
+                    LOCAL_STORAGE_MANAGER.set('defeatGiantsLevel', defeatGiantlevel + 1);
+                    LOCAL_STORAGE_MANAGER.set('defeatGiantsLevelUnlocked', false);
                 }
 
                 const playerMonstersCount = (LOCAL_STORAGE_MANAGER.get('playerMonstersData') as []).length;
@@ -767,9 +849,11 @@ export class Game extends AbstractScene {
 
             // disable alll after player has given up
             this.data.list.playerMonsters.forEach((m: Monster) => {
-                m.pendingAction = false;
-                m.disableInteractive();
-                this.movementArrowsContainer.removeArrows();
+                if (m) {
+                    m.pendingAction = false;
+                    m.disableInteractive();
+                    this.movementArrowsContainer.removeArrows();
+                }
             });
 
             // try again button
@@ -1173,27 +1257,38 @@ export class Game extends AbstractScene {
         }
     }
 
-    private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = []): { row: number, col: number, occupiedBy: string }[] {
-        const visibleCells = [];
+    private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = [], isGiant: boolean = false): { row: number, col: number, occupiedBy: string }[] {
+        const visibleCells: { row: number, col: number, occupiedBy: string }[] = [];
         const array = this.data.list.gridPositions;
-        for (let y = -radius; y <= radius; y++) {
-            for (let x = -radius; x <= radius; x++) {
-                const newRow = row + y;
-                const newCol = col + x;
 
-                if (
-                    newRow >= 0 && newRow < array.length
-                    && newCol >= 0 && newCol < array[0].length
-                ) {
+        const getCells = (r: number, c: number) => {
+            for (let y = -radius; y <= radius; y++) {
+                for (let x = -radius; x <= radius; x++) {
+                    const newRow = r + y;
+                    const newCol = c + x;
 
-                    if (allVisibleCellsToOpponent.length && !allVisibleCellsToOpponent[newRow][newCol]) {
-                        continue;// enemy unreachable by current monster
+                    if (
+                        newRow >= 0 && newRow < array.length
+                        && newCol >= 0 && newCol < array[0].length
+                    ) {
+
+                        if (allVisibleCellsToOpponent.length && !allVisibleCellsToOpponent[newRow][newCol]) {
+                            continue;// enemy unreachable by current monster
+                        }
+                        const occupiedBy = array[newRow][newCol].occupiedBy;
+                        visibleCells.push({ row: newRow, col: newCol, occupiedBy });
                     }
-                    const occupiedBy = array[newRow][newCol].occupiedBy;
-                    visibleCells.push({ row: newRow, col: newCol, occupiedBy });
                 }
             }
         }
+
+        getCells(row, col);
+        if (isGiant) {
+            getCells(row, col + 1);
+            getCells(row + 1, col);
+            getCells(row + 1, col + 1);
+        }
+
         return visibleCells;
     }
 
@@ -1210,7 +1305,7 @@ export class Game extends AbstractScene {
             });
         });
         playerMonsters.forEach((m: Monster) => {
-            const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision);
+            const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision, [], m.unitData.isGiant);
             visibleCells.forEach((cell: { row: number, col: number }) => {
                 if (showImediatelly) {
                     this.data.list.clouds[cell.row][cell.col].setAlpha(0);
@@ -1235,7 +1330,7 @@ export class Game extends AbstractScene {
         // get all positions visible to opponent
         const allVisibleCellsToOpponent = Array.from({ length: cols }, () => Array(rows).fill(false));
         this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null).forEach((m: Monster) => {
-            const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision);
+            const visibleCells = this.getVisibleCells(m.unitData.row, m.unitData.col, m.unitData.vision, [], m.unitData.isGiant);
             visibleCells.forEach((cell: { row: number, col: number }) => {
                 allVisibleCellsToOpponent[cell.row][cell.col] = true;
             });
@@ -1246,7 +1341,8 @@ export class Game extends AbstractScene {
             this.currentlySelectedMonster.unitData.row,
             this.currentlySelectedMonster.unitData.col,
             range,
-            allVisibleCellsToOpponent
+            allVisibleCellsToOpponent,
+            this.currentlySelectedMonster.unitData.isGiant
         );
 
         // all player monsters in range by current opponent's monster
@@ -1341,50 +1437,69 @@ export class Game extends AbstractScene {
         //UP
         row = currentUnitData.row - 1;
         col = currentUnitData.col;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //UP RIGHT
         row = currentUnitData.row - 1;
         col = currentUnitData.col + 1;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //RIGHT
         row = currentUnitData.row;
         col = currentUnitData.col + 1;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //RIGHT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col + 1;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //LEFT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col - 1;
-        if (this.isCellEmpty(row, col)) return true;
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //LEFT
         row = currentUnitData.row;
         col = currentUnitData.col - 1;
-        if (this.isCellEmpty(row, col)) return true;
+
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
 
         //UP LEFT
         row = currentUnitData.row - 1;
         col = currentUnitData.col - 1;
-        if (this.isCellEmpty(row, col)) return true;
+
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+            return true;
+        }
+
         return false;
     }
 
     private getMove(closestUnitData: IUnitData): { row: number, col: number, weight: number } {
         const currentUnitData = this.currentlySelectedMonster.unitData;
 
-        const addMove = (row: number, col: number) => {
-            if (this.isCellEmpty(row, col)) {
+        const tryAddMove = (row: number, col: number, skipCheck: boolean = false) => {
+            if (this.isCellEmpty(row, col, skipCheck)) {
                 moves.push({
                     row,
                     col,
@@ -1398,45 +1513,89 @@ export class Game extends AbstractScene {
         //UP
         row = currentUnitData.row - 1;
         col = currentUnitData.col;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1)) {
+            console.log(`%c GIANT CAN MOVE UP ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //UP RIGHT
         row = currentUnitData.row - 1;
         col = currentUnitData.col + 1;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2)) {
+            console.log(`%c GIANT CAN UP RIGHT ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //RIGHT
         row = currentUnitData.row;
         col = currentUnitData.col + 1;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) {
+            console.log(`%c GIANT CAN RIGHT ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //RIGHT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col + 1;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) {
+            console.log(`%c GIANT CAN RIGHT DOWN ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1)) {
+            console.log(`%c GIANT CAN MOVE DOWN ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //LEFT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col - 1;
-        addMove(row, col);
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+            console.log(`%c GIANT CAN MOVE LEFT DOWN ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //LEFT
         row = currentUnitData.row;
         col = currentUnitData.col - 1;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1)) {
+            console.log(`%c GIANT CAN MOVE LEFT ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
         //UP LEFT
         row = currentUnitData.row - 1;
         col = currentUnitData.col - 1;
-        addMove(row, col);
+        if (this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col)) {
+            console.log(`%c GIANT CAN MOVE UP LEFT ${row} ${col}`, "background: red");
+            tryAddMove(row, col, true);
+        } else if (!this.currentlySelectedMonster.unitData.isGiant) {
+            tryAddMove(row, col);
+        }
 
+        console.log(`GIANT MOVED FROM ROW=>${currentUnitData.row}, COL=>${currentUnitData.col}`);
         const maxWeight = Math.max(...moves.map((x) => x.weight));
         const bestMoves = moves.filter(move => move.weight === maxWeight);
+        console.log('moves: ', moves);
+        console.log('bestMoves: ', bestMoves);
+        console.log(this.data.list.gridPositions);
         const move = Phaser.Math.RND.pick(bestMoves);
         return move;
     }
@@ -1446,6 +1605,7 @@ export class Game extends AbstractScene {
         let row = this.currentlySelectedMonster.unitData.row;
         let col = this.currentlySelectedMonster.unitData.col;
         let newRow = NaN, newCol = NaN;
+        let giantMonsterCanMove = false;
 
         const check = () => {
             const rnd = Phaser.Math.RND.between(1, 100);
@@ -1453,43 +1613,69 @@ export class Game extends AbstractScene {
             if (rnd > 80) {
                 newRow = row;
                 newCol = col + 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row, col + 2) && this.isCellEmpty(row + 1, col + 2)
+                }
             }
             //UP RIGHT - 20%
             else if (rnd > 60) {
                 newRow = row - 1;
                 newCol = col + 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row - 1, col + 1) && this.isCellEmpty(row - 1, col + 2) && this.isCellEmpty(row, col + 2)
+                }
             }
             //DOWN RIGHT - 20%
             else if (rnd > 40) {
                 newRow = row + 1;
                 newCol = col + 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row + 2, col + 1) && this.isCellEmpty(row + 2, col + 2) && this.isCellEmpty(row + 1, col + 2)
+                }
             }
             //UP - 15%
             else if (rnd > 25) {
                 newRow = row - 1;
                 newCol = col;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row - 1, col) && this.isCellEmpty(row - 1, col + 1)
+                }
             }
             //DOWN - 15%
             else if (rnd > 10) {
                 newRow = row + 1;
                 newCol = col;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row + 2, col) && this.isCellEmpty(row + 2, col + 1)
+                }
             }
             //DOWN LEFT - 3%
             else if (rnd > 7) {
                 newRow = row + 1;
                 newCol = col - 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row + 1, col - 1) && this.isCellEmpty(row + 2, col - 1) && this.isCellEmpty(row + 2, col)
+                }
             }
             //LEFT - 3%
             else if (rnd > 4) {
                 newRow = row;
                 newCol = col - 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row, col - 1) && this.isCellEmpty(row + 1, col - 1)
+                }
             }
             //UP LEFT - 4%
             else {
                 newRow = row - 1;
                 newCol = col - 1;
+                if (this.currentlySelectedMonster.unitData.isGiant) {
+                    giantMonsterCanMove = this.isCellEmpty(row, col - 1) && this.isCellEmpty(row - 1, col - 1) && this.isCellEmpty(row - 1, col)
+                }
             }
-            if (!this.isCellEmpty(newRow, newCol)) {
+
+            if ((this.currentlySelectedMonster.unitData.isGiant && !giantMonsterCanMove) || (!this.currentlySelectedMonster.unitData.isGiant && !this.isCellEmpty(newRow, newCol))) {
+
                 check();
             }
         }
@@ -1497,10 +1683,10 @@ export class Game extends AbstractScene {
         return { newRow, newCol }
     }
 
-    private isCellEmpty(row: number, col: number): boolean {
+    private isCellEmpty(row: number, col: number, skipCheck: boolean = false): boolean {
         return this.data.list.gridPositions[row] !== undefined &&
             this.data.list.gridPositions[row][col] !== undefined &&
-            this.data.list.gridPositions[row][col].isEmpty;
+            (skipCheck ? true : this.data.list.gridPositions[row][col].isEmpty);
     }
 
     createCoins(): void { };
@@ -1530,6 +1716,7 @@ export interface IUnitData {
     movesLeft: number;
     upgradeCost?: number;
     sellsFor?: number;
+    isGiant?: boolean;
 }
 
 export interface IBuff {

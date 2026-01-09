@@ -11,8 +11,8 @@ import { DailyQuests } from './scenes/DailyQuests';
 import { Achievements } from './scenes/Achievements';
 import { MonstersInfo } from './scenes/MonstersInfo';
 import { Gamble } from './scenes/Gamble';
+import { DefeatGiants } from './scenes/DefeatGiants';
 
-// import main_confi from '../sconfig/main_config.json';
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -39,7 +39,8 @@ const config: Phaser.Types.Core.GameConfig = {
         Achievements,
         MonstersInfo,
         GameOver,
-        Gamble
+        Gamble,
+        DefeatGiants
     ]
 };
 

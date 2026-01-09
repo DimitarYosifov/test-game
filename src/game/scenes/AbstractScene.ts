@@ -8,7 +8,7 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
         super(sceneName);
     }
 
-    create() {
+    create(d?: any) {
         this.cameras.main.fadeIn(500, 0, 0, 0);
         this.cameras.main.once('camerafadeincomplete', () => { });
     }

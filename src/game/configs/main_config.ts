@@ -14,10 +14,11 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 1,// clouds visibility
+    "fullCloudsOpacity": 0.1,// clouds visibility
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
     "playerStartingGems": 1,
+    "playerStartingKeys": 1,
     "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 985, // 1.5% for gem drop

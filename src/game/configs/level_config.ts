@@ -146,6 +146,44 @@ export const survivalLevelsWorld2 = [
     }
 ];
 
+// region DEFEAT GIANTS
+export const defeatGiantsLevelConfig = [
+    // L E V E L   1    
+    {
+        levelName: 1,
+        firstWinReward: 221,
+        gemsReward: 5,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 7, stars: 5
+            }
+        ],
+        opponentMonstersData: [
+            { type: 7, stars: 1, isGiant: true },
+            { type: 8, stars: 2, isGiant: true },
+            { type: 9, stars: 3, isGiant: true },
+        ]
+    },
+    // L E V E L   1    
+    {
+        levelName: 2,
+        firstWinReward: 333,
+        gemsReward: 15,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 1, stars: 1
+            }
+        ],
+        opponentMonstersData: [
+            { type: 1, stars: 4, isGiant: true },
+        ]
+    },
+]
+
 //region WORLD 1
 // R E G U L A R   M A P   L E V E L S
 export const level_config = [
@@ -159,7 +197,7 @@ export const level_config = [
             y: 0
         },
         opponentMonstersData: [
-            { type: 1, stars: 1 },
+            { type: 1, stars: 1, isGiant: false },
             { type: 2, stars: 1 },
             { type: 2, stars: 1 },
             { type: 5, stars: 1 },
@@ -1964,4 +2002,6 @@ export interface ILevelConfig {
     totalMonstersCount?: number;
     isTransition?: boolean;
     isFlipped?: boolean;
+    monstersReward?: { type: number, stars: number }[];
+    gemsReward?: number;
 }

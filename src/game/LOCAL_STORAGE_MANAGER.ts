@@ -15,7 +15,10 @@ export interface IGameData {
     freeGoldPacks: number;
     currentWorld: number;
     worldReached: number;
+    defeatGiantsLevel: number,
+    defeatGiantsLevelUnlocked: boolean,
     gems: number;
+    keys: number;
     currentLevel: number;
     achievements: [] | null; //???
     questProgress: any; //???
@@ -45,7 +48,10 @@ export class LOCAL_STORAGE_MANAGER {
         freeGoldPacks: 0,
         currentWorld: 1,
         worldReached: 1,
+        defeatGiantsLevel: 1,
+        defeatGiantsLevelUnlocked: false,
         gems: main_config.playerStartingGems,
+        keys: main_config.playerStartingKeys,
         currentLevel: 0,
         achievements: null, //????
         questProgress: [], //????

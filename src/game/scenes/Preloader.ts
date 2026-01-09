@@ -46,6 +46,7 @@ export class Preloader extends Scene {
         this.load.image('bg-map', 'bg44.jpg');
         this.load.image('bg-achievments', 'bg44.jpg');
         this.load.image('bg-casino', 'casino.jpg');
+        this.load.image('defeat-giants', 'defeat-giants.png');
         this.load.image('bow', 'bow.png');
         this.load.image('cloud', 'cloud.png');
         this.load.image('circle', 'circle.png');
@@ -86,6 +87,8 @@ export class Preloader extends Scene {
         this.load.image('parachute', 'parachute.png');
         this.load.image('question-mark', 'question-mark.png');
         this.load.image('flare', 'flare.png');
+        this.load.image('unlock', 'unlock.png');
+        this.load.image('key', 'key.png');
 
         this.load.image('confetti-yellow', 'confetti-yellow.png');
         this.load.image('confetti-orange', 'confetti-orange.png');
