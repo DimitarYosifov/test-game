@@ -281,7 +281,12 @@ export class Game extends AbstractScene {
     }
 
     private createLevelTitle() {
-        const currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        let currentLevel = undefined;
+        if (this.isGiantFightLevel) {
+            currentLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel');
+        } else {
+            currentLevel = LOCAL_STORAGE_MANAGER.get('currentLevel');
+        }
         const levelTitle = this.add.text(
             960,
             50,
@@ -487,6 +492,7 @@ export class Game extends AbstractScene {
             const currentData = this.currentlySelectedMonster.unitData;
             this.data.list.gridPositions[currentData.row][currentData.col].isEmpty = true;
             delete this.data.list.gridPositions[currentData.row][currentData.col].occupiedBy;
+            delete this.data.list.gridPositions[currentData.row][currentData.col].giantData;
             if (this.currentlySelectedMonster.isGiant) {
                 delete this.data.list.gridPositions[currentData.row][currentData.col + 1].occupiedBy;
                 delete this.data.list.gridPositions[currentData.row + 1][currentData.col].occupiedBy;
@@ -495,7 +501,6 @@ export class Game extends AbstractScene {
                 this.data.list.gridPositions[currentData.row + 1][currentData.col].isEmpty = true;
                 this.data.list.gridPositions[currentData.row + 1][currentData.col + 1].isEmpty = true;
 
-                delete this.data.list.gridPositions[currentData.row][currentData.col].giantData;
                 delete this.data.list.gridPositions[currentData.row][currentData.col + 1].giantData;
                 delete this.data.list.gridPositions[currentData.row + 1][currentData.col].giantData;
                 delete this.data.list.gridPositions[currentData.row + 1][currentData.col + 1].giantData;
@@ -1232,6 +1237,7 @@ export class Game extends AbstractScene {
             const index = this.data.list.opponentMonsters.length;
             const monster = new Monster(this, x, y, width, height, unit, index, false);
             monster.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: IUnitData) => {
+                //TODO - check if giant is present in a survival level - there will be bugs
                 this.data.list.gridPositions[data.row][data.col].isEmpty = true;
                 delete this.data.list.gridPositions[data.row][data.col].occupiedBy;
                 this.data.list.opponentMonsters[index] = null;

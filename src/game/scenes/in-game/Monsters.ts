@@ -58,6 +58,20 @@ export class Monsters {
             monster.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: IUnitData) => {
                 this.scene.data.list.gridPositions[data.row][data.col].isEmpty = true;
                 delete this.scene.data.list.gridPositions[data.row][data.col].occupiedBy;
+                delete this.scene.data.list.gridPositions[data.row][data.col].giantData;
+                if (monster.isGiant) {
+                    this.scene.data.list.gridPositions[data.row][data.col + 1].isEmpty = true;
+                    this.scene.data.list.gridPositions[data.row + 1][data.col].isEmpty = true;
+                    this.scene.data.list.gridPositions[data.row + 1][data.col + 1].isEmpty = true;
+
+                    delete this.scene.data.list.gridPositions[data.row][data.col + 1].occupiedBy;
+                    delete this.scene.data.list.gridPositions[data.row + 1][data.col].occupiedBy;
+                    delete this.scene.data.list.gridPositions[data.row + 1][data.col + 1].occupiedBy;
+
+                    delete this.scene.data.list.gridPositions[data.row][data.col + 1].giantData;
+                    delete this.scene.data.list.gridPositions[data.row + 1][data.col].giantData;
+                    delete this.scene.data.list.gridPositions[data.row + 1][data.col + 1].giantData;
+                }
                 if (isPlayer) {
                     this.scene.data.list.playerMonsters[index] = null;
                 } else {

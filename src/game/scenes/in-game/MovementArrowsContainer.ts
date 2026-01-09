@@ -101,7 +101,8 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         emptyNeighborCells.forEach((emptyCell: INeighborCells) => {
             let row = emptyCell.row;
             let col = emptyCell.col;
-            let pos = this.scene.data.list.gridPositions[row][col];
+            let position_x = this.scene.data.list.gridPositions[row][col].x;
+            let position_y = this.scene.data.list.gridPositions[row][col].y;
             let angle = this.getAngle(emptyCell.direction);
             const target = emptyCell.target === true;
             const isRanged = emptyCell.isRanged
@@ -124,8 +125,8 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 row = giantData.row;
                 col = giantData.col;
                 const mainGiantPosition = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === row && m.unitData.col === col);
-                pos.x = mainGiantPosition.x;
-                pos.y = mainGiantPosition.y;
+                position_x = mainGiantPosition.x;
+                position_y = mainGiantPosition.y;
                 angle = Phaser.Math.Angle.Between(
                     mainGiantPosition.x,
                     mainGiantPosition.y,
@@ -135,7 +136,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 angle = Phaser.Math.RadToDeg(angle) - 90;
             }
 
-            const arrow = new DirectionArrow(this.scene, pos.x, pos.y, angle, row, col, img, target, isRanged, this);
+            const arrow = new DirectionArrow(this.scene, position_x, position_y, angle, row, col, img, target, isRanged, this);
             this.add(arrow);
             this.arrows.push(arrow);
         });

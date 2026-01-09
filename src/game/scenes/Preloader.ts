@@ -17,8 +17,8 @@ export class Preloader extends Scene {
             console.log(progress)
         });
 
-        this.add.rectangle(960, 600 - 16, 720, 24).setStrokeStyle(3, 0x000000);
-        const bar = this.add.rectangle(960 - 360 + 3, 600 - 16, 4, 20, 0xff0000);
+        this.add.rectangle(960, 100 - 16, 720, 24).setStrokeStyle(3, 0x000000);
+        const bar = this.add.rectangle(960 - 360 + 3, 100 - 16, 4, 20, 0xff0000);
         this.load.on('progress', (progress: number) => {
             bar.width = (720 * progress);
         });
@@ -43,9 +43,11 @@ export class Preloader extends Scene {
         this.load.image('bg-buy-packs', 'bg11.jpg');
         this.load.image('bg-card-selection', 'bg22.jpg');
         this.load.image('bg-main-menu', 'bg33.jpg');
+        this.load.image('bg-test', 'bg55.jpg');
         this.load.image('bg-map', 'bg44.jpg');
         this.load.image('bg-achievments', 'bg44.jpg');
         this.load.image('bg-casino', 'casino.jpg');
+        this.load.image('bg-loading', 'bg-loading.png');
         this.load.image('defeat-giants', 'defeat-giants.png');
         this.load.image('bow', 'bow.png');
         this.load.image('cloud', 'cloud.png');
@@ -118,6 +120,7 @@ export class Preloader extends Scene {
     }
 
     create() {
+        // return
         // DailyQuestTimeHandler.initialCheck();
         // DataHandler.setInitialAchievements();
         this.cameras.main.fadeOut(500, 0, 0, 0);

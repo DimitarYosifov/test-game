@@ -39,7 +39,8 @@ export class DefeatGiants extends AbstractScene {
         const isUnlocked = (LOCAL_STORAGE_MANAGER.get('defeatGiantsLevelUnlocked') as boolean);
         const enableUnlock = +this.UIkeys >= defeatGiantsLevelConfig[(this.level as number) - 1].keysNeededToUnlock;
 
-        this.add.image(0, 0, 'defeat-giants').setOrigin(0);
+        this.add.image(0, 0, 'bg-test').setOrigin(0);
+        // this.add.image(0, 0, 'defeat-giants').setOrigin(0);
         this.createBackButton();
         this.createCoins();
         this.createTitle();
