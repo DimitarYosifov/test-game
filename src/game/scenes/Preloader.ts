@@ -31,6 +31,7 @@ export class Preloader extends Scene {
         this.load.image('7', '7.png');
         this.load.image('8', '8.png');
         this.load.image('9', '9.png');
+        this.load.image('11', '11.png');
         this.load.image('logo', 'logo.png');
         this.load.image('attack', 'attack.png');
         this.load.image('health', 'health.png');
@@ -91,6 +92,7 @@ export class Preloader extends Scene {
         this.load.image('flare', 'flare.png');
         this.load.image('unlock', 'unlock.png');
         this.load.image('key', 'key.png');
+        this.load.image('blur-bg', 'blur-bg.png');
 
         this.load.image('confetti-yellow', 'confetti-yellow.png');
         this.load.image('confetti-orange', 'confetti-orange.png');

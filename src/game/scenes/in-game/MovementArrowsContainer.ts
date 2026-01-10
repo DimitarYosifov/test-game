@@ -118,10 +118,11 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 img = 'sword';
             }
 
+            const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
             const giantData = this.scene.data.list.gridPositions[row][col].giantData;
+          
             if (giantData) {
                 // attackingMonster should be set here because row and col are changed below
-                const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
                 row = giantData.row;
                 col = giantData.col;
                 const mainGiantPosition = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === row && m.unitData.col === col);
@@ -133,8 +134,15 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                     atackingMonster.x,
                     atackingMonster.y
                 )
-                angle = Phaser.Math.RadToDeg(angle) - 90;
+            } else {
+                angle = Phaser.Math.Angle.Between(
+                    position_x,
+                    position_y,
+                    atackingMonster.x,
+                    atackingMonster.y
+                )
             }
+            angle = Phaser.Math.RadToDeg(angle) - 90;
 
             const arrow = new DirectionArrow(this.scene, position_x, position_y, angle, row, col, img, target, isRanged, this);
             this.add(arrow);

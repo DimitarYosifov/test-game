@@ -138,4 +138,22 @@ export const monsters_power_config = {
             melee: 4, ranged: 0, magic: 0, health: 5, shield: 2, vision: 1, stars: 5, type: '9', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244
         }
     ],
+
+    '11': [
+        { // 1 star
+            melee: 2, ranged: 0, magic: 0, health: 13, shield: 0, vision: 1, stars: 1, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+        },
+        { // 2 stars
+            melee: 2, ranged: 0, magic: 0, health: 14, shield: 0, vision: 1, stars: 2, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+        },
+        { // 3 stars
+            melee: 3, ranged: 0, magic: 0, health: 14, shield: 1, vision: 1, stars: 3, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+        },
+        { // 4 stars
+            melee: 3, ranged: 0, magic: 0, health: 15, shield: 1, vision: 1, stars: 4, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+        },
+        { // 5 stars
+            melee: 4, ranged: 0, magic: 0, health: 15, shield: 2, vision: 1, stars: 5, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+        }
+    ],
 }

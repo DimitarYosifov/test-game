@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { Monster } from '../in-game/Monster';
 import { getAllMonsterTypes, getMonsterDataConfig, main_config } from '../../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../../LOCAL_STORAGE_MANAGER';
+import { monsters_power_config } from '../../configs/monsters_power_config';
 
 export class DataHandler {
     scene: Scene;
@@ -122,6 +123,12 @@ export class DataHandler {
                 JSON.stringify(main_config.achievements.monsters)
             );
             totalRowsSoFar++;
+
+            if ((monsters_power_config as any)[type][0].isGiant) {
+                // no giants allowed in achievments!!!!
+                return;
+            }
+
             achievementsData.push({
                 data,
                 type

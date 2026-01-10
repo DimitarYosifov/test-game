@@ -1,11 +1,11 @@
-import { addFullscreenFunctionality, getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
 import { Button } from './in-main-menu/Button';
 
 const SPIN_SPEED = 25
-const REWARDS = [...getAllMonsterTypes(), 'gem', 'coin']
+const REWARDS = [...getAllMonsterTypes(), 'gem', 'coin', 'key']
 const MONSTER_SIZE = 200;
 
 export class Gamble extends AbstractScene {
@@ -27,17 +27,15 @@ export class Gamble extends AbstractScene {
     private monsterStarsToBeWon: number;
     private backButton: Button;
     private spinButton: Button;
-    private coinText: Phaser.GameObjects.Text;
-    private coinTexture: Phaser.GameObjects.Image;
-    private gemsText: Phaser.GameObjects.Text;
-    private gems: string;
-    private gemsTexture: Phaser.GameObjects.Image;
     private slowDownEvent: Phaser.Time.TimerEvent | null;
     private slowDownTween: Phaser.Tweens.Tween | null;
     private autoButton: Phaser.GameObjects.Image;
     private autoText: Phaser.GameObjects.Text;
     private isInAutoMode: boolean = false;
     private playerCoins: number;
+    private keysToBeWonText: Phaser.GameObjects.Text;
+    private keysToBeWon: number;
+
 
     constructor() {
         super('Gamble');
@@ -53,12 +51,14 @@ export class Gamble extends AbstractScene {
         this.createHeader();
         this.createReels();
         this.createGemsSection();
+        this.createKeysSection();
         this.createCoinsSection();
         this.createStarsSection();
         this.createBackButton();
         this.createSpinButton();
         this.createAutoButton();
-        this.createCoins();
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
         this.checkSpinAffordable();
@@ -142,6 +142,19 @@ export class Gamble extends AbstractScene {
         this.reel3.setMask(mask3);
     }
 
+    private createKeysSection() {
+        const key = this.add.image(900, 300, 'key').setScale(0.2).setOrigin(0.5);
+        this.keysToBeWonText = this.add.text(
+            key.x + key.displayWidth / 2,
+            key.y,
+            `10`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 60, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 4,
+                align: 'center'
+            }).setOrigin(0, 0.5).setName('keysText');
+    }
+
     private createGemsSection() {
         const gem = this.add.image(700, 300, 'gem').setScale(0.2).setOrigin(0.5);
         this.gemsToBeWonText = this.add.text(
@@ -180,7 +193,7 @@ export class Gamble extends AbstractScene {
         this.spinSpeed.speed = SPIN_SPEED;
         this.updateCoinsText();
         this.winningSymbols = [Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS), Phaser.Math.RND.pick(REWARDS)];
-        // this.winningSymbols = ['gem', 'gem', 'gem']; //// test
+        // this.winningSymbols = ['key', 'key', 'key']; //// test
         this.isWinningSpin = this.winningSymbols[0] === this.winningSymbols[1] && this.winningSymbols[0] === this.winningSymbols[2];
         this.shouldSpin = true;
         this.spinFinished = false;
@@ -216,10 +229,12 @@ export class Gamble extends AbstractScene {
     private updateRewards() {
         this.coinsToBeWon = Phaser.Math.RND.between(main_config.slotCoins.min, main_config.slotCoins.max);
         this.gemsToBeWon = Phaser.Math.RND.between(main_config.slotGems.min, main_config.slotGems.max);
+        this.keysToBeWon = Phaser.Math.RND.between(main_config.slotKeys.min, main_config.slotKeys.max);
         this.monsterStarsToBeWon = Phaser.Math.RND.between(main_config.slotMonsterStars.min, main_config.slotMonsterStars.max);
 
         this.coinsToBeWonText.setText(`${this.coinsToBeWon}`);
         this.gemsToBeWonText.setText(`${this.gemsToBeWon}`);
+        this.keysToBeWonText.setText(`${this.keysToBeWon}`);
         this.stars[0].alpha = 1;
         this.stars[1].alpha = this.monsterStarsToBeWon > 1 ? 1 : 0.45;
         this.stars[2].alpha = this.monsterStarsToBeWon > 2 ? 1 : 0.45;
@@ -252,6 +267,8 @@ export class Gamble extends AbstractScene {
                 this.onCoinsWin();
             } else if (this.winningSymbols[0] === 'gem') {
                 this.onGemsWin();
+            } else if (this.winningSymbols[0] === 'key') {
+                this.onKeysWin();
             } else {
                 this.onMonsterWin();
             }
@@ -323,6 +340,35 @@ export class Gamble extends AbstractScene {
                 LOCAL_STORAGE_MANAGER.set('gems', +this.gems + 1);
                 this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
                 this.gemsText.setText(`${this.gems}`);
+            },
+            emitCallbackScope: this
+        })
+    }
+
+    private onKeysWin() {
+        let emitted = 0;
+        let emitter = this.add.particles(0, 0, 'key', {
+            x: { start: this.keysToBeWonText.x - 75, end: this.keysTexture.x, ease: 'sine.in' },
+            y: { start: this.keysToBeWonText.y, end: this.keysTexture.y },
+            frequency: 250,
+            lifespan: 1000,
+            maxParticles: this.keysToBeWon,
+            quantity: 1,
+            scale: { start: 0.2, end: 0.1 },
+            emitCallback: () => {
+                emitted++;
+                if (emitted >= this.keysToBeWon) {
+                    emitter.stop();
+                    this.time.delayedCall(1000, () => {
+                        emitter.destroy(true);
+                        this.reset();
+                    })
+                }
+            },
+            deathCallback: () => {
+                LOCAL_STORAGE_MANAGER.set('keys', +this.keys + 1);
+                this.keys = (LOCAL_STORAGE_MANAGER.get('keys') as number).toString();
+                this.keysText.setText(`${this.keys}`);
             },
             emitCallbackScope: this
         })
@@ -434,6 +480,8 @@ export class Gamble extends AbstractScene {
                     monster1.setScale(1.7);
                 } else if (randomMonster === 'gem') {
                     monster1.setScale(0.4);
+                } else if (randomMonster === 'key') {
+                    monster1.setScale(0.43);
                 } else {
                     monster1.setScale(1);
                 }
@@ -446,6 +494,8 @@ export class Gamble extends AbstractScene {
                         monster2.setScale(1.7);
                     } else if (monster2.texture.key === 'gem') {
                         monster2.setScale(0.4);
+                    } else if (monster2.texture.key === 'key') {
+                        monster2.setScale(0.43);
                     } else {
                         monster2.setScale(1);
                     }
@@ -469,6 +519,8 @@ export class Gamble extends AbstractScene {
                     monster2.setScale(1.7);
                 } else if (monster2.texture.key === 'gem') {
                     monster2.setScale(0.4);
+                } else if (monster2.texture.key === 'key') {
+                    monster2.setScale(0.43);
                 } else {
                     monster2.setScale(1);
                 }
@@ -522,31 +574,6 @@ export class Gamble extends AbstractScene {
         this.backButton = new Button(this, 100, 950, 'button', 'back', () => {
             this.changeScene('MainMenu');
         });
-    }
-
-    createCoins(): void {
-        const coins = LOCAL_STORAGE_MANAGER.get('coins');
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     private updateCoinsText() {

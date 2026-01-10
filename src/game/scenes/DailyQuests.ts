@@ -1,7 +1,7 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
-import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
 import { Monster } from './in-game/Monster';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
@@ -9,10 +9,7 @@ import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 export class DailyQuests extends AbstractScene {
 
-    coins: string | null;
     timeLeftText: Phaser.GameObjects.Text;
-    coinText: Phaser.GameObjects.Text;
-    coinTexture: Phaser.GameObjects.Image;
     backButton: Button;
     headerText: Phaser.GameObjects.Text;
     progressBarBg: Phaser.GameObjects.Graphics;
@@ -22,9 +19,6 @@ export class DailyQuests extends AbstractScene {
     progressBarPosition: { x: number; y: number; };
     chests: Phaser.GameObjects.Image[] = [];
     totalProgress: number;
-    gems: string;
-    gemsText: Phaser.GameObjects.Text;
-    gemsTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('DailyQuests');
@@ -33,10 +27,11 @@ export class DailyQuests extends AbstractScene {
     create() {
 
         super.create();
-        this.createCoins();
         this.createBackButton();
         this.createHeaderTexts();
         this.createTimeLeftText();
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
         // const startTime = DailyQuestTimeHandler.getOrCreateStartTime();
@@ -474,31 +469,6 @@ export class DailyQuests extends AbstractScene {
             this.changeScene('MainMenu');
         });
         this.add.existing(this.backButton);
-    }
-
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     changeScene(nextScene: string): void {

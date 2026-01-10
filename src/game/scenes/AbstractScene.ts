@@ -4,6 +4,18 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
 
     camera: Phaser.Cameras.Scene2D.Camera;
 
+    coins: string;
+    gems: string;
+    keys: string;
+
+    coinText: Phaser.GameObjects.Text;
+    gemsText: Phaser.GameObjects.Text;
+    keysText: Phaser.GameObjects.Text;
+
+    coinTexture: Phaser.GameObjects.Image;
+    gemsTexture: Phaser.GameObjects.Image;
+    keysTexture: Phaser.GameObjects.Image;
+
     constructor(sceneName: string) {
         super(sceneName);
     }
@@ -24,12 +36,11 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
     }
 
     abstract changeScene(nextScene: string, isSurvivalLevel: boolean): void;
-    abstract createCoins(): void;
+    // abstract createCoins(): void;
     abstract createBackButton(): void;
 }
 
 interface IAbstractScene {
     changeScene(nextScene: string, isSurvivalLevel: boolean): void;
-    createCoins(): void;
     createBackButton(): void;
 }

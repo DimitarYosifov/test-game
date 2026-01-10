@@ -6,13 +6,10 @@ import { world1points } from './in-map/world_1_points';
 import { world2points } from './in-map/world_2_points';
 import { SpriteAnimation } from './SpriteAnimation';
 import { LOCAL_STORAGE_MANAGER, IGameData } from '../LOCAL_STORAGE_MANAGER';
-import { addFullscreenFunctionality } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies } from '../configs/main_config';
 
 export class Map extends AbstractScene {
     confirmPopupOpen: boolean;
-    coinTexture: Phaser.GameObjects.Image;
-    coinText: Phaser.GameObjects.Text;
-    coins: string | null;
     backButton: Button;
     levelConfirm: MainMenuLevelConfirm;
     spots: { x: number, y: number }[];
@@ -27,10 +24,6 @@ export class Map extends AbstractScene {
     survivalLevels: any;
     survivalLevelsData: any;
     world: number;
-    gems: string;
-    gemsText: Phaser.GameObjects.Text;
-    gemsTexture: Phaser.GameObjects.Image;
-
 
     constructor() {
         super('Map');
@@ -111,7 +104,8 @@ export class Map extends AbstractScene {
 
         this.createBackButton();
         this.createLevels();
-        this.createCoins();
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
     }
@@ -495,31 +489,6 @@ export class Map extends AbstractScene {
             })
         }
         moveToNext();
-    }
-
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     changeScene(nextScene: string, isSurvivalLevel: boolean = false): void {

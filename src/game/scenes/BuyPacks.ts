@@ -1,5 +1,5 @@
 import { IOpponentMonstersData } from '../configs/level_config';
-import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -35,16 +35,10 @@ export class BuyPacks extends AbstractScene {
     goldenPackTexture: Phaser.GameObjects.Image;
     goldenPackButton: Button;
     backButton: Button;
-    coins: string | number;
-    coinText: Phaser.GameObjects.Text;
-    coinTexture: Phaser.GameObjects.Image;
     monstersContainer: Phaser.GameObjects.Container;
     monsters: Monster[];
     overlay: Phaser.GameObjects.Image | null;
     claimButton: Button | null;
-    gems: string;
-    gemsText: Phaser.GameObjects.Text;
-    gemsTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('BuyPacks');
@@ -58,13 +52,13 @@ export class BuyPacks extends AbstractScene {
         this.monstersContainer = this.add.container(0, 0).setDepth(100).setAlpha(1);
         this.monsters = [];
 
-        this.createCoins(); // should be called before other methods
         this.createCommonPack();
         this.createSilverPack();
         this.createGoldenrPack();
         this.createBackButton();
+        
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
-
     }
 
     changeScene(nextScene: string): void {
@@ -438,31 +432,6 @@ export class BuyPacks extends AbstractScene {
         // this.add.existing(this.backButton);
     }
 
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
-    }
-
     private onBuy(cost: number, packName: PackName, isFree: boolean = false) {
 
         this.overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0);
@@ -546,8 +515,8 @@ export class BuyPacks extends AbstractScene {
             if (!isFree) {
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
-                this.coins = +playerCoins - +cost;
-                LOCAL_STORAGE_MANAGER.set('coins', this.coins);
+                this.coins = (+playerCoins - +cost).toString();
+                LOCAL_STORAGE_MANAGER.set('coins', +this.coins);
                 this.updateCoinsText(`${this.coins}`);
             }
 

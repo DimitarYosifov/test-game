@@ -1,3 +1,5 @@
+import { IGameData } from "../LOCAL_STORAGE_MANAGER";
+import { AbstractScene } from "../scenes/AbstractScene";
 import { monsters_power_config } from "./monsters_power_config";
 
 export const main_config = {
@@ -22,6 +24,7 @@ export const main_config = {
     "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 985, // 1.5% for gem drop
+    "chanceToDropKey": 985, // 1.5% for gem drop 
     "chanceToGetGemOnLevelWin": 90, // 10% for gem reward on level win(including repeat level)
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
@@ -255,6 +258,10 @@ export const main_config = {
         "min": 5,
         "max": 10,
     },
+    "slotKeys": {
+        "min": 3,
+        "max": 7,
+    },
     "slotMonsterStars": {
         "min": 1,
         "max": 3,
@@ -263,6 +270,11 @@ export const main_config = {
 
 
     // TODO:
+    // add winning keys
+
+
+
+
 
     // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                  ^HIGHEST PRIORITY^!!!!
     // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
@@ -347,12 +359,33 @@ export const main_config = {
 
 }
 
-export const getRandomMonsterType = () => {
-    return Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+export const getRandomMonsterType = (includeGiants: boolean = false): number => {
+    if (includeGiants) {
+        return Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+    } else {
+        let notGiantMonsterFound = false;
+        while (!notGiantMonsterFound) {
+            let monsterType = Number(Phaser.Math.RND.pick(Object.keys(monsters_power_config)));
+            if (!(monsters_power_config as any)[monsterType][0].isGiant) {
+                notGiantMonsterFound = true;
+                return monsterType;
+            }
+        }
+    }
+    return NaN;
 }
 
-export const getAllMonsterTypes = () => {
-    return Object.keys(monsters_power_config);
+export const getAllMonsterTypes = (includeGiants: boolean = false) => {
+    if (includeGiants) {
+        return Object.keys(monsters_power_config);
+    } else {
+        const filteredConfig = Object.fromEntries(
+            Object.entries(monsters_power_config).filter(
+                ([, monsters]) => !(monsters[0] as any).isGiant
+            )
+        );
+        return Object.keys(filteredConfig);
+    }
 }
 
 export const getMonsterDataConfig = (type: number, stars: number) => {
@@ -376,4 +409,50 @@ export const addFullscreenFunctionality = (scene: Phaser.Scene, x: number = 250,
             scene.game.scale.startFullscreen();
         }
     });
-} 
+}
+
+export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager) => {
+    if (!lsm) {
+        console.warn('LOCAL_STORAGE_MANAGER not ready');
+        return;
+    }
+
+    scene.coins = (lsm.get('coins') as number).toString();
+    scene.coinText = scene.add.text(
+        1900,
+        30,
+        `${scene.coins}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.coinTexture = scene.add.image(scene.coinText.x - scene.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
+    scene.gems = (lsm.get('gems') as number).toString();
+    scene.gemsText = scene.add.text(
+        scene.coinTexture.x - scene.coinTexture.displayWidth - 25,
+        30,
+        `${scene.gems}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.gemsTexture = scene.add.image(scene.gemsText.x - scene.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
+
+    scene.keys = (lsm.get('keys') as number).toString();
+    scene.keysText = scene.add.text(
+        scene.gemsTexture.x - scene.gemsTexture.displayWidth - 25,
+        30,
+        `${scene.keys}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.keysTexture = scene.add.image(scene.keysText.x - scene.keysText.displayWidth, 30, 'key').setScale(0.15).setOrigin(1, 0.5);
+}
+
+interface ILocalStorageManager {
+  get<T extends keyof IGameData>(key: T): IGameData[T] | null;
+}

@@ -1,5 +1,5 @@
-import { defeatGiantsLevelConfig } from "../configs/level_config";
-import { addFullscreenFunctionality, getMonsterDataConfig } from "../configs/main_config";
+import { defeat_giants_level_config } from "../configs/level_config";
+import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig } from "../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../LOCAL_STORAGE_MANAGER";
 import { AbstractScene } from "./AbstractScene";
 import { Monster } from "./in-game/Monster";
@@ -19,11 +19,8 @@ export class DefeatGiants extends AbstractScene {
     unlockButton: Button;
     giantsDescriptionContainer: any;
     level: number | null;
-    keys: Phaser.GameObjects.Image[] = [];
-    keysText: Phaser.GameObjects.Text;
-    keysTexture: Phaser.GameObjects.Image;
-    UIkeys: string;
     fightButton: Button;
+    keysArray: Phaser.GameObjects.Image[];
 
     constructor() {
         super('DefeatGiants');
@@ -33,21 +30,21 @@ export class DefeatGiants extends AbstractScene {
 
         super.create();
 
-        this.keys = [];
+        this.keysArray = [];
         this.level = (LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel') as number);
-        this.UIkeys = (LOCAL_STORAGE_MANAGER.get('keys') as number).toString();
+        this.keys = (LOCAL_STORAGE_MANAGER.get('keys') as number).toString();
         const isUnlocked = (LOCAL_STORAGE_MANAGER.get('defeatGiantsLevelUnlocked') as boolean);
-        const enableUnlock = +this.UIkeys >= defeatGiantsLevelConfig[(this.level as number) - 1].keysNeededToUnlock;
+        const enableUnlock = +this.keys >= defeat_giants_level_config[(this.level as number) - 1].keysNeededToUnlock;
 
         this.add.image(0, 0, 'bg-test').setOrigin(0);
         // this.add.image(0, 0, 'defeat-giants').setOrigin(0);
         this.createBackButton();
-        this.createCoins();
         this.createTitle();
         isUnlocked ? this.showFightButton(true) : this.createUnlockButton();
         this.createEnemyDescription();
         this.createKeys(isUnlocked);
 
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
         if (!isUnlocked) {
@@ -96,7 +93,7 @@ export class DefeatGiants extends AbstractScene {
         this.unlockButton = new Button(this, 960, 900, 'unlock', '', () => {
             this.unlockButton.disableInteractive();
             const showKey = () => {
-                const key = this.keys.shift();
+                const key = this.keysArray.shift();
                 const startScale = key?.scale;
                 // key!.scale = startScale! * 1.25;
                 key!.alpha = 0;
@@ -107,11 +104,11 @@ export class DefeatGiants extends AbstractScene {
                     alpha: 1,
                     ease: 'Cubic.easeOut',
                     onComplete: () => {
-                        this.UIkeys = `${Number(this.UIkeys) - 1}`;
-                        LOCAL_STORAGE_MANAGER.set('keys', +this.UIkeys);
-                        this.keysText.setText(this.UIkeys);
+                        this.keys = `${Number(this.keys) - 1}`;
+                        LOCAL_STORAGE_MANAGER.set('keys', +this.keys);
+                        this.keysText.setText(this.keys);
                         this.time.delayedCall(50, () => {
-                            if (this.keys.length) {
+                            if (this.keysArray.length) {
                                 showKey();
                             } else {
                                 LOCAL_STORAGE_MANAGER.set('defeatGiantsLevelUnlocked', true);
@@ -161,7 +158,7 @@ export class DefeatGiants extends AbstractScene {
     private createEnemyDescription() {
         this.giantsDescriptionContainer = this.add.container(0, 0);
 
-        const enemyData: any = defeatGiantsLevelConfig[(this.level as number) - 1].opponentMonstersData;
+        const enemyData: any = defeat_giants_level_config[(this.level as number) - 1].opponentMonstersData;
 
         const counts = new Map();
         for (const obj of enemyData) {
@@ -202,51 +199,18 @@ export class DefeatGiants extends AbstractScene {
         }
     }
 
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
-
-        this.keysText = this.add.text(
-            this.gemsTexture.x - this.gemsTexture.displayWidth - 25,
-            30,
-            `${this.UIkeys}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.keysTexture = this.add.image(this.keysText.x - this.keysText.displayWidth, 30, 'key').setScale(0.65).setOrigin(1, 0.5);
-    }
-
     createKeys(isUnlocked: boolean) {
-        const keysCount: any = defeatGiantsLevelConfig[(this.level as number) - 1].keysNeededToUnlock;
+        // const bg = this.add.image(960 + 110, 900, 'blur-bg').setOrigin(0, 0.5);
+
+        const keysCount: any = defeat_giants_level_config[(this.level as number) - 1].keysNeededToUnlock;
         let totalWidth = 0;
         for (let index = 0; index < keysCount; index++) {
-            const key = this.add.image(960 + 260 + totalWidth, 900, 'key').setScale(1.2).setOrigin(0.5);
-            this.keys.push(key);
-            totalWidth += key.displayWidth;
+            const key = this.add.image(960 + 260 + totalWidth, 900, 'key').setScale(0.4).setOrigin(0.5);
+            this.keysArray.push(key);
+            totalWidth += key.displayWidth * 0.6;
             key.alpha = isUnlocked ? 1 : 0.6;
         }
+        // bg.scaleX = keysCount * 0.8;
     }
 
     toggleUnlockButton(enable: boolean) {

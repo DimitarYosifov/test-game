@@ -3,7 +3,7 @@ import { Monster } from './in-game/Monster';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { addFullscreenFunctionality, getMonsterDataConfig } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
@@ -38,14 +38,8 @@ export class CardSelection extends AbstractScene {
     sellButton: Button;
     monsterAddedForSale: Monster | null;
     sellCardText: GameObjects.Text;
-    coinText: GameObjects.Text;
-    coinTexture: GameObjects.Image;
-    gems: string;
-    gemsText: GameObjects.Text;
-    gemsTexture: GameObjects.Image;
     upgradeCostGemsText: GameObjects.Text;
     upgradeCostGems: number = 0;
-    ;
 
     constructor() {
         super('CardSelection');
@@ -68,7 +62,8 @@ export class CardSelection extends AbstractScene {
         this.createUpgradeSlots();
         this.createSellCardSlot();
         this.createOkButton();
-        this.createCoins();
+        
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 1635, 970);
 
         this.initializeMonsters();
@@ -85,149 +80,149 @@ export class CardSelection extends AbstractScene {
         //for testing when starting new game - start with the monsters below
         this.playerMonstersData =
             playerMonstersDataFromStorage.length ? playerMonstersDataFromStorage :
-            [
-                // {
-                //     type: 5, stars: 4, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
+                [
+                    // {
+                    //     type: 5, stars: 4, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
 
-                // {
-                //     type: 1, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 2, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 3, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 6, stars: 1, row: NaN, col: 11
-                // },
+                    // {
+                    //     type: 1, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 2, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 3, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 6, stars: 1, row: NaN, col: 11
+                    // },
 
 
-                // {
-                //     type: 6, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 5, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 2, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 3, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 7, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 8, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-                // {
-                //     type: 9, stars: 1, row: NaN, col: 11
-                // },
-            ]
+                    // {
+                    //     type: 6, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 5, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 2, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 3, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 7, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 8, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                    // {
+                    //     type: 9, stars: 1, row: NaN, col: 11
+                    // },
+                ]
 
         this.sortMonsters();
         console.log(`${playerMonstersDataFromStorage} - from local storage`);
@@ -979,32 +974,6 @@ export class CardSelection extends AbstractScene {
         this.monsterAddedForSale = null;
         LOCAL_STORAGE_MANAGER.set('playerMonstersData', this.playerMonstersData)
         this.changeScene('MainMenu');
-    }
-
-    createCoins() {
-        const coins = LOCAL_STORAGE_MANAGER.get('coins');
-
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     private updateCoinsText(value: number | string, playerGemsAfterUpgrade: number | null = null) {

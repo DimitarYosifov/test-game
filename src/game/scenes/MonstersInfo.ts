@@ -1,6 +1,6 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { addFullscreenFunctionality, getAllMonsterTypes, getMonsterDataConfig } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, getAllMonsterTypes, getMonsterDataConfig } from '../configs/main_config';
 import { Monster } from './in-game/Monster';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
@@ -13,15 +13,9 @@ const MAX_TOTAL_WIDTH = 1640;
 
 export class MonstersInfo extends AbstractScene {
 
-    coins: string | null;
-    coinText: Phaser.GameObjects.Text;
-    coinTexture: Phaser.GameObjects.Image;
     backButton: Button;
     totalProgress: number;
     mainContainer: Phaser.GameObjects.Container;
-    gems: string;
-    gemsText: Phaser.GameObjects.Text;
-    gemsTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('MonstersInfo');
@@ -29,8 +23,9 @@ export class MonstersInfo extends AbstractScene {
 
     create() {
         super.create();
-        this.createCoins();
         this.createBackButton();
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
         this.mainContainer = this.add.container(0, 0);
@@ -74,31 +69,6 @@ export class MonstersInfo extends AbstractScene {
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start(nextScene);
         });
-    }
-
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
     }
 
     createBackButton() {

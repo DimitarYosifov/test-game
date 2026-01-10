@@ -1,4 +1,4 @@
-import { addFullscreenFunctionality } from "../configs/main_config";
+import { addFullscreenFunctionality, addUICurrencies } from "../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../LOCAL_STORAGE_MANAGER";
 import { AbstractScene } from "./AbstractScene";
 import { Button } from "./in-main-menu/Button";
@@ -13,13 +13,7 @@ export class Achievements extends AbstractScene {
     achievementsData: any[];
     storedAchievementsData: any;
     backButton: Button;
-    coins: string;
-    coinText: Phaser.GameObjects.Text;
-    coinTexture: Phaser.GameObjects.Image;
     mainContainer: Phaser.GameObjects.Container;
-    gems: string;
-    gemsText: Phaser.GameObjects.Text;
-    gemsTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('Achievements');
@@ -30,7 +24,8 @@ export class Achievements extends AbstractScene {
 
         this.add.image(0, 0, 'bg-map').setOrigin(0);
         this.createBackButton();
-        this.createCoins();
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
 
         this.storedAchievementsData = LOCAL_STORAGE_MANAGER.get('achievements');

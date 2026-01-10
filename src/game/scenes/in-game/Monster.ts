@@ -674,17 +674,14 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     die() {
-        // this.alpha = 0.5;
         this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         let waitForPackDropped = false;
         let waitForGemDropped = false;
+        let waitForKeyDropped = false;
         if (!this.isPlayerMonster) {
-            const checkFreePackDrop = this.checkFreePackDrop();
-            if (!checkFreePackDrop) {// if no pack drop, check gem drop
-                waitForGemDropped = this.checkGemDrop();
-            } else {
-                waitForPackDropped = true;
-            }
+            waitForPackDropped = this.checkFreePackDrop();
+            waitForGemDropped = waitForPackDropped ? false : this.checkGemDrop();
+            waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
         }
         this.scene.tweens.add({
             targets: this,
@@ -702,11 +699,62 @@ export class Monster extends Phaser.GameObjects.Container {
                         this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                     })
                 }
+                else if (waitForKeyDropped) {
+                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    })
+                }
                 else {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                 }
             }
         })
+    }
+
+    checkKeyDrop() {
+        const odds = main_config.chanceToDropKey;
+        const randomNumber = Phaser.Math.RND.between(1, 1000);
+        if (randomNumber >= odds) {
+
+            const key = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'key').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+            const data = (LOCAL_STORAGE_MANAGER.get('keys') as number);
+            LOCAL_STORAGE_MANAGER.set('keys', +data + 1);
+
+            this.scene.tweens.chain({
+                tweens: [
+                    {
+                        targets: key,
+                        alpha: 1,
+                        scale: 0.22,
+                        duration: 350,
+                        delay: 550,
+                        ease: 'Back.easeOut'
+                    },
+                    {
+                        targets: key,
+                        x: 960,
+                        y: 540,
+                        scale: 1,
+                        duration: 300
+                    },
+                    {
+                        targets: key,
+                        delay: 1100,
+                        alpha: 0,
+                        scale: 0,
+                        duration: 300,
+                        ease: 'Back.easeOut',
+                        onComplete: () => {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED);
+                            key.destroy(true);
+                        }
+                    },
+                ]
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
     checkGemDrop() {

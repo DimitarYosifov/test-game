@@ -142,9 +142,9 @@ export class DailyQuestTimeHandler {
 
         for (let index = 0; index < dailyQuestsInfo.questsCount; index++) {
 
-            let randomMonsterType = getRandomMonsterType();
+            let randomMonsterType = (getRandomMonsterType() as number);
             while (monsterTypesCreated.includes(randomMonsterType)) {
-                randomMonsterType = getRandomMonsterType();
+                randomMonsterType = (getRandomMonsterType() as number);
             }
             monsterTypesCreated.push(randomMonsterType);
 

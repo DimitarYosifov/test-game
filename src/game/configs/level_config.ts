@@ -147,8 +147,8 @@ export const survivalLevelsWorld2 = [
 ];
 
 // region DEFEAT GIANTS
-export const defeatGiantsLevelConfig = [
-    // L E V E L   1    
+export const defeat_giants_level_config = [
+    // L E V E L   1    -  7x 2-stars player monsters easily win this level
     {
         levelName: 1,
         firstWinReward: 221,
@@ -161,12 +161,12 @@ export const defeatGiantsLevelConfig = [
             }
         ],
         opponentMonstersData: [
-            { type: 7, stars: 1, isGiant: true },
-            { type: 8, stars: 2, isGiant: true },
-            { type: 9, stars: 3, isGiant: true },
+            { type: 11, stars: 1, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+            { type: 11, stars: 3, isGiant: true },
         ]
     },
-    // L E V E L   1    
+    // L E V E L   2    
     {
         levelName: 2,
         firstWinReward: 333,

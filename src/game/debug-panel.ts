@@ -1,3 +1,4 @@
+import { defeat_giants_level_config, level_config } from "./configs/level_config";
 import { getAllMonsterTypes } from "./configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "./LOCAL_STORAGE_MANAGER";
 import { IPlayerMonstersData } from "./scenes/in-game/TestPlayerTeam";
@@ -5,6 +6,7 @@ import { IPlayerMonstersData } from "./scenes/in-game/TestPlayerTeam";
 export const createDebugPanel = () => {
 
     let panelVisible = false;
+    const lastMapLevel = level_config[level_config.length - 1].levelName as number;
 
     const app = document.getElementById('app');
 
@@ -153,6 +155,8 @@ export const createDebugPanel = () => {
     const goToLevelInput = document.createElement('input');
     goToLevelInput.type = 'number';
     goToLevelInput.value = '1';
+    goToLevelInput.min = '1'
+    goToLevelInput.max = lastMapLevel.toString();
     const goToLevelButton = document.createElement('button');
     goToLevelButton.innerText = 'go';
     goToLevelButton.onclick = () => {
@@ -187,6 +191,8 @@ export const createDebugPanel = () => {
     const levelReachedInput = document.createElement('input');
     levelReachedInput.type = 'number';
     levelReachedInput.value = '1';
+    levelReachedInput.min = '1'
+    levelReachedInput.max = lastMapLevel.toString();
     const levelReachedButton = document.createElement('button');
     levelReachedButton.innerText = 'set';
     levelReachedButton.onclick = () => {
@@ -208,6 +214,30 @@ export const createDebugPanel = () => {
     levelReachedContainer.appendChild(levelReachedText);
     levelReachedContainer.appendChild(levelReachedInput);
     levelReachedContainer.appendChild(levelReachedButton);
+
+    //defeat giants level-------------------------------------------------------------------------
+    const defeatGiantsContainer = document.createElement('div');
+    defeatGiantsContainer.style.margin = '0.4em'
+    defeatGiantsContainer.style.display = 'flex';
+    defeatGiantsContainer.style['justify-content' as any] = 'center';
+    const defeatGiantsText = document.createElement('span');
+    defeatGiantsText.innerText = 'defeat giants level';
+    const defeatGiantsInput = document.createElement('input');
+    defeatGiantsInput.type = 'number';
+    defeatGiantsInput.value = '1';
+    defeatGiantsInput.min = '1'
+    defeatGiantsInput.max = defeat_giants_level_config.length.toString();
+    const defeatGiantsButton = document.createElement('button');
+    defeatGiantsButton.innerText = 'go';
+    defeatGiantsButton.onclick = () => {
+        const defeatGiantsLvL = +defeatGiantsInput.value;
+        LOCAL_STORAGE_MANAGER.set('defeatGiantsLevel', defeatGiantsLvL);
+        LOCAL_STORAGE_MANAGER.set('defeatGiantsLevelUnlocked', false);
+    }
+    mainContainer.appendChild(defeatGiantsContainer);
+    defeatGiantsContainer.appendChild(defeatGiantsText);
+    defeatGiantsContainer.appendChild(defeatGiantsInput);
+    defeatGiantsContainer.appendChild(defeatGiantsButton);
 
     //reset daily quest-------------------------------------------------------------------------
     const resetDailyQuestContainer = document.createElement('div');

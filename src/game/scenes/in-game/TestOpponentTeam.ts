@@ -1,5 +1,5 @@
 
-import { defeatGiantsLevelConfig, level_config } from "../../configs/level_config";
+import { defeat_giants_level_config, level_config } from "../../configs/level_config";
 import { getMonsterDataConfig } from "../../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 import { IUnitData } from "../Game";
@@ -112,7 +112,7 @@ export class TestOpponentTeam {
         let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         currentLevel = LOCAL_STORAGE_MANAGER.get('currentWorld') === 2 ? currentLevel + 1 : currentLevel - 1;  //TODO check world, it could be 3,4.....
         const currentDefeatGiantsLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel')
-        const giantFightLevelData = this.isGiantFightLevel ? defeatGiantsLevelConfig[currentDefeatGiantsLevel! - 1] : null;
+        const giantFightLevelData = this.isGiantFightLevel ? defeat_giants_level_config[currentDefeatGiantsLevel! - 1] : null;
         const survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         const opponentMonstersData = giantFightLevelData?.opponentMonstersData || survivalLevelData?.opponentMonstersData || level_config[currentLevel].opponentMonstersData;
 

@@ -3,7 +3,7 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { defeatGiantsLevelConfig, ILevelConfig, level_config } from '../configs/level_config';
+import { defeat_giants_level_config, ILevelConfig, level_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
@@ -18,7 +18,8 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'DIRECTION_SELECTED' = 'direction-selected',
     'MONSTER_DIED' = 'monster-died',
     'DROPPED_PACK_COLLECTED' = 'dropped-pack-collected',
-    'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected'
+    'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected',
+    'DROPPED_KEY_COLLECTED' = 'dropped-key-collected'
 }
 
 export enum BUFF_TYPES {
@@ -646,7 +647,7 @@ export class Game extends AbstractScene {
 
         if (this.isGiantFightLevel) {
             const currentDefeatGiantsLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel')
-            currentLevelData = defeatGiantsLevelConfig[currentDefeatGiantsLevel! - 1];
+            currentLevelData = defeat_giants_level_config[currentDefeatGiantsLevel! - 1];
             isFirstTimeReward = true;
             monstersReward = currentLevelData!.monstersReward;
             hasMonsterReweard = monstersReward.length > 0;
@@ -1283,6 +1284,19 @@ export class Game extends AbstractScene {
                         }
                         const occupiedBy = array[newRow][newCol].occupiedBy;
                         visibleCells.push({ row: newRow, col: newCol, occupiedBy });
+
+
+                        // reveal the whole giant monster
+                        const giantData = array[newRow][newCol].giantData
+                        if (giantData) {
+                            const giantMainRow = giantData.row;
+                            const giantMainCol = giantData.col;
+                            visibleCells.push({ row: giantMainRow, col: giantMainCol, occupiedBy });
+                            visibleCells.push({ row: giantMainRow, col: giantMainCol + 1, occupiedBy });
+                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol, occupiedBy });
+                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol + 1, occupiedBy });
+
+                        }
                     }
                 }
             }
@@ -1569,7 +1583,7 @@ export class Game extends AbstractScene {
         //LEFT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col - 1;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col))) {
             console.log(`%c GIANT CAN MOVE LEFT DOWN ${row} ${col}`, "background: red");
             tryAddMove(row, col, true);
         } else if (!this.currentlySelectedMonster.unitData.isGiant) {

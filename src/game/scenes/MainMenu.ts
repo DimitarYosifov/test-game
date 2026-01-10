@@ -1,10 +1,10 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { addFullscreenFunctionality, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, main_config } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { StartOverConfirm } from './in-main-menu/StartOverConfirm';
-import { SpriteAnimation } from './SpriteAnimation';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
+import { defeat_giants_level_config } from '../configs/level_config';
 
 export class MainMenu extends AbstractScene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -12,23 +12,14 @@ export class MainMenu extends AbstractScene {
     gameover_text: Phaser.GameObjects.Text;
     deckButton: Button;
     confirmPopupOpen: boolean;
-    coinTexture: Phaser.GameObjects.Image;
-    coinText: Phaser.GameObjects.Text;
-    coins: string | null;
     shopButton: Button;
     mapButton: Button;
     dailyQuestsButton: Button;
     achievementsButton: Button;
     deleteButton: Button;
     infoButton: Button;
-    gems: string;
-    gemsTexture: Phaser.GameObjects.Image;
-    gemsText: Phaser.GameObjects.Text;
     gambleButton: Button;
     defeatMonstersButton: Button;
-    keys: string;
-    keysText: Phaser.GameObjects.Text;
-    keysTexture: Phaser.GameObjects.Image;
 
     constructor() {
         super('MainMenu');
@@ -61,8 +52,6 @@ export class MainMenu extends AbstractScene {
         this.createDeleteButton();
         this.createGambleButton();
         this.createDefeatGiantsButton();
-        this.createCoins();
-
 
         const fullscreenImg = this.add.image(250, 75, 'fullscreen').setOrigin(0.5).setScale(0.85);
         if (!(window as any).userHasInteracted) {
@@ -78,6 +67,12 @@ export class MainMenu extends AbstractScene {
         (playerMonstersData as []).every((x: any) => x.row === null) || (playerMonstersData as []).length === 0 || (playerMonstersData as []).every((x: any) => Number.isNaN(x.row)) ?
             this.mapButton.disableInteractive().setAlpha(0.4) :
             this.mapButton.setInteractive().setAlpha(1);
+
+        (playerMonstersData as []).every((x: any) => x.row === null) || (playerMonstersData as []).length === 0 || (playerMonstersData as []).every((x: any) => Number.isNaN(x.row)) ?
+            this.mapButton.disableInteractive().setAlpha(0.4) :
+            this.mapButton.setInteractive().setAlpha(1);
+
+        this.checkDefeatGiantsButtonEnabled((playerMonstersData as []));
 
         if ((playerMonstersData as []).length === 0) {
             // no player monsters
@@ -109,6 +104,8 @@ export class MainMenu extends AbstractScene {
                 });
             })
         }
+
+        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
     }
 
     private createInfoButton() {
@@ -153,7 +150,7 @@ export class MainMenu extends AbstractScene {
         const defeatMonstersTitle = this.add.text(
             this.defeatMonstersButton.x,
             this.defeatMonstersButton.y + 150,
-            `defeat\nmonsters`,
+            `defeat\ngiants`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,
@@ -273,43 +270,6 @@ export class MainMenu extends AbstractScene {
 
     }
 
-    createCoins() {
-        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
-        this.coinText = this.add.text(
-            1900,
-            30,
-            `${this.coins}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.coinTexture = this.add.image(this.coinText.x - this.coinText.displayWidth, 30, 'coin').setScale(0.35).setOrigin(1, 0.5);
-        this.gems = (LOCAL_STORAGE_MANAGER.get('gems') as number).toString();
-        this.gemsText = this.add.text(
-            this.coinTexture.x - this.coinTexture.displayWidth - 25,
-            30,
-            `${this.gems}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.gemsTexture = this.add.image(this.gemsText.x - this.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
-
-        this.keys = (LOCAL_STORAGE_MANAGER.get('keys') as number).toString();
-        this.keysText = this.add.text(
-            this.gemsTexture.x - this.gemsTexture.displayWidth - 25,
-            30,
-            `${this.keys}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
-                align: 'center'
-            }).setOrigin(1, 0.5);
-        this.keysTexture = this.add.image(this.keysText.x - this.keysText.displayWidth, 30, 'key').setScale(0.65).setOrigin(1, 0.5);
-    }
-
     changeScene(nextScene: string): void {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
@@ -319,4 +279,39 @@ export class MainMenu extends AbstractScene {
 
     createBackButton(): void { };
 
+    checkDefeatGiantsButtonEnabled(playerMonstersData: []) {
+        const defeatGiantsLevel = (LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel') as number);
+        const allGiantLevelsComplete = defeatGiantsLevel > defeat_giants_level_config.length;
+        if (
+            (playerMonstersData.every((x: any) => x.row === null) ||
+                playerMonstersData.length === 0 ||
+                playerMonstersData.every((x: any) => Number.isNaN(x.row))
+            ) ||
+            allGiantLevelsComplete
+        ) {
+            this.defeatMonstersButton.disableInteractive()
+        } else {
+            this.defeatMonstersButton.setInteractive();
+        }
+
+        if (allGiantLevelsComplete) {
+            const levelCompletedText: Phaser.GameObjects.Text = this.add.text(
+                this.defeatMonstersButton.x,
+                this.defeatMonstersButton.y,
+                `completed`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#ff0000',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5).setAlpha(0).setScale(1.5);
+            levelCompletedText.angle = -25;
+            this.tweens.add({
+                targets: levelCompletedText,
+                alpha: 1,
+                scale: 1,
+                duration: 300,
+                delay: 200
+            })
+        }
+    }
 }
