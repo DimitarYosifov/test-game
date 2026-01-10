@@ -151,79 +151,505 @@ export const defeat_giants_level_config = [
     // L E V E L   1    -  7x 2-stars player monsters easily win this level
     {
         levelName: 1,
-        firstWinReward: 221,
-        gemsReward: 5,
+        firstWinReward: 30,
+        gemsReward: 1,
         repeatLevelWinReward: 0,
-        keysNeededToUnlock: 3,
+        keysNeededToUnlock: 2,
         monstersReward: [
             {
-                type: 7, stars: 5
+                type: 1, stars: 2
             }
         ],
         opponentMonstersData: [
             { type: 11, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 1, isGiant: true },
+        ]
+    },
+    // L E V E L   2      
+    {
+        levelName: 2,
+        firstWinReward: 40,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 2, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 1, isGiant: true },
+        ]
+    },
+    // L E V E L   3      
+    {
+        levelName: 3,
+        firstWinReward: 50,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 3, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 1, isGiant: true },
+        ]
+    },
+    // L E V E L   4      
+    {
+        levelName: 4,
+        firstWinReward: 60,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 5, stars: 2
+            }
+        ],
+        opponentMonstersData: [
             { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 1, isGiant: true },
+        ]
+    },
+    // L E V E L   5      
+    {
+        levelName: 5,
+        firstWinReward: 70,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 6, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+        ]
+    },
+    // L E V E L   6      
+    {
+        levelName: 6,
+        firstWinReward: 80,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 7, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 1, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+        ]
+    },
+    // L E V E L   7      
+    {
+        levelName: 7,
+        firstWinReward: 90,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 2,
+        monstersReward: [
+            {
+                type: 8, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+        ]
+    },
+    // L E V E L   8      
+    {
+        levelName: 8,
+        firstWinReward: 100,
+        gemsReward: 1,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 9, stars: 2
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+        ]
+    },
+    // L E V E L   9      
+    {
+        levelName: 9,
+        firstWinReward: 110,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 1, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
+        ]
+    },
+    // L E V E L   10      
+    {
+        levelName: 10,
+        firstWinReward: 120,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 2, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 2, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 3, isGiant: true },
         ]
     },
-    // L E V E L   2    
+    // L E V E L   11      
     {
-        levelName: 2,
-        firstWinReward: 333,
-        gemsReward: 15,
+        levelName: 11,
+        firstWinReward: 130,
+        gemsReward: 2,
         repeatLevelWinReward: 0,
-        keysNeededToUnlock: 4,
+        keysNeededToUnlock: 3,
         monstersReward: [
             {
-                type: 1, stars: 1
+                type: 3, stars: 3
             }
         ],
         opponentMonstersData: [
-            { type: 12, stars: 1, isGiant: true },
-            { type: 12, stars: 2, isGiant: true },
+            { type: 11, stars: 2, isGiant: true },
             { type: 12, stars: 3, isGiant: true },
-        ]
-    },
-    // L E V E L   3    
-    {
-        levelName: 3,
-        firstWinReward: 333,
-        gemsReward: 15,
-        repeatLevelWinReward: 0,
-        keysNeededToUnlock: 4,
-        monstersReward: [
-            {
-                type: 1, stars: 1
-            }
-        ],
-        opponentMonstersData: [
-            { type: 12, stars: 5, isGiant: true },
-            { type: 12, stars: 5, isGiant: true },
-            { type: 12, stars: 5, isGiant: true },
-            { type: 12, stars: 1, isGiant: true },
-            { type: 12, stars: 1, isGiant: true },
-            { type: 12, stars: 1, isGiant: true },
-        ]
-    },
-    // L E V E L   4    - moderate  for 7x - 5-stars monsters
-    {
-        levelName: 4,
-        firstWinReward: 333,
-        gemsReward: 15,
-        repeatLevelWinReward: 0,
-        keysNeededToUnlock: 4,
-        monstersReward: [
-            {
-                type: 1, stars: 1
-            }
-        ],
-        opponentMonstersData: [
             { type: 13, stars: 3, isGiant: true },
-            { type: 13, stars: 4, isGiant: true },
-            { type: 13, stars: 5, isGiant: true },
             { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 11, stars: 3, isGiant: true },
+        ]
+    },
+    // L E V E L   12      
+    {
+        levelName: 12,
+        firstWinReward: 140,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 5, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 2, isGiant: true },
+            { type: 11, stars: 3, isGiant: true },
+        ]
+    },
+    // L E V E L   13      
+    {
+        levelName: 13,
+        firstWinReward: 150,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 3,
+        monstersReward: [
+            {
+                type: 6, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 11, stars: 3, isGiant: true },
+        ]
+    },
+    // L E V E L   14     
+    {
+        levelName: 14,
+        firstWinReward: 160,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 7, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   15     
+    {
+        levelName: 15,
+        firstWinReward: 170,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 8, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
             { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   16     
+    {
+        levelName: 16,
+        firstWinReward: 180,
+        gemsReward: 2,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 9, stars: 3
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   17     
+    {
+        levelName: 17,
+        firstWinReward: 190,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 1, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 3, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   18     
+    {
+        levelName: 18,
+        firstWinReward: 200,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 2, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 3, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   19     
+    {
+        levelName: 19,
+        firstWinReward: 210,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 3, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   20     
+    {
+        levelName: 20,
+        firstWinReward: 220,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 5,
+        monstersReward: [
+            {
+                type: 5, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 4, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   21     
+    {
+        levelName: 21,
+        firstWinReward: 230,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 5,
+        monstersReward: [
+            {
+                type: 6, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 4, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   22     
+    {
+        levelName: 22,
+        firstWinReward: 240,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 5,
+        monstersReward: [
+            {
+                type: 7, stars: 4
+            }
+        ],
+        opponentMonstersData: [
             { type: 11, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   23     
+    {
+        levelName: 23,
+        firstWinReward: 250,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 5,
+        monstersReward: [
+            {
+                type: 8, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
+        ]
+    },
+    // L E V E L   24     
+    {
+        levelName: 24,
+        firstWinReward: 260,
+        gemsReward: 3,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 5,
+        monstersReward: [
+            {
+                type: 9, stars: 4
+            }
+        ],
+        opponentMonstersData: [
+            { type: 11, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 11, stars: 4, isGiant: true },
         ]
     },
 ]

@@ -141,53 +141,53 @@ export const monsters_power_config = {
 
     '11': [
         { // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 13, shield: 0, vision: 1, stars: 1, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 2, ranged: 0, magic: 0, health: 13, shield: 0, vision: 2, stars: 1, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 2 stars
-            melee: 2, ranged: 0, magic: 0, health: 14, shield: 0, vision: 1, stars: 2, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 2, ranged: 0, magic: 0, health: 14, shield: 0, vision: 2, stars: 2, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 3 stars
-            melee: 3, ranged: 0, magic: 0, health: 14, shield: 1, vision: 1, stars: 3, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 3, ranged: 0, magic: 0, health: 14, shield: 1, vision: 2, stars: 3, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 4 stars
-            melee: 3, ranged: 0, magic: 0, health: 15, shield: 1, vision: 1, stars: 4, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 3, ranged: 0, magic: 0, health: 15, shield: 1, vision: 2, stars: 4, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 5 stars
-            melee: 4, ranged: 0, magic: 0, health: 15, shield: 2, vision: 1, stars: 5, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 4, ranged: 0, magic: 0, health: 15, shield: 2, vision: 2, stars: 5, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
         }
     ],
     '12': [
         { // 1 star
-            melee: 0, ranged: 3, magic: 0, health: 14, shield: 0, vision: 1, stars: 1, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 3, magic: 0, health: 14, shield: 0, vision: 2, stars: 1, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 2 stars
-            melee: 0, ranged: 3, magic: 0, health: 16, shield: 1, vision: 1, stars: 2, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 3, magic: 0, health: 16, shield: 1, vision: 2, stars: 2, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 3 stars
             melee: 0, ranged: 4, magic: 0, health: 16, shield: 1, vision: 2, stars: 3, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 4 stars
-            melee: 0, ranged: 4, magic: 0, health: 17, shield: 1, vision: 2, stars: 4, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 4, magic: 0, health: 17, shield: 1, vision: 3, stars: 4, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 5 stars
-            melee: 0, ranged: 5, magic: 0, health: 18, shield: 1, vision: 2, stars: 5, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 5, magic: 0, health: 18, shield: 1, vision: 3, stars: 5, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         }
     ],
     '13': [
         { // 1 star
-            melee: 0, ranged: 0, magic: 2, health: 12, shield: 0, vision: 1, stars: 1, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 2, health: 12, shield: 0, vision: 2, stars: 1, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 2 stars
-            melee: 0, ranged: 0, magic: 2, health: 13, shield: 1, vision: 1, stars: 2, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 2, health: 13, shield: 1, vision: 2, stars: 2, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 3 stars
-            melee: 0, ranged: 0, magic: 3, health: 14, shield: 1, vision: 1, stars: 3, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 3, health: 14, shield: 1, vision: 2, stars: 3, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 4 stars
-            melee: 0, ranged: 0, magic: 3, health: 15, shield: 1, vision: 1, stars: 4, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 3, health: 15, shield: 1, vision: 2, stars: 4, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
         },
         { // 5 stars
-            melee: 0, ranged: 0, magic: 4, health: 16, shield: 2, vision: 1, stars: 5, type: '13', moves: 4, movesLeft: 4, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 4, health: 16, shield: 2, vision: 2, stars: 5, type: '13', moves: 4, movesLeft: 4, upgradeCost: null, sellsFor: null, isGiant: true
         }
     ],
 }

@@ -205,7 +205,7 @@ export class DefeatGiants extends AbstractScene {
         const keysCount: any = defeat_giants_level_config[(this.level as number) - 1].keysNeededToUnlock;
         let totalWidth = 0;
         for (let index = 0; index < keysCount; index++) {
-            const key = this.add.image(960 + 260 + totalWidth, 900, 'key').setScale(0.4).setOrigin(0.5);
+            const key = this.add.image(960 + 220 + totalWidth, 900, 'key').setScale(0.4).setOrigin(0.5);
             this.keysArray.push(key);
             totalWidth += key.displayWidth * 0.6;
             key.alpha = isUnlocked ? 1 : 0.6;

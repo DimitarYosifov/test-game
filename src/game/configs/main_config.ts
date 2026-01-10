@@ -20,7 +20,7 @@ export const main_config = {
     "rangedUnitsRange": 2,
     "playerStartingCoins": 50,
     "playerStartingGems": 1,
-    "playerStartingKeys": 1,
+    "playerStartingKeys": 0,
     "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 985, // 1.5% for gem drop
