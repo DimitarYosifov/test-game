@@ -424,6 +424,12 @@ export class Game extends AbstractScene {
 
     private skipButtonHandler(): void {
         this.skipButton = new Button(this, 1810, 350, 'button', 'skip\nmove', this.onSkip.bind(this), true, 1);
+        this.input.keyboard!.on('keydown-SPACE', () => {
+            if (this.data.list.isPlayerTurn && this.skipButton.bg.input?.enabled) {
+                console.log('Skipped with Space');
+                this.onSkip();
+            }
+        });
     }
 
     private onSkip() {
@@ -1454,45 +1460,65 @@ export class Game extends AbstractScene {
     private checkPossibleMove(): boolean {
         let row, col;
         const currentUnitData = this.currentlySelectedMonster.unitData;
+        console.log(this.data.list.gridPositions);
+        console.log(`%c CURRENT GIANT IS AT ${currentUnitData.row} ${currentUnitData.col}`, "background: grey");
         //UP
         row = currentUnitData.row - 1;
         col = currentUnitData.col;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1))) {
+            console.log(`%c GIANT CAN MOVE UP ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
         //UP RIGHT
         row = currentUnitData.row - 1;
         col = currentUnitData.col + 1;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2))) {
+            console.log(`%c GIANT CAN MOVE UP RIGHT ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
         //RIGHT
         row = currentUnitData.row;
         col = currentUnitData.col + 1;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2))) {
+            console.log(`%c GIANT CAN MOVE RIGHT ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
         //RIGHT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col + 1;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 2) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col + 2))) {
+            console.log(`%c GIANT CAN MOVE RIGHT DOWN ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
         //DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col + 1))) {
+            console.log(`%c GIANT CAN MOVE DOWN ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
         //LEFT DOWN
         row = currentUnitData.row + 1;
         col = currentUnitData.col - 1;
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 2, currentUnitData.col))) {
+            console.log(`%c GIANT CAN MOVE LEFT DOWN ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
@@ -1500,7 +1526,10 @@ export class Game extends AbstractScene {
         row = currentUnitData.row;
         col = currentUnitData.col - 1;
 
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row + 1, currentUnitData.col - 1))) {
+            console.log(`%c GIANT CAN MOVE LEFT ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 
@@ -1508,7 +1537,10 @@ export class Game extends AbstractScene {
         row = currentUnitData.row - 1;
         col = currentUnitData.col - 1;
 
-        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col)) || this.isCellEmpty(row, col)) {
+        if ((this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(currentUnitData.row, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col - 1) && this.isCellEmpty(currentUnitData.row - 1, currentUnitData.col))) {
+            console.log(`%c GIANT CAN MOVE UP LEFT ${row} ${col}`, "background: red");
+            return true;
+        } else if (!this.currentlySelectedMonster.unitData.isGiant && this.isCellEmpty(row, col)) {
             return true;
         }
 

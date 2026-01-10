@@ -32,6 +32,8 @@ export class Preloader extends Scene {
         this.load.image('8', '8.png');
         this.load.image('9', '9.png');
         this.load.image('11', '11.png');
+        this.load.image('12', '12.png');
+        this.load.image('13', '13.png');
         this.load.image('logo', 'logo.png');
         this.load.image('attack', 'attack.png');
         this.load.image('health', 'health.png');

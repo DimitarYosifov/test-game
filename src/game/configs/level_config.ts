@@ -179,7 +179,51 @@ export const defeat_giants_level_config = [
             }
         ],
         opponentMonstersData: [
-            { type: 1, stars: 4, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 12, stars: 2, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+        ]
+    },
+    // L E V E L   3    
+    {
+        levelName: 3,
+        firstWinReward: 333,
+        gemsReward: 15,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 1, stars: 1
+            }
+        ],
+        opponentMonstersData: [
+            { type: 12, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 12, stars: 5, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+            { type: 12, stars: 1, isGiant: true },
+        ]
+    },
+    // L E V E L   4    - moderate  for 7x - 5-stars monsters
+    {
+        levelName: 4,
+        firstWinReward: 333,
+        gemsReward: 15,
+        repeatLevelWinReward: 0,
+        keysNeededToUnlock: 4,
+        monstersReward: [
+            {
+                type: 1, stars: 1
+            }
+        ],
+        opponentMonstersData: [
+            { type: 13, stars: 3, isGiant: true },
+            { type: 13, stars: 4, isGiant: true },
+            { type: 13, stars: 5, isGiant: true },
+            { type: 12, stars: 3, isGiant: true },
+            { type: 12, stars: 4, isGiant: true },
+            { type: 11, stars: 5, isGiant: true },
         ]
     },
 ]
