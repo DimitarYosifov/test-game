@@ -19,7 +19,8 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'MONSTER_DIED' = 'monster-died',
     'DROPPED_PACK_COLLECTED' = 'dropped-pack-collected',
     'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected',
-    'DROPPED_KEY_COLLECTED' = 'dropped-key-collected'
+    'DROPPED_KEY_COLLECTED' = 'dropped-key-collected',
+    'BUFF_BOMB_EXPLODE' = 'buff-bomb-explode'
 }
 
 export enum BUFF_TYPES {
@@ -29,7 +30,8 @@ export enum BUFF_TYPES {
     'HEALTH' = 'health',
     'SHIELD' = 'shield',
     'VISION' = 'vision',
-    'GREEN_DOT' = 'green-dot'
+    'GREEN_DOT' = 'green-dot',
+    'BOMB' = 'bomb'
 }
 
 export class Game extends AbstractScene {
@@ -59,6 +61,7 @@ export class Game extends AbstractScene {
     confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
     currentlySelectedMonsterAnimation: SpriteAnimation | null;
     isGiantFightLevel: any;
+    activeExplodePositions: number = 0;
 
     constructor() {
         super('Game');
@@ -109,6 +112,7 @@ export class Game extends AbstractScene {
         this.monsterSelectHandler();
         this.directionSelectHandler();
         this.targetSelectHandler();
+        this.buffBombExplodeHandler();
         // this.checkEndTurnHandler(); // it calls  this.addInteraction // BEING CALLED AFTER INITIAL BUFFS HAVE LANDED
 
         LOCAL_STORAGE_MANAGER.remove('survivalLevelData');
@@ -145,7 +149,7 @@ export class Game extends AbstractScene {
         if (!this.questionMarkContainer && addQuestionMarks) {
             this.addQuestionMarks();
         }
-        const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
+        const randomBuffType = BUFF_TYPES.BOMB// Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
         container.setDepth(7);
@@ -163,6 +167,12 @@ export class Game extends AbstractScene {
         container.add(buffText);
         let buffTypeImage = this.add.image(0, 25, randomBuffType).setOrigin(0.5).setScale(0.35);
         container.add(buffTypeImage);
+
+        if (randomBuffType === 'bomb') {
+            plate.destroy(true);
+            buffText.destroy(true);
+            buffTypeImage.setY(10).setScale(0.2);
+        }
 
         console.log(this.data.list.gridPositions)
 
@@ -593,6 +603,153 @@ export class Game extends AbstractScene {
         });
     }
 
+    private buffBombExplodeHandler() {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.BUFF_BOMB_EXPLODE, (data: number[]) => {
+
+            const row = data[0];
+            const col = data[1];
+            if (this.data.list.gridPositions[row][col].buff?.buffContainer) {
+                this.data.list.gridPositions[row][col].buff?.buffContainer.destroy(true);
+            }
+            delete this.data.list.gridPositions[row][col].buff;
+            this.activeExplodePositions++;
+
+            let anyMonsterDiesFromTheExplosion = false;
+            let nextBuffBomb: number[][] = [];
+
+            let newRow = NaN;
+            let newCol = NaN;
+
+            const isValidPosition = (r: number, c: number): boolean => {
+                return r >= 0 && r < 7 && c >= 0 && c < 12;
+            }
+
+            const explode = (r: number, c: number, isCenter: boolean) => {
+                const { x, y } = this.data.list.gridPositions[r][c];
+                let explodeImage = this.add.image(x + this.mainGridContainer.x, y + this.mainGridContainer.y, 'boom').setScale(1).setOrigin(0.5).setDepth(23);
+                this.tweens.chain({
+                    tweens: [
+                        {
+                            targets: explodeImage,
+                            scale: explodeImage.scale * 1.1,
+                            yoyo: true,
+                            duration: 150
+                        },
+                        {
+                            targets: explodeImage,
+                            alpha: 0,
+                            duration: 700,
+                            onComplete: () => {
+                                if (isCenter) {
+                                    // central position decreases activeExplodePositions and if 0 -all explosions done, so emit
+                                    this.activeExplodePositions--;
+                                    if (this.activeExplodePositions === 0) {
+                                        this.time.delayedCall(anyMonsterDiesFromTheExplosion ? 2100 : 1100, () => {
+                                            console.log(`%c ${this.activeExplodePositions}`, "background: blue");
+                                            this.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                                        })
+
+
+                                    }
+                                }
+                                explodeImage.destroy(true);
+                            }
+                        }
+                    ]
+                })
+            }
+
+            const findMonster = (r: number, c: number): Monster | undefined => {
+                const position = this.data.list.gridPositions[newRow][newCol];
+                const isPlayer = position.occupiedBy === 'player';
+                const isOpponent = position.occupiedBy === 'opponent';
+                const isBombBuff = position.buff?.buffType === 'bomb';
+                const giantData = position.giantData;
+
+                //TODO... CHECK IF GIANT !!!!!!!
+                if (isPlayer) {
+                    return this.data.list.playerMonsters.find((x: Monster) => x !== null && x.unitData.row === r && x.unitData.col === c);
+                } else if (isOpponent) {
+                    if (giantData) {
+                        return this.data.list.opponentMonsters.find((x: Monster) => x !== null && x.unitData.row === giantData.row && x.unitData.col === giantData.col);
+                    }
+                    return this.data.list.opponentMonsters.find((x: Monster) => x !== null && x.unitData.row === r && x.unitData.col === c);
+                } else if (isBombBuff) {
+                    nextBuffBomb.push([newRow, newCol]);
+                } else {
+                    return undefined;
+                }
+            }
+
+            const proceed = (r: number, c: number, isCenter: boolean = false) => {
+                if (isValidPosition(r, c)) {
+                    explode(r, c, isCenter);
+                    const monster = findMonster(r, c);
+                    if (monster) {
+                        if (monster.takeDamege(isCenter ? 2 : 1, false, true, false, 0)) anyMonsterDiesFromTheExplosion = true;
+                    }
+                }
+            }
+
+            // left up
+            newRow = row - 1;
+            newCol = col - 1;
+            proceed(newRow, newCol);
+
+            // up
+            newRow = row - 1;
+            newCol = col;
+            proceed(newRow, newCol);
+
+            // up right
+            newRow = row - 1;
+            newCol = col + 1;
+            proceed(newRow, newCol);
+
+            // left
+            newRow = row;
+            newCol = col - 1;
+            proceed(newRow, newCol);
+
+            // center
+            newRow = row;
+            newCol = col;
+            proceed(newRow, newCol, true);
+
+            // right
+            newRow = row;
+            newCol = col + 1;
+            proceed(newRow, newCol);
+
+            // left down
+            newRow = row + 1;
+            newCol = col - 1;
+            proceed(newRow, newCol);
+
+            // down
+            newRow = row + 1;
+            newCol = col;
+            proceed(newRow, newCol);
+
+            // down right
+            newRow = row + 1;
+            newCol = col + 1;
+            proceed(newRow, newCol);
+
+            if (nextBuffBomb.length) {
+                // chain explosion
+                this.time.delayedCall(500, () => {
+                    nextBuffBomb.forEach((element: number[], index: number) => {
+                        if (this.data.list.gridPositions[element[0]][element[1]].buff) {
+                            this.events.emit(GAME_SCENE_SCENE_EVENTS.BUFF_BOMB_EXPLODE, element);
+                        }
+                    });
+
+                })
+            }
+        })
+    }
+
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: (Monster | IUnitData)[]) => {
 
@@ -1019,6 +1176,7 @@ export class Game extends AbstractScene {
             this.giveUpButton.disableInteractive();
 
             // alert('end turn');
+            this.activeExplodePositions = 0;
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
             this.changeBulbIndicators(this.data.list.isPlayerTurn);
 
@@ -1192,7 +1350,8 @@ export class Game extends AbstractScene {
             }
         });
 
-        if (resume && this.currentlySelectedMonster.unitData.movesLeft === 0) {
+        //monster has no more moves or just died(from buff bomb for example)
+        if ((resume && this.currentlySelectedMonster.unitData.movesLeft === 0) || this.currentlySelectedMonster.unitData.health === 0) {
             this.autoSelectRandomPlayerMonster();
         }
         else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
@@ -1257,7 +1416,6 @@ export class Game extends AbstractScene {
 
         }
         this.updateOpponentMonstersLeft();
-
 
         console.log(this.data.list.opponentMonsters)
         console.log(`new survival monsters => ${newMonstersCount}`)

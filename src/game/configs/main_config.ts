@@ -248,7 +248,7 @@ export const main_config = {
             "min": 5,
             "max": 6
         },
-        "chanceForBuffAfterRound": 33 // 30 %
+        "chanceForBuffAfterRound": 33 // 33 %
     },
     "slotCoins": {
         "min": 50,
@@ -454,5 +454,5 @@ export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager)
 }
 
 interface ILocalStorageManager {
-  get<T extends keyof IGameData>(key: T): IGameData[T] | null;
+    get<T extends keyof IGameData>(key: T): IGameData[T] | null;
 }

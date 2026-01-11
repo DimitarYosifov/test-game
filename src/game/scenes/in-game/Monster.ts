@@ -333,19 +333,22 @@ export class Monster extends Phaser.GameObjects.Container {
                 this.setInteraction(false);
             },
             onComplete: () => {
-                this.checkForBuff(row, col);
+                let hasBuffBomb = false;
+                if (this.checkForBuff(row, col)) hasBuffBomb = true;
 
                 if (this.isGiant) {// if monster is a  giant - check the other positions
-                    this.checkForBuff(row, col + 1);
-                    this.checkForBuff(row + 1, col);
-                    this.checkForBuff(row + 1, col + 1);
+                    if (this.checkForBuff(row, col + 1)) hasBuffBomb = true;
+                    if (this.checkForBuff(row + 1, col)) hasBuffBomb = true;
+                    if (this.checkForBuff(row + 1, col + 1)) hasBuffBomb = true;
                 }
 
                 this.decreaseMoves();
-                const movesLeft = this.unitData.movesLeft;
-                this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
-                if (movesLeft > 0 && this.isPlayerMonster) {
-                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
+                if (!hasBuffBomb) {
+                    const movesLeft = this.unitData.movesLeft;
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    if (movesLeft > 0 && this.isPlayerMonster) {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this, this.unitData, false]);
+                    }
                 }
             }
         })
@@ -360,7 +363,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 (buff.buffType === 'bow' && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
                 (buff.buffType === 'ball' && this.unitData.magic === 0)      // monster not suitable for magic buff
             ) {
-                return;
+                return false;
             } else {
                 //add buff
                 if (this.scene.data.list.isPlayerTurn) {
@@ -440,8 +443,20 @@ export class Monster extends Phaser.GameObjects.Container {
                         }
                         buffImageKey = BUFF_TYPES.GREEN_DOT;
                         break;
+                    case BUFF_TYPES.BOMB:
+                        buffImageKey = BUFF_TYPES.BOMB;
+                        break;
                     default:
                         break;
+                }
+
+                if (buff.buffType === BUFF_TYPES.BOMB) {
+                    this.setInteraction(false);
+                    buff.buffContainer.destroy(true);
+                    delete this.scene.data.list.gridPositions[row][col].buff;
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.BUFF_BOMB_EXPLODE, [row, col]);
+
+                    return true;
                 }
 
                 // add visual  display of the buff and tween
@@ -473,8 +488,8 @@ export class Monster extends Phaser.GameObjects.Container {
                 buff.buffContainer.destroy(true);
                 delete this.scene.data.list.gridPositions[row][col].buff;
                 console.log(this.scene.data.list.gridPositions[row][col]);
+                return false;
             }
-
         }
     }
 
@@ -622,10 +637,15 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    takeDamege(damage: number, isMagicAttack: boolean): void {
+    takeDamege(damage: number, isMagicAttack: boolean, ignoreArmor: boolean = false, emitCheckEndTurnOnComplete: boolean = true, delayAnimation: number = 0): boolean {
+
+        if (this.unitData.health === 0) {
+            // already dead - it is a giant
+            return false;
+        }
 
         let dmg = 0;
-        if (isMagicAttack) {
+        if (isMagicAttack || ignoreArmor) {
             // magic attack - no shield
             dmg = damage;
         } else {
@@ -655,25 +675,30 @@ export class Monster extends Phaser.GameObjects.Container {
                 stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
-        lostHealth.setOrigin(0.5).setDepth(15);
+        lostHealth.setOrigin(0.5).setDepth(15).setAlpha(0);
         // this.add(lostHealth);
         this.scene.tweens.add({
             targets: lostHealth,
             // alpha: { value: 0, delay: 2750 },
             y: y + 75,
+            delay: delayAnimation,
             duration: 1500,
+            onStart: () => {
+                lostHealth.alpha = 1;
+            },
             onComplete: () => {
                 if (healthLeft === 0) {
-                    this.die();
-                } else {
+                    this.die(emitCheckEndTurnOnComplete);
+                } else if (emitCheckEndTurnOnComplete) {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                 }
                 lostHealth.destroy(true);
             }
         })
+        return healthLeft === 0;
     }
 
-    die() {
+    die(emitCheckEndTurnOnComplete: boolean = true) {
         this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         let waitForPackDropped = false;
         let waitForGemDropped = false;
@@ -691,22 +716,31 @@ export class Monster extends Phaser.GameObjects.Container {
                 if (waitForPackDropped) {
                     // SOMETIMES THERES A BUG HERE - this.scene is undefined !!!!
                     this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
-                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        if (emitCheckEndTurnOnComplete) {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
                     })
                 }
                 else if (waitForGemDropped) {
                     this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
-                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        if (emitCheckEndTurnOnComplete) {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
                     })
                 }
                 else if (waitForKeyDropped) {
                     this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
-                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        if (emitCheckEndTurnOnComplete) {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
                     })
                 }
                 else {
-                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    if (emitCheckEndTurnOnComplete) {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    }
                 }
+                this.destroy(true);
             }
         })
     }
