@@ -149,7 +149,7 @@ export class Game extends AbstractScene {
         if (!this.questionMarkContainer && addQuestionMarks) {
             this.addQuestionMarks();
         }
-        const randomBuffType = BUFF_TYPES.BOMB// Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
+        const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
         container.setDepth(7);
