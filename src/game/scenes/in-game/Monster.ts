@@ -719,6 +719,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         if (emitCheckEndTurnOnComplete) {
                             this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
+                        this.destroy(true);
                     })
                 }
                 else if (waitForGemDropped) {
@@ -726,6 +727,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         if (emitCheckEndTurnOnComplete) {
                             this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
+                        this.destroy(true);
                     })
                 }
                 else if (waitForKeyDropped) {
@@ -733,14 +735,15 @@ export class Monster extends Phaser.GameObjects.Container {
                         if (emitCheckEndTurnOnComplete) {
                             this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
+                        this.destroy(true);
                     })
                 }
                 else {
                     if (emitCheckEndTurnOnComplete) {
                         this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                     }
+                    this.destroy(true);
                 }
-                this.destroy(true);
             }
         })
     }
@@ -825,6 +828,8 @@ export class Monster extends Phaser.GameObjects.Container {
                         duration: 300,
                         ease: 'Back.easeOut',
                         onComplete: () => {
+
+                            //BUG - sometimes scene here is undefined!!!!
                             this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
                             gem.destroy(true);
                         }

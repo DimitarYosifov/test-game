@@ -1322,8 +1322,21 @@ export class Game extends AbstractScene {
             if (monster) {
                 monster.setAlpha(1);
                 monster.pendingAction = !this.data.list.isPlayerTurn;
+                if (monster.bg.input) {
+                    console.log('opponent monster set to interactive. row' + monster.unitData.row + 'col' + monster.unitData.col);
+                }
+                monster.setInteraction(false);// fix for untracked bug where random opponent monster gets selectible!!!
             }
         });
+
+
+        //test
+        this.data.list.opponentMonsters.forEach((monster: Monster, i: number) => {
+            if (monster) {
+                console.log(`opponent monster at  index ${i} is enabled => ${monster.bg.input}`);
+            }
+        });
+
 
         if (this.data.list.isPlayerTurn) {
             this.endTurnButton.setInteractive();

@@ -23,9 +23,9 @@ export const main_config = {
     "playerStartingKeys": 0,
     "maxMonstersAllowedInDeck": 49,
     "playerStartingFreeCommonPacks": 3,
-    "chanceToDropGem": 985, // 1.5% for gem drop
-    "chanceToDropKey": 985, // 1.5% for gem drop 
-    "chanceToGetGemOnLevelWin": 90, // 10% for gem reward on level win(including repeat level)
+    "chanceToDropGem": 980, // 2% for gem drop on enemy kill
+    "chanceToDropKey": 975, // 2.5% for key drop  on enemy kill
+    "chanceToGetGemOnLevelWin": 80, // 20% for gem reward on level win(including repeat level)
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
         985,   //     2% for common pack
