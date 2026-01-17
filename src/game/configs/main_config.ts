@@ -241,14 +241,14 @@ export const main_config = {
     "buffs": {
         "quality": 1,
         "quantityAtLevelStart": {
-            "min": 1,
+            "min": 2,
             "max": 5
         },
         "buffsStartLevelColumn": {
             "min": 5,
             "max": 6
         },
-        "chanceForBuffAfterRound": 33 // 33 %
+        "chanceForBuffAfterRound": 45 // 33 %
     },
     "slotCoins": {
         "min": 50,
@@ -269,8 +269,7 @@ export const main_config = {
     "slotSpinCost": 3
 
 
-    // TODO:
-    // add winning keys
+
 
 
 
@@ -278,23 +277,15 @@ export const main_config = {
 
     // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                  ^HIGHEST PRIORITY^!!!!
     // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
-    // ADD 35 MORE LEVELS (MAP 2)                                                                                                       ^HIGH PRIORITY^
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
-    // ADD ENERY MECHANIC TO THE GAME                                                                                                   ^HIGH PRIORITY^
-    // ADD SLOT GAME WITH MONSTERS
+    // ADD ENERGY MECHANIC TO THE GAME                                                                                                   ^HIGH PRIORITY^
     // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
-    // in-game implement drag movement for creatures                                                                                    ^HIGH PRIORITY^
-    // add loading
     // add total power for opponent before level and for the player
-    // add text "drag here" to hit rects in card selection
     // add blink tween for the bulbs
     // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
     //ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
-    // add space skip for move
-    // add some conffetti particles whrn getting a reward
-    // ADD SOME ENCRYPTION BEFORE STORING TO LOCAL STORAGE                                                                              ^HIGH PRIORITY^
     // ADD SOME MORE LEVEL BACKGROUNDS
-    // ADD 3 MORE MONSTERE - 1 OF EACH TYPE
+    // ADD 1 MORE MONSTERE - poison damage
     // add some kinda welcome screen
 
 
@@ -303,52 +294,7 @@ export const main_config = {
 
     //BUGS:
 
-
-
-
-    // after attacking enemy monster s- somethimes the enemy monster is selected  !!!!!!
-
-
-
-
-
-
-    // AFTER SUCCESSFUL UPGRADE COIN COST AND GEMS COST ARE NOT CLEARED !!!!! 
-
-    /// when two tabs with the game are open. after buy pack in one tab, you still 
-    // have cash to buy - fix check local storage coins on on Buy   - same for update and sell cards                                    ^HIGHEST PRIORITY^!!!!
-
-
-    //CHECK 3 STAR MONSTER  IN THE SELECTED SECTION AND 6 X 1 STAR IN THE MAIN - AND UPGRADE THE 6  - CAUSES BUG ?
-
-
-
-
-
-    //1. when i monster with 2 moves hits on its first move, its get locked - PROBABLY FIXED
-
-    // below cant be reproduced FOR NOW
-    // 2: AFTER SELLIMG CARD CHECK IF THERE IS 3 CARDS PENDING IN ULGRADE SECTION AN ENABLE/DISABLE UPGRADE BUTTON PROPERLY
-    // IF SO DONE 3 CARDS IN THE UPGRADE ARE AUTUMATICALLY UPGRADED AFTER REFRESH !!!!
-
-    //3.sometimes angle of the bow is changed when ranged monster is about to act
-
-
-
-    // BUG => PROBLEM IN UPGRADE SECTION ======================== AFTER UPGRADE MORE THAN 1 MONSTER IS SET TO THE SAME ROW!!!
-    //  ^HIGHEST PRIORITY^ ==========================================
-
-    // BUG  - AFTER UPGRADE ONE SPOT(ROW) IS OCCUPIED BY 2 MONSTERS                                                                            ^HIGH PRIORITY^
-    // buf scale tween is buggy sometimes
-
-
-    //OBSERVATIONS:
-    // ON LEVEL 15 ALL MONSTERS ARE LEVEL 2
-    // ON LEVEL 11 ALL MONSTERS ARE LEVEL 2 diff run
-    // ON LEVEL 13 ALL MONSTERS ARE LEVEL 2 diff run
-    // ОN LEVEL 27 - 2 3 STAR MONSTERS
-    // ON LVL 20 PLAYER HAS 1 3 STAR MONTER(BOUGHT/UPGRADED)
-
+    // sometimes can buy pack with insufficient coins 
 
     //   D E P L O Y    T O   G H - P A G E S
     /**
