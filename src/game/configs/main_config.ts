@@ -274,12 +274,12 @@ export const main_config = {
 
 
 
-
-    // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                  ^HIGHEST PRIORITY^!!!!
-    // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  ^HIGH PRIORITY^
-    // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        ^HIGH PRIORITY^
-    // ADD ENERGY MECHANIC TO THE GAME                                                                                                   ^HIGH PRIORITY^
-    // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           ^LOW PRIORITY^
+    //  T O D O . . .
+    // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                   
+    // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  
+    // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        
+    // ADD ENERGY MECHANIC TO THE GAME                                                                                               
+    // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           
     // add total power for opponent before level and for the player
     // add blink tween for the bulbs
     // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
@@ -292,9 +292,13 @@ export const main_config = {
 
 
 
-    //BUGS:
+    //  B U G S :
+    //  sometimes can buy pack with insufficient coins 
 
-    // sometimes can buy pack with insufficient coins 
+
+
+
+
 
     //   D E P L O Y    T O   G H - P A G E S
     /**

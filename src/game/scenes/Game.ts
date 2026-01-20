@@ -805,9 +805,19 @@ export class Game extends AbstractScene {
         let hasMonsterReweard = !this.isSurvivalLevel && isFirstTimeReward && (rndNum <= main_config.chanceToGetMonsterOnLevelWin);
         let rndNum2 = Phaser.Math.RND.between(1, 100);
         let hasGemReward = !this.isSurvivalLevel && rndNum2 > main_config.chanceToGetGemOnLevelWin;
+        let gemReward = hasGemReward ? 1 : 0;
+        let hasKeyReward = false;
+        let keyReward = 0;
+        let hasCommonPacks = false;
+        let commonPacks = 0;
+        let hasSilverPacks = false;
+        let silverPacks = 0;
+        let hasGoldPacks = false;
+        let goldPacks = 0;
         let monstersReward = undefined;
         console.log(this.isGiantFightLevel);
 
+        // MODIFY DATA IF LEVEL WAS DEFEAT GIANTS LEVEL
         if (this.isGiantFightLevel) {
             const currentDefeatGiantsLevel = LOCAL_STORAGE_MANAGER.get('defeatGiantsLevel')
             currentLevelData = defeat_giants_level_config[currentDefeatGiantsLevel! - 1];
@@ -815,8 +825,27 @@ export class Game extends AbstractScene {
             monstersReward = currentLevelData!.monstersReward;
             hasMonsterReweard = monstersReward.length > 0;
             hasGemReward = currentLevelData.gemsReward > 0;
+            gemReward = currentLevelData.gemsReward;
         }
+        // MODIFY DATA IF LEVEL WAS SURVIVAL LEVEL AND WAS WON BY KILLING MONSTERS IN ADVANCE
+        const monstersSpawned = this.data.list.opponentMonsters.length;
+        if (this.isSurvivalLevel && monstersSpawned < (this.survivalTotalMonstersCount as number)) {
+            const unspawnedMonstersCount = (this.survivalLevelData.totalMonstersCount as number) - monstersSpawned;
+            const data: ISurvivalLevelWonInAdvanceData = this.getSurvivalLevelWonInAdvanceData(unspawnedMonstersCount);
+            gemReward = data.gems;
+            hasGemReward = data.gems > 0;
+            hasMonsterReweard = false;
+            keyReward = data.keys;
+            hasKeyReward = data.keys > 0;
+            commonPacks = data.commonPacks;
+            hasCommonPacks = data.commonPacks > 0;
+            silverPacks = data.silverPacks;
+            hasSilverPacks = data.silverPacks > 0;
+            goldPacks = data.goldPacks;
+            hasGoldPacks = data.goldPacks > 0;
 
+            this.survivalLevelReward = (this.survivalLevelData.totalMonstersCount as number) * (this.survivalLevelData.rewardPerKill as number);
+        }
 
         // UPDATE LEVELS WON(LOCAL STORAGE) -- bug fixed - update only if level won!
         // THERE COULD BE PROBLEMS WHEN CHANGING WORLDS!!!!!!!
@@ -826,7 +855,7 @@ export class Game extends AbstractScene {
             LOCAL_STORAGE_MANAGER.set('levelsWon', levelsWon);
         }
 
-        // bg overlay
+        // BG OVERLAY
         let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23 - 0.1);
         this.tweens.add({
             targets: overlay,
@@ -845,7 +874,7 @@ export class Game extends AbstractScene {
             pointer.event.stopPropagation();
         });
 
-        //   HEADER
+        // HEADER
         if (!this.isSurvivalLevel) {
 
             const msg = levelWon ? 'LEVEL WON' : 'LEVEL LOST';
@@ -866,18 +895,18 @@ export class Game extends AbstractScene {
         if (levelWon || this.isSurvivalLevel) {
             // REWARD TEXT
             const rewardtext: Phaser.GameObjects.Text = this.add.text(
-                960,
+                0,
                 500,
                 'REWARDS: ',
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0, 0.5).setDepth(23 + 0.1);
+                }).setOrigin(0.5, 0.5).setDepth(23 + 0.1);
             rewardsContainer.add(rewardtext);
 
-            //coin img
-            let coin = this.add.image(rewardtext.x + rewardtext.width, 500, 'coin').setOrigin(0, 0.5).setScale(0.5);
+            // COIN IMAGE
+            let coin = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + 20, 500, 'coin').setOrigin(0, 0.5).setScale(0.5);
             rewardsContainer.add(coin);
 
             // COIN TEXT
@@ -901,8 +930,8 @@ export class Game extends AbstractScene {
             let monsterSize = 0;
             let monsterPadding = 0;
 
-            //determine monster type and stars !!!!
-            //TODO - add more options in config - main_config.afterLevelMonsterReward
+            // DETERMINE MONSTER TYPE AND STARS
+            // TODO - add more options in config - main_config.afterLevelMonsterReward
             const odds = main_config.afterLevelMonsterReward;
             let monsterRewardType = getRandomMonsterType();
             let monsterRewardStars = NaN;
@@ -920,33 +949,35 @@ export class Game extends AbstractScene {
                 monsterRewardStars = (currentLevelData as any).monstersReward[0].stars;
             }
 
+            // MONSTER CARD REWARD
             if (hasMonsterReweard) {
-                //monster card reward
                 monsterSize = 150;
                 monsterPadding = 40;
-
                 const newMonsterConfig = getMonsterDataConfig(+monsterRewardType, monsterRewardStars - 1);
                 const monster = new Monster(this, cointext.x + cointext.displayWidth + monsterSize / 2 + monsterPadding, 500, monsterSize, monsterSize, newMonsterConfig, 0, true)
                 monster.starsContainer.x = monsterSize / -4 + 18;
                 monster.movesLeftContainer.x = monsterSize / 2 + 21;
                 rewardsContainer.add(monster);
             }
+
+
+            // GEM REWARD
             let gem;
             let gemPadding = 0;
             if (hasGemReward) {
-                //gem reward
+
                 gemPadding = 20;
                 gem = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + gemPadding, 500, 'gem').setScale(0.2).setOrigin(0, 0.5);
                 rewardsContainer.add(gem);
             }
 
-            //get count
+            // GEM COUNT
             let gemstext;
-            if (this.isGiantFightLevel) {
+            if (hasGemReward) {
                 gemstext = this.add.text(
                     gem!.x + gem!.displayWidth,
                     500,
-                    `x${(currentLevelData as any).gemsReward}`,
+                    `x${gemReward}`,
                     {
                         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                         stroke: '#000000', letterSpacing: 4,
@@ -955,11 +986,133 @@ export class Game extends AbstractScene {
                 rewardsContainer.add(gemstext);
             }
 
-            //center reward container
-            const totalWidth = rewardtext.width + coin.displayWidth + cointext.width + monsterPadding + monsterSize + gemPadding + (gem?.displayWidth || 0) + (gemstext?.displayWidth || 0);
-            rewardsContainer.x -= totalWidth / 2;
+            // KEY REWARD
+            let key;
+            let keyPadding = 0;
+            if (hasKeyReward) {
+                keyPadding = 20;
+                key = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + keyPadding, 500, 'key').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(key);
+            }
 
-            // particles
+            // KEY COUNT
+            let keystext;
+            if (hasKeyReward) {
+                keystext = this.add.text(
+                    key!.x + key!.displayWidth,
+                    500,
+                    `x${keyReward}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(keystext);
+            }
+
+            // COMMON PACK REWARD
+            let commonPack;
+            let commonPacksPadding = 0;
+            if (hasCommonPacks) {
+                commonPacksPadding = 20;
+                commonPack = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + commonPacksPadding, 500, 'common-pack').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(commonPack);
+            }
+
+            // COMMON PACK COUNT
+            let commonPackstext;
+            if (hasCommonPacks) {
+                commonPackstext = this.add.text(
+                    commonPack!.x + commonPack!.displayWidth,
+                    500,
+                    `x${commonPacks}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(commonPackstext);
+            }
+
+            // SILVER PACK REWARD
+            let silverPack;
+            let silverPacksPadding = 0;
+            if (hasSilverPacks) {
+                silverPacksPadding = 20;
+                silverPack = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + silverPacksPadding, 500, 'silver-pack').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(silverPack);
+            }
+
+            // SILVER PACK COUNT
+            let silverPackstext;
+            if (hasSilverPacks) {
+                silverPackstext = this.add.text(
+                    silverPack!.x + silverPack!.displayWidth,
+                    500,
+                    `x${silverPacks}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(silverPackstext);
+            }
+
+            // GOLD PACK REWARD
+            let goldPack;
+            let goldPacksPadding = 0;
+            if (hasGoldPacks) {
+                goldPacksPadding = 20;
+                goldPack = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + goldPacksPadding, 500, 'gold-pack').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(goldPack);
+            }
+
+            // GOLD PACK COUNT
+            let goldPackstext;
+            if (hasGoldPacks) {
+                goldPackstext = this.add.text(
+                    goldPack!.x + goldPack!.displayWidth,
+                    500,
+                    `x${goldPacks}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(goldPackstext);
+            }
+
+            // CENTER REWARD CONTAINER
+            const totalWidth =
+                rewardtext.displayWidth / 2
+                + coin.displayWidth
+                + cointext.displayWidth
+
+                + monsterPadding
+                + monsterSize
+
+                + gemPadding
+                + (gem?.displayWidth || 0)
+                + (gemstext?.displayWidth || 0)
+
+                + commonPacksPadding
+                + (commonPack?.displayWidth || 0)
+                + (commonPackstext?.displayWidth || 0)
+
+                + silverPacksPadding
+                + (silverPack?.displayWidth || 0)
+                + (silverPackstext?.displayWidth || 0)
+
+                + goldPacksPadding
+                + (goldPack?.displayWidth || 0)
+                + (goldPackstext?.displayWidth || 0);
+
+            rewardsContainer.x = 960 - totalWidth / 2;
+            // if (rewardtext.displayWidth + totalWidth > 1850) {
+            //     rewardsContainer.scale = 1850 / (rewardtext.displayWidth + totalWidth);
+            // }
+
+            // PARTICLES
             let emitParticles = true;
             this.startConfettiEmitter();
             this.addLevelWonParticles();
@@ -971,19 +1124,43 @@ export class Game extends AbstractScene {
                 },
             });
 
-            // claim button
+            // CLAIM BUTTON
             const claimButton = new Button(this, 960, 700, 'claim', null, () => {
                 emitParticles = false;
-
-                // UPDATE PLAYER GEMS(LOCALE STORAGE) 
-                if (hasGemReward) {
-                    const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
-                    LOCAL_STORAGE_MANAGER.set('gems', +playerGems + ((currentLevelData as any).gemsReward || 1));
-                }
 
                 // UPDATE PLAYER COINS(LOCALE STORAGE) 
                 const playerCoins = (LOCAL_STORAGE_MANAGER.get('coins') as number);
                 LOCAL_STORAGE_MANAGER.set('coins', +playerCoins + +(coinsWon as number));
+
+                // UPDATE PLAYER GEMS(LOCALE STORAGE) 
+                if (hasGemReward) {
+                    const playerGems = (LOCAL_STORAGE_MANAGER.get('gems') as number);
+                    LOCAL_STORAGE_MANAGER.set('gems', +playerGems + gemReward);
+                }
+
+                // UPDATE PLAYER KEYS(LOCALE STORAGE) 
+                if (hasKeyReward) {
+                    const playerKeys = (LOCAL_STORAGE_MANAGER.get('keys') as number);
+                    LOCAL_STORAGE_MANAGER.set('keys', +playerKeys + keyReward);
+                }
+
+                // UPDATE PLAYER COMMON PACKS(LOCALE STORAGE) 
+                if (hasCommonPacks) {
+                    const playerCommonPacks = (LOCAL_STORAGE_MANAGER.get('freeCommonPacks') as number);
+                    LOCAL_STORAGE_MANAGER.set('freeCommonPacks', +playerCommonPacks + commonPacks);
+                }
+
+                // UPDATE PLAYER SILVER PACKS(LOCALE STORAGE) 
+                if (hasSilverPacks) {
+                    const playerSilverPacks = (LOCAL_STORAGE_MANAGER.get('freeSilverPacks') as number);
+                    LOCAL_STORAGE_MANAGER.set('freeSilverPacks', +playerSilverPacks + silverPacks);
+                }
+
+                // UPDATE PLAYER GOLD PACKS(LOCALE STORAGE) 
+                if (hasGoldPacks) {
+                    const playerGoldPacks = (LOCAL_STORAGE_MANAGER.get('freeGoldPacks') as number);
+                    LOCAL_STORAGE_MANAGER.set('freeGoldPacks', +playerGoldPacks + goldPacks);
+                }
 
                 // UPDATE MAP LEVEL( to unlock next level on the map)
                 const mapLevel = (LOCAL_STORAGE_MANAGER.get('mapLevel') as number);
@@ -1016,7 +1193,7 @@ export class Game extends AbstractScene {
             }).setDepth(23 + 0.1);
         } else {
 
-            // disable alll after player has given up
+            // DISABLE ALL AFTER PLAYER HAS GIVEN UP
             this.data.list.playerMonsters.forEach((m: Monster) => {
                 if (m) {
                     m.pendingAction = false;
@@ -1025,16 +1202,46 @@ export class Game extends AbstractScene {
                 }
             });
 
-            // try again button
+            // TRY AGAIN BUTTON
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
             }, false).setDepth(23 + 0.1);
 
-            // giveUp button
+            // GIVE UP BUTTON
             const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
             }).setDepth(23 + 0.1)
         }
+    }
+
+    private getSurvivalLevelWonInAdvanceData(unspawnedMonstersCount: number): ISurvivalLevelWonInAdvanceData {
+        let survivalLevelWonInAdvanceData: ISurvivalLevelWonInAdvanceData = {
+            gems: 0,
+            keys: 0,
+            commonPacks: 0,
+            silverPacks: 0,
+            goldPacks: 0
+        }
+
+        for (let index = 0; index < unspawnedMonstersCount; index++) {
+            let rnd = Phaser.Math.RND.between(1, 1000);
+            if (rnd > main_config.chanceToDropGem) survivalLevelWonInAdvanceData.gems++;
+
+            rnd = Phaser.Math.RND.between(1, 1000);
+            if (rnd > main_config.chanceToDropKey) survivalLevelWonInAdvanceData.keys++;
+
+            rnd = Phaser.Math.RND.between(1, 1000);
+
+            if (rnd > main_config.chanceToDropPack[2]) {
+                survivalLevelWonInAdvanceData.goldPacks++;
+            } else if (rnd > main_config.chanceToDropPack[1]) {
+                survivalLevelWonInAdvanceData.silverPacks++;
+            } else if (rnd > main_config.chanceToDropPack[0]) {
+                survivalLevelWonInAdvanceData.commonPacks++;
+            }
+        }
+
+        return survivalLevelWonInAdvanceData;
     }
 
     private startConfettiEmitter() {
@@ -1946,4 +2153,12 @@ export interface IBuff {
     buffType: string;
     quantity: number;
     buffContainer: Phaser.GameObjects.Container;
+}
+
+interface ISurvivalLevelWonInAdvanceData {
+    keys: number;
+    gems: number;
+    commonPacks: number;
+    silverPacks: number;
+    goldPacks: number;
 }

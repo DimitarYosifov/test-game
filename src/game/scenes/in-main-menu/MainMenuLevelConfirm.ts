@@ -37,14 +37,24 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private createSurvivalLevelMsg(): void {
         const levelHeader: Phaser.GameObjects.Text = this.scene.add.text(
             960,
-            540,
+            500,
             `face 100 monsters, \n survive as long as you can!`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 70, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4,
+                stroke: '#000000', letterSpacing: 4, lineSpacing: 5,
                 align: 'center'
             }).setOrigin(0.5);
         this.add(levelHeader);
+        const levelDescription: Phaser.GameObjects.Text = this.scene.add.text(
+            960,
+            640,
+            `if there are no enemy monsters left, the full reward is won`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 45, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+        this.add(levelDescription);
     }
 
     private createBGOverlay() {
