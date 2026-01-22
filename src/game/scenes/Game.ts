@@ -829,7 +829,7 @@ export class Game extends AbstractScene {
         }
         // MODIFY DATA IF LEVEL WAS SURVIVAL LEVEL AND WAS WON BY KILLING MONSTERS IN ADVANCE
         const monstersSpawned = this.data.list.opponentMonsters.length;
-        if (this.isSurvivalLevel && monstersSpawned < (this.survivalTotalMonstersCount as number)) {
+        if (levelWon && this.isSurvivalLevel && monstersSpawned < (this.survivalTotalMonstersCount as number)) {
             const unspawnedMonstersCount = (this.survivalLevelData.totalMonstersCount as number) - monstersSpawned;
             const data: ISurvivalLevelWonInAdvanceData = this.getSurvivalLevelWonInAdvanceData(unspawnedMonstersCount);
             gemReward = data.gems;
