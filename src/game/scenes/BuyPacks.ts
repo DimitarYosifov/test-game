@@ -52,11 +52,13 @@ export class BuyPacks extends AbstractScene {
         this.monstersContainer = this.add.container(0, 0).setDepth(100).setAlpha(1);
         this.monsters = [];
 
+        this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();
+
         this.createCommonPack();
         this.createSilverPack();
         this.createGoldenrPack();
         this.createBackButton();
-        
+
         addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 100, 75);
     }
