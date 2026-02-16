@@ -10,6 +10,14 @@ export class DailyQuestTimeHandler {
     scene: Scene;
 
     /* -------------------------------------------------------------------------- */
+    /*                              RESET DAILY QUESTS                            */
+    /* -------------------------------------------------------------------------- */
+
+    // static RESET_INTERVAL = 60 * 1000; // TEST MODE RESET INTERVAL (1 minute)
+    static RESET_INTERVAL = 24 * 60 * 60 * 1000; //  🔥  PROD MODE RESET INTERVAL (24 hours)
+
+
+    /* -------------------------------------------------------------------------- */
     /*                                  BOOTSTRAP                                 */
     /* -------------------------------------------------------------------------- */
 
@@ -23,7 +31,7 @@ export class DailyQuestTimeHandler {
     }
 
     /* -------------------------------------------------------------------------- */
-    /*                               STORAGE HELPERS                               */
+    /*                               STORAGE HELPERS                              */
     /* -------------------------------------------------------------------------- */
 
     static setLastResetTime(): void {
@@ -44,75 +52,32 @@ export class DailyQuestTimeHandler {
     }
 
     /* -------------------------------------------------------------------------- */
-    /*                             RESET TIME LOGIC                                */
+    /*                             RESET TIME LOGIC                               */
     /* -------------------------------------------------------------------------- */
 
-    /** Returns today's scheduled reset time (anchored to first launch clock) */
-    static getTodayResetTime(startTime: number): Date {
-        const now = new Date();
-        const base = new Date(startTime);
-
-        const reset = new Date(now);
-        reset.setHours(
-            base.getHours(),
-            base.getMinutes(),
-            base.getSeconds(),
-            0
-        );
-
-        return reset;
-    }
-
-    /** Returns the most recent reset that should have occurred */
-    static getMostRecentScheduledReset(startTime: number): Date {
-        const now = new Date();
-        const todayReset = this.getTodayResetTime(startTime);
-
-        // If today's reset hasn't happened yet, the most recent was yesterday
-        if (now < todayReset) {
-            todayReset.setDate(todayReset.getDate() - 1);
-        }
-
-        return todayReset;
-    }
-
-    /** Determines whether quests must be reset */
     static shouldResetQuests(startTime: number): boolean {
         const lastResetTime = this.getLastResetTime();
 
-        // First launch → reset immediately
         if (lastResetTime === 0) return true;
 
-        const lastReset = new Date(lastResetTime);
-        const mostRecentReset = this.getMostRecentScheduledReset(startTime);
-
-        return lastReset < mostRecentReset;
+        return Date.now() - lastResetTime >= this.RESET_INTERVAL;
     }
 
-    /** Returns milliseconds until the next scheduled reset */
     static getTimeUntilNextReset(startTime: number): number {
-        const now = new Date();
-        const base = new Date(startTime);
+        const lastResetTime = this.getLastResetTime();
 
-        const nextReset = new Date(now);
-        nextReset.setHours(
-            base.getHours(),
-            base.getMinutes(),
-            base.getSeconds(),
-            0
-        );
-        nextReset.setMilliseconds(0);
-
-        // If today's reset already passed, next reset is tomorrow
-        if (now >= nextReset) {
-            nextReset.setDate(nextReset.getDate() + 1);
+        if (lastResetTime === 0) {
+            return this.RESET_INTERVAL;
         }
 
-        return nextReset.getTime() - now.getTime();
+        const elapsed = Date.now() - lastResetTime;
+        const remaining = this.RESET_INTERVAL - elapsed;
+
+        return Math.max(0, remaining);
     }
 
     /* -------------------------------------------------------------------------- */
-    /*                                FORMATTING                                   */
+    /*                                FORMATTING                                  */
     /* -------------------------------------------------------------------------- */
 
     static formatTime(ms: number): string {
@@ -127,7 +92,7 @@ export class DailyQuestTimeHandler {
     }
 
     /* -------------------------------------------------------------------------- */
-    /*                                QUEST LOGIC                                  */
+    /*                                QUEST LOGIC                                 */
     /* -------------------------------------------------------------------------- */
 
     static resetQuests(): void {

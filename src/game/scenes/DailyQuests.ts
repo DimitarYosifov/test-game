@@ -56,6 +56,7 @@ export class DailyQuests extends AbstractScene {
                 if (DailyQuestTimeHandler.shouldResetQuests(startTime)) {
                     DailyQuestTimeHandler.resetQuests();
                     DailyQuestTimeHandler.setLastResetTime();
+                    this.changeScene('DailyQuests');
                 }
 
                 const timeLeft = DailyQuestTimeHandler.getTimeUntilNextReset(startTime);
