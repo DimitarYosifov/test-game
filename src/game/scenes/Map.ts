@@ -191,7 +191,7 @@ export class Map extends AbstractScene {
 
 
 
-        // levelTexture.setInteractive();
+        levelTexture.setInteractive();
         levelTexture.on('pointerdown', () => {
             if (this.confirmPopupOpen) {
                 return;
@@ -220,11 +220,11 @@ export class Map extends AbstractScene {
             }
             let targetLvl = lvl.revealedByLevel - 1;// first we move the player to the level that revealed the survival level
             if (this.world === 2) targetLvl -= 34; // TODO - 34 is world1Levels.length - 1 -------- fix this
-            this.movePlayerToLevel(targetLvl * 6, () => {
-                this.movePlayerToLevel(3, () => {
-                    onMoveComplete();
-                }, lvl.survivalSpots, true, 0);
-            });
+            // this.movePlayerToLevel(targetLvl * 6, () => {
+            this.movePlayerToLevel(3, () => {
+                onMoveComplete();
+            }, lvl.survivalSpots, true, 0);
+            // });
         })
 
         //  tween alpha of new revielled survival level
@@ -246,6 +246,10 @@ export class Map extends AbstractScene {
             });
         }
 
+
+        return;
+
+
         // count down text
         let survivalLevelCountDownText = this.add.text(
             levelTexture.x + 50,
@@ -260,44 +264,44 @@ export class Map extends AbstractScene {
             .setDepth(GAME_OBJECT_DEPTHS.mapSceneSurvivalLevelCountDownText);
         let unlockSurvivalLevel1Time = parseInt(LOCAL_STORAGE_MANAGER.get(`${lvl.levelName}` as keyof IGameData));
         // this.resetSurvivalLevel1();//test
-        this.updateSurvivalLevel(levelTexture, unlockSurvivalLevel1Time, survivalLevelCountDownText, lvl.levelName);
+        // this.updateSurvivalLevel(levelTexture, unlockSurvivalLevel1Time, survivalLevelCountDownText, lvl.levelName);
 
     }
 
-    private resetSurvivalLevel() {
+    // private resetSurvivalLevel() {
         // const hoursToReset = survivalLevels[0].hoursToReset
         // let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
         // // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
         // local-Storage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
-    }
+    // }
 
-    private updateSurvivalLevel(levelTexture: Phaser.GameObjects.Image, unlockSurvivalLevelTime: number, survivalLevelCountDownText: Phaser.GameObjects.Text, levelName: string) {
-        const now = Date.now();
+    // private updateSurvivalLevel(levelTexture: Phaser.GameObjects.Image, unlockSurvivalLevelTime: number, survivalLevelCountDownText: Phaser.GameObjects.Text, levelName: string) {
+    //     const now = Date.now();
 
-        if (!unlockSurvivalLevelTime || now >= unlockSurvivalLevelTime) {
-            // level is unlocked!
-            console.log(`SurvivalLevel ${levelName} is unlocked...`)
-            levelTexture.setInteractive();
-            survivalLevelCountDownText.setText('');
-            LOCAL_STORAGE_MANAGER.remove(`${levelName}` as keyof IGameData);
-        } else {
-            const remaining = unlockSurvivalLevelTime - now;
-            const hours = Math.floor(remaining / (1000 * 60 * 60));
-            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+    //     if (!unlockSurvivalLevelTime || now >= unlockSurvivalLevelTime) {
+    //         // level is unlocked!
+    //         console.log(`SurvivalLevel ${levelName} is unlocked...`)
+    //         levelTexture.setInteractive();
+    //         survivalLevelCountDownText.setText('');
+    //         LOCAL_STORAGE_MANAGER.remove(`${levelName}` as keyof IGameData);
+    //     } else {
+    //         const remaining = unlockSurvivalLevelTime - now;
+    //         const hours = Math.floor(remaining / (1000 * 60 * 60));
+    //         const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    //         const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
 
-            const formatted = `${hours.toString().padStart(2, '0')}:${minutes
-                .toString()
-                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    //         const formatted = `${hours.toString().padStart(2, '0')}:${minutes
+    //             .toString()
+    //             .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-            survivalLevelCountDownText.setText(`${formatted}`);
-            levelTexture.disableInteractive();
+    //         survivalLevelCountDownText.setText(`${formatted}`);
+    //         levelTexture.disableInteractive();
 
-            this.time.delayedCall(1000, () => {
-                this.updateSurvivalLevel(levelTexture, unlockSurvivalLevelTime, survivalLevelCountDownText, levelName);
-            })
-        }
-    }
+    //         this.time.delayedCall(1000, () => {
+    //             this.updateSurvivalLevel(levelTexture, unlockSurvivalLevelTime, survivalLevelCountDownText, levelName);
+    //         })
+    //     }
+    // }
 
     private createLevels(): void {
 
@@ -461,12 +465,7 @@ export class Map extends AbstractScene {
 
         const increase = newSpotIndex > currentSpot;
         const duration = 300;
-
         const finalSpot = spots[targetSpot];
-        if (!isSurvivalLevel) {
-            this.playerDotSpot = targetSpot;
-            console.log(`playerDotSpot is ${this.playerDotSpot}`);
-        }
 
         // hide player
         this.tweens.add({
@@ -493,7 +492,18 @@ export class Map extends AbstractScene {
             }
         })
 
-        const current = spots[currentSpot];
+
+
+        let current = null;
+
+        if (isSurvivalLevel) {
+            current = this.spots[this.playerDotSpot];
+        } else {
+            current = spots[this.playerDotSpot];
+            this.playerDotSpot = targetSpot;
+
+        }
+
         const particles = this.add.particles(current.x, current.y, 'flare', {
             lifespan: {
                 min: 200,

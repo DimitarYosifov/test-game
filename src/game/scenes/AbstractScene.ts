@@ -7,14 +7,29 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
     coins: string;
     gems: string;
     keys: string;
+    token5: string;
+    token4: string;
+    token3: string;
+    token2: string;
+    token1: string;
 
     coinText: Phaser.GameObjects.Text;
     gemsText: Phaser.GameObjects.Text;
     keysText: Phaser.GameObjects.Text;
+    token5Text: Phaser.GameObjects.Text;
+    token4Text: Phaser.GameObjects.Text;
+    token3Text: Phaser.GameObjects.Text;
+    token2Text: Phaser.GameObjects.Text;
+    token1Text: Phaser.GameObjects.Text;
 
     coinTexture: Phaser.GameObjects.Image;
     gemsTexture: Phaser.GameObjects.Image;
     keysTexture: Phaser.GameObjects.Image;
+    token5Texture: Phaser.GameObjects.Image;
+    token4Texture: Phaser.GameObjects.Image;
+    token3Texture: Phaser.GameObjects.Image;
+    token2Texture: Phaser.GameObjects.Image;
+    token1Texture: Phaser.GameObjects.Image;
 
     constructor(sceneName: string) {
         super(sceneName);

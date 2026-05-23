@@ -703,10 +703,12 @@ export class Monster extends Phaser.GameObjects.Container {
         let waitForPackDropped = false;
         let waitForGemDropped = false;
         let waitForKeyDropped = false;
+        let waitForTokenDropped = false;
         if (!this.isPlayerMonster) {
             waitForPackDropped = this.checkFreePackDrop();
             waitForGemDropped = waitForPackDropped ? false : this.checkGemDrop();
             waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
+            waitForTokenDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped ? false : this.checkTokenDrop();
         }
         this.scene.tweens.add({
             targets: this,
@@ -757,6 +759,7 @@ export class Monster extends Phaser.GameObjects.Container {
             const data = (LOCAL_STORAGE_MANAGER.get('keys') as number);
             LOCAL_STORAGE_MANAGER.set('keys', +data + 1);
 
+            const scene = this.scene;
             this.scene.tweens.chain({
                 tweens: [
                     {
@@ -782,7 +785,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         duration: 300,
                         ease: 'Back.easeOut',
                         onComplete: () => {
-                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED);
                             key.destroy(true);
                         }
                     },
@@ -803,6 +806,7 @@ export class Monster extends Phaser.GameObjects.Container {
             const data = (LOCAL_STORAGE_MANAGER.get('gems') as number);
             LOCAL_STORAGE_MANAGER.set('gems', +data + 1);
 
+            const scene = this.scene;
             this.scene.tweens.chain({
                 tweens: [
                     {
@@ -828,9 +832,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         duration: 300,
                         ease: 'Back.easeOut',
                         onComplete: () => {
-
-                            //BUG - sometimes scene here is undefined!!!!
-                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
                             gem.destroy(true);
                         }
                     },
@@ -887,6 +889,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const data = LOCAL_STORAGE_MANAGER.get(storedItem as keyof IGameData);
         LOCAL_STORAGE_MANAGER.set(storedItem as keyof IGameData, +data + 1);
 
+        const scene = this.scene;
         this.scene.tweens.chain({
             tweens: [
                 {
@@ -912,7 +915,7 @@ export class Monster extends Phaser.GameObjects.Container {
                     duration: 300,
                     ease: 'Back.easeOut',
                     onComplete: () => {
-                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED);
+                        scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED);
                         pack.destroy(true);
                     }
                 },
@@ -920,6 +923,76 @@ export class Monster extends Phaser.GameObjects.Container {
         });
 
         return true;
+    }
+
+    checkTokenDrop() {
+        const odds = main_config.chanceToDropToken;
+        const randomNumber = Phaser.Math.RND.between(1, 1000);
+        if (randomNumber >= odds) {
+            const randomToken = Phaser.Math.RND.between(1, 5);
+            const token = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, `token${randomToken}`).setScale(0).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.monsterGemDropped);
+            let data;
+            switch (randomToken) {
+                case 1:
+                    data = (LOCAL_STORAGE_MANAGER.get('token1') as number);
+                    LOCAL_STORAGE_MANAGER.set('token1', +data + 1);
+                    break;
+                case 2:
+                    data = (LOCAL_STORAGE_MANAGER.get('token2') as number);
+                    LOCAL_STORAGE_MANAGER.set('token2', +data + 1);
+                    break;
+                case 3:
+                    data = (LOCAL_STORAGE_MANAGER.get('token3') as number);
+                    LOCAL_STORAGE_MANAGER.set('token3', +data + 1);
+                    break;
+                case 4:
+                    data = (LOCAL_STORAGE_MANAGER.get('token4') as number);
+                    LOCAL_STORAGE_MANAGER.set('token5', +data + 1);
+                    break;
+                case 5:
+                    data = (LOCAL_STORAGE_MANAGER.get('token5') as number);
+                    LOCAL_STORAGE_MANAGER.set('token5', +data + 1);
+                    break;
+                default:
+                    break;
+            }
+
+            const scene = this.scene;
+            this.scene.tweens.chain({
+                tweens: [
+                    {
+                        targets: token,
+                        alpha: 1,
+                        scale: 0.5,
+                        duration: 350,
+                        delay: 550,
+                        ease: 'Back.easeOut'
+                    },
+                    {
+                        targets: token,
+                        x: 960,
+                        y: 540,
+                        scale: 2.2,
+                        duration: 300
+                    },
+                    {
+                        targets: token,
+                        delay: 1100,
+                        alpha: 0,
+                        scale: 0,
+                        duration: 300,
+                        ease: 'Back.easeOut',
+                        onComplete: () => {
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
+                            token.destroy(true);
+                        }
+                    },
+                ]
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
     setIdlePendingMove(): void {

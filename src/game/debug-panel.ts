@@ -82,6 +82,111 @@ export const createDebugPanel = () => {
     addKeysContainer.appendChild(addKeysInput);
     addKeysContainer.appendChild(addKeysButton);
 
+    //add token 1-------------------------------------------------------------------------
+    const addToken1Container = document.createElement('div');
+    addToken1Container.style.margin = '0.4em'
+    addToken1Container.style.display = 'flex';
+    addToken1Container.style['justify-content' as any] = 'center';
+    const addToken1Text = document.createElement('span');
+    addToken1Text.innerText = 'add token 1';
+    const addToken1Input = document.createElement('input');
+    addToken1Input.type = 'number';
+    addToken1Input.value = '1';
+    const addToken1Button = document.createElement('button');
+    addToken1Button.innerText = 'add';
+    addToken1Button.onclick = () => {
+        const token1 = LOCAL_STORAGE_MANAGER.get('token1');
+        LOCAL_STORAGE_MANAGER.set('token1', +(token1 as number) + +addToken1Input.value);
+    }
+    mainContainer.appendChild(addToken1Container);
+    addToken1Container.appendChild(addToken1Text);
+    addToken1Container.appendChild(addToken1Input);
+    addToken1Container.appendChild(addToken1Button);
+
+    //add token 2-------------------------------------------------------------------------
+    const addToken2Container = document.createElement('div');
+    addToken2Container.style.margin = '0.4em'
+    addToken2Container.style.display = 'flex';
+    addToken2Container.style['justify-content' as any] = 'center';
+    const addToken2Text = document.createElement('span');
+    addToken2Text.innerText = 'add token 2';
+    const addToken2Input = document.createElement('input');
+    addToken2Input.type = 'number';
+    addToken2Input.value = '1';
+    const addToken2Button = document.createElement('button');
+    addToken2Button.innerText = 'add';
+    addToken2Button.onclick = () => {
+        const token2 = LOCAL_STORAGE_MANAGER.get('token2');
+        LOCAL_STORAGE_MANAGER.set('token2', +(token2 as number) + +addToken2Input.value);
+    }
+    mainContainer.appendChild(addToken2Container);
+    addToken2Container.appendChild(addToken2Text);
+    addToken2Container.appendChild(addToken2Input);
+    addToken2Container.appendChild(addToken2Button);
+
+    //add token 3-------------------------------------------------------------------------
+    const addToken3Container = document.createElement('div');
+    addToken3Container.style.margin = '0.4em'
+    addToken3Container.style.display = 'flex';
+    addToken3Container.style['justify-content' as any] = 'center';
+    const addToken3Text = document.createElement('span');
+    addToken3Text.innerText = 'add token 3';
+    const addToken3Input = document.createElement('input');
+    addToken3Input.type = 'number';
+    addToken3Input.value = '1';
+    const addToken3Button = document.createElement('button');
+    addToken3Button.innerText = 'add';
+    addToken3Button.onclick = () => {
+        const token3 = LOCAL_STORAGE_MANAGER.get('token3');
+        LOCAL_STORAGE_MANAGER.set('token3', +(token3 as number) + +addToken3Input.value);
+    }
+    mainContainer.appendChild(addToken3Container);
+    addToken3Container.appendChild(addToken3Text);
+    addToken3Container.appendChild(addToken3Input);
+    addToken3Container.appendChild(addToken3Button);
+
+    //add token 4-------------------------------------------------------------------------
+    const addToken4Container = document.createElement('div');
+    addToken4Container.style.margin = '0.4em'
+    addToken4Container.style.display = 'flex';
+    addToken4Container.style['justify-content' as any] = 'center';
+    const addToken4Text = document.createElement('span');
+    addToken4Text.innerText = 'add token 4';
+    const addToken4Input = document.createElement('input');
+    addToken4Input.type = 'number';
+    addToken4Input.value = '1';
+    const addToken4Button = document.createElement('button');
+    addToken4Button.innerText = 'add';
+    addToken4Button.onclick = () => {
+        const token4 = LOCAL_STORAGE_MANAGER.get('token4');
+        LOCAL_STORAGE_MANAGER.set('token4', +(token4 as number) + +addToken4Input.value);
+    }
+    mainContainer.appendChild(addToken4Container);
+    addToken4Container.appendChild(addToken4Text);
+    addToken4Container.appendChild(addToken4Input);
+    addToken4Container.appendChild(addToken4Button);
+
+    //add token 5-------------------------------------------------------------------------
+    const addToken5Container = document.createElement('div');
+    addToken5Container.style.margin = '0.4em'
+    addToken5Container.style.display = 'flex';
+    addToken5Container.style['justify-content' as any] = 'center';
+    const addToken5Text = document.createElement('span');
+    addToken5Text.innerText = 'add token 5';
+    const addToken5Input = document.createElement('input');
+    addToken5Input.type = 'number';
+    addToken5Input.value = '1';
+    const addToken5Button = document.createElement('button');
+    addToken5Button.innerText = 'add';
+    addToken5Button.onclick = () => {
+        const token5 = LOCAL_STORAGE_MANAGER.get('token5');
+        LOCAL_STORAGE_MANAGER.set('token5', +(token5 as number) + +addToken5Input.value);
+    }
+    mainContainer.appendChild(addToken5Container);
+    addToken5Container.appendChild(addToken5Text);
+    addToken5Container.appendChild(addToken5Input);
+    addToken5Container.appendChild(addToken5Button);
+
     //add free common pack-------------------------------------------------------------------------
     const addFreeCommonPackContainer = document.createElement('div');
     addFreeCommonPackContainer.style.margin = '0.4em'
@@ -239,41 +344,41 @@ export const createDebugPanel = () => {
     defeatGiantsContainer.appendChild(defeatGiantsInput);
     defeatGiantsContainer.appendChild(defeatGiantsButton);
 
-    //reset daily quest-------------------------------------------------------------------------
-    const resetDailyQuestContainer = document.createElement('div');
-    resetDailyQuestContainer.style.margin = '0.4em'
-    resetDailyQuestContainer.style.display = 'flex';
-    resetDailyQuestContainer.style['justify-content' as any] = 'center';
-    const resetDailyQuestText = document.createElement('span');
-    resetDailyQuestText.innerText = 'reset daily quests';
-    const resetDailyQuestButton = document.createElement('button');
-    resetDailyQuestButton.innerText = 'reset';
-    resetDailyQuestButton.onclick = () => {
-        LOCAL_STORAGE_MANAGER.set('questStartTime', '');
-    }
-    mainContainer.appendChild(resetDailyQuestContainer);
-    resetDailyQuestContainer.appendChild(resetDailyQuestText);
-    resetDailyQuestContainer.appendChild(resetDailyQuestButton);
+    // //reset daily quest-------------------------------------------------------------------------
+    // const resetDailyQuestContainer = document.createElement('div');
+    // resetDailyQuestContainer.style.margin = '0.4em'
+    // resetDailyQuestContainer.style.display = 'flex';
+    // resetDailyQuestContainer.style['justify-content' as any] = 'center';
+    // const resetDailyQuestText = document.createElement('span');
+    // resetDailyQuestText.innerText = 'reset daily quests';
+    // const resetDailyQuestButton = document.createElement('button');
+    // resetDailyQuestButton.innerText = 'reset';
+    // resetDailyQuestButton.onclick = () => {
+    //     LOCAL_STORAGE_MANAGER.set('questStartTime', '');
+    // }
+    // mainContainer.appendChild(resetDailyQuestContainer);
+    // resetDailyQuestContainer.appendChild(resetDailyQuestText);
+    // resetDailyQuestContainer.appendChild(resetDailyQuestButton);
 
-    //reset survival levels-------------------------------------------------------------------------
-    const resetSurvivalLevelsContainer = document.createElement('div');
-    resetSurvivalLevelsContainer.style.margin = '0.4em'
-    resetSurvivalLevelsContainer.style.display = 'flex';
-    resetSurvivalLevelsContainer.style['justify-content' as any] = 'center';
-    const resetSurvivalLevelsText = document.createElement('span');
-    resetSurvivalLevelsText.innerText = 'reset survival levels';
-    const resetSurvivalLevelsButton = document.createElement('button');
-    resetSurvivalLevelsButton.innerText = 'reset';
-    resetSurvivalLevelsButton.onclick = () => {
-        LOCAL_STORAGE_MANAGER.set('survival_level_1', null);
-        LOCAL_STORAGE_MANAGER.set('survival_level_2', null);
-        LOCAL_STORAGE_MANAGER.set('survival_level_3', null);
-        LOCAL_STORAGE_MANAGER.set('survival_level_4', null);
-        LOCAL_STORAGE_MANAGER.set('survival_level_5', null);
-    }
-    mainContainer.appendChild(resetSurvivalLevelsContainer);
-    resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsText);
-    resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsButton);
+    // //reset survival levels-------------------------------------------------------------------------
+    // const resetSurvivalLevelsContainer = document.createElement('div');
+    // resetSurvivalLevelsContainer.style.margin = '0.4em'
+    // resetSurvivalLevelsContainer.style.display = 'flex';
+    // resetSurvivalLevelsContainer.style['justify-content' as any] = 'center';
+    // const resetSurvivalLevelsText = document.createElement('span');
+    // resetSurvivalLevelsText.innerText = 'reset survival levels';
+    // const resetSurvivalLevelsButton = document.createElement('button');
+    // resetSurvivalLevelsButton.innerText = 'reset';
+    // resetSurvivalLevelsButton.onclick = () => {
+    //     LOCAL_STORAGE_MANAGER.set('survival_level_1', null);
+    //     LOCAL_STORAGE_MANAGER.set('survival_level_2', null);
+    //     LOCAL_STORAGE_MANAGER.set('survival_level_3', null);
+    //     LOCAL_STORAGE_MANAGER.set('survival_level_4', null);
+    //     LOCAL_STORAGE_MANAGER.set('survival_level_5', null);
+    // }
+    // mainContainer.appendChild(resetSurvivalLevelsContainer);
+    // resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsText);
+    // resetSurvivalLevelsContainer.appendChild(resetSurvivalLevelsButton);
 
     //add monster-------------------------------------------------------------------------
     const addMonsterContainer = document.createElement('div');

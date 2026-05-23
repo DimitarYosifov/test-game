@@ -13,6 +13,10 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     private levelData: ILevelConfig;
     private okButton: Button;
     private backButton: Button;
+    tokenName: string | undefined;
+    playerTokens: string;
+    tokenArray: Phaser.GameObjects.Image[];
+    isSurvivalLevel: boolean;
 
     constructor(scene: Scene, x: number, y: number, levelData: ILevelConfig, isSurvivalLevel: boolean = false) {
         super(scene, x, y);
@@ -20,18 +24,51 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
         this.levelData = levelData;
         this.scene.add.existing(this);
         this.setDepth(GAME_OBJECT_DEPTHS.mainMenuLevelConfirm);
+        this.tokenArray = [];
+        this.isSurvivalLevel = isSurvivalLevel;
 
         this.createBGOverlay();
+
+        this.createBackButton();
+        this.createOkButton();
+
         if (isSurvivalLevel) {
             this.createSurvivalLevelMsg();
+            this.tokenName = this.levelData.levelToken;
+
+
+            switch (this.tokenName) {
+                case 'token1':
+                    this.playerTokens = (LOCAL_STORAGE_MANAGER.get('token1') as number).toString();
+                    break;
+                case 'token2':
+                    this.playerTokens = (LOCAL_STORAGE_MANAGER.get('token2') as number).toString();
+                    break;
+                case 'token3':
+                    this.playerTokens = (LOCAL_STORAGE_MANAGER.get('token3') as number).toString();
+                    break;
+                case 'token4':
+                    this.playerTokens = (LOCAL_STORAGE_MANAGER.get('token4') as number).toString();
+                    break;
+                case 'token5':
+                    this.playerTokens = (LOCAL_STORAGE_MANAGER.get('token5') as number).toString();
+                    break;
+                default:
+                    break;
+            }
+
+            const isUnlocked = +this.playerTokens >= (levelData.tokensNeededToUnlock as number);
+            this.createTokens(isUnlocked);
+            if (!isUnlocked) {
+                this.okButton.disableInteractive();
+            }
+
         } else {
             this.createLevelHeader();
             this.createFirstWinReward();
             this.createRepeatLevelWinReward();
             this.createEnemyDescription();
         }
-        this.createOkButton();
-        this.createBackButton();
     }
 
     private createSurvivalLevelMsg(): void {
@@ -180,12 +217,52 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     }
 
     private createOkButton() {
-        this.okButton = new Button(this.scene, 1800, 950, 'button', 'OK', () => this.emit('level-selected', this.levelData.levelName));
+        this.okButton = new Button(this.scene, 1800, 950, 'button', 'OK', () => {
+            this.emit('level-selected', this.levelData.levelName);
+            if (this.isSurvivalLevel) {
+                const playerTokens = +this.playerTokens - (this.levelData.tokensNeededToUnlock as number);
+                switch (this.tokenName) {
+                    case 'token1':
+                        LOCAL_STORAGE_MANAGER.set('token1', playerTokens);
+                        break;
+                    case 'token2':
+                        LOCAL_STORAGE_MANAGER.set('token2', playerTokens);
+                        break;
+                    case 'token3':
+                        LOCAL_STORAGE_MANAGER.set('token3', playerTokens);
+                        break;
+                    case 'token4':
+                        LOCAL_STORAGE_MANAGER.set('token4', playerTokens);
+                        break;
+                    case 'token5':
+                        LOCAL_STORAGE_MANAGER.set('token5', playerTokens);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        })
         this.add(this.okButton);
     }
 
     private createBackButton() {
         this.backButton = new Button(this.scene, 100, 950, 'button', 'back', () => this.emit('level-unselected'));
         this.add(this.backButton);
+    }
+
+    private createTokens(isUnlocked: boolean) {
+        const tokenCount: any = this.levelData.tokensNeededToUnlock;
+        let totalWidth = 0;
+        const container = this.scene.add.container(0, 900);
+        this.add(container);
+        for (let index = 0; index < tokenCount; index++) {
+            //TODO - center tokens!
+            const token = this.scene.add.image(totalWidth, 0, (this.tokenName as string)).setScale(0.8).setOrigin(0, 0.5);
+            this.tokenArray.push(token);
+            totalWidth += token.displayWidth;
+            token.alpha = isUnlocked ? 1 : 0.6;
+            container.add(token);
+        }
+        container.setX(960 - totalWidth / 2);
     }
 }

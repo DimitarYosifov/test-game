@@ -20,13 +20,11 @@ export class MainMenu extends AbstractScene {
     infoButton: Button;
     gambleButton: Button;
     defeatMonstersButton: Button;
-
     constructor() {
         super('MainMenu');
     }
 
     create() {
-
         this.add.image(0, 0, 'bg-main-menu').setOrigin(0);
 
         // add monster manually - for debugging!

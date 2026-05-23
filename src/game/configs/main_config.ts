@@ -3,7 +3,7 @@ import { AbstractScene } from "../scenes/AbstractScene";
 import { monsters_power_config } from "./monsters_power_config";
 
 export const main_config = {
-    "cryptData": true, //should local storage data be crypted
+    "cryptData": false, //should local storage data be crypted
 
     //---------DEBUG---------
     "allowDebugPanel": true, // should allow debug panel to be used
@@ -25,6 +25,7 @@ export const main_config = {
     "playerStartingFreeCommonPacks": 3,
     "chanceToDropGem": 980, // 2% for gem drop on enemy kill
     "chanceToDropKey": 975, // 2.5% for key drop  on enemy kill
+    "chanceToDropToken": 975, // 2.5% for token drop  on enemy kill
     "chanceToGetGemOnLevelWin": 80, // 20% for gem reward on level win(including repeat level)
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
@@ -402,6 +403,71 @@ export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager)
             align: 'center'
         }).setOrigin(1, 0.5);
     scene.keysTexture = scene.add.image(scene.keysText.x - scene.keysText.displayWidth, 30, 'key').setScale(0.15).setOrigin(1, 0.5);
+
+    //TOKEN 5
+    scene.token5 = (lsm.get('token5') as number).toString();
+    scene.token5Text = scene.add.text(
+        scene.keysTexture.x - scene.keysTexture.displayWidth,
+        30,
+        `${scene.token5}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.token5Texture = scene.add.image(scene.token5Text.x - scene.token5Text.displayWidth, 33, 'token5').setScale(0.4).setOrigin(1, 0.5);
+
+    //TOKEN 4
+    scene.token4 = (lsm.get('token4') as number).toString();
+    scene.token4Text = scene.add.text(
+        scene.token5Texture.x - scene.token5Texture.displayWidth - 15,
+        30,
+        `${scene.token4}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.token4Texture = scene.add.image(scene.token4Text.x - scene.token4Text.displayWidth, 33, 'token4').setScale(0.38).setOrigin(1, 0.5);
+
+    //TOKEN 3
+    scene.token3 = (lsm.get('token3') as number).toString();
+    scene.token3Text = scene.add.text(
+        scene.token4Texture.x - scene.token4Texture.displayWidth - 15,
+        30,
+        `${scene.token3}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.token3Texture = scene.add.image(scene.token3Text.x - scene.token3Text.displayWidth, 33, 'token3').setScale(0.34).setOrigin(1, 0.5);
+
+    //TOKEN 2
+    scene.token2 = (lsm.get('token2') as number).toString();
+    scene.token2Text = scene.add.text(
+        scene.token3Texture.x - scene.token3Texture.displayWidth - 15,
+        30,
+        `${scene.token2}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.token2Texture = scene.add.image(scene.token2Text.x - scene.token2Text.displayWidth, 33, 'token2').setScale(0.36).setOrigin(1, 0.5);
+
+    //TOKEN 1
+    scene.token1 = (lsm.get('token1') as number).toString();
+    scene.token1Text = scene.add.text(
+        scene.token2Texture.x - scene.token2Texture.displayWidth - 15,
+        30,
+        `${scene.token1}`,
+        {
+            fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+            stroke: '#000000', letterSpacing: 4,
+            align: 'center'
+        }).setOrigin(1, 0.5);
+    scene.token1Texture = scene.add.image(scene.token1Text.x - scene.token1Text.displayWidth, 33, 'token1').setScale(0.35).setOrigin(1, 0.5);
 }
 
 interface ILocalStorageManager {

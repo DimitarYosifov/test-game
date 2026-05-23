@@ -14,6 +14,8 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 10,
         totalMonstersCount: 100,
+        tokensNeededToUnlock: 3,
+        levelToken: 'token1',
         hoursToReset: 8,
         newEnemiesStars: [
             50,    // 50% for 1 star  monster
@@ -42,6 +44,8 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 20,
         totalMonstersCount: 100,
+        tokensNeededToUnlock: 3,
+        levelToken: 'token2',
         hoursToReset: 12,
         newEnemiesStars: [
             25,     // 25% for 1 star  monster
@@ -70,6 +74,8 @@ export const survivalLevelsWorld1 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 31,
         totalMonstersCount: 100,
+        tokensNeededToUnlock: 3,
+        levelToken: 'token3',
         hoursToReset: 16,
         newEnemiesStars: [
             0,       // 0% for 1 star  monster
@@ -101,6 +107,8 @@ export const survivalLevelsWorld2 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 40,
         totalMonstersCount: 100,
+        tokensNeededToUnlock: 3,
+        levelToken: 'token4',
         hoursToReset: 20,
         newEnemiesStars: [
             0,       // 0% for 1 star  monster
@@ -129,6 +137,8 @@ export const survivalLevelsWorld2 = [
         newEnemiesPerRound: 3,
         revealedByLevel: 58,
         totalMonstersCount: 100,
+        tokensNeededToUnlock: 3,
+        levelToken: 'token5',
         hoursToReset: 24,
         newEnemiesStars: [
             0,       // 0% for 1 star  monster
@@ -2474,4 +2484,6 @@ export interface ILevelConfig {
     isFlipped?: boolean;
     monstersReward?: { type: number, stars: number }[];
     gemsReward?: number;
+    levelToken?: string;
+    tokensNeededToUnlock?: number;
 }

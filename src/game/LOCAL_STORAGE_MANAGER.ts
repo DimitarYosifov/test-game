@@ -25,11 +25,18 @@ export interface IGameData {
     chests: boolean[]; //???
     survivalLevelData: any; //???
 
-    survival_level_1: any; //?????
-    survival_level_2: any; //?????
-    survival_level_3: any; //?????
-    survival_level_4: any; //?????
-    survival_level_5: any; //?????
+    // survival_level_1: any; //?????
+    // survival_level_2: any; //?????
+    // survival_level_3: any; //?????
+    // survival_level_4: any; //?????
+    // survival_level_5: any; //?????
+
+    token1: number,
+    token2: number,
+    token3: number,
+    token4: number,
+    token5: number,
+
 }
 
 export class LOCAL_STORAGE_MANAGER {
@@ -58,11 +65,17 @@ export class LOCAL_STORAGE_MANAGER {
         chests: [], //????
         survivalLevelData: {},//???????
 
-        survival_level_1: null,  //?????
-        survival_level_2: null,  //?????
-        survival_level_3: null,  //?????
-        survival_level_4: null,  //?????
-        survival_level_5: null,  //?????
+        token1: 0,
+        token2: 0,
+        token3: 0,
+        token4: 0,
+        token5: 0,
+
+        // survival_level_1: null,  //?????
+        // survival_level_2: null,  //?????
+        // survival_level_3: null,  //?????
+        // survival_level_4: null,  //?????
+        // survival_level_5: null,  //?????
 
         lastResetTime: '0',
         questStartTime: '',

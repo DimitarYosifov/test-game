@@ -1220,10 +1220,16 @@ export class Game extends AbstractScene {
             keys: 0,
             commonPacks: 0,
             silverPacks: 0,
-            goldPacks: 0
+            goldPacks: 0,
+            token1: 0,
+            token2: 0,
+            token3: 0,
+            token4: 0,
+            token5: 0,
         }
 
         for (let index = 0; index < unspawnedMonstersCount; index++) {
+
             let rnd = Phaser.Math.RND.between(1, 1000);
             if (rnd > main_config.chanceToDropGem) survivalLevelWonInAdvanceData.gems++;
 
@@ -1231,7 +1237,30 @@ export class Game extends AbstractScene {
             if (rnd > main_config.chanceToDropKey) survivalLevelWonInAdvanceData.keys++;
 
             rnd = Phaser.Math.RND.between(1, 1000);
+            if (rnd > main_config.chanceToDropToken) {
+                const randomToken = Phaser.Math.RND.between(1, 5);
+                switch (randomToken) {
+                    case 1:
+                        survivalLevelWonInAdvanceData.token1++;
+                        break;
+                    case 2:
+                        survivalLevelWonInAdvanceData.token2++;
+                        break;
+                    case 3:
+                        survivalLevelWonInAdvanceData.token3++;
+                        break;
+                    case 4:
+                        survivalLevelWonInAdvanceData.token4++;
+                        break;
+                    case 5:
+                        survivalLevelWonInAdvanceData.token5++;
+                        break;
+                    default:
+                        break;
+                }
+            }
 
+            rnd = Phaser.Math.RND.between(1, 1000);
             if (rnd > main_config.chanceToDropPack[2]) {
                 survivalLevelWonInAdvanceData.goldPacks++;
             } else if (rnd > main_config.chanceToDropPack[1]) {
@@ -2161,4 +2190,9 @@ interface ISurvivalLevelWonInAdvanceData {
     commonPacks: number;
     silverPacks: number;
     goldPacks: number;
+    token1: number;
+    token2: number;
+    token3: number;
+    token4: number;
+    token5: number;
 }
