@@ -1,4 +1,4 @@
-import { addFullscreenFunctionality, addUICurrencies, getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, GAME_OBJECT_DEPTHS, getAllMonsterTypes, getMonsterDataConfig, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -385,7 +385,7 @@ export class Gamble extends AbstractScene {
             pointer.event.stopPropagation();
         });
         const config = getMonsterDataConfig(+newMonsterType, newMonsterStars - 1);
-        const newMonster = new Monster(this, 960, 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0).setDepth(100);
+        const newMonster = new Monster(this, 960, 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.gambleSceneNewMonster);
         this.add.existing(newMonster);
         newMonster.starsContainer.x = MONSTER_SIZE / -4 + 10;
         newMonster.movesLeftContainer.x = MONSTER_SIZE / 2 + 10;

@@ -6,7 +6,7 @@ import { world1points } from './in-map/world_1_points';
 import { world2points } from './in-map/world_2_points';
 import { SpriteAnimation } from './SpriteAnimation';
 import { LOCAL_STORAGE_MANAGER, IGameData } from '../LOCAL_STORAGE_MANAGER';
-import { addFullscreenFunctionality, addUICurrencies } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, GAME_OBJECT_DEPTHS } from '../configs/main_config';
 
 export class Map extends AbstractScene {
     confirmPopupOpen: boolean;
@@ -41,7 +41,7 @@ export class Map extends AbstractScene {
         this.survival1Spots = [];
         this.dots = [];
         this.survivalLeveldots = [];
-        this.levelContentContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(101);
+        this.levelContentContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(GAME_OBJECT_DEPTHS.mapSceneLevelContentContainer);
         this.add.existing(this.levelContentContainer);
 
         //TODO check world, it could be 3,4.....
@@ -113,7 +113,7 @@ export class Map extends AbstractScene {
     private createFireAnimation() {
         const fireAnimation = new SpriteAnimation(this, 0, 1350, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 6.5, 5, 5);
         fireAnimation.animation!.setOrigin(0, 1);
-        fireAnimation.animation!.setDepth(1).setAlpha(1);
+        fireAnimation.animation!.setDepth(GAME_OBJECT_DEPTHS.mapSceneFireAnimation).setAlpha(1);
         // const fireAnimation2 = new SpriteAnimation(this, fireAnimation.animation.x + fireAnimation.animation.displayWidth, 1080, 'bg-fire', 'bg-fire', 'bgfirefx_', true, 60, 3.5, 3, 5);
         // fireAnimation2.animation.setOrigin(0, 1);
         // fireAnimation2.animation.setDepth(1).setAlpha(1);
@@ -121,7 +121,7 @@ export class Map extends AbstractScene {
     }
 
     private addLight(texture: Phaser.GameObjects.Image) {
-        let light = this.lights.addPointLight(texture.x, texture.y, 0xffffff, 100, 4, 0.05).setAlpha(0.06).setDepth(this.levelContentContainer.depth + 0.1);
+        let light = this.lights.addPointLight(texture.x, texture.y, 0xffffff, 100, 4, 0.05).setAlpha(0.06).setDepth(GAME_OBJECT_DEPTHS.mapSceneLight);
         this.tweens.add({
             targets: light,
             alpha: 0.12,
@@ -146,11 +146,11 @@ export class Map extends AbstractScene {
             maxAliveParticles: 175,
             advance: 20000
 
-        }).setDepth(15 + 0.1)
+        }).setDepth(GAME_OBJECT_DEPTHS.mapSceneEmitter)
     }
 
     private createPlayer() {
-        this.player = this.add.image(0, 0, 'location').setScale(1).setOrigin(0.5, 1).setAlpha(0).setDepth(99);
+        this.player = this.add.image(0, 0, 'location').setScale(1).setOrigin(0.5, 1).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.mapScenePlayer);
     }
 
     createBackButton() {
@@ -159,7 +159,7 @@ export class Map extends AbstractScene {
             this.changeScene('MainMenu');
         });
         this.add.existing(this.backButton);
-        this.backButton.setDepth(15);
+        this.backButton.setDepth(GAME_OBJECT_DEPTHS.mapSceneBackButton);
     }
 
     private createSurvivalLevel(introduceToSurvivalLevel: boolean, lvl: any) {
@@ -167,7 +167,7 @@ export class Map extends AbstractScene {
         const levelTexture = this.add.image(lvl.survivalSpots[3].x, lvl.survivalSpots[3].y, 'survival1')
             .setScale(0.4)
             .setOrigin(0.5)
-            .setDepth(88)
+            .setDepth(GAME_OBJECT_DEPTHS.mapSceneLevelTexture)
             .setAlpha(+!introduceToSurvivalLevel);
 
         const leveltext: Phaser.GameObjects.Text = this.add.text(
@@ -180,7 +180,7 @@ export class Map extends AbstractScene {
                 align: 'center'
             })
             .setOrigin(0.5)
-            .setDepth(88)
+            .setDepth(GAME_OBJECT_DEPTHS.mapSceneLevelText)
             .setAlpha(+!introduceToSurvivalLevel);
 
         this.levelContentContainer.add([levelTexture, leveltext]);
@@ -257,7 +257,7 @@ export class Map extends AbstractScene {
                 align: 'center'
             })
             .setOrigin(0, 0.5)
-            .setDepth(88);
+            .setDepth(GAME_OBJECT_DEPTHS.mapSceneSurvivalLevelCountDownText);
         let unlockSurvivalLevel1Time = parseInt(LOCAL_STORAGE_MANAGER.get(`${lvl.levelName}` as keyof IGameData));
         // this.resetSurvivalLevel1();//test
         this.updateSurvivalLevel(levelTexture, unlockSurvivalLevel1Time, survivalLevelCountDownText, lvl.levelName);
@@ -312,7 +312,7 @@ export class Map extends AbstractScene {
         config.forEach((levelData: ILevelConfig, index: number) => {
 
             const textureName = levelData.isTransition ? 'world-arrow' : 'lvl-plate';
-            const levelTexture = this.add.image(this.spots[index * 6].x, this.spots[index * 6].y, textureName).setScale(levelData.isTransition ? 0.3 : 0.5).setOrigin(0.5).setDepth(88);
+            const levelTexture = this.add.image(this.spots[index * 6].x, this.spots[index * 6].y, textureName).setScale(levelData.isTransition ? 0.3 : 0.5).setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.mapSceneLevelTexture);
             if (levelData.isFlipped) {
                 levelTexture.flipX = true;
             }
@@ -333,7 +333,7 @@ export class Map extends AbstractScene {
                         fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 33, color: '#ffffff',
                         stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
                         align: 'center'
-                    }).setOrigin(0.5).setDepth(88);
+                    }).setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.mapSceneLevelText);
                 this.levelContentContainer.add(leveltext);
             }
 
@@ -461,34 +461,113 @@ export class Map extends AbstractScene {
 
         const increase = newSpotIndex > currentSpot;
         const duration = 300;
-        const moveToNext = () => {
-            increase ? currentSpot++ : currentSpot--;
-            const initialScale = this.player.scale;
-            this.tweens.add({
-                targets: this.player,
-                scale: {
-                    value: initialScale * 1.1,
-                    yoyo: true,
-                    duration: duration / 2
-                },
-                duration,
-                x: spots[currentSpot].x,
-                y: spots[currentSpot].y,
-                onComplete: () => {
-                    if (!isSurvivalLevel) {
-                        this.playerDotSpot = currentSpot;
-                        console.log(`playerDotSpot is ${this.playerDotSpot}`);
-                    }
-                    if (currentSpot === targetSpot) {
-                        onLevelReached();
-                    }
-                    else {
-                        moveToNext();
-                    }
-                }
-            })
+
+        const finalSpot = spots[targetSpot];
+        if (!isSurvivalLevel) {
+            this.playerDotSpot = targetSpot;
+            console.log(`playerDotSpot is ${this.playerDotSpot}`);
         }
-        moveToNext();
+
+        // hide player
+        this.tweens.add({
+            targets: this.player,
+            scale: 0,
+            duration: 300,
+            ease: 'Back.easeIn',
+            onComplete: () => {
+                this.player.setPosition(finalSpot.x, finalSpot.y);
+            }
+        })
+
+        //  show player
+        this.tweens.add({
+            targets: this.player,
+            scale: 1,
+            duration: 300,
+            delay: 800,
+            ease: 'Back.easeOut',
+            onComplete: () => {
+                this.time.delayedCall(750, () => {
+                    onLevelReached();
+                });
+            }
+        })
+
+        const current = spots[currentSpot];
+        const particles = this.add.particles(current.x, current.y, 'flare', {
+            lifespan: {
+                min: 200,
+                max: 1750
+            },
+            scale: { start: 2, end: 2 },
+            quantity: 0,
+            frequency: -1,
+            speed: {
+                min: 10,
+                max: 80
+            },
+            angle: {
+                min: 0,
+                max: 360
+            },
+            alpha: {
+                start: 0.9,
+                end: 0
+            },
+            tint: [
+                0x222222,
+                0x333333,
+                0x555555,
+                0x664488
+            ],
+            rotate: {
+                min: 0,
+                max: 360
+            },
+            gravityY: -40,
+            blendMode: 'NORMAL',
+            emitting: false
+        });
+
+        particles.setDepth(GAME_OBJECT_DEPTHS.mapSceneSmokeEmitter);
+        this.time.delayedCall(300, () => {
+            particles.explode(145);
+        });
+
+        return;
+        /**
+         *  CODE BELOW WAS USED FOR MOVING THE PLAYER ON THE MAP SPOT BY
+         *  SPOT - NOW REPLACED WITH TELEPORTING THE PLAYER TO THE FINAL SPOT
+         */
+
+        // const moveToNext = () => {
+        //     increase ? currentSpot++ : currentSpot--;
+        //     const initialScale = this.player.scale;
+        //     this.tweens.add({
+        //         targets: this.player,
+        //         scale: {
+        //             value: initialScale * 1.1,
+        //             yoyo: true,
+        //             duration: duration / 2
+        //         },
+        //         duration,
+        //         x: spots[currentSpot].x,
+        //         y: spots[currentSpot].y,
+        //         onComplete: () => {
+        //             if (!isSurvivalLevel) {
+        //                 this.playerDotSpot = currentSpot;
+        //                 console.log(`playerDotSpot is ${this.playerDotSpot}`);
+        //             }
+        //             if (currentSpot === targetSpot) {
+        //                 onLevelReached();
+        //             }
+        //             else {
+        //                 moveToNext();
+        //             }
+        //         }
+        //     })
+        // }
+        // moveToNext();
     }
 
     changeScene(nextScene: string, isSurvivalLevel: boolean = false): void {

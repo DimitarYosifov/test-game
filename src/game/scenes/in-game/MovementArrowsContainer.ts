@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { IUnitData } from '../Game';
 import { DirectionArrow } from './DirectionArrow';
-import { main_config } from '../../configs/main_config';
+import { GAME_OBJECT_DEPTHS, main_config } from '../../configs/main_config';
 import { Monster } from './Monster';
 
 export class MovementArrowsContainer extends Phaser.GameObjects.Container {
@@ -13,7 +13,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         super(scene, x, y);
         this.scene = scene;
         this.scene.add.existing(this);
-        this.setDepth(10);
+        this.setDepth(GAME_OBJECT_DEPTHS.movementArrowsContainer);
     }
 
     createArrows(data: IUnitData): void {

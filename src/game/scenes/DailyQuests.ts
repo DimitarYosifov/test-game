@@ -1,7 +1,7 @@
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DailyQuestItem } from './in-daily-quest/DailyQuestItem';
-import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, GAME_OBJECT_DEPTHS, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { DailyQuestTimeHandler } from './in-daily-quest/DailyQuestTimeHandler';
 import { Monster } from './in-game/Monster';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
@@ -158,7 +158,7 @@ export class DailyQuests extends AbstractScene {
 
         let newMonsters = [];
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(100);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(GAME_OBJECT_DEPTHS.dailyQuestRewardContainer);
         this.add.existing(rewardsContainer);
 
         console.log(allPossibleRewards)

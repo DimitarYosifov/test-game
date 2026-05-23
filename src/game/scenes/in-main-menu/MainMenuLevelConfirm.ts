@@ -2,7 +2,7 @@ import { Scene } from "phaser";
 import { Monster } from "../in-game/Monster";
 import { ILevelConfig } from "../../configs/level_config";
 import { Button } from "./Button";
-import { getMonsterDataConfig } from "../../configs/main_config";
+import { GAME_OBJECT_DEPTHS, getMonsterDataConfig } from "../../configs/main_config";
 import { LOCAL_STORAGE_MANAGER } from "../../LOCAL_STORAGE_MANAGER";
 
 const MONSTER_SIZE = 150;
@@ -19,7 +19,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
         this.scene = scene;
         this.levelData = levelData;
         this.scene.add.existing(this);
-        this.setDepth(102);
+        this.setDepth(GAME_OBJECT_DEPTHS.mainMenuLevelConfirm);
 
         this.createBGOverlay();
         if (isSurvivalLevel) {
@@ -58,7 +58,7 @@ export class MainMenuLevelConfirm extends Phaser.GameObjects.Container {
     }
 
     private createBGOverlay() {
-        let overlay = this.scene.add.graphics().setDepth(102);
+        let overlay = this.scene.add.graphics().setDepth(GAME_OBJECT_DEPTHS.mainMenuLevelConfirmOverlay);
         overlay.fillStyle(0x000000, 0.95);
         overlay.fillRect(0, 0, 1920, 1080);
         overlay.setInteractive();

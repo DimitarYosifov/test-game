@@ -1,5 +1,5 @@
 import { IOpponentMonstersData } from '../configs/level_config';
-import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, GAME_OBJECT_DEPTHS, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 import { AbstractScene } from './AbstractScene';
 import { Monster } from './in-game/Monster';
@@ -49,7 +49,7 @@ export class BuyPacks extends AbstractScene {
 
         this.add.image(0, 0, 'bg-buy-packs').setOrigin(0);
 
-        this.monstersContainer = this.add.container(0, 0).setDepth(100).setAlpha(1);
+        this.monstersContainer = this.add.container(0, 0).setDepth(GAME_OBJECT_DEPTHS.buyPacksMonsterContainer).setAlpha(1);
         this.monsters = [];
 
         this.coins = (LOCAL_STORAGE_MANAGER.get('coins') as number).toString();

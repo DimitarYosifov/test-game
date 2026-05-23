@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { BUFF_TYPES, GAME_SCENE_SCENE_EVENTS, IBuff, IUnitData } from '../Game';
-import { main_config } from '../../configs/main_config';
+import { GAME_OBJECT_DEPTHS, main_config } from '../../configs/main_config';
 import { IGameData, LOCAL_STORAGE_MANAGER } from '../../LOCAL_STORAGE_MANAGER';
 import { SpriteAnimation } from '../SpriteAnimation';
 
@@ -463,7 +463,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 const glbPos = this.bg.getBounds()
                 const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
                 const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
-                let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(12);
+                let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(GAME_OBJECT_DEPTHS.monsterBuffImage);
                 const buffQuantityText = this.scene.add.text(
                     x,
                     y,
@@ -473,7 +473,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                         align: 'center'
                     });
-                buffQuantityText.setOrigin(1, 0.5).setDepth(12);
+                buffQuantityText.setOrigin(1, 0.5).setDepth(GAME_OBJECT_DEPTHS.monsterBuffQuantityText);
                 this.scene.tweens.add({
                     targets: [buffQuantityText, buffImage],
                     y: y - 75,
@@ -514,7 +514,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const targetX = targetGlobalPos.x + target!.bg.displayWidth / 2;
 
         const targetY = targetGlobalPos.y + target!.bg.displayHeight / 2;
-        const weaponImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5).setDepth(12);
+        const weaponImg = this.scene.add.image(x, y, 'sword').setScale(this.bg.displayWidth * 0.5 / 100).setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.monsterWeaponImage);
         const startAngle = isTargetToTheLeft ? 45 : -45;
         const endAngle = isTargetToTheLeft ? -45 : 45;
         const isRangedAttack = this.unitData.ranged > 0;
@@ -526,7 +526,7 @@ export class Monster extends Phaser.GameObjects.Container {
             scale: { start: 0.75, end: 0.2 },
             gravityY: 125,
             emitting: false
-        }).setDepth(15)
+        }).setDepth(GAME_OBJECT_DEPTHS.monsterHitEmitter)
 
         // A R R O W   A T T A C K
         if (isRangedAttack) {
@@ -675,7 +675,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
                 align: 'center'
             });
-        lostHealth.setOrigin(0.5).setDepth(15).setAlpha(0);
+        lostHealth.setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.monsterLostHealth).setAlpha(0);
         // this.add(lostHealth);
         this.scene.tweens.add({
             targets: lostHealth,
@@ -753,7 +753,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const randomNumber = Phaser.Math.RND.between(1, 1000);
         if (randomNumber >= odds) {
 
-            const key = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'key').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+            const key = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'key').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.monsterKeyDropped);
             const data = (LOCAL_STORAGE_MANAGER.get('keys') as number);
             LOCAL_STORAGE_MANAGER.set('keys', +data + 1);
 
@@ -799,7 +799,7 @@ export class Monster extends Phaser.GameObjects.Container {
         const randomNumber = Phaser.Math.RND.between(1, 1000);
         if (randomNumber >= odds) {
 
-            const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+            const gem = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'gem').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.monsterGemDropped);
             const data = (LOCAL_STORAGE_MANAGER.get('gems') as number);
             LOCAL_STORAGE_MANAGER.set('gems', +data + 1);
 
@@ -869,7 +869,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 // alert(packTexture);
             }
         }
-        const pack = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, packTexture).setScale(0).setOrigin(0.5).setAlpha(0).setDepth(100);
+        const pack = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, packTexture).setScale(0).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.monsterPackDropped);
         let storedItem = '';
         switch (packDropped) {
             case 'common':

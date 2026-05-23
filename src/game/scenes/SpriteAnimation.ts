@@ -1,3 +1,4 @@
+import { GAME_OBJECT_DEPTHS } from "../configs/main_config";
 
 export class SpriteAnimation {
 
@@ -31,7 +32,7 @@ export class SpriteAnimation {
 
         this.animation = scene.add.sprite(x, y, texture)
             .setName('sprite-animation')
-            .setDepth(22)
+            .setDepth(GAME_OBJECT_DEPTHS.spriteAnimation)
             .setOrigin(0.5)
             .setScale(scaleX, scaleY)
             .play(texture);

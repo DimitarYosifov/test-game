@@ -1,4 +1,4 @@
-import { addFullscreenFunctionality, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, GAME_OBJECT_DEPTHS, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
@@ -152,7 +152,7 @@ export class Game extends AbstractScene {
         const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
-        container.setDepth(7);
+        container.setDepth(GAME_OBJECT_DEPTHS.gameSceneBuffContainer);
         let plate = this.add.image(0, 0, 'lvl-plate').setOrigin(0.5).setScale(0.75);
         container.add(plate);
         const buffText = this.add.text(
@@ -185,7 +185,7 @@ export class Game extends AbstractScene {
 
     private addBuffs(buffsCount: number = NaN) {
 
-        this.questionMarkContainer = this.add.container().setDepth(13);
+        this.questionMarkContainer = this.add.container().setDepth(GAME_OBJECT_DEPTHS.gameSceneQuestionMarkContainer);
         this.addQuestionMarks();
 
         const totalBuffsCount = isNaN(buffsCount) ? Phaser.Math.Between(main_config.buffs.quantityAtLevelStart.min, main_config.buffs.quantityAtLevelStart.max) : buffsCount;
@@ -254,7 +254,7 @@ export class Game extends AbstractScene {
 
     private addParachute(onComplete: Function) {
 
-        let parachute = this.add.image(Phaser.Math.RND.between(850, 1070), -100, 'parachute').setScale(1).setOrigin(0.5).setAlpha(1).setDepth(14);
+        let parachute = this.add.image(Phaser.Math.RND.between(850, 1070), -100, 'parachute').setScale(1).setOrigin(0.5).setAlpha(1).setDepth(GAME_OBJECT_DEPTHS.gameSceneParachute);
         let duration = Phaser.Math.RND.between(2500, 3500)
         let targetY = Phaser.Math.RND.between(500, 800)
 
@@ -359,7 +359,7 @@ export class Game extends AbstractScene {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4, strokeThickness: 8,
                 align: 'center'
-            }).setOrigin(0.5).setAlpha(0).setDepth(25);
+            }).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.gameSceneOpponentTurnMsg);
     }
 
     private showOpponentTurnMsg() {
@@ -626,7 +626,7 @@ export class Game extends AbstractScene {
 
             const explode = (r: number, c: number, isCenter: boolean) => {
                 const { x, y } = this.data.list.gridPositions[r][c];
-                let explodeImage = this.add.image(x + this.mainGridContainer.x, y + this.mainGridContainer.y, 'boom').setScale(1).setOrigin(0.5).setDepth(23);
+                let explodeImage = this.add.image(x + this.mainGridContainer.x, y + this.mainGridContainer.y, 'boom').setScale(1).setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.gameSceneExplodeImage);
                 this.tweens.chain({
                     tweens: [
                         {
@@ -856,7 +856,7 @@ export class Game extends AbstractScene {
         }
 
         // BG OVERLAY
-        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(23 - 0.1);
+        let overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.gameSceneBGOverlay);
         this.tweens.add({
             targets: overlay,
             duration: 200,
@@ -886,10 +886,10 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 100, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0.5).setDepth(23);
+                }).setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.gameSceneHeaderLevelText);
         }
 
-        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(23 + 0.1);
+        const rewardsContainer = new Phaser.GameObjects.Container(this, 0, 0).setDepth(GAME_OBJECT_DEPTHS.gameSceneRewardsContainer);
         this.add.existing(rewardsContainer);
 
         if (levelWon || this.isSurvivalLevel) {
@@ -902,7 +902,7 @@ export class Game extends AbstractScene {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
                     align: 'center'
-                }).setOrigin(0.5, 0.5).setDepth(23 + 0.1);
+                }).setOrigin(0.5, 0.5).setDepth(GAME_OBJECT_DEPTHS.gameSceneRewardText);
             rewardsContainer.add(rewardtext);
 
             // COIN IMAGE
@@ -1190,7 +1190,7 @@ export class Game extends AbstractScene {
                     this.changeScene('MainMenu');
                 }
 
-            }).setDepth(23 + 0.1);
+            }).setDepth(GAME_OBJECT_DEPTHS.gameSceneClaimButton);
         } else {
 
             // DISABLE ALL AFTER PLAYER HAS GIVEN UP
@@ -1205,12 +1205,12 @@ export class Game extends AbstractScene {
             // TRY AGAIN BUTTON
             const tryAgain = new Button(this, 760, 700, 'button', 'try\nagain', () => {
                 this.changeScene('Game');
-            }, false).setDepth(23 + 0.1);
+            }, false).setDepth(GAME_OBJECT_DEPTHS.gameSceneTryAgainButton);
 
             // GIVE UP BUTTON
             const giveUp = new Button(this, 1160, 700, 'button', 'give\nup', () => {
                 this.changeScene('MainMenu');
-            }).setDepth(23 + 0.1)
+            }).setDepth(GAME_OBJECT_DEPTHS.gameSceneGiveUpButton)
         }
     }
 
@@ -1256,7 +1256,7 @@ export class Game extends AbstractScene {
                 blendMode: 'ADD',
                 frequency: 150,
                 advance: 2000
-            }).setDepth(23)
+            }).setDepth(GAME_OBJECT_DEPTHS.gameSceneConfettiEmitter)
             this.confettiEmitters.push(emitter);
         });
     }
@@ -1272,7 +1272,7 @@ export class Game extends AbstractScene {
             gravityY: 150,
             blendMode: 'ADD',
             emitting: false
-        }).setDepth(23)
+        }).setDepth(GAME_OBJECT_DEPTHS.gameSceneLevelWonParticleEmitter)
         emitter.explode(55);
         emitter.once('complete', () => {
             emitter.destroy();
@@ -1281,7 +1281,7 @@ export class Game extends AbstractScene {
     }
 
     private monsterNotClaimedPopup() {
-        const overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(25);
+        const overlay = this.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.gameSceneMonsterNotClaimedPopup);
         overlay.setInteractive();
         overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
@@ -1295,7 +1295,7 @@ export class Game extends AbstractScene {
                 stroke: '#000000', letterSpacing: 4, wordWrap: { width: 700 },
                 align: 'center'
             }
-        ).setOrigin(0.5).setAlpha(0).setDepth(25);
+        ).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.gameSceneMonsterNotClaimedMsg);
         this.tweens.chain({
             tweens: [
                 {
@@ -1444,7 +1444,7 @@ export class Game extends AbstractScene {
         const x = sceneWidth / 2 - this.gridDimensions.totalSizeHorizontal / 2;
         const y = sceneHeight / 2 - this.gridDimensions.totalSizeVertical / 2;
 
-        this.mainGridContainer = this.add.container(x, y).setDepth(9);
+        this.mainGridContainer = this.add.container(x, y).setDepth(GAME_OBJECT_DEPTHS.gameSceneMainGridContainer);
         this.mainGridContainer.add(this.gridLines);
 
         this.movementArrowsContainer = new MovementArrowsContainer(this, x, y);
@@ -1475,7 +1475,7 @@ export class Game extends AbstractScene {
                 const x = this.gridDimensions.cellSize * col + this.gridDimensions.cellSize / 2;
                 const y = this.gridDimensions.cellSize * row + this.gridDimensions.cellSize / 2;
                 const cloud = new Cloud(this, x, y, row, col);
-                this.cloudsContainer.add(cloud).setDepth(11);
+                this.cloudsContainer.add(cloud).setDepth(GAME_OBJECT_DEPTHS.gameSceneCloudsContainer);
                 cloudPositionsData.push(cloud)
             }
             clouds.push(cloudPositionsData);

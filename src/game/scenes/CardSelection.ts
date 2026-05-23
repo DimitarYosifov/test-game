@@ -3,7 +3,7 @@ import { Monster } from './in-game/Monster';
 import { IPlayerMonstersData } from './in-game/TestPlayerTeam';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
-import { addFullscreenFunctionality, addUICurrencies, getMonsterDataConfig } from '../configs/main_config';
+import { addFullscreenFunctionality, addUICurrencies, GAME_OBJECT_DEPTHS, getMonsterDataConfig } from '../configs/main_config';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
@@ -53,7 +53,7 @@ export class CardSelection extends AbstractScene {
         super.create();
 
         this.add.image(0, 0, 'bg-card-selection').setOrigin(0);
-        this.monstersContainer = this.add.container().setDepth(100);
+        this.monstersContainer = this.add.container().setDepth(GAME_OBJECT_DEPTHS.cardSelectionMonsterContainer);
         this.hitRects = [];
         this.upgradeHitRects = [];
         this.loadPlayerMonsters();
@@ -62,7 +62,7 @@ export class CardSelection extends AbstractScene {
         this.createUpgradeSlots();
         this.createSellCardSlot();
         this.createOkButton();
-        
+
         addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
         addFullscreenFunctionality(this, 1635, 970);
 

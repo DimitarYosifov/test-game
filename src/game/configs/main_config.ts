@@ -6,7 +6,7 @@ export const main_config = {
     "cryptData": true, //should local storage data be crypted
 
     //---------DEBUG---------
-    "allowDebugPanel": true, //shoiuld allow debug panel to be used
+    "allowDebugPanel": true, // should allow debug panel to be used
     "jumpToOutroPopup": false, // should any level on the map be automatically won withot playing it
     //-----------------------
 
@@ -366,7 +366,7 @@ export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager)
         console.warn('LOCAL_STORAGE_MANAGER not ready');
         return;
     }
-
+    // COINS
     scene.coins = (lsm.get('coins') as number).toString();
     scene.coinText = scene.add.text(
         1900,
@@ -390,6 +390,7 @@ export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager)
         }).setOrigin(1, 0.5);
     scene.gemsTexture = scene.add.image(scene.gemsText.x - scene.gemsText.displayWidth, 30, 'gem').setScale(0.1).setOrigin(1, 0.5);
 
+    // KEYS
     scene.keys = (lsm.get('keys') as number).toString();
     scene.keysText = scene.add.text(
         scene.gemsTexture.x - scene.gemsTexture.displayWidth - 25,
@@ -405,4 +406,51 @@ export const addUICurrencies = (scene: AbstractScene, lsm: ILocalStorageManager)
 
 interface ILocalStorageManager {
     get<T extends keyof IGameData>(key: T): IGameData[T] | null;
+}
+
+export const GAME_OBJECT_DEPTHS = {
+    mapSceneFireAnimation: 1,
+    gameSceneBuffContainer: 7,
+    gameSceneMainGridContainer: 9,
+    movementArrowsContainer: 10,
+    gameSceneCloudsContainer: 11,
+    monsterBuffImage: 12,
+    monsterBuffQuantityText: 12,
+    monsterWeaponImage: 12,
+    gameSceneQuestionMarkContainer: 13,
+    gameSceneParachute: 14,
+    mapSceneBackButton: 15,
+    monsterHitEmitter: 15,
+    monsterLostHealth: 15,
+    mapSceneEmitter: 16,
+    spriteAnimation: 21,
+    gameSceneBGOverlay: 22,
+    gameSceneExplodeImage: 23,
+    gameSceneHeaderLevelText: 23,
+    gameSceneConfettiEmitter: 23,
+    gameSceneLevelWonParticleEmitter: 23,
+    gameSceneRewardsContainer: 24,
+    gameSceneRewardText: 24,
+    gameSceneClaimButton: 24,
+    gameSceneTryAgainButton: 24,
+    gameSceneGiveUpButton: 24,
+    gameSceneOpponentTurnMsg: 25,
+    gameSceneMonsterNotClaimedPopup: 25,
+    gameSceneMonsterNotClaimedMsg: 25,
+    mapSceneLevelTexture: 88,
+    mapSceneLevelText: 88,
+    mapSceneSurvivalLevelCountDownText: 88,
+    mapScenePlayer: 99,
+    buyPacksMonsterContainer: 100,
+    cardSelectionMonsterContainer: 100,
+    dailyQuestRewardContainer: 100,
+    gambleSceneNewMonster: 100,
+    monsterKeyDropped: 100,
+    monsterGemDropped: 100,
+    monsterPackDropped: 100,
+    mapSceneLevelContentContainer: 101,
+    mapSceneLight: 102,
+    mapSceneSmokeEmitter: 102,
+    mainMenuLevelConfirm: 103,
+    mainMenuLevelConfirmOverlay: 103,
 }
