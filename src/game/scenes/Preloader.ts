@@ -120,6 +120,9 @@ export class Preloader extends Scene {
         this.load.image('token4', 'token4.png');
         this.load.image('token5', 'token5.png');
 
+        this.load.image('chains', 'chains.png');
+        this.load.image('green-poison-particle', 'green-poison-particle.png');
+
         //  F O N T S
         this.load.font('main-font', 'Oups.otf');
 

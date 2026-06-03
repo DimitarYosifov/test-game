@@ -37,6 +37,10 @@ export class Monster extends Phaser.GameObjects.Container {
     private _displayWidth: number;
     isGiant: boolean | undefined;
     movesLeftContainer2: Phaser.GameObjects.Container;
+    frozenChains: Phaser.GameObjects.Image | null;
+    frozen_turns_left_text: Phaser.GameObjects.Text | null;
+    poisonEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null;
+    poisoned_turns_left_text: Phaser.GameObjects.Text | null;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -248,6 +252,11 @@ export class Monster extends Phaser.GameObjects.Container {
         this.add([this.movesLeftContainer, this.movesLeftContainer2])
 
         this.addInteraction();
+
+
+
+
+        // this.setPoisoned();
     }
 
 
@@ -1043,5 +1052,117 @@ export class Monster extends Phaser.GameObjects.Container {
             (dot as Phaser.GameObjects.Image).setTexture('green-dot');
         });
         this.unitData.movesLeft = this.unitData.moves;
+    }
+
+    setPoisoned(forTurns: number = 1) {
+        this.poisonEmitter = this.scene.add.particles(0, 0, 'green-poison-particle', {
+            x: { random: [-30, 30] },
+            y: { random: [-30, 30] },
+            lifespan: { random: [3000, 7000] },
+            scale: { min: 0.2, max: 0.4 },
+            alpha: { min: 0.025, max: 0.08 },
+            blendMode: 'ADD',
+            frequency: 100,
+            quantity: 1,
+            maxAliveParticles: 20,
+            rotate: { start: 0, end: 90 }
+        });
+
+        this.add(this.poisonEmitter);
+
+        this.poisoned_turns_left_text = this.scene.add.text(
+            0, 0,
+            `${forTurns}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                align: 'center'
+            });
+        this.poisoned_turns_left_text.setOrigin(0.5);
+        this.add(this.poisoned_turns_left_text);
+
+        //test!!!
+        // this.scene.time.delayedCall(2222, () => {
+        //     this.removePoisoned();
+        // })
+    }
+
+    removePoisoned() {
+        if (this.poisonEmitter) {
+            this.poisonEmitter.emitting = false;
+            this.poisonEmitter.timeScale = 5;
+            this.scene.time.delayedCall(2000, () => {
+                this.poisonEmitter!.destroy(true);
+                this.poisonEmitter = null;
+            });
+            this.scene.tweens.add({
+                targets: [this.poisoned_turns_left_text],
+                alpha: 0,
+                duration: 500,
+                onComplete: () => {
+                    this.poisoned_turns_left_text!.destroy(true);
+                    this.poisoned_turns_left_text = null;
+                }
+            });
+        }
+    }
+
+    setFrozen(forTurns: number = 1) {
+        this.frozenChains = this.scene.add.image(0, 0, 'chains')
+            .setOrigin(0.5)
+            .setName('chains')
+            .setScale(0.65)
+            .setAlpha(0.7);
+        this.bg.setTint(0x33AAFF);
+        this.add(this.frozenChains);
+
+        const reveal = this.frozenChains.postFX.addReveal(
+            0.03,
+            0,
+            1
+        );
+        this.scene.tweens.add({
+            targets: reveal,
+            progress: 1,
+            duration: 3000,
+            onComplete: () => {
+                if (this.frozenChains?.postFX) {
+                    this.frozenChains.postFX.remove(reveal);
+                }
+            }
+        });
+
+        this.frozen_turns_left_text = this.scene.add.text(
+            0, 0,
+            `${forTurns}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                align: 'center'
+            });
+        this.frozen_turns_left_text.setOrigin(0.5);
+        this.add(this.frozen_turns_left_text);
+
+        //test!!!
+        // this.scene.time.delayedCall(2222, () => {
+        //     this.removeFrozen();
+        // })
+    }
+
+    removeFrozen() {
+        if (this.frozenChains) {
+            this.scene.tweens.add({
+                targets: [this.frozenChains, this.frozen_turns_left_text],
+                alpha: 0,
+                duration: 500,
+                onComplete: () => {
+                    this.frozenChains!.destroy(true);
+                    this.frozen_turns_left_text!.destroy(true);
+                    this.frozenChains = null;
+                    this.frozen_turns_left_text = null;
+                }
+            });
+            this.bg.clearTint();
+        }
     }
 }
