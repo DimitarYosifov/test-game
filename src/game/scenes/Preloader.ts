@@ -120,6 +120,25 @@ export class Preloader extends Scene {
         this.load.image('token4', 'token4.png');
         this.load.image('token5', 'token5.png');
 
+        this.load.image('spell-point', 'spell-point.png');
+        this.load.image('spell-book', 'spell-book.png');
+
+        this.load.image('number-of-targets', 'number-of-targets.png');
+        this.load.image('duration', 'duration.png');
+        this.load.image('cooldown', 'cooldown.png');
+        this.load.image('ball-black-and-white', 'ball-black-and-white.png');
+        this.load.image('attack-black-and-white', 'attack-black-and-white.png');
+        this.load.image('bow-black-and-white', 'bow-black-and-white.png');
+
+        this.load.image('magic-ball-button', 'magic-ball-button.png');
+        this.load.image('magic-ball-button-locked', 'magic-ball-button-locked.png');
+        this.load.image('poison-button', 'poison-button.png');
+        this.load.image('poison-button-locked', 'poison-button-locked.png');
+        this.load.image('rain-of-arrows-button', 'rain-of-arrows-button.png');
+        this.load.image('rain-of-arrows-button-locked', 'rain-of-arrows-button-locked.png');
+        this.load.image('freeze-button', 'freeze-button.png');
+        this.load.image('freeze-button-locked', 'freeze-button-locked.png');
+
         this.load.image('chains', 'chains.png');
         this.load.image('green-poison-particle', 'green-poison-particle.png');
 

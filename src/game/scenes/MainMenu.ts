@@ -20,6 +20,7 @@ export class MainMenu extends AbstractScene {
     infoButton: Button;
     gambleButton: Button;
     defeatMonstersButton: Button;
+    spellsButton: Button;
     constructor() {
         super('MainMenu');
     }
@@ -50,6 +51,7 @@ export class MainMenu extends AbstractScene {
         this.createDeleteButton();
         this.createGambleButton();
         this.createDefeatGiantsButton();
+        this.createSpellsButton();
 
         const fullscreenImg = this.add.image(250, 75, 'fullscreen').setOrigin(0.5).setScale(0.85);
         if (!(window as any).userHasInteracted) {
@@ -139,6 +141,7 @@ export class MainMenu extends AbstractScene {
                 align: 'center'
             }).setOrigin(0.5);
     }
+
     private createDefeatGiantsButton() {
         const defeatMonstersButtonClick = () => {
             this.defeatMonstersButton.disableInteractive();
@@ -149,6 +152,23 @@ export class MainMenu extends AbstractScene {
             this.defeatMonstersButton.x,
             this.defeatMonstersButton.y + 150,
             `defeat\ngiants`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(0.5);
+    }
+
+    private createSpellsButton() {
+        const spellButtonClick = () => {
+            this.spellsButton.disableInteractive();
+            this.changeScene('Spells');
+        }
+        this.spellsButton = new Button(this, 1150, 875, 'spell-book', null, spellButtonClick.bind(this), false, 0.5);
+        const spellsTitle = this.add.text(
+            this.spellsButton.x,
+            this.spellsButton.y + 125,
+            `spells`,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 55, color: '#ffffff',
                 stroke: '#000000', letterSpacing: 4,

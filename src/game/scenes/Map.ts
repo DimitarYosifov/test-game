@@ -1,5 +1,5 @@
 import { MainMenuLevelConfirm } from './in-main-menu/MainMenuLevelConfirm';
-import { ILevelConfig, level_config, survivalLevelsWorld1, survivalLevelsWorld2 } from '../configs/level_config';
+import { ILevelConfig, ISpellsData, level_config, survivalLevelsWorld1, survivalLevelsWorld2 } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { world1points } from './in-map/world_1_points';
@@ -208,6 +208,10 @@ export class Map extends AbstractScene {
                     this.levelConfirm.removeAllListeners();
                     this.levelConfirm.destroy(true);
                     LOCAL_STORAGE_MANAGER.set('survivalLevelData', lvl);
+
+                    // TODO -here add opponent spells for the survival levels !!!!!
+
+
                     this.changeScene('Game', true);
                 }, this);
 
@@ -269,10 +273,10 @@ export class Map extends AbstractScene {
     }
 
     // private resetSurvivalLevel() {
-        // const hoursToReset = survivalLevels[0].hoursToReset
-        // let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
-        // // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
-        // local-Storage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
+    // const hoursToReset = survivalLevels[0].hoursToReset
+    // let unlockSurvivalLevelTime = Date.now() + hoursToReset * 60 * 60 * 1000;
+    // // this.unlockSurvivalLevel1Time = Date.now() + 1 * 60 * 1000; // 1 minute for testing
+    // local-Storage.setItem('SurvivalLevel1', unlockSurvivalLevelTime.toString());
     // }
 
     // private updateSurvivalLevel(levelTexture: Phaser.GameObjects.Image, unlockSurvivalLevelTime: number, survivalLevelCountDownText: Phaser.GameObjects.Text, levelName: string) {
@@ -406,7 +410,14 @@ export class Map extends AbstractScene {
                             this.confirmPopupOpen = false;
                             this.levelConfirm.removeAllListeners();
                             this.levelConfirm.destroy(true);
-                            this.changeScene('Game');
+
+
+                            //TODO  - check if it is world 2 - if so below level - 1 could be wrong
+                            console.log(level_config[level - 1]);
+
+                            const opponentSpellsData: ISpellsData = structuredClone(level_config[level - 1].opponentSpells);
+
+                            this.changeScene('Game', false, opponentSpellsData);
                         }, this);
 
                         this.levelConfirm.once('level-unselected', () => {
@@ -580,11 +591,11 @@ export class Map extends AbstractScene {
         // moveToNext();
     }
 
-    changeScene(nextScene: string, isSurvivalLevel: boolean = false): void {
+    changeScene(nextScene: string, isSurvivalLevel: boolean = false, opponentSpellsData: ISpellsData = null): void {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.confirmPopupOpen = false;
-            this.scene.start(nextScene, { isSurvivalLevel });
+            this.scene.start(nextScene, { isSurvivalLevel, opponentSpellsData });
         });
     }
 }

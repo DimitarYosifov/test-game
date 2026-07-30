@@ -25,6 +25,24 @@ export interface IGameData {
     chests: boolean[]; //???
     survivalLevelData: any; //???
 
+    magicBallCooldownLevel: number;
+    magicBallDamageLevel: number;
+    magicBallTargetsLevel: number;
+
+    poisonCooldownLevel: number;
+    poisonDamageLevel: number;
+    poisonTargetsLevel: number;
+    poisonDurationLevel: number;
+
+    rainOfArrowsCooldownLevel: number;
+    rainOfArrowsDamageLevel: number;
+    rainOfArrowsTargetsLevel: number;
+
+    freezeCooldownLevel: number;
+    freezeDurationLevel: number;
+    freezeTargetsLevel: number;
+
+
     // survival_level_1: any; //?????
     // survival_level_2: any; //?????
     // survival_level_3: any; //?????
@@ -36,6 +54,8 @@ export interface IGameData {
     token3: number,
     token4: number,
     token5: number,
+
+    spellPoints: number
 
 }
 
@@ -65,6 +85,27 @@ export class LOCAL_STORAGE_MANAGER {
         chests: [], //????
         survivalLevelData: {},//???????
 
+        //TODO - the following 3 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
+        magicBallCooldownLevel: NaN,
+        magicBallDamageLevel: NaN,
+        magicBallTargetsLevel: NaN,
+
+        //TODO - the following 4 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
+        poisonCooldownLevel: NaN,
+        poisonDamageLevel: NaN,
+        poisonTargetsLevel: NaN,
+        poisonDurationLevel: NaN,
+
+        //TODO - the following 3 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
+        rainOfArrowsCooldownLevel: NaN,
+        rainOfArrowsDamageLevel: NaN,
+        rainOfArrowsTargetsLevel: NaN,
+
+        //TODO - the following 3 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
+        freezeCooldownLevel: 0,
+        freezeDurationLevel: 0,
+        freezeTargetsLevel: 0,
+
         token1: 0,
         token2: 0,
         token3: 0,
@@ -79,6 +120,9 @@ export class LOCAL_STORAGE_MANAGER {
 
         lastResetTime: '0',
         questStartTime: '',
+
+        spellPoints: main_config.startingSpellPoints,
+
     };
 
     static data?: IGameData; // undefined until first access

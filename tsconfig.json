@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "strictNullChecks": false,
         "module": "ESNext", // or "CommonJS" depending on your target
         "target": "ES6", //
         "esModuleInterop": true,

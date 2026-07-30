@@ -1,0 +1,45 @@
+import { Scene } from "phaser";
+import { GAME_OBJECT_DEPTHS, getRandomNonNullIndex } from "../../../configs/main_config";
+import { SpriteAnimation } from "../../SpriteAnimation";
+import { Monster } from "../Monster";
+import { IPoison } from "../../../configs/level_config";
+import { GAME_SCENE_SCENE_EVENTS } from "../../Game";
+
+export class PoisonSpell {
+
+    private scene: Phaser.Scene;
+    private mainGridContainer: Phaser.GameObjects.Container;
+
+    constructor(scene: Scene, mainGridContainer: Phaser.GameObjects.Container, targetMonsters: any, poisonData: IPoison) {
+
+        this.scene = scene;
+        this.mainGridContainer = mainGridContainer;
+
+        let targetsCount = poisonData.targets;
+        const damage = poisonData.damage;
+        const duration = poisonData.duration;
+
+        const proceed = () => {
+            targetsCount--;
+
+            // notice here already poisoned enemy CAN be targeted, which will affect only the poison duration!!!
+            const targetMonsterIndex = getRandomNonNullIndex(targetMonsters);
+            const targetMonster: Monster = targetMonsters[targetMonsterIndex];
+            const emitCheckEndTurnOnComplete = targetsCount === 0;
+
+            targetMonster.setPoisoned(duration, damage, () => {
+                if (emitCheckEndTurnOnComplete) {
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                }
+            });
+
+            if (targetsCount > 0) {
+                this.scene.time.delayedCall(200, () => {
+                    proceed();
+                })
+            }
+        }
+
+        proceed();
+    }
+}

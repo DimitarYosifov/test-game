@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { ISpellsData } from '../configs/level_config';
 
 export abstract class AbstractScene extends Scene implements IAbstractScene {
 
@@ -50,12 +51,12 @@ export abstract class AbstractScene extends Scene implements IAbstractScene {
         this.anims.removeAllListeners();
     }
 
-    abstract changeScene(nextScene: string, isSurvivalLevel: boolean): void;
+    abstract changeScene(nextScene: string, isSurvivalLevel: boolean, opponentSpellsData: ISpellsData): void;
     // abstract createCoins(): void;
     abstract createBackButton(): void;
 }
 
 interface IAbstractScene {
-    changeScene(nextScene: string, isSurvivalLevel: boolean): void;
+    changeScene(nextScene: string, isSurvivalLevel: boolean, opponentSpellsData: ISpellsData): void;
     createBackButton(): void;
 }

@@ -267,7 +267,13 @@ export const main_config = {
         "min": 1,
         "max": 3,
     },
-    "slotSpinCost": 3
+    "slotSpinCost": 3,
+    "startingSpellPoints": 1,
+
+    "spellPointsToUnlockMagicBall": 1,
+    "spellPointsToUnlockPoison": 1,
+    "spellPointsToUnlockRainOfArrows": 1,
+    "spellPointsToUnlockFreeze": 1,
 
 
 
@@ -308,6 +314,31 @@ export const main_config = {
      * npm run deploy
      */
 
+
+
+    /**
+     * POTENTIAL ISSUES TO CHECK AFTER SPELLS IMPLEMENTATION
+     * check correct spellsData from level_config for levels around world change - 35,36,37...
+     * add opponentMonstersData for ALL LEVELS  inside level_config
+     * 
+     */
+
+}
+
+export const getRandomNonNullIndex = (arr: any[]): number => {
+    const validIndices = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] !== null) {
+            validIndices.push(i);
+        }
+    }
+
+    if (validIndices.length === 0) {
+        return -1;
+    }
+
+    return Phaser.Utils.Array.GetRandom(validIndices);
 }
 
 export const getRandomMonsterType = (includeGiants: boolean = false): number => {
@@ -503,6 +534,7 @@ export const GAME_OBJECT_DEPTHS = {
     gameSceneOpponentTurnMsg: 25,
     gameSceneMonsterNotClaimedPopup: 25,
     gameSceneMonsterNotClaimedMsg: 25,
+    spell: 30,
     mapSceneLevelTexture: 88,
     mapSceneLevelText: 88,
     mapSceneSurvivalLevelCountDownText: 88,

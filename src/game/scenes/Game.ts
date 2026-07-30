@@ -3,12 +3,17 @@ import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
 import { Cloud } from './in-game/Cloud';
-import { defeat_giants_level_config, ILevelConfig, level_config } from '../configs/level_config';
+import { defeat_giants_level_config, ILevelConfig, ISpellsData, level_config } from '../configs/level_config';
 import { Button } from './in-main-menu/Button';
 import { AbstractScene } from './AbstractScene';
 import { DataHandler } from './in-daily-quest/DataHandler';
 import { SpriteAnimation } from './SpriteAnimation';
 import { IGameData, LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
+import { spellsConfig } from '../configs/spells_config';
+import { MagicBallSpell } from './in-game/spells/MagicBallSpell';
+import { PoisonSpell } from './in-game/spells/PoisonSpell';
+import { RainOfArrowsSpell } from './in-game/spells/RainOfArrowsSpell';
+import { FreezeSpell } from './in-game/spells/FreezeSpell';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -20,7 +25,9 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'DROPPED_PACK_COLLECTED' = 'dropped-pack-collected',
     'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected',
     'DROPPED_KEY_COLLECTED' = 'dropped-key-collected',
-    'BUFF_BOMB_EXPLODE' = 'buff-bomb-explode'
+    'DROPPED_TOKEN_COLLECTED' = 'dropped-token-collected',
+    'BUFF_BOMB_EXPLODE' = 'buff-bomb-explode',
+    'ROUND_END' = 'round-end'
 }
 
 export enum BUFF_TYPES {
@@ -61,7 +68,23 @@ export class Game extends AbstractScene {
     confettiEmitters: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
     currentlySelectedMonsterAnimation: SpriteAnimation | null;
     isGiantFightLevel: any;
+    spellCastInProgress: boolean = false;
     activeExplodePositions: number = 0;
+
+    playerMagicBallButton: Button;
+    opponentMagicBallButton: Button;
+
+    playerPoisonButton: Button;
+    opponentPoisonButton: Button;
+
+    playerRainOfArrowsButton: Button;
+    opponentRainOfArrowsButton: Button;
+
+    playerFreezeButton: Button;
+    opponentFreezeButton: Button;
+
+    opponentSpellsData: ISpellsData;
+    playerSpellsData: ISpellsData;
 
     constructor() {
         super('Game');
@@ -70,11 +93,17 @@ export class Game extends AbstractScene {
     create(d: any) {
         super.create();
 
+        this.playerSpellsData = null;
+        this.opponentSpellsData = null;
+        this.playerMagicBallButton = null;
+        this.playerPoisonButton = null;
+
         this.add.image(0, 0, 'bg').setOrigin(0);
         this.data.list.isPlayerTurn = true;
 
         this.isSurvivalLevel = (this.scene.settings.data as any).isSurvivalLevel;
         this.isGiantFightLevel = d.isGiantFightLevel;
+        this.opponentSpellsData = d.opponentSpellsData;
         this.survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         this.survivalLevelReward = 0;
         this.survivalLevelKilledMonsters = 0;
@@ -88,22 +117,25 @@ export class Game extends AbstractScene {
         this.setGridDimensions();
         this.drawGridLines();
         this.createContainers();
-        this.setGridPositions();
+        this.setGridPositions(); //return;
         this.setInitialMonsters();
 
         Monsters.createMonsters(this, this.mainGridContainer, this.gridDimensions, d.isGiantFightLevel);
         this.addClouds();
-        this.createBulbs();
+        // this.createBulbs();
         if (!this.isSurvivalLevel) {
             this.createLevelTitle();
         }
+
+        // buttons and popups
         this.createGiveUpButton();
         this.createEndTurnButton();
         this.createOpponentTurnMsg();
         this.addOpponentMonstersLeftText();
-        this.checkMapVisibility(true);
-        addFullscreenFunctionality(this, 100, 170);
+        this.createSpellButtons();
 
+        this.checkMapVisibility(true);
+        addFullscreenFunctionality(this, 100, 80);
 
         // event handlers
         this.skipButtonHandler();
@@ -117,7 +149,10 @@ export class Game extends AbstractScene {
 
         LOCAL_STORAGE_MANAGER.remove('survivalLevelData');
 
+        //TODO - uncomment below
         this.addBuffs();
+
+
         this.time.delayedCall(5000, () => {
             //TODO - fix this magic here - 5000 ms
             this.checkEndTurnHandler();
@@ -129,7 +164,7 @@ export class Game extends AbstractScene {
 
         if (main_config.jumpToOutroPopup) {
             // test debug
-            this.createLevelOutroPopup(true)
+            this.createLevelOutroPopup(true);
         }
 
         this.input.on('pointerdown', (pointer: any) => {
@@ -143,6 +178,9 @@ export class Game extends AbstractScene {
         this.input.on('pointerup', () => {
             this.data.list.selectedMonsterDragged = false;
         })
+
+        // this.playerMagicBallButton = null;
+
     }
 
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
@@ -185,6 +223,8 @@ export class Game extends AbstractScene {
 
     private addBuffs(buffsCount: number = NaN) {
 
+        this.updatePlayerSpellButtonsInteraction(true);
+        // this.pauseResumeInteraction(false);
         this.questionMarkContainer = this.add.container().setDepth(GAME_OBJECT_DEPTHS.gameSceneQuestionMarkContainer);
         this.addQuestionMarks();
 
@@ -335,7 +375,7 @@ export class Game extends AbstractScene {
     }
 
     private createEndTurnButton() {
-        this.endTurnButton = new Button(this, 1810, 500, 'button', 'end\nturn', () => {
+        this.endTurnButton = new Button(this, 1820, 1000, 'button', 'end\nturn', () => {
             this.endTurnButton.disableInteractive();
             this.data.list.playerMonsters.forEach((m: Monster) => {
                 if (m !== null) {
@@ -379,7 +419,10 @@ export class Game extends AbstractScene {
                     delay: 800,
                     scale: 0,
                     duration: 250,
-                    ease: 'Back.easeIn'
+                    ease: 'Back.easeIn',
+                    onComplete: () => {
+                        this.checkOpponentForSpellCast();
+                    }
 
                 }
             ]
@@ -388,7 +431,7 @@ export class Game extends AbstractScene {
 
     private addOpponentMonstersLeftText() {
         this.opponentMonstersLeftText = this.add.text(
-            150,
+            200,
             50,
             `enemies left: ${this.data.list.opponentMonsters.length}`,
             {
@@ -414,26 +457,39 @@ export class Game extends AbstractScene {
                 return;
             }
 
-            if (this.currentlySelectedMonster.unitData.movesLeft > 0) {
+            if (this.currentlySelectedMonster?.unitData.movesLeft > 0 && this.currentlySelectedMonster.frozenForDuration === 0) {
 
                 if (this.data.list.isPlayerTurn) {
                     this.currentlySelectedMonster.pendingAction = true;
-                    this.checkNextTurn(skipByUser);
+                    // this.checkNextTurn(skipByUser);
                 } else {
                     this.currentlySelectedMonster.pendingAction = true;
-                    this.checkNextTurn(skipByUser);
+                    // this.checkNextTurn(skipByUser);
                 }
 
-            } else {
+            } else if (this.currentlySelectedMonster) {
                 this.currentlySelectedMonster.setAlpha(0.7);
-                this.checkNextTurn(skipByUser);
+                // this.checkNextTurn(skipByUser);
             }
+            else {
+                if (!this.data.list.isPlayerTurn) {
+                    // this.addInteraction();
+                    // this.getRandomOpponentMonster();
+                    this.checkOpponentForSpellCast();
+                    return;
+                }
+                else {
+                    throw Error("NO currentlySelectedMonster")
+                }
+            }
+
+            this.checkNextTurn(skipByUser);
         })
         this.addInteraction();
     }
 
     private skipButtonHandler(): void {
-        this.skipButton = new Button(this, 1810, 350, 'button', 'skip\nmove', this.onSkip.bind(this), true, 1);
+        this.skipButton = new Button(this, 1820, 80, 'button', 'skip\nmove', this.onSkip.bind(this), true, 1);
         this.input.keyboard!.on('keydown-SPACE', () => {
             if (this.data.list.isPlayerTurn && this.skipButton.bg.input?.enabled) {
                 console.log('Skipped with Space');
@@ -484,6 +540,8 @@ export class Game extends AbstractScene {
             } else {
                 this.currentlySelectedMonsterAnimation!.hide().pause();
             }
+            this.updatePlayerSpellButtonsInteraction();
+
             this.resetPreviousSelectedMonsterMoves();
             this.currentlySelectedMonster = data[0] as Monster;
             this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
@@ -548,6 +606,19 @@ export class Game extends AbstractScene {
             if (isPlayerTurn) {
                 this.pauseResumeInteraction(false);
             }
+
+            if (isPlayerTurn && this.playerMagicBallButton?.readyForUse) {
+                this.playerMagicBallButton.disableInteractive();
+            }
+            if (isPlayerTurn && this.playerPoisonButton?.readyForUse) {
+                this.playerPoisonButton.disableInteractive();
+            }
+            if (isPlayerTurn && this.playerRainOfArrowsButton?.readyForUse) {
+                this.playerRainOfArrowsButton.disableInteractive();
+            }
+            if (isPlayerTurn && this.playerFreezeButton?.readyForUse) {
+                this.playerFreezeButton.disableInteractive();
+            }
         });
     }
 
@@ -600,6 +671,13 @@ export class Game extends AbstractScene {
                 //TODO - repeat // ?????????
             }
 
+            if (isPlayerTurn && this.playerMagicBallButton?.readyForUse) {
+                this.playerMagicBallButton.disableInteractive();
+            }
+
+            if (isPlayerTurn && this.playerPoisonButton?.readyForUse) {
+                this.playerMagicBallButton.disableInteractive();
+            }
         });
     }
 
@@ -772,6 +850,11 @@ export class Game extends AbstractScene {
                 this.createLevelOutroPopup(true);
             } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
                 // alert('opponent wins');
+
+
+                this.levelFinished = true;////////////////////////////////// ??????
+
+
                 this.createLevelOutroPopup();
             } else {
                 this.checkMapVisibility(false);
@@ -1395,6 +1478,9 @@ export class Game extends AbstractScene {
     }
 
     private checkShouldAddBuffs() {
+        // test 
+        return true
+
         return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
     }
 
@@ -1407,27 +1493,50 @@ export class Game extends AbstractScene {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
         if (turnEnd) {
+
+            if (!this.data.list.isPlayerTurn) {
+                // ROUND ENDED
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.ROUND_END);
+            }
+
             this.endTurnButton.disableInteractive();
             this.skipButton.disableInteractive();
             this.giveUpButton.disableInteractive();
 
-            // alert('end turn');
             this.activeExplodePositions = 0;
             this.data.list.isPlayerTurn = !this.data.list.isPlayerTurn;
-            this.changeBulbIndicators(this.data.list.isPlayerTurn);
+            // this.changeBulbIndicators(this.data.list.isPlayerTurn);
+
+            this.pauseResumeInteraction(false);
+            // this.updatePlayerSpellButtonsInteraction();
+            this.updateFrozenMonsters();
 
             if (this.data.list.isPlayerTurn) {
-                // this.skipButton.setInteractive().setAlpha(1);
-                if (this.checkShouldAddBuffs()) {
-                    this.addBuffs(1);
-                } else {
-                    this.addInteraction();
-                }
-
+                // player turn starts
+                this.updateSpellLevelsOnTurnEnd();
+                this.applyPoison(() => {
+                    if (this.checkShouldAddBuffs()) {
+                        console.log('checkShouldAddBuffs')
+                        this.addBuffs(1);
+                    } else {
+                        this.addInteraction();
+                    }
+                })
             } else {
+                // opponent turn starts 
                 this.skipButton.disableInteractive();
-                this.addInteraction();
-                this.getRandomOpponentMonster();
+                this.time.delayedCall(10, () => {
+                    //this delay is needed to fix skip button action callback setting the currentlySelectedMonster to interactive...
+                    this.currentlySelectedMonster.setInteraction(false);
+                    this.currentlySelectedMonster = null;
+                    // this.checkOpponentForSpellCast();
+                })
+                this.movementArrowsContainer.removeArrows();
+                this.currentlySelectedMonsterAnimation!.pause().hide();
+                this.applyPoison(() => {
+                    console.log('showOpponentTurnMsg')
+                    this.showOpponentTurnMsg();
+                })
             }
         } else if (this.data.list.isPlayerTurn) {
             this.pauseResumeInteraction(true, skipByUser);
@@ -1520,6 +1629,14 @@ export class Game extends AbstractScene {
 
     // called after every player/opponent moves end
     private addInteraction(): void {
+
+        // //test
+        // if (!this.data.list.isPlayerTurn) {
+
+        //     this.newMagicBallSpell();
+        // }
+
+
         if (this.questionMarkContainer) {
             this.removeQuestionMarks();
         }
@@ -1535,12 +1652,16 @@ export class Game extends AbstractScene {
             // this.data.list.opponentMonsters[0].takeDamege(55)
             // return;
             this.skipButton.disableInteractive();
-            this.showOpponentTurnMsg();
+            // this.showOpponentTurnMsg();
             if (this.isSurvivalLevel) {
                 this.addNewSurvivalLevelMonsters();
             }
             this.data.list.opponentMonsters.forEach((monster: Monster) => {
                 if (monster) {
+                    console.log(monster.unitData.row);
+                    console.log(monster.unitData.movesLeft);
+                    console.log(monster.pendingAction);
+
                     monster.resetMoves();
                 }
             });
@@ -1557,7 +1678,11 @@ export class Game extends AbstractScene {
         this.data.list.opponentMonsters.forEach((monster: Monster) => {
             if (monster) {
                 monster.setAlpha(1);
-                monster.pendingAction = !this.data.list.isPlayerTurn;
+                if (monster.unitData.movesLeft === 0) {
+                    monster.pendingAction = false;
+                } else {
+                    monster.pendingAction = !this.data.list.isPlayerTurn;
+                }
                 if (monster.bg.input) {
                     console.log('opponent monster set to interactive. row' + monster.unitData.row + 'col' + monster.unitData.col);
                 }
@@ -1580,6 +1705,7 @@ export class Game extends AbstractScene {
         } else {
             this.endTurnButton.disableInteractive();
         }
+        this.updatePlayerSpellButtonsInteraction();
     }
 
     // called after every player action(select direction or attack)and after every player move
@@ -1593,19 +1719,21 @@ export class Game extends AbstractScene {
         }
 
         this.data.list.playerMonsters.forEach((monster: Monster, index: number) => {
-            if (monster && monster.pendingAction) {
+            if (monster) { //  && monster.pendingAction
                 console.log(index)
                 monster.setInteraction(resume, skipByUser);
             }
         });
 
         //monster has no more moves or just died(from buff bomb for example)
-        if ((resume && this.currentlySelectedMonster.unitData.movesLeft === 0) || this.currentlySelectedMonster.unitData.health === 0) {
+        if ((resume && this.currentlySelectedMonster && this.currentlySelectedMonster.unitData.movesLeft === 0) || (this.currentlySelectedMonster && this.currentlySelectedMonster.unitData.health === 0)) {
             this.autoSelectRandomPlayerMonster();
         }
         else if (resume && this.currentlySelectedMonster.unitData.movesLeft > 0) {
             this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, [this.currentlySelectedMonster, this.currentlySelectedMonster.unitData, false]);
         }
+
+        this.updatePlayerSpellButtonsInteraction();
     }
 
     private addNewSurvivalLevelMonsters() {
@@ -1751,6 +1879,9 @@ export class Game extends AbstractScene {
 
     private getRandomOpponentMonster(repeatMove: boolean = false) {
         const opponentMonsters = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m!.pendingAction);
+
+        console.log(opponentMonsters);
+
         if (!repeatMove) {
             const rndMonsterIndex = Phaser.Math.RND.between(0, opponentMonsters.length - 1);
             this.resetPreviousSelectedMonsterMoves();
@@ -1759,7 +1890,6 @@ export class Game extends AbstractScene {
         this.mainGridContainer.bringToTop(this.currentlySelectedMonster);
         const rows = main_config.gridSizeHorizontal;
         const cols = main_config.gridSizeVertical;
-
         // get all positions visible to opponent
         const allVisibleCellsToOpponent = Array.from({ length: cols }, () => Array(rows).fill(false));
         this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null).forEach((m: Monster) => {
@@ -1780,6 +1910,7 @@ export class Game extends AbstractScene {
 
         // all player monsters in range by current opponent's monster
         attackableTargetsToCurrentOpponentMonster = attackableTargetsToCurrentOpponentMonster.filter(x => x.occupiedBy === 'player');
+
         if (attackableTargetsToCurrentOpponentMonster.length > 0) {
             //ATTACK
             const targetForOpponentCurrentMonster = this.getRandomTargetForOpponent(attackableTargetsToCurrentOpponentMonster);
@@ -2146,6 +2277,633 @@ export class Game extends AbstractScene {
         return this.data.list.gridPositions[row] !== undefined &&
             this.data.list.gridPositions[row][col] !== undefined &&
             (skipCheck ? true : this.data.list.gridPositions[row][col].isEmpty);
+    }
+
+    private createSpellButtons() {
+
+        const magicBallCooldownLevel = LOCAL_STORAGE_MANAGER.get('magicBallCooldownLevel');
+        const poisonCooldownLevel = LOCAL_STORAGE_MANAGER.get('poisonCooldownLevel');
+        const rainOfArrowsCooldownLevel = LOCAL_STORAGE_MANAGER.get('rainOfArrowsCooldownLevel');
+        const freezeCooldownLevel = LOCAL_STORAGE_MANAGER.get('freezeCooldownLevel');
+
+        (this.playerSpellsData as any) = {};
+
+        // PLAYER MAGIC BALL BUTTON
+        if (!isNaN(magicBallCooldownLevel) && magicBallCooldownLevel !== null) {
+            this.playerSpellsData.magicBall = {
+                cooldown: spellsConfig.magicBall.coolDown[magicBallCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[LOCAL_STORAGE_MANAGER.get('magicBallDamageLevel')].value,
+                targets: spellsConfig.magicBall.targets[LOCAL_STORAGE_MANAGER.get('magicBallTargetsLevel')].value
+            }
+
+            this.playerMagicBallButton = new Button(this, 1820, 290, 'magic-ball-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.magicBall.cooldownProgress = 0;
+                this.playerMagicBallButton.readyForUse = false;
+                this.newMagicBallSpell(this.playerSpellsData.magicBall.cooldown);
+                // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+                // this.playerMagicBallButton.setAlpha(1);
+            }, true, 0.6);
+            this.playerMagicBallButton.addRevealOverlay();
+            this.playerMagicBallButton.updateCooldown(
+                this.playerSpellsData.magicBall.cooldownProgress,
+                this.playerSpellsData.magicBall.cooldown
+            );
+            this.playerMagicBallButton.updateCooldownText(
+                `${this.playerSpellsData.magicBall.cooldown - this.playerSpellsData.magicBall.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerMagicBallButton = this.add.image(1820, 290, 'magic-ball-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER POISON BUTTON
+        if (!isNaN(poisonCooldownLevel) && poisonCooldownLevel !== null) {
+            this.playerSpellsData.poison = {
+                cooldown: spellsConfig.poison.coolDown[poisonCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[LOCAL_STORAGE_MANAGER.get('poisonDamageLevel')].value,
+                targets: spellsConfig.poison.targets[LOCAL_STORAGE_MANAGER.get('poisonTargetsLevel')].value,
+                duration: spellsConfig.poison.duration[LOCAL_STORAGE_MANAGER.get('poisonDurationLevel')].value
+
+            }
+            this.playerPoisonButton = new Button(this, 1820, 417, 'poison-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.poison.cooldownProgress = 0;
+                this.playerPoisonButton.readyForUse = false;
+                this.newPoisonSpell(this.playerSpellsData.poison.cooldown);
+                // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+                // this.playerMagicBallButton.setAlpha(1);
+            }, true, 0.6);
+            this.playerPoisonButton.addRevealOverlay();
+            this.playerPoisonButton.updateCooldown(
+                this.playerSpellsData.poison.cooldownProgress,
+                this.playerSpellsData.poison.cooldown
+            );
+            this.playerPoisonButton.updateCooldownText(
+                `${this.playerSpellsData.poison.cooldown - this.playerSpellsData.poison.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerPoisonButton = this.add.image(1820, 417, 'poison-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER RAIN OF ARROWS BUTTON
+        if (!isNaN(rainOfArrowsCooldownLevel) && rainOfArrowsCooldownLevel !== null) {
+            this.playerSpellsData.rainOfArrows = {
+                cooldown: spellsConfig.rainOfArrows.coolDown[rainOfArrowsCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[LOCAL_STORAGE_MANAGER.get('rainOfArrowsDamageLevel')].value,
+                targets: spellsConfig.rainOfArrows.targets[LOCAL_STORAGE_MANAGER.get('rainOfArrowsTargetsLevel')].value
+            }
+
+            this.playerRainOfArrowsButton = new Button(this, 1820, 550, 'rain-of-arrows-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.rainOfArrows.cooldownProgress = 0;
+                this.playerRainOfArrowsButton.readyForUse = false;
+                this.newRainOfArrowsSpell(this.playerSpellsData.rainOfArrows.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6);
+            this.playerRainOfArrowsButton.addRevealOverlay();
+            this.playerRainOfArrowsButton.updateCooldown(
+                this.playerSpellsData.rainOfArrows.cooldownProgress,
+                this.playerSpellsData.rainOfArrows.cooldown
+            );
+            this.playerRainOfArrowsButton.updateCooldownText(
+                `${this.playerSpellsData.rainOfArrows.cooldown - this.playerSpellsData.rainOfArrows.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerRainOfArrowButton = this.add.image(1820, 550, 'rain-of-arrows-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER FREEZE BUTTON
+        if (!isNaN(freezeCooldownLevel) && freezeCooldownLevel !== null) {
+            this.playerSpellsData.freeze = {
+                cooldown: spellsConfig.freeze.coolDown[freezeCooldownLevel].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[LOCAL_STORAGE_MANAGER.get('freezeDurationLevel')].value,
+                targets: spellsConfig.freeze.targets[LOCAL_STORAGE_MANAGER.get('freezeTargetsLevel')].value
+            }
+
+            this.playerFreezeButton = new Button(this, 1820, 680, 'freeze-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.freeze.cooldownProgress = 0;
+                this.playerFreezeButton.readyForUse = false;
+                this.newFreezeSpell(this.playerSpellsData.freeze.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6);
+            this.playerFreezeButton.addRevealOverlay();
+            this.playerFreezeButton.updateCooldown(
+                this.playerSpellsData.freeze.cooldownProgress,
+                this.playerSpellsData.freeze.cooldown
+            );
+            this.playerFreezeButton.updateCooldownText(
+                `${this.playerSpellsData.freeze.cooldown - this.playerSpellsData.freeze.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerFreezeButton = this.add.image(1820, 680, 'freeze-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT MAGIC BALL BUTTON
+        if (this.opponentSpellsData?.magicBall) {
+            this.opponentMagicBallButton = new Button(this, 100, 290, 'magic-ball-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6)
+            this.opponentMagicBallButton.addRevealOverlay();
+            this.opponentMagicBallButton.updateCooldown(
+                this.opponentSpellsData.magicBall.cooldownProgress,
+                this.opponentSpellsData.magicBall.cooldown
+            );
+            this.opponentMagicBallButton.updateCooldownText(
+                `${this.opponentSpellsData.magicBall.cooldown - this.opponentSpellsData.magicBall.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent magic ball button
+            const staticOpponentMagicBallButton = this.add.image(100, 290, 'magic-ball-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT POISON BUTTON
+        if (this.opponentSpellsData?.poison) {
+            this.opponentPoisonButton = new Button(this, 100, 417, 'poison-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6)
+            this.opponentPoisonButton.addRevealOverlay();
+            this.opponentPoisonButton.updateCooldown(
+                this.opponentSpellsData.poison.cooldownProgress,
+                this.opponentSpellsData.poison.cooldown
+            );
+            this.opponentPoisonButton.updateCooldownText(
+                `${this.opponentSpellsData.poison.cooldown - this.opponentSpellsData.poison.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent magic ball button
+            const staticOpponentMagicBallButton = this.add.image(100, 417, 'poison-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT RAIN OF ARROWS BUTTON
+        if (this.opponentSpellsData?.rainOfArrows) {
+            this.opponentRainOfArrowsButton = new Button(this, 100, 550, 'rain-of-arrows-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6)
+            this.opponentRainOfArrowsButton.addRevealOverlay();
+            this.opponentRainOfArrowsButton.updateCooldown(
+                this.opponentSpellsData.rainOfArrows.cooldownProgress,
+                this.opponentSpellsData.rainOfArrows.cooldown
+            );
+            this.opponentRainOfArrowsButton.updateCooldownText(
+                `${this.opponentSpellsData.rainOfArrows.cooldown - this.opponentSpellsData.rainOfArrows.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentRainOfArrowsButton = this.add.image(100, 550, 'rain-of-arrows-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT FREEZE BUTTON
+        if (this.opponentSpellsData?.freeze) {
+            this.opponentFreezeButton = new Button(this, 100, 680, 'freeze-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6)
+            this.opponentFreezeButton.addRevealOverlay();
+            this.opponentFreezeButton.updateCooldown(
+                this.opponentSpellsData.freeze.cooldownProgress,
+                this.opponentSpellsData.freeze.cooldown
+            );
+            this.opponentFreezeButton.updateCooldownText(
+                `${this.opponentSpellsData.freeze.cooldown - this.opponentSpellsData.freeze.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentFreezeButton = this.add.image(100, 680, 'freeze-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+    }
+
+    private checkOpponentForSpellCast() {
+        if (
+            // check magic ball
+            this.opponentSpellsData &&
+            this.opponentSpellsData.magicBall &&
+            this.opponentSpellsData.magicBall.cooldownProgress === this.opponentSpellsData.magicBall.cooldown
+        ) {
+            this.opponentSpellsData.magicBall.cooldownProgress = 0;
+            this.newMagicBallSpell(this.opponentSpellsData.magicBall.cooldown);
+        } else if (
+            // check poison
+            this.opponentSpellsData &&
+            this.opponentSpellsData.poison &&
+            this.opponentSpellsData.poison.cooldownProgress === this.opponentSpellsData.poison.cooldown
+        ) {
+            this.opponentSpellsData.poison.cooldownProgress = 0;
+            this.newPoisonSpell(this.opponentSpellsData.poison.cooldown);
+        } else if (
+            // check rain of arrows
+            this.opponentSpellsData &&
+            this.opponentSpellsData.rainOfArrows &&
+            this.opponentSpellsData.rainOfArrows.cooldownProgress === this.opponentSpellsData.rainOfArrows.cooldown
+        ) {
+            this.opponentSpellsData.rainOfArrows.cooldownProgress = 0;
+            this.newRainOfArrowsSpell(this.opponentSpellsData.rainOfArrows.cooldown);
+        } else if (
+            // check freeze
+            this.opponentSpellsData &&
+            this.opponentSpellsData.freeze &&
+            this.opponentSpellsData.freeze.cooldownProgress === this.opponentSpellsData.freeze.cooldown
+        ) {
+            this.opponentSpellsData.freeze.cooldownProgress = 0;
+            this.newFreezeSpell(this.opponentSpellsData.freeze.cooldown);
+        } else {
+            this.addInteraction();
+            this.getRandomOpponentMonster();
+        }
+    }
+
+    private newMagicBallSpell(cooldown: number) {
+        const button = this.data.list.isPlayerTurn ? this.playerMagicBallButton : this.opponentMagicBallButton;
+        button.setAlpha(1);
+
+        button.animateSpellTrigger(() => {
+            button.removeSpellFilledTween();
+            button.onSpellUse();
+            this.events.once(GAME_SCENE_SCENE_EVENTS.ROUND_END, () => {
+                button.tweenUpdateCooldown(0, cooldown);
+            });
+            new MagicBallSpell(
+                this,
+                this.mainGridContainer,
+                this.data.list.isPlayerTurn ? this.data.list.opponentMonsters : this.data.list.playerMonsters,
+                this.data.list.isPlayerTurn ? this.playerSpellsData.magicBall : this.opponentSpellsData.magicBall
+
+            );
+
+            this.time.delayedCall(750, () => {
+                this.spellCastInProgress = false;
+            })
+        })
+    }
+
+    private newPoisonSpell(cooldown: number) {
+        const button = this.data.list.isPlayerTurn ? this.playerPoisonButton : this.opponentPoisonButton;
+        button.setAlpha(1);
+
+        button.animateSpellTrigger(() => {
+            button.removeSpellFilledTween();
+            button.onSpellUse();
+            this.events.once(GAME_SCENE_SCENE_EVENTS.ROUND_END, () => {
+                button.tweenUpdateCooldown(0, cooldown);
+            });
+            new PoisonSpell(
+                this,
+                this.mainGridContainer,
+                this.data.list.isPlayerTurn ? this.data.list.opponentMonsters : this.data.list.playerMonsters,
+                this.data.list.isPlayerTurn ? this.playerSpellsData.poison : this.opponentSpellsData.poison
+
+            );
+
+            this.time.delayedCall(750, () => {
+                this.spellCastInProgress = false;
+            })
+        })
+    }
+
+    private newRainOfArrowsSpell(cooldown: number) {
+        const button = this.data.list.isPlayerTurn ? this.playerRainOfArrowsButton : this.opponentRainOfArrowsButton;
+        button.setAlpha(1);
+
+        button.animateSpellTrigger(() => {
+            button.removeSpellFilledTween();
+            button.onSpellUse();
+            this.events.once(GAME_SCENE_SCENE_EVENTS.ROUND_END, () => {
+                button.tweenUpdateCooldown(0, cooldown);
+            });
+
+            new RainOfArrowsSpell(
+                this,
+                this.mainGridContainer,
+                this.data.list.isPlayerTurn ? this.data.list.opponentMonsters : this.data.list.playerMonsters,
+                this.data.list.isPlayerTurn ? this.playerSpellsData.rainOfArrows : this.opponentSpellsData.rainOfArrows
+            );
+
+            this.time.delayedCall(750, () => {
+                this.spellCastInProgress = false;
+            })
+        })
+    }
+
+    private newFreezeSpell(cooldown: number) {
+        const button = this.data.list.isPlayerTurn ? this.playerFreezeButton : this.opponentFreezeButton;
+        button.setAlpha(1);
+
+        button.animateSpellTrigger(() => {
+            button.removeSpellFilledTween();
+            button.onSpellUse();
+            this.events.once(GAME_SCENE_SCENE_EVENTS.ROUND_END, () => {
+                button.tweenUpdateCooldown(0, cooldown);
+            });
+
+            new FreezeSpell(
+                this,
+                this.mainGridContainer,
+                this.data.list.isPlayerTurn ? this.data.list.opponentMonsters : this.data.list.playerMonsters,
+                this.data.list.isPlayerTurn ? this.playerSpellsData.freeze : this.opponentSpellsData.freeze
+
+            );
+
+            this.time.delayedCall(750, () => {
+                this.spellCastInProgress = false;
+            })
+        })
+    }
+
+    private updatePlayerSpellButtonsInteraction(forceDisable: boolean = false) {
+        // Player Magic Ball Button
+        if (this.data.list.isPlayerTurn) {
+
+            // Player Magic Ball Buttonf
+            if (this.playerMagicBallButton) {
+                if (this.playerMagicBallButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
+                    this.playerMagicBallButton.setInteractive();
+                } else {
+                    this.playerMagicBallButton.disableInteractive();
+                }
+                this.playerMagicBallButton.setAlpha(this.playerMagicBallButton.usedCurrentRound ? 0.45 : 1);
+            }
+
+            // Player Poison Button
+            if (this.playerPoisonButton) {
+                if (this.playerPoisonButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
+                    this.playerPoisonButton.setInteractive();
+                } else {
+                    this.playerPoisonButton.disableInteractive();
+                }
+                this.playerPoisonButton.setAlpha(this.playerPoisonButton.usedCurrentRound ? 0.45 : 1);
+            }
+
+            // Player Rain Of Arrows Button
+            if (this.playerRainOfArrowsButton) {
+                if (this.playerRainOfArrowsButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
+                    this.playerRainOfArrowsButton.setInteractive();
+                } else {
+                    this.playerRainOfArrowsButton.disableInteractive();
+                }
+                this.playerRainOfArrowsButton.setAlpha(this.playerRainOfArrowsButton.usedCurrentRound ? 0.45 : 1);
+            }
+
+            // Player Freeze Button
+            if (this.playerFreezeButton) {
+                if (this.playerFreezeButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
+                    this.playerFreezeButton.setInteractive();
+                } else {
+                    this.playerFreezeButton.disableInteractive();
+                }
+                this.playerFreezeButton.setAlpha(this.playerFreezeButton.usedCurrentRound ? 0.45 : 1);
+            }
+
+        } else {
+            if (this.playerMagicBallButton) {
+                this.playerMagicBallButton.disableInteractive();
+                this.playerMagicBallButton.setAlpha(this.playerMagicBallButton.usedCurrentRound ? 0.45 : 1);
+            }
+            if (this.playerPoisonButton) {
+                this.playerPoisonButton.disableInteractive();
+                this.playerPoisonButton.setAlpha(this.playerPoisonButton.usedCurrentRound ? 0.45 : 1);
+            }
+            if (this.playerRainOfArrowsButton) {
+                this.playerRainOfArrowsButton.disableInteractive();
+                this.playerRainOfArrowsButton.setAlpha(this.playerRainOfArrowsButton.usedCurrentRound ? 0.45 : 1);
+            }
+            if (this.playerFreezeButton) {
+                this.playerFreezeButton.disableInteractive();
+                this.playerFreezeButton.setAlpha(this.playerFreezeButton.usedCurrentRound ? 0.45 : 1);
+            }
+        }
+    }
+
+    private updateSpellLevelsOnTurnEnd() {
+
+        // check player magic ball cooldown filled
+        if (this.playerSpellsData && this.playerSpellsData.magicBall && !isNaN(this.playerSpellsData.magicBall.cooldown)) {
+
+            if (this.playerMagicBallButton.usedCurrentRound) {
+                this.playerMagicBallButton.usedCurrentRound = false;
+            } else {
+                this.playerSpellsData.magicBall.cooldownProgress++;
+            }
+
+            this.playerMagicBallButton.tweenUpdateCooldown(
+                this.playerSpellsData.magicBall.cooldownProgress,
+                this.playerSpellsData.magicBall.cooldown
+            );
+
+            if (this.playerSpellsData.magicBall.cooldownProgress === this.playerSpellsData.magicBall.cooldown) {
+                this.playerMagicBallButton.readyForUse = true;
+                this.playerMagicBallButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check player poison cooldown filled
+        if (this.playerSpellsData && this.playerSpellsData.poison && !isNaN(this.playerSpellsData.poison.cooldown)) {
+
+            if (this.playerPoisonButton.usedCurrentRound) {
+                this.playerPoisonButton.usedCurrentRound = false;
+            } else {
+                this.playerSpellsData.poison.cooldownProgress++;
+            }
+
+            this.playerPoisonButton.tweenUpdateCooldown(
+                this.playerSpellsData.poison.cooldownProgress,
+                this.playerSpellsData.poison.cooldown
+            );
+            if (this.playerSpellsData.poison.cooldownProgress === this.playerSpellsData.poison.cooldown) {
+                this.playerPoisonButton.readyForUse = true;
+                this.playerPoisonButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check player rain of arrows cooldown filled
+        if (this.playerSpellsData && this.playerSpellsData.rainOfArrows && !isNaN(this.playerSpellsData.rainOfArrows.cooldown)) {
+
+            if (this.playerRainOfArrowsButton.usedCurrentRound) {
+                this.playerRainOfArrowsButton.usedCurrentRound = false;
+            } else {
+                this.playerSpellsData.rainOfArrows.cooldownProgress++;
+            }
+
+            this.playerRainOfArrowsButton.tweenUpdateCooldown(
+                this.playerSpellsData.rainOfArrows.cooldownProgress,
+                this.playerSpellsData.rainOfArrows.cooldown
+            );
+            if (this.playerSpellsData.rainOfArrows.cooldownProgress === this.playerSpellsData.rainOfArrows.cooldown) {
+                this.playerRainOfArrowsButton.readyForUse = true;
+                this.playerRainOfArrowsButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check player freeze cooldown filled
+        if (this.playerSpellsData && this.playerSpellsData.freeze && !isNaN(this.playerSpellsData.freeze.cooldown)) {
+
+            if (this.playerFreezeButton.usedCurrentRound) {
+                this.playerFreezeButton.usedCurrentRound = false;
+            } else {
+                this.playerSpellsData.freeze.cooldownProgress++;
+            }
+
+            this.playerFreezeButton.tweenUpdateCooldown(
+                this.playerSpellsData.freeze.cooldownProgress,
+                this.playerSpellsData.freeze.cooldown
+            );
+            if (this.playerSpellsData.freeze.cooldownProgress === this.playerSpellsData.freeze.cooldown) {
+                this.playerFreezeButton.readyForUse = true;
+                this.playerFreezeButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check opponent magic ball cooldown filled
+        if (this.opponentSpellsData.magicBall) {
+
+            if (this.opponentMagicBallButton.usedCurrentRound) {
+                this.opponentMagicBallButton.usedCurrentRound = false;
+            } else {
+                this.opponentSpellsData.magicBall.cooldownProgress++;
+            }
+
+            this.opponentMagicBallButton.tweenUpdateCooldown(
+                this.opponentSpellsData.magicBall.cooldownProgress,
+                this.opponentSpellsData.magicBall.cooldown
+            );
+
+            if (this.opponentSpellsData.magicBall.cooldownProgress === this.opponentSpellsData.magicBall.cooldown) {
+                this.opponentMagicBallButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check opponent poison cooldown filled
+        if (this.opponentSpellsData.poison) {
+
+            if (this.opponentPoisonButton.usedCurrentRound) {
+                this.opponentPoisonButton.usedCurrentRound = false;
+            } else {
+                this.opponentSpellsData.poison.cooldownProgress++;
+            }
+
+            this.opponentPoisonButton.tweenUpdateCooldown(
+                this.opponentSpellsData.poison.cooldownProgress,
+                this.opponentSpellsData.poison.cooldown
+            );
+
+            if (this.opponentSpellsData.poison.cooldownProgress === this.opponentSpellsData.poison.cooldown) {
+                this.opponentPoisonButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check opponent rain of arrows cooldown filled
+        if (this.opponentSpellsData.rainOfArrows) {
+
+            if (this.opponentRainOfArrowsButton.usedCurrentRound) {
+                this.opponentRainOfArrowsButton.usedCurrentRound = false;
+            } else {
+                this.opponentSpellsData.rainOfArrows.cooldownProgress++;
+            }
+
+            this.opponentRainOfArrowsButton.tweenUpdateCooldown(
+                this.opponentSpellsData.rainOfArrows.cooldownProgress,
+                this.opponentSpellsData.rainOfArrows.cooldown
+            );
+
+            if (this.opponentSpellsData.rainOfArrows.cooldownProgress === this.opponentSpellsData.rainOfArrows.cooldown) {
+                this.opponentRainOfArrowsButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check opponent freeze filled
+        if (this.opponentSpellsData.freeze) {
+
+            if (this.opponentFreezeButton.usedCurrentRound) {
+                this.opponentFreezeButton.usedCurrentRound = false;
+            } else {
+                this.opponentSpellsData.freeze.cooldownProgress++;
+            }
+
+            this.opponentFreezeButton.tweenUpdateCooldown(
+                this.opponentSpellsData.freeze.cooldownProgress,
+                this.opponentSpellsData.freeze.cooldown
+            );
+
+            if (this.opponentSpellsData.freeze.cooldownProgress === this.opponentSpellsData.freeze.cooldown) {
+                this.opponentFreezeButton.startSpellFilledTween(false);
+            }
+        }
+    }
+
+    updateFrozenMonsters() {
+        const allFrozenMonsters: Monster[] = this.data.list.isPlayerTurn ?
+            this.data.list.opponentMonsters.filter((m: Monster) => m && m.frozenForDuration > 0) :
+            this.data.list.playerMonsters.filter((m: Monster) => m && m.frozenForDuration > 0);
+
+        while (allFrozenMonsters.length) {
+            const monster = allFrozenMonsters.shift();
+            let emitCheckEndTurnOnComplete = false;
+            monster.frozenForDuration--;
+            monster.unitData.movesLeft = 0;
+            monster.frozen_turns_left_text.setText(`${monster.frozenForDuration}`);
+            monster.pendingAction = false;
+            if (monster.frozenForDuration === 0) {
+                monster.removeFrozen();
+            }
+        }
+    }
+
+    applyPoison(onComplete: () => void) {
+
+        console.log(this.data.list.playerMonsters);
+        console.log(this.data.list.opponentMonsters);
+
+        const allPoisonedMonsters: Monster[] = this.data.list.isPlayerTurn ?
+            this.data.list.playerMonsters.filter((m: Monster) => m && m.poisonedForDuration > 0) :
+            this.data.list.opponentMonsters.filter((m: Monster) => m && m.poisonedForDuration > 0)
+
+
+        if (allPoisonedMonsters.length === 0) {
+            onComplete();
+        } else {
+            /**
+             * this delayed call is a dirty hack.changing the duration will probably cause issues.
+             * duration is based onthe monster.takeDamage tween duration, which is 1500.
+             * TO BE FIXED...
+             */
+            this.time.delayedCall(2000, () => {
+                onComplete();
+            })
+        }
+
+        while (allPoisonedMonsters.length) {
+            const monster = allPoisonedMonsters.shift();
+            let emitCheckEndTurnOnComplete = false;
+            monster.takePoisonDamege(emitCheckEndTurnOnComplete)
+        }
     }
 
     createCoins(): void { };

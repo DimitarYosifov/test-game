@@ -187,6 +187,28 @@ export const createDebugPanel = () => {
     addToken5Container.appendChild(addToken5Input);
     addToken5Container.appendChild(addToken5Button);
 
+    //add spell points-------------------------------------------------------------------------
+    const addSpellPointsContainer = document.createElement('div');
+    addSpellPointsContainer.style.margin = '0.4em'
+    addSpellPointsContainer.style.display = 'flex';
+    addSpellPointsContainer.style['justify-content' as any] = 'center';
+    const addSpellPointsText = document.createElement('span');
+    addSpellPointsText.innerText = 'add spell points';
+    const addSpellPointsInput = document.createElement('input');
+    addSpellPointsInput.type = 'number';
+    addSpellPointsInput.value = '1';
+    const addSpellPointsButton = document.createElement('button');
+    addSpellPointsButton.innerText = 'add';
+    addSpellPointsButton.onclick = () => {
+        const spellPoints = LOCAL_STORAGE_MANAGER.get('spellPoints');
+        LOCAL_STORAGE_MANAGER.set('spellPoints', +(spellPoints as number) + +addSpellPointsInput.value);
+    }
+    mainContainer.appendChild(addSpellPointsContainer);
+    addSpellPointsContainer.appendChild(addSpellPointsText);
+    addSpellPointsContainer.appendChild(addSpellPointsInput);
+    addSpellPointsContainer.appendChild(addSpellPointsButton);
+
+
     //add free common pack-------------------------------------------------------------------------
     const addFreeCommonPackContainer = document.createElement('div');
     addFreeCommonPackContainer.style.margin = '0.4em'

@@ -41,6 +41,9 @@ export class Monster extends Phaser.GameObjects.Container {
     frozen_turns_left_text: Phaser.GameObjects.Text | null;
     poisonEmitter: Phaser.GameObjects.Particles.ParticleEmitter | null;
     poisoned_turns_left_text: Phaser.GameObjects.Text | null;
+    poisonedForDuration: number = 0;
+    poisonedForDamage: number = 0;
+    frozenForDuration: number = 0;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -252,10 +255,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.add([this.movesLeftContainer, this.movesLeftContainer2])
 
         this.addInteraction();
-
-
-
-
+        //test
         // this.setPoisoned();
     }
 
@@ -280,7 +280,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
     setInteraction(interactive: boolean, skipByUser: boolean = false): void {
         // skipByUser is false for the currentlySelectedMonster when skipped
-        interactive ? this.bg.setInteractive() : this.bg.disableInteractive();
+        interactive && this.frozenForDuration === 0 ? this.bg.setInteractive() : this.bg.disableInteractive();
         if (interactive && !skipByUser) {
             // this.setIdlePendingMove(); // do not use scale tween for now...
         } else {
@@ -646,9 +646,30 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    takeDamege(damage: number, isMagicAttack: boolean, ignoreArmor: boolean = false, emitCheckEndTurnOnComplete: boolean = true, delayAnimation: number = 0): boolean {
+    takePoisonDamege(emitCheckEndTurnOnComplete: boolean) {
 
-        if (this.unitData.health === 0) {
+        this.takeDamege(this.poisonedForDamage, true, true, emitCheckEndTurnOnComplete);
+        this.poisonedForDuration--;
+        this.poisoned_turns_left_text.setText(`${this.poisonedForDuration}`);
+        if (this.poisonedForDuration === 0) {
+            this.poisonedForDamage = 0;
+            this.removePoisoned();
+        }
+    }
+
+    takeDamege(damage: number, isMagicAttack: boolean, ignoreArmor: boolean = false, emitCheckEndTurnOnComplete: boolean = true, delayAnimation: number = 0, continueIfDead: boolean = false): boolean {
+
+        let alreadyDead = this.unitData.health === 0;
+        if (this.unitData.health === 0 && !continueIfDead) {
+            if (emitCheckEndTurnOnComplete) {
+                /**
+                 * below emit is needed for when multiple spell hits and kill all targets,
+                 * without it , the game gets stuck,
+                 * TODO - it could possible cause issues with giant levels - CHECK it
+                 */
+                // this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+            }
+
             // already dead - it is a giant
             return false;
         }
@@ -696,7 +717,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 lostHealth.alpha = 1;
             },
             onComplete: () => {
-                if (healthLeft === 0) {
+                if (healthLeft === 0 && !alreadyDead) {
                     this.die(emitCheckEndTurnOnComplete);
                 } else if (emitCheckEndTurnOnComplete) {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
@@ -719,6 +740,7 @@ export class Monster extends Phaser.GameObjects.Container {
             waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
             waitForTokenDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped ? false : this.checkTokenDrop();
         }
+        const scene = this.scene;
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -726,32 +748,40 @@ export class Monster extends Phaser.GameObjects.Container {
             onComplete: () => {
                 if (waitForPackDropped) {
                     // SOMETIMES THERES A BUG HERE - this.scene is undefined !!!!
-                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
+                    scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
-                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
                     })
                 }
                 else if (waitForGemDropped) {
-                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
+                    scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
-                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
                     })
                 }
                 else if (waitForKeyDropped) {
-                    this.scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
+                    scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
-                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
+                        this.destroy(true);
+                    })
+                }
+                else if (waitForTokenDropped) {
+                    scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED, () => {
+                        if (emitCheckEndTurnOnComplete) {
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
                     })
                 }
                 else {
                     if (emitCheckEndTurnOnComplete) {
-                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                     }
                     this.destroy(true);
                 }
@@ -992,7 +1022,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         duration: 300,
                         ease: 'Back.easeOut',
                         onComplete: () => {
-                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED);
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED);
                             token.destroy(true);
                         }
                     },
@@ -1051,40 +1081,51 @@ export class Monster extends Phaser.GameObjects.Container {
         this.movesLeftContainer2.list.forEach(dot => {
             (dot as Phaser.GameObjects.Image).setTexture('green-dot');
         });
-        this.unitData.movesLeft = this.unitData.moves;
+        if (this.frozenForDuration === 0) {
+            this.unitData.movesLeft = this.unitData.moves;
+        }
     }
 
-    setPoisoned(forTurns: number = 1) {
-        this.poisonEmitter = this.scene.add.particles(0, 0, 'green-poison-particle', {
-            x: { random: [-30, 30] },
-            y: { random: [-30, 30] },
-            lifespan: { random: [3000, 7000] },
-            scale: { min: 0.2, max: 0.4 },
-            alpha: { min: 0.025, max: 0.08 },
-            blendMode: 'ADD',
-            frequency: 100,
-            quantity: 1,
-            maxAliveParticles: 20,
-            rotate: { start: 0, end: 90 }
-        });
-
-        this.add(this.poisonEmitter);
-
-        this.poisoned_turns_left_text = this.scene.add.text(
-            0, 0,
-            `${forTurns}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
-                align: 'center'
+    setPoisoned(poisonedForDuration: number = 1, poisonedForDamage: number, onComplete: () => void) {
+        if (this.poisonedForDuration > 0) {
+            // monster alredy poisoned - increase duration!
+            this.poisonedForDuration += poisonedForDuration;
+            this.poisoned_turns_left_text.setText(`${this.poisonedForDuration}`)
+        } else {
+            this.poisonedForDuration = poisonedForDuration;
+            this.poisonedForDamage = poisonedForDamage;
+            this.poisonEmitter = this.scene.add.particles(0, 0, 'green-poison-particle', {
+                x: { random: [-30, 30] },
+                y: { random: [-30, 30] },
+                lifespan: { random: [3000, 7000] },
+                scale: { min: 0.2, max: 0.4 },
+                alpha: { min: 0.025, max: 0.08 },
+                blendMode: 'ADD',
+                frequency: 100,
+                quantity: 1,
+                maxAliveParticles: 20,
+                rotate: { start: 0, end: 90 }
             });
-        this.poisoned_turns_left_text.setOrigin(0.5);
-        this.add(this.poisoned_turns_left_text);
 
-        //test!!!
-        // this.scene.time.delayedCall(2222, () => {
-        //     this.removePoisoned();
-        // })
+            this.add(this.poisonEmitter);
+
+            this.poisoned_turns_left_text = this.scene.add.text(
+                0, 0,
+                `${poisonedForDuration}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    align: 'center'
+                });
+            this.poisoned_turns_left_text.setOrigin(0.5);
+            this.poisoned_turns_left_text.setTint(0x33af07);
+            this.add(this.poisoned_turns_left_text);
+        }
+
+        this.scene.time.delayedCall(2000, () => {
+            if (onComplete) onComplete();
+        })
+
     }
 
     removePoisoned() {
@@ -1107,49 +1148,69 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    setFrozen(forTurns: number = 1) {
-        this.frozenChains = this.scene.add.image(0, 0, 'chains')
-            .setOrigin(0.5)
-            .setName('chains')
-            .setScale(0.65)
-            .setAlpha(0.7);
-        this.bg.setTint(0x33AAFF);
-        this.add(this.frozenChains);
+    setFrozen(frozenForDuration: number = 1, onComplete: () => void) {
 
-        const reveal = this.frozenChains.postFX.addReveal(
-            0.03,
-            0,
-            1
-        );
-        this.scene.tweens.add({
-            targets: reveal,
-            progress: 1,
-            duration: 3000,
-            onComplete: () => {
-                if (this.frozenChains?.postFX) {
-                    this.frozenChains.postFX.remove(reveal);
+        this.unitData.movesLeft = 0;
+        this.pendingAction = false;
+
+        if (this.frozenForDuration > 0) {
+            // monster alredy poisoned - increase duration!
+            this.frozenForDuration += frozenForDuration;
+            this.frozen_turns_left_text.setText(`${this.frozenForDuration}`)
+        } else {
+            this.frozenForDuration = frozenForDuration;
+            this.frozenChains = this.scene.add.image(0, 0, 'chains')
+                .setOrigin(0.5)
+                .setName('chains')
+                .setScale(0.65)
+                .setAlpha(0);
+            this.bg.setTint(0x33AAFF);
+            this.add(this.frozenChains);
+
+            const reveal = this.frozenChains.postFX.addReveal(
+                0,
+                0,
+                1
+            );
+
+            reveal.progress = 0;
+
+            this.scene.tweens.add({
+                targets: this.frozenChains,
+                alpha: 0.7,
+                duration: 250
+            })
+
+            this.scene.tweens.add({
+                targets: reveal,
+                progress: 1,
+                duration: 2000,
+                onComplete: () => {
+                    if (this.frozenChains?.postFX) {
+                        this.frozenChains.postFX.remove(reveal);
+                    }
                 }
-            }
-        });
-
-        this.frozen_turns_left_text = this.scene.add.text(
-            0, 0,
-            `${forTurns}`,
-            {
-                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
-                align: 'center'
             });
-        this.frozen_turns_left_text.setOrigin(0.5);
-        this.add(this.frozen_turns_left_text);
 
-        //test!!!
-        // this.scene.time.delayedCall(2222, () => {
-        //     this.removeFrozen();
-        // })
+            this.frozen_turns_left_text = this.scene.add.text(
+                0, 0,
+                `${frozenForDuration}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                    align: 'center'
+                });
+            this.frozen_turns_left_text.setOrigin(0.5);
+            this.add(this.frozen_turns_left_text);
+
+            this.scene.time.delayedCall(2000, () => {
+                onComplete()
+            })
+        }
     }
 
     removeFrozen() {
+        this.frozenForDuration = 0;
         if (this.frozenChains) {
             this.scene.tweens.add({
                 targets: [this.frozenChains, this.frozen_turns_left_text],

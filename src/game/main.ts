@@ -12,6 +12,7 @@ import { Achievements } from './scenes/Achievements';
 import { MonstersInfo } from './scenes/MonstersInfo';
 import { Gamble } from './scenes/Gamble';
 import { DefeatGiants } from './scenes/DefeatGiants';
+import { Spells } from './scenes/Spells';
 
 
 //  Find out more information about the Game Config at:
@@ -40,7 +41,8 @@ const config: Phaser.Types.Core.GameConfig = {
         MonstersInfo,
         GameOver,
         Gamble,
-        DefeatGiants
+        DefeatGiants,
+        Spells
     ]
 };
 
