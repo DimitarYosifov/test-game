@@ -6,10 +6,21 @@ import { LOCAL_STORAGE_MANAGER } from '../LOCAL_STORAGE_MANAGER';
 
 const MONSTER_SIZE = 165;
 const START_X = 960;
-const START_Y = 540;
+const START_Y = 480;
 const HORIZONTAL_DISTANCE_BETWEEN_MONSTERS = 40;
 const VERTICAL_DISTANCE_BETWEEN_MONSTERS = 20;
 const MAX_TOTAL_WIDTH = 1640;
+const MONSTER_TYPE_DESCRIPTION = {
+    // TODO - replace 'monster N4' with image or monster name...
+    "1": "+1 permanent move if this monster kills 'monster N4'",
+    "2": "+1 helath if this monster attacks magic monster",
+    "3": "+1 attack for every adjusting enemy magic monster",
+    "5": "+1 health when enemy monster dies",  //TODO - check this could be overpowered!
+    "6": "+50% attack(rounded down) for the next turn(current round) if enemy monster is killed",
+    "7": "20% chance to freeze enemy monster",
+    "8": "+50% attack if health goes below 35%",
+    "9": "+1 move(current round) when enemy monster dies"
+}
 
 export class MonstersInfo extends AbstractScene {
 
@@ -25,17 +36,20 @@ export class MonstersInfo extends AbstractScene {
         super.create();
         this.createBackButton();
 
-        addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
-        addFullscreenFunctionality(this, 100, 75);
+        // addUICurrencies((this as AbstractScene), LOCAL_STORAGE_MANAGER);
+        // addFullscreenFunctionality(this, 100, 75);
 
         this.mainContainer = this.add.container(0, 0);
 
         const container = this.add.container(START_X, START_Y);
         let totalWidth = 0;
         let totalHeight = 0;
+        const monstersLevelsCount = 5;
+
         getAllMonsterTypes().forEach((monsterType: string, monsterTypeIndex: number) => {
             // [...getAllMonsterTypes(), ...getAllMonsterTypes()].slice(0, 11).forEach((monsterType: string, monsterTypeIndex: number) => { // test
-            for (let index = 0; index < 5; index++) {
+            // TODO - the loop below should not be monstersLevelsCount, but all monster levels count
+            for (let index = 0; index < monstersLevelsCount; index++) {
                 const config = getMonsterDataConfig(+monsterType, index);
                 const x = monsterTypeIndex * (MONSTER_SIZE + HORIZONTAL_DISTANCE_BETWEEN_MONSTERS);
                 const y = (MONSTER_SIZE + VERTICAL_DISTANCE_BETWEEN_MONSTERS) * index;
@@ -46,13 +60,29 @@ export class MonstersInfo extends AbstractScene {
                 if (monsterTypeIndex === 0) {
                     totalHeight += MONSTER_SIZE + VERTICAL_DISTANCE_BETWEEN_MONSTERS;
                 }
+
             }
             totalWidth += MONSTER_SIZE + HORIZONTAL_DISTANCE_BETWEEN_MONSTERS;
+
+            // description
+            const description = this.add.text(
+                monsterTypeIndex * (MONSTER_SIZE + HORIZONTAL_DISTANCE_BETWEEN_MONSTERS),
+                ((MONSTER_SIZE + VERTICAL_DISTANCE_BETWEEN_MONSTERS) * (monstersLevelsCount)) - 25,
+                // `${(MONSTER_TYPE_DESCRIPTION as any)[monsterType]}`,
+                `${(MONSTER_TYPE_DESCRIPTION as any)[Object.keys(MONSTER_TYPE_DESCRIPTION)[monsterTypeIndex]]}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 17, color: '#ffffff',
+                    wordWrap: { width: MONSTER_SIZE + 30 }, stroke: '#000000', letterSpacing: 2,
+                    align: 'center'
+                }).setOrigin(0.5, 0.5);
+            container.add(description);
+
         });
 
 
         container.x = START_X - (totalWidth / 2) + (MONSTER_SIZE) - HORIZONTAL_DISTANCE_BETWEEN_MONSTERS;
         container.y = START_Y - (totalHeight / 2) + (MONSTER_SIZE / 2);
+
         //SCALE MONSTERS CONTAINER TO FIT THE SCREEN
         const scale = MAX_TOTAL_WIDTH / totalWidth;
         if (scale < 1) {
