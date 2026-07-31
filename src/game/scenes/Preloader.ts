@@ -17,8 +17,8 @@ export class Preloader extends Scene {
             console.log(progress)
         });
 
-        this.add.rectangle(960, 100 - 16, 720, 24).setStrokeStyle(3, 0x000000);
-        const bar = this.add.rectangle(960 - 360 + 3, 100 - 16, 4, 20, 0xff0000);
+        this.add.rectangle(960, 960 - 16, 720, 24).setStrokeStyle(3, 0x000000);
+        const bar = this.add.rectangle(960 - 360 + 3, 960 - 16, 4, 20, 0xff0000);
         this.load.on('progress', (progress: number) => {
             bar.width = (720 * progress);
         });
@@ -51,6 +51,7 @@ export class Preloader extends Scene {
         this.load.image('bg-achievments', 'bg44.jpg');
         this.load.image('bg-casino', 'casino.jpg');
         this.load.image('bg-loading', 'bg-loading.png');
+        this.load.image('loading-bg', 'loading-bg.png');
         this.load.image('defeat-giants', 'defeat-giants.png');
         this.load.image('bow', 'bow.png');
         this.load.image('cloud', 'cloud.png');
@@ -110,6 +111,7 @@ export class Preloader extends Scene {
         this.load.image('slot-machine', 'slot-machine.png');
         this.load.image('on', 'on.png');
         this.load.image('off', 'off.png');
+        this.load.image('defeat-giants-menu', 'defeat-giants-menu.png');
 
         this.load.image('fullscreen', 'fullscreen.png');
         this.load.image('exit-fullscreen', 'exit-fullscreen.png');
@@ -153,14 +155,19 @@ export class Preloader extends Scene {
     }
 
     create() {
-        // return
-        // DailyQuestTimeHandler.initialCheck();
-        // DataHandler.setInitialAchievements();
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start('MainMenu');
-            DailyQuestTimeHandler.initialCheck();
-            DataHandler.setInitialAchievements();
-        });
+
+        // setTimeout(() => {
+            // return
+            // DailyQuestTimeHandler.initialCheck();
+            // DataHandler.setInitialAchievements();
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once('camerafadeoutcomplete', () => {
+                this.scene.start('MainMenu');
+                DailyQuestTimeHandler.initialCheck();
+                DataHandler.setInitialAchievements();
+            });
+        // }, 7500);
+
+
     }
 }
