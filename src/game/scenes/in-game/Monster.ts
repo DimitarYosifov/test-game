@@ -418,38 +418,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         buffImageKey = BUFF_TYPES.VISION;
                         break;
                     case BUFF_TYPES.GREEN_DOT:
-                        this.unitData.moves++;
-                        const dot = this.scene.add.image(0, 0, 'grey-dot').setScale(this._displayWidth * 0.15 / 100).setOrigin(0, 0.5);
-                        if (this.unitData.moves > 4) {
-                            this.movesLeftContainer2.add(dot);
-                        } else {
-                            this.movesLeftContainer.add(dot);
-                        }
-
-                        Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
-                            width: 0,
-                            height: this.movesLeftContainer.list.length,
-                            cellWidth: 0,
-                            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
-                            position: Phaser.Display.Align.CENTER
-                        });
-
-                        Phaser.Actions.GridAlign(this.movesLeftContainer2.list, {
-                            width: 0,
-                            height: this.movesLeftContainer2.list.length,
-                            cellWidth: 0,
-                            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
-                            position: Phaser.Display.Align.CENTER
-                        });
-
-                        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
-                        this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
-                        if (this.isGiant) {
-
-                        } else {
-                            this.movesLeftContainer.x = this.bg.displayWidth - 32;
-                            this.movesLeftContainer2.x = this.bg.displayWidth - 55;
-                        }
+                        this.addMove();
                         buffImageKey = BUFF_TYPES.GREEN_DOT;
                         break;
                     case BUFF_TYPES.BOMB:
@@ -468,30 +437,7 @@ export class Monster extends Phaser.GameObjects.Container {
                     return true;
                 }
 
-                // add visual  display of the buff and tween
-                const glbPos = this.bg.getBounds()
-                const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
-                const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
-                let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(GAME_OBJECT_DEPTHS.monsterBuffImage);
-                const buffQuantityText = this.scene.add.text(
-                    x,
-                    y,
-                    `+${buff.quantity}`,
-                    {
-                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#4bcc0f',
-                        stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
-                        align: 'center'
-                    });
-                buffQuantityText.setOrigin(1, 0.5).setDepth(GAME_OBJECT_DEPTHS.monsterBuffQuantityText);
-                this.scene.tweens.add({
-                    targets: [buffQuantityText, buffImage],
-                    y: y - 75,
-                    duration: 1500,
-                    onComplete: () => {
-                        buffQuantityText.destroy(true);
-                        buffImage.destroy(true);
-                    }
-                })
+                this.addBUffCollected(row, col, buff.quantity, buffImageKey);
 
                 //remove buff data and visually
                 buff.buffContainer.destroy(true);
@@ -499,6 +445,85 @@ export class Monster extends Phaser.GameObjects.Container {
                 console.log(this.scene.data.list.gridPositions[row][col]);
                 return false;
             }
+        }
+    }
+
+    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string) {
+        // add visual  display of the buff and tween
+        const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
+        const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
+        let buffImage = this.scene.add.image(x, y, buffImageKey).setOrigin(0, 0.5).setScale(0.35).setDepth(GAME_OBJECT_DEPTHS.monsterBuffImage);
+        const buffQuantityText = this.scene.add.text(
+            x,
+            y,
+            `+${buffQuantity}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#4bcc0f',
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                align: 'center'
+            });
+        buffQuantityText.setOrigin(1, 0.5).setDepth(GAME_OBJECT_DEPTHS.monsterBuffQuantityText);
+        this.scene.tweens.add({
+            targets: [buffQuantityText, buffImage],
+            y: y - 75,
+            duration: 1500,
+            onComplete: () => {
+                buffQuantityText.destroy(true);
+                buffImage.destroy(true);
+            }
+        })
+    }
+
+    addMove(onlyForCurrentRound: boolean = false, addForCurrentRoundOnly: boolean = false) {
+
+        if (this.unitData.movesLeft < main_config.maxMonsterMovesPerRound) {
+            this.unitData.movesLeft++;
+        }
+
+        this.pendingAction = true;
+
+        if (!onlyForCurrentRound) {
+            if (this.unitData.moves < main_config.maxMonsterMovesPerRound) {
+                this.unitData.moves++;
+            }
+        }
+
+        const dot = this.scene.add.image(0, 0, 'grey-dot').setScale(this._displayWidth * 0.15 / 100).setOrigin(0, 0.5);
+
+
+        if (this.unitData.movesLeft > this.unitData.moves || !onlyForCurrentRound) {
+            if (this.unitData.moves > 4) {
+                this.movesLeftContainer2.add(dot);
+            } else {
+                this.movesLeftContainer.add(dot);
+            }
+        }
+
+        Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
+            width: 0,
+            height: this.movesLeftContainer.list.length,
+            cellWidth: 0,
+            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+            position: Phaser.Display.Align.CENTER
+        });
+
+        Phaser.Actions.GridAlign(this.movesLeftContainer2.list, {
+            width: 0,
+            height: this.movesLeftContainer2.list.length,
+            cellWidth: 0,
+            cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+            position: Phaser.Display.Align.CENTER
+        });
+
+        this.updateMoveDots();
+
+        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+        this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
+        if (this.isGiant) {
+
+        } else {
+            this.movesLeftContainer.x = this.bg.displayWidth - 32;
+            this.movesLeftContainer2.x = this.bg.displayWidth - 55;
         }
     }
 
@@ -1059,22 +1084,35 @@ export class Monster extends Phaser.GameObjects.Container {
         // this.bg.postFX.addGlow(0xffffff, 8, 0, false, 0.1, 16);
     }
 
-    decreaseMoves(): void {
+    updateMoveDots() {
 
+        this.movesLeftContainer.list.forEach((element: any, index: number) => {
+            if (this.unitData.movesLeft > index) {
+                element.setTexture('green-dot');
+            } else {
+                element.setTexture('grey-dot');
+            }
+        });
+        this.movesLeftContainer2.list.forEach((element: any, index: number) => {
+            if (this.unitData.movesLeft - 4 > index) {
+                element.setTexture('green-dot');
+            } else {
+                element.setTexture('grey-dot');
+            }
+        });
+    }
+
+    decreaseMoves(): void {
         //================== hack to fix nasty bug!===========================||
         if (this.unitData.movesLeft === 0) return;
         //====================================================================||
 
         this.unitData.movesLeft--;
-        if (this.unitData.movesLeft > 3) {
-            (this.movesLeftContainer2.list[this.unitData.movesLeft - 4] as Phaser.GameObjects.Image).setTexture('grey-dot');
-        } else {
-            (this.movesLeftContainer.list[this.unitData.movesLeft] as Phaser.GameObjects.Image).setTexture('grey-dot');
-        }
-
+        this.updateMoveDots();
     }
 
     resetMoves(): void {
+        this.movesLeftContainer.list.length = this.unitData.moves;
         this.movesLeftContainer.list.forEach(dot => {
             (dot as Phaser.GameObjects.Image).setTexture('green-dot');
         });
@@ -1154,7 +1192,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.pendingAction = false;
 
         if (this.frozenForDuration > 0) {
-            // monster alredy poisoned - increase duration!
+            // monster alredy frozen - increase duration!
             this.frozenForDuration += frozenForDuration;
             this.frozen_turns_left_text.setText(`${this.frozenForDuration}`)
         } else {

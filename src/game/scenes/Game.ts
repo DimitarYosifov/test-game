@@ -828,11 +828,29 @@ export class Game extends AbstractScene {
         })
     }
 
+    private checkSpecificMonsterSkillOnMonsterDie(killedMonster: Monster) {
+
+        /**below will not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
+
+        // monster 1 special skill 
+        if (+killedMonster.type === 5) {
+            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+            monsters
+                .filter((m: Monster) => +m.type === 1)
+                .forEach((fm: Monster) => {
+                    fm.addMove();
+                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
+                });
+        }
+    }
+
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: (Monster | IUnitData)[]) => {
 
             const monster = data[0] as Monster;
             const unitData = data[1];
+
+            this.checkSpecificMonsterSkillOnMonsterDie(monster);
 
             if (!monster.isPlayerMonster) {
                 DataHandler.checkDataOnMonsterDeath(monster)
@@ -1479,7 +1497,7 @@ export class Game extends AbstractScene {
 
     private checkShouldAddBuffs() {
         // test 
-        return true
+        // return true
 
         return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
     }

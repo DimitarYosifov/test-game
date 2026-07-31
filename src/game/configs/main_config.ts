@@ -18,6 +18,7 @@ export const main_config = {
     "lineWidth": 6,
     "fullCloudsOpacity": 1,// clouds visibility
     "rangedUnitsRange": 2,
+    "maxMonsterMovesPerRound": 8,
     "playerStartingCoins": 50,
     "playerStartingGems": 1,
     "playerStartingKeys": 0,
