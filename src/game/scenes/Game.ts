@@ -14,6 +14,7 @@ import { MagicBallSpell } from './in-game/spells/MagicBallSpell';
 import { PoisonSpell } from './in-game/spells/PoisonSpell';
 import { RainOfArrowsSpell } from './in-game/spells/RainOfArrowsSpell';
 import { FreezeSpell } from './in-game/spells/FreezeSpell';
+import { HealSpell } from './in-game/spells/HealSpell';
 
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
@@ -82,6 +83,9 @@ export class Game extends AbstractScene {
 
     playerFreezeButton: Button;
     opponentFreezeButton: Button;
+
+    playerHealButton: Button;
+    opponentHealButton: Button;
 
     opponentSpellsData: ISpellsData;
     playerSpellsData: ISpellsData;
@@ -618,6 +622,9 @@ export class Game extends AbstractScene {
             }
             if (isPlayerTurn && this.playerFreezeButton?.readyForUse) {
                 this.playerFreezeButton.disableInteractive();
+            }
+            if (isPlayerTurn && this.playerHealButton?.readyForUse) {
+                this.playerHealButton.disableInteractive();
             }
         });
     }
@@ -2306,6 +2313,7 @@ export class Game extends AbstractScene {
         const poisonCooldownLevel = LOCAL_STORAGE_MANAGER.get('poisonCooldownLevel');
         const rainOfArrowsCooldownLevel = LOCAL_STORAGE_MANAGER.get('rainOfArrowsCooldownLevel');
         const freezeCooldownLevel = LOCAL_STORAGE_MANAGER.get('freezeCooldownLevel');
+        const healCooldownLevel = LOCAL_STORAGE_MANAGER.get('healCooldownLevel');
 
         (this.playerSpellsData as any) = {};
 
@@ -2442,6 +2450,38 @@ export class Game extends AbstractScene {
                 .setScale(0.6);
         }
 
+        // PLAYER HEAL BUTTON
+        if (!isNaN(healCooldownLevel) && healCooldownLevel !== null) {
+            this.playerSpellsData.heal = {
+                cooldown: spellsConfig.heal.coolDown[healCooldownLevel].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[LOCAL_STORAGE_MANAGER.get('healAmountLevel')].value,
+                targets: spellsConfig.heal.targets[LOCAL_STORAGE_MANAGER.get('healTargetsLevel')].value
+            }
+
+            this.playerHealButton = new Button(this, 1820, 810, 'heal-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.heal.cooldownProgress = 0;
+                this.playerHealButton.readyForUse = false;
+                this.newHealSpell(this.playerSpellsData.heal.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6);
+            this.playerHealButton.addRevealOverlay();
+            this.playerHealButton.updateCooldown(
+                this.playerSpellsData.heal.cooldownProgress,
+                this.playerSpellsData.heal.cooldown
+            );
+            this.playerHealButton.updateCooldownText(
+                `${this.playerSpellsData.heal.cooldown - this.playerSpellsData.heal.cooldownProgress}`
+            );
+        } else {
+            // create static image for player heal button
+            const staticPlayerHealButton = this.add.image(1820, 810, 'heal-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
         // OPPONENT MAGIC BALL BUTTON
         if (this.opponentSpellsData?.magicBall) {
             this.opponentMagicBallButton = new Button(this, 100, 290, 'magic-ball-button', '', () => {
@@ -2521,6 +2561,26 @@ export class Game extends AbstractScene {
                 .setOrigin(0.5)
                 .setScale(0.6);
         }
+
+        // OPPONENT HEAL BUTTON
+        if (this.opponentSpellsData?.heal) {
+            this.opponentHealButton = new Button(this, 100, 810, 'heal-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6)
+            this.opponentHealButton.addRevealOverlay();
+            this.opponentHealButton.updateCooldown(
+                this.opponentSpellsData.heal.cooldownProgress,
+                this.opponentSpellsData.heal.cooldown
+            );
+            this.opponentHealButton.updateCooldownText(
+                `${this.opponentSpellsData.heal.cooldown - this.opponentSpellsData.heal.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentHealButton = this.add.image(100, 810, 'heal-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
     }
 
     private checkOpponentForSpellCast() {
@@ -2556,6 +2616,14 @@ export class Game extends AbstractScene {
         ) {
             this.opponentSpellsData.freeze.cooldownProgress = 0;
             this.newFreezeSpell(this.opponentSpellsData.freeze.cooldown);
+        } else if (
+            // check heal
+            this.opponentSpellsData &&
+            this.opponentSpellsData.heal &&
+            this.opponentSpellsData.heal.cooldownProgress === this.opponentSpellsData.heal.cooldown
+        ) {
+            this.opponentSpellsData.heal.cooldownProgress = 0;
+            this.newHealSpell(this.opponentSpellsData.heal.cooldown);
         } else {
             this.addInteraction();
             this.getRandomOpponentMonster();
@@ -2659,11 +2727,35 @@ export class Game extends AbstractScene {
         })
     }
 
+    private newHealSpell(cooldown: number) {
+        const button = this.data.list.isPlayerTurn ? this.playerHealButton : this.opponentHealButton;
+        button.setAlpha(1);
+
+        button.animateSpellTrigger(() => {
+            button.removeSpellFilledTween();
+            button.onSpellUse();
+            this.events.once(GAME_SCENE_SCENE_EVENTS.ROUND_END, () => {
+                button.tweenUpdateCooldown(0, cooldown);
+            });
+
+            new HealSpell(
+                this,
+                this.mainGridContainer,
+                this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters,
+                this.data.list.isPlayerTurn ? this.playerSpellsData.heal : this.opponentSpellsData.heal
+            );
+
+            this.time.delayedCall(750, () => {
+                this.spellCastInProgress = false;
+            })
+        })
+    }
+
     private updatePlayerSpellButtonsInteraction(forceDisable: boolean = false) {
         // Player Magic Ball Button
         if (this.data.list.isPlayerTurn) {
 
-            // Player Magic Ball Buttonf
+            // Player Magic Ball Button
             if (this.playerMagicBallButton) {
                 if (this.playerMagicBallButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
                     this.playerMagicBallButton.setInteractive();
@@ -2703,6 +2795,15 @@ export class Game extends AbstractScene {
                 this.playerFreezeButton.setAlpha(this.playerFreezeButton.usedCurrentRound ? 0.45 : 1);
             }
 
+            // Player Heal Button
+            if (this.playerHealButton) {
+                if (this.playerHealButton.readyForUse && !this.spellCastInProgress && !forceDisable) {
+                    this.playerHealButton.setInteractive();
+                } else {
+                    this.playerHealButton.disableInteractive();
+                }
+                this.playerHealButton.setAlpha(this.playerHealButton.usedCurrentRound ? 0.45 : 1);
+            }
         } else {
             if (this.playerMagicBallButton) {
                 this.playerMagicBallButton.disableInteractive();
@@ -2719,6 +2820,10 @@ export class Game extends AbstractScene {
             if (this.playerFreezeButton) {
                 this.playerFreezeButton.disableInteractive();
                 this.playerFreezeButton.setAlpha(this.playerFreezeButton.usedCurrentRound ? 0.45 : 1);
+            }
+            if (this.playerHealButton) {
+                this.playerHealButton.disableInteractive();
+                this.playerHealButton.setAlpha(this.playerHealButton.usedCurrentRound ? 0.45 : 1);
             }
         }
     }
@@ -2802,6 +2907,25 @@ export class Game extends AbstractScene {
             }
         }
 
+        // check player heal cooldown filled
+        if (this.playerSpellsData && this.playerSpellsData.heal && !isNaN(this.playerSpellsData.heal.cooldown)) {
+
+            if (this.playerHealButton.usedCurrentRound) {
+                this.playerHealButton.usedCurrentRound = false;
+            } else {
+                this.playerSpellsData.heal.cooldownProgress++;
+            }
+
+            this.playerHealButton.tweenUpdateCooldown(
+                this.playerSpellsData.heal.cooldownProgress,
+                this.playerSpellsData.heal.cooldown
+            );
+            if (this.playerSpellsData.heal.cooldownProgress === this.playerSpellsData.heal.cooldown) {
+                this.playerHealButton.readyForUse = true;
+                this.playerHealButton.startSpellFilledTween(false);
+            }
+        }
+
         // check opponent magic ball cooldown filled
         if (this.opponentSpellsData.magicBall) {
 
@@ -2875,6 +2999,25 @@ export class Game extends AbstractScene {
 
             if (this.opponentSpellsData.freeze.cooldownProgress === this.opponentSpellsData.freeze.cooldown) {
                 this.opponentFreezeButton.startSpellFilledTween(false);
+            }
+        }
+
+        // check opponent heal filled
+        if (this.opponentSpellsData.heal) {
+
+            if (this.opponentHealButton.usedCurrentRound) {
+                this.opponentHealButton.usedCurrentRound = false;
+            } else {
+                this.opponentSpellsData.heal.cooldownProgress++;
+            }
+
+            this.opponentHealButton.tweenUpdateCooldown(
+                this.opponentSpellsData.heal.cooldownProgress,
+                this.opponentSpellsData.heal.cooldown
+            );
+
+            if (this.opponentSpellsData.heal.cooldownProgress === this.opponentSpellsData.heal.cooldown) {
+                this.opponentHealButton.startSpellFilledTween(false);
             }
         }
     }

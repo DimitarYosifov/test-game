@@ -40,6 +40,13 @@ export class Spells extends AbstractScene {
     freezeImage: Phaser.GameObjects.Image;
     freezeContainer: Phaser.GameObjects.Container;
 
+    //heal  
+    healCooldown: number;
+    healTargets: number;
+    healAmount: number;
+    healImage: Phaser.GameObjects.Image;
+    healContainer: Phaser.GameObjects.Container;
+
     constructor() {
         super('Spells');
     }
@@ -62,6 +69,7 @@ export class Spells extends AbstractScene {
         this.createPoisonSection();
         this.createRainOfArrowsSection();
         this.createFreezeSection();
+        this.createHealSection();
     }
 
     recreateElements() {
@@ -71,6 +79,7 @@ export class Spells extends AbstractScene {
         this.poisonContainer.destroy(true);
         this.rainOfArrowsContainer.destroy(true);
         this.freezeContainer.destroy(true);
+        this.healContainer.destroy(true);
 
         this.createElements();
     }
@@ -1595,6 +1604,359 @@ export class Spells extends AbstractScene {
             this.freezeContainer.add(spellPointsNeededText);
 
             if (this.spellPoints >= spellPointsToUnlockFreeze) {
+                unlockButton.setInteractive();
+            }
+        }
+    }
+
+    createHealSection() {
+
+        const healCooldownLevel = LOCAL_STORAGE_MANAGER.get('healCooldownLevel');
+        const healTargetsLevel = LOCAL_STORAGE_MANAGER.get('healTargetsLevel');
+        const healAmountLevel = LOCAL_STORAGE_MANAGER.get('healAmountLevel')
+
+        this.healContainer = this.add.container(850, 940);
+        // title
+        const healTitleText = this.add.text(
+            0,
+            0,
+            `heal`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4,
+                align: 'center'
+            }).setOrigin(1, 0.5);
+        this.healContainer.add(healTitleText);
+
+        // icon
+        this.healImage = this.add.image(10, 0, 'heal-button').setOrigin(0, 0.5).setScale(0.45);
+        this.healContainer.add(this.healImage);
+
+        //heal ball cooldown img
+
+        if (!isNaN(healCooldownLevel) && healCooldownLevel !== null) {
+
+            //========================== HEAL COOLDOWN=================================
+            const healCooldownImage = this.add.image(this.healImage.x + this.healImage.displayWidth + 35, this.healImage.y - this.healImage.displayHeight / 3 - 20, 'cooldown').setOrigin(0, 0.5).setScale(0.2);
+            this.healContainer.add(healCooldownImage);
+            this.healCooldown = spellsConfig.heal.coolDown[healCooldownLevel].value;
+            //heal cooldown text
+            const healCooldownText = this.add.text(
+                healCooldownImage.x + healCooldownImage.displayWidth + 10,
+                healCooldownImage.y,
+                `${this.healCooldown}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0, 0.5);
+            this.healContainer.add(healCooldownText);
+
+            const nextLevelCooldown = spellsConfig.heal.coolDown[healCooldownLevel + 1];
+
+            // next level
+            if (nextLevelCooldown) {
+                // arrow img
+                const healCooldownArrow = this.add.image(
+                    healCooldownText.x + healCooldownText.displayWidth + 50,
+                    healCooldownText.y,
+                    'arrow'
+                ).setOrigin(0.5).setScale(0.3).setAngle(90);
+                this.healContainer.add(healCooldownArrow);
+
+                //next lvl cooldown text
+                const nextLevelCooldownText = this.add.text(
+                    healCooldownArrow.x + healCooldownArrow.displayWidth + 20,
+                    healCooldownArrow.y,
+                    `${nextLevelCooldown.value}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(nextLevelCooldownText);
+
+                const unlockSpellPointsImg = this.add.image(nextLevelCooldownText.x + nextLevelCooldownText.displayWidth + 50, nextLevelCooldownText.y, 'spell-point').setOrigin(0, 0.5).setScale(0.25);
+                this.healContainer.add(unlockSpellPointsImg);
+
+                //heal spell Points Needed Text
+                const spellPointsNeededText = this.add.text(
+                    unlockSpellPointsImg.x + unlockSpellPointsImg.displayWidth + 10,
+                    unlockSpellPointsImg.y,
+                    `${nextLevelCooldown.cost}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(spellPointsNeededText);
+
+                // upgrade button
+                const upgradeButton = new Button(
+                    this,
+                    spellPointsNeededText.x + spellPointsNeededText.displayWidth,
+                    spellPointsNeededText.y,
+                    'upgrade',
+                    '',
+                    () => {
+                        LOCAL_STORAGE_MANAGER.set('healCooldownLevel', healCooldownLevel + 1);
+                        // LOCAL_STORAGE_MANAGER.set('poisonDamageLevel', 0);
+                        // LOCAL_STORAGE_MANAGER.set('poisonTargetsLevel', 0);
+                        this.spellPoints -= nextLevelCooldown.cost;
+                        LOCAL_STORAGE_MANAGER.set('spellPoints', this.spellPoints);
+                        this.recreateElements();
+                    },
+                    true,
+                    0.35
+                );
+                upgradeButton.x += upgradeButton.bg.displayWidth / 2;
+                this.healContainer.add(upgradeButton);
+                if (this.spellPoints >= nextLevelCooldown.cost) {
+                    upgradeButton.setInteractive();
+                }
+            } else {
+                // SPELL MAXED
+                const maxText = this.add.text(
+                    healCooldownText.x + healCooldownText.displayWidth + 50,
+                    healCooldownText.y,
+                    `max`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(maxText);
+            }
+
+            //========================== HEAL TARGETS=================================
+            // heal targets img
+            this.healTargets = spellsConfig.poison.targets[healTargetsLevel].value;
+            const healTargetsImage = this.add.image(this.healImage.x + this.healImage.displayWidth + 35, this.healImage.y, 'number-of-targets').setOrigin(0, 0.5).setScale(0.2);
+            this.healContainer.add(healTargetsImage);
+
+            // heal targets text
+            const healTargetsText = this.add.text(
+                healTargetsImage.x + healTargetsImage.displayWidth + 10,
+                healTargetsImage.y,
+                `${this.healTargets}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0, 0.5);
+            this.healContainer.add(healTargetsText);
+
+            const nextLevelTargets = spellsConfig.heal.targets[healTargetsLevel + 1];
+
+            // next level
+            if (nextLevelTargets) {
+                // arrow img
+                const healTargetsArrow = this.add.image(
+                    healTargetsText.x + healTargetsText.displayWidth + 50,
+                    healTargetsText.y,
+                    'arrow'
+                ).setOrigin(0.5).setScale(0.3).setAngle(90);
+                this.healContainer.add(healTargetsArrow);
+
+                //next lvl targets text
+                const nextLevelTargetsText = this.add.text(
+                    healTargetsArrow.x + healTargetsArrow.displayWidth + 20,
+                    healTargetsArrow.y,
+                    `${nextLevelTargets.value}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(nextLevelTargetsText);
+
+                const unlockSpellPointsImg = this.add.image(nextLevelTargetsText.x + nextLevelTargetsText.displayWidth + 50, nextLevelTargetsText.y, 'spell-point').setOrigin(0, 0.5).setScale(0.25);
+                this.healContainer.add(unlockSpellPointsImg);
+
+                // heal Points Needed Text
+                const spellPointsNeededText = this.add.text(
+                    unlockSpellPointsImg.x + unlockSpellPointsImg.displayWidth + 10,
+                    unlockSpellPointsImg.y,
+                    `${nextLevelTargets.cost}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(spellPointsNeededText);
+
+                // upgrade button
+                const upgradeButton = new Button(
+                    this,
+                    spellPointsNeededText.x + spellPointsNeededText.displayWidth,
+                    spellPointsNeededText.y,
+                    'upgrade',
+                    '',
+                    () => {
+                        LOCAL_STORAGE_MANAGER.set('healTargetsLevel', healTargetsLevel + 1);
+                        // LOCAL_STORAGE_MANAGER.set('poisonDamageLevel', 0);
+                        // LOCAL_STORAGE_MANAGER.set('poisonTargetsLevel', 0);
+                        this.spellPoints -= nextLevelTargets.cost;
+                        LOCAL_STORAGE_MANAGER.set('spellPoints', this.spellPoints);
+                        this.recreateElements();
+                    },
+                    true,
+                    0.35
+                );
+                upgradeButton.x += upgradeButton.bg.displayWidth / 2;
+                this.healContainer.add(upgradeButton);
+                if (this.spellPoints >= nextLevelTargets.cost) {
+                    upgradeButton.setInteractive();
+                }
+            } else {
+                // SPELL MAXED
+                const maxText = this.add.text(
+                    healTargetsText.x + healTargetsText.displayWidth + 50,
+                    healTargetsText.y,
+                    `max`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(maxText);
+            }
+
+            //========================== HEAL AMOUNT =================================
+            // heal amount img
+            this.healAmount = spellsConfig.heal.amount[healAmountLevel].value;
+            const healAmountImage = this.add.image(this.healImage.x + this.healImage.displayWidth + 35, this.healImage.y + this.healImage.displayHeight / 3 + 20, 'duration').setOrigin(0, 0.5).setScale(0.2);
+            this.healContainer.add(healAmountImage);
+
+            //heal amount text
+            const healAmountText = this.add.text(
+                healAmountImage.x + healAmountImage.displayWidth + 10,
+                healAmountImage.y,
+                `${this.healAmount}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0, 0.5);
+            this.healContainer.add(healAmountText);
+
+            const nextLevelAmount = spellsConfig.heal.amount[healAmountLevel + 1];
+
+            // next level
+            if (nextLevelAmount) {
+                // arrow img
+                const healAmountArrow = this.add.image(
+                    healAmountText.x + healAmountText.displayWidth + 50,
+                    healAmountText.y,
+                    'arrow'
+                ).setOrigin(0.5).setScale(0.3).setAngle(90);
+                this.healContainer.add(healAmountArrow);
+
+                //next lvl amount text
+                const nextLevelAmountText = this.add.text(
+                    healAmountArrow.x + healAmountArrow.displayWidth + 20,
+                    healAmountArrow.y,
+                    `${nextLevelAmount.value}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(nextLevelAmountText);
+
+                const unlockSpellPointsImg = this.add.image(nextLevelAmountText.x + nextLevelAmountText.displayWidth + 50, nextLevelAmountText.y, 'spell-point').setOrigin(0, 0.5).setScale(0.25);
+                this.healContainer.add(unlockSpellPointsImg);
+
+                //heal Amount Points Needed Text
+                const spellPointsNeededText = this.add.text(
+                    unlockSpellPointsImg.x + unlockSpellPointsImg.displayWidth + 10,
+                    unlockSpellPointsImg.y,
+                    `${nextLevelAmount.cost}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(spellPointsNeededText);
+
+                // upgrade button
+                const upgradeButton = new Button(
+                    this,
+                    spellPointsNeededText.x + spellPointsNeededText.displayWidth,
+                    spellPointsNeededText.y,
+                    'upgrade',
+                    '',
+                    () => {
+                        LOCAL_STORAGE_MANAGER.set('healAmountLevel', healAmountLevel + 1);
+                        // LOCAL_STORAGE_MANAGER.set('poisonDamageLevel', 0);
+                        // LOCAL_STORAGE_MANAGER.set('poisonTargetsLevel', 0);
+                        this.spellPoints -= nextLevelAmount.cost;
+                        LOCAL_STORAGE_MANAGER.set('spellPoints', this.spellPoints);
+                        this.recreateElements();
+                    },
+                    true,
+                    0.35
+                );
+                upgradeButton.x += upgradeButton.bg.displayWidth / 2;
+                this.healContainer.add(upgradeButton);
+                if (this.spellPoints >= nextLevelAmount.cost) {
+                    upgradeButton.setInteractive();
+                }
+            } else {
+                // SPELL MAXED
+                const maxText = this.add.text(
+                    healAmountText.x + healAmountText.displayWidth + 50,
+                    healAmountText.y,
+                    `max`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                this.healContainer.add(maxText);
+            }
+
+        } else {
+            // spell is locked
+            this.healImage.setTexture('heal-button-locked');
+            const spellPointsToUnlockHeal = main_config.spellPointsToUnlockHeal;
+
+            const unlockButton = new Button(
+                this,
+                this.healImage.x + this.healImage.displayWidth + 10,
+                this.healImage.y,
+                'unlock',
+                '',
+                () => {
+                    LOCAL_STORAGE_MANAGER.set('healCooldownLevel', 0);
+                    LOCAL_STORAGE_MANAGER.set('healTargetsLevel', 0);
+                    LOCAL_STORAGE_MANAGER.set('healAmountLevel', 0);
+                    this.spellPoints -= spellPointsToUnlockHeal;
+                    LOCAL_STORAGE_MANAGER.set('spellPoints', this.spellPoints);
+                    this.recreateElements();
+                },
+                true,
+                0.6
+            );
+            unlockButton.x += unlockButton.bg.displayWidth / 2;
+            this.healContainer.add(unlockButton);
+
+            const unlockSpellPointsImg = this.add.image(unlockButton.x + unlockButton.bg.displayWidth / 2, unlockButton.y, 'spell-point').setOrigin(0.5).setScale(0.25);
+            this.healContainer.add(unlockSpellPointsImg);
+
+            //heal  spell Points Needed Text
+            const spellPointsNeededText = this.add.text(
+                unlockSpellPointsImg.x + unlockSpellPointsImg.displayWidth / 2 + 10,
+                unlockSpellPointsImg.y,
+                `${spellPointsToUnlockHeal}`,
+                {
+                    fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 35, color: '#ffffff',
+                    stroke: '#000000', letterSpacing: 4,
+                    align: 'center'
+                }).setOrigin(0.5);
+            this.headerContainer.add(spellPointsNeededText);
+
+            if (this.spellPoints >= spellPointsToUnlockHeal) {
                 unlockButton.setInteractive();
             }
         }

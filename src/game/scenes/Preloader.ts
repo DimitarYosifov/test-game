@@ -50,7 +50,6 @@ export class Preloader extends Scene {
         this.load.image('bg-map', 'bg44.jpg');
         this.load.image('bg-achievments', 'bg44.jpg');
         this.load.image('bg-casino', 'casino.jpg');
-        this.load.image('bg-loading', 'bg-loading.png');
         this.load.image('loading-bg', 'loading-bg.png');
         this.load.image('defeat-giants', 'defeat-giants.png');
         this.load.image('bow', 'bow.png');
@@ -140,6 +139,8 @@ export class Preloader extends Scene {
         this.load.image('rain-of-arrows-button-locked', 'rain-of-arrows-button-locked.png');
         this.load.image('freeze-button', 'freeze-button.png');
         this.load.image('freeze-button-locked', 'freeze-button-locked.png');
+        this.load.image('heal-button', 'heal-button.png');
+        this.load.image('heal-button-locked', 'heal-button-locked.png');
 
         this.load.image('chains', 'chains.png');
         this.load.image('green-poison-particle', 'green-poison-particle.png');

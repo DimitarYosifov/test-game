@@ -71,4 +71,21 @@ export const spellsConfig = {
             { value: 3, cost: 4 } // duration level 2
         ]
     },
+    heal: {
+        coolDown: [
+            { value: 1, cost: 0 }, // cooldown level 0
+            { value: 11, cost: 2 }, // cooldown level 1
+            { value: 10, cost: 5 }  // cooldown level 2
+        ],
+        targets: [
+            { value: 1, cost: 0 },  // targets level 0
+            { value: 2, cost: 4 },  // targets level 1
+            { value: 3, cost: 8 }  // targets level 2
+        ],
+        amount: [
+            { value: 1, cost: 0 }, // amount level 0
+            { value: 2, cost: 2 }, // amount level 1
+            { value: 3, cost: 4 } // amount level 2
+        ]
+    },
 }

@@ -276,6 +276,7 @@ export const main_config = {
     "spellPointsToUnlockPoison": 1,
     "spellPointsToUnlockRainOfArrows": 1,
     "spellPointsToUnlockFreeze": 1,
+    "spellPointsToUnlockHeal": 1,
 
 
 

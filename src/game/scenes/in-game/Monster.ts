@@ -402,9 +402,7 @@ export class Monster extends Phaser.GameObjects.Container {
                         buffImageKey = BUFF_TYPES.BALL;
                         break;
                     case BUFF_TYPES.HEALTH:
-                        this.unitData.health++;
-                        this.health_text.setText(`${this.unitData.health}`);
-                        this.health_text.tint = 0x4bcc0f;
+                        this.addHealth();
                         buffImageKey = BUFF_TYPES.HEALTH;
                         break;
                     case BUFF_TYPES.SHIELD:
@@ -450,7 +448,7 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string) {
+    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string, emitCheckEndTurnOnComplete) {
         // add visual  display of the buff and tween
         const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
         const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
@@ -472,8 +470,20 @@ export class Monster extends Phaser.GameObjects.Container {
             onComplete: () => {
                 buffQuantityText.destroy(true);
                 buffImage.destroy(true);
+                if (emitCheckEndTurnOnComplete) {
+                    this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                }
             }
         })
+    }
+
+    addHealth() {
+        this.unitData.health++;
+        this.health_text.setText(`${this.unitData.health}`);
+        this.health_text.tint = 0x4bcc0f;
+        if (this.poisonedForDuration > 0) {
+            this.removePoisoned();
+        }
     }
 
     addMove(onlyForCurrentRound: boolean = false, addForCurrentRoundOnly: boolean = false) {
@@ -1272,7 +1282,7 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-   showImmuneText() {
+    showImmuneText() {
         const x = this.x + (this.scene as any).mainGridContainer.x;
         const y = this.y + (this.scene as any).mainGridContainer.y;
         const immuneText = this.scene.add.text(

@@ -42,6 +42,9 @@ export interface IGameData {
     freezeDurationLevel: number;
     freezeTargetsLevel: number;
 
+    healCooldownLevel: number,
+    healTargetsLevel: number,
+    healAmountLevel: number,
 
     // survival_level_1: any; //?????
     // survival_level_2: any; //?????
@@ -102,9 +105,14 @@ export class LOCAL_STORAGE_MANAGER {
         rainOfArrowsTargetsLevel: NaN,
 
         //TODO - the following 3 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
-        freezeCooldownLevel: 0,
-        freezeDurationLevel: 0,
-        freezeTargetsLevel: 0,
+        freezeCooldownLevel: NaN,
+        freezeDurationLevel: NaN,
+        freezeTargetsLevel: NaN,
+
+        //TODO - the following 3 should be NaN(NaN is for when spell is not unlocked), anything else is just for testing!!!!
+        healCooldownLevel: NaN,
+        healTargetsLevel: NaN,
+        healAmountLevel: NaN,
 
         token1: 0,
         token2: 0,
