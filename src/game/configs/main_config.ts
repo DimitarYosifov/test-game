@@ -1,5 +1,6 @@
 import { IGameData } from "../LOCAL_STORAGE_MANAGER";
 import { AbstractScene } from "../scenes/AbstractScene";
+import { Monster } from "../scenes/in-game/Monster";
 import { monsters_power_config } from "./monsters_power_config";
 
 export const main_config = {
@@ -324,6 +325,17 @@ export const main_config = {
      * 
      */
 
+}
+
+export const getMonsterAtSpot = (row: number, col: number, playerMonsters: Monster[], opponentMonsters: Monster[]): Monster => {
+    const monster = [...playerMonsters, ...opponentMonsters]
+        .filter((m: Monster) => m)
+        .find((m: Monster) => m.unitData.row === row && m.unitData.col === col);
+    if (monster) {
+        return monster;
+    } else {
+        throw Error(`no monster found at row ${row} col ${col}`);
+    }
 }
 
 export const getRandomNonNullIndex = (arr: any[]): number => {

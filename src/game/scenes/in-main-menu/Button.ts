@@ -25,7 +25,7 @@ export class Button extends Phaser.GameObjects.Container {
         this.bg.on('pointerover', () => {
             this.scene.tweens.add({
                 targets: this,
-                scale: this.initialScale * 1.05,
+                scale: this.initialScale * 1.025,
                 duration: 150,
             })
         });

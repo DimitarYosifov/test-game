@@ -836,7 +836,7 @@ export class Game extends AbstractScene {
         if (+killedMonster.type === 5) {
             const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
             monsters
-                .filter((m: Monster) => +m.type === 1)
+                .filter((m: Monster) => m && +m.type === 1)
                 .forEach((fm: Monster) => {
                     fm.addMove();
                     fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
@@ -1553,6 +1553,9 @@ export class Game extends AbstractScene {
                 this.currentlySelectedMonsterAnimation!.pause().hide();
                 this.applyPoison(() => {
                     console.log('showOpponentTurnMsg')
+                    if (this.levelFinished) {
+                        return;
+                    }
                     this.showOpponentTurnMsg();
                 })
             }

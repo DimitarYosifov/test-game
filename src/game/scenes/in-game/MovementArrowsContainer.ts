@@ -1,13 +1,15 @@
 import { Scene } from 'phaser';
 import { IUnitData } from '../Game';
 import { DirectionArrow } from './DirectionArrow';
-import { GAME_OBJECT_DEPTHS, main_config } from '../../configs/main_config';
+import { GAME_OBJECT_DEPTHS, getMonsterAtSpot, main_config } from '../../configs/main_config';
 import { Monster } from './Monster';
 
 export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
     private neighborCells: INeighborCells[];
     private arrows: DirectionArrow[] = [];
+    private potentialDamageTexts: Phaser.GameObjects.Text[] = [];
+    private potentialDamageTextTweens: Phaser.Tweens.Tween[] = [];
 
     constructor(scene: Scene, x: number, y: number) {
         super(scene, x, y);
@@ -120,7 +122,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
             const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
             const giantData = this.scene.data.list.gridPositions[row][col].giantData;
-          
+
             if (giantData) {
                 // attackingMonster should be set here because row and col are changed below
                 row = giantData.row;
@@ -144,15 +146,68 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             }
             angle = Phaser.Math.RadToDeg(angle) - 90;
 
+            let potentialDamage = NaN;
+
             const arrow = new DirectionArrow(this.scene, position_x, position_y, angle, row, col, img, target, isRanged, this);
             this.add(arrow);
             this.arrows.push(arrow);
+
+            if (target) {
+                potentialDamage = this.getPotentialDamageForSpot(atackingMonster, row, col, isRanged, isMagic);
+                this.showPotentialDamage(position_x, position_y, potentialDamage);
+            }
         });
+    }
+
+    getPotentialDamageForSpot(atackingMonster: Monster, row: number, col: number, isRanged: boolean, isMagic: boolean): number {
+
+        const targetMonster = getMonsterAtSpot(row, col, this.scene.data.list.playerMonsters, this.scene.data.list.opponentMonsters);
+        let potentialDamage = 0;
+
+        if (isRanged) {
+            potentialDamage = atackingMonster.unitData.ranged - targetMonster.unitData.shield;
+        } else if (isMagic) {
+            potentialDamage = atackingMonster.unitData.magic;
+        } else {
+            potentialDamage = atackingMonster.unitData.melee - targetMonster.unitData.shield;
+        }
+
+        return potentialDamage > targetMonster.unitData.health ? targetMonster.unitData.health : potentialDamage;
+    }
+
+    private showPotentialDamage(x: number, y: number, potentialDamage: number) {
+        const scene = this.scene;
+
+        const potentialDamageText = scene.add.text(
+            x,
+            y,
+            `${potentialDamage}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#6fa8fd',
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 3,
+                align: 'center'
+            }).setOrigin(0.5);
+
+        this.add(potentialDamageText);
+        this.potentialDamageTexts.push(potentialDamageText);
+
+        const potentialDamageTextTween = this.scene.tweens.add({
+            targets: potentialDamageText,
+            scale: potentialDamageText.scale * 1.2,
+            duration: 350,
+            yoyo: true,
+            repeat: -1
+        })
+        this.potentialDamageTextTweens.push(potentialDamageTextTween);
     }
 
     removeArrows() {
         this.arrows.forEach((arrow: DirectionArrow) => arrow.destroy(true));
         this.arrows = [];
+        this.potentialDamageTexts.forEach((potentialDamageText: Phaser.GameObjects.Text) => potentialDamageText.destroy(true));
+        this.potentialDamageTexts = [];
+        this.potentialDamageTextTweens.forEach((potentialDamageTween: Phaser.Tweens.Tween) => potentialDamageTween.remove());
+        this.potentialDamageTextTweens = [];
     }
 }
 
