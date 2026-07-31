@@ -12,7 +12,7 @@ const VERTICAL_DISTANCE_BETWEEN_MONSTERS = 20;
 const MAX_TOTAL_WIDTH = 1640;
 const MONSTER_TYPE_DESCRIPTION = {
     // TODO - replace 'monster N4' with image or monster name...
-    "1": "+1 permanent move if this monster kills 'monster N4'",
+    "1": "+1 permanent move when enemy 'monster N4' dies",
     "2": "+1 helath if this monster attacks magic monster",
     "3": "+1 attack for every adjusting enemy magic monster",
     "5": "+1 health when enemy monster dies",  //TODO - check this could be overpowered!

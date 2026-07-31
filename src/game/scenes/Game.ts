@@ -2952,6 +2952,7 @@ export interface IUnitData {
     upgradeCost?: number;
     sellsFor?: number;
     isGiant?: boolean;
+    immuneTo?: string[];
 }
 
 export interface IBuff {

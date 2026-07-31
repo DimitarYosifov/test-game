@@ -4,190 +4,190 @@
 export const monsters_power_config = {
     '1': [
         { // 1 star
-            melee: 1, ranged: 0, magic: 0, health: 4, shield: 0, vision: 3, stars: 1, type: '1', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4
+            melee: 1, ranged: 0, magic: 0, health: 4, shield: 0, vision: 3, stars: 1, type: '1', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: ['poison']
         },
         { // 2 stars
-            melee: 1, ranged: 0, magic: 0, health: 5, shield: 0, vision: 3, stars: 2, type: '1', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36
+            melee: 1, ranged: 0, magic: 0, health: 5, shield: 0, vision: 3, stars: 2, type: '1', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: ['poison']
         },
         { // 3 stars
-            melee: 2, ranged: 0, magic: 0, health: 5, shield: 0, vision: 4, stars: 3, type: '1', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324
+            melee: 2, ranged: 0, magic: 0, health: 5, shield: 0, vision: 4, stars: 3, type: '1', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: ['poison']
         },
         { // 4 stars
-            melee: 2, ranged: 0, magic: 0, health: 6, shield: 1, vision: 4, stars: 4, type: '1', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916
+            melee: 2, ranged: 0, magic: 0, health: 6, shield: 1, vision: 4, stars: 4, type: '1', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['poison']
         },
         { // 5 stars
-            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 4, stars: 5, type: '1', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244
+            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 4, stars: 5, type: '1', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: ['poison']
         }
     ],
     '2': [
         { // 1 star
-            melee: 0, ranged: 0, magic: 2, health: 4, shield: 0, vision: 1, stars: 1, type: '2', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+            melee: 0, ranged: 0, magic: 2, health: 4, shield: 0, vision: 1, stars: 1, type: '2', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: ['magic-ball']
         },
         { // 2 stars
-            melee: 0, ranged: 0, magic: 2, health: 4, shield: 1, vision: 1, stars: 2, type: '2', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+            melee: 0, ranged: 0, magic: 2, health: 4, shield: 1, vision: 1, stars: 2, type: '2', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: ['magic-ball']
         },
         { // 3 stars
-            melee: 0, ranged: 0, magic: 3, health: 5, shield: 1, vision: 1, stars: 3, type: '2', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+            melee: 0, ranged: 0, magic: 3, health: 5, shield: 1, vision: 1, stars: 3, type: '2', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: ['magic-ball']
         },
         { // 4 stars
-            melee: 0, ranged: 0, magic: 3, health: 6, shield: 1, vision: 1, stars: 4, type: '2', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 0, ranged: 0, magic: 3, health: 6, shield: 1, vision: 1, stars: 4, type: '2', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['magic-ball']
         },
         { // 5 stars
-            melee: 0, ranged: 0, magic: 4, health: 6, shield: 2, vision: 1, stars: 5, type: '2', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
+            melee: 0, ranged: 0, magic: 4, health: 6, shield: 2, vision: 1, stars: 5, type: '2', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: ['magic-ball']
         }
     ],
     '3': [
         { // 1 star
-            melee: 0, ranged: 0, magic: 1, health: 3, shield: 1, vision: 1, stars: 1, type: '3', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+            melee: 0, ranged: 0, magic: 1, health: 3, shield: 1, vision: 1, stars: 1, type: '3', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: ['magic-ball']
         },
         { // 2 stars
-            melee: 0, ranged: 0, magic: 1, health: 4, shield: 1, vision: 2, stars: 2, type: '3', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+            melee: 0, ranged: 0, magic: 1, health: 4, shield: 1, vision: 2, stars: 2, type: '3', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: ['magic-ball']
         },
         { // 3 stars
-            melee: 0, ranged: 0, magic: 2, health: 5, shield: 1, vision: 2, stars: 3, type: '3', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+            melee: 0, ranged: 0, magic: 2, health: 5, shield: 1, vision: 2, stars: 3, type: '3', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: ['magic-ball']
         },
         { // 4 stars
-            melee: 0, ranged: 0, magic: 2, health: 5, shield: 2, vision: 2, stars: 4, type: '3', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 0, ranged: 0, magic: 2, health: 5, shield: 2, vision: 2, stars: 4, type: '3', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['magic-ball']
         },
         { // 5 stars
-            melee: 0, ranged: 0, magic: 3, health: 6, shield: 2, vision: 2, stars: 5, type: '3', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
+            melee: 0, ranged: 0, magic: 3, health: 6, shield: 2, vision: 2, stars: 5, type: '3', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: ['magic-ball']
         }
     ],
     '5': [
         {  // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 5, shield: 0, vision: 2, stars: 1, type: '5', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+            melee: 2, ranged: 0, magic: 0, health: 5, shield: 0, vision: 2, stars: 1, type: '5', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         {  // 2 stars
-            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 2, stars: 2, type: '5', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 2, stars: 2, type: '5', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         {  // 3 stars
-            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 3, stars: 3, type: '5', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 3, stars: 3, type: '5', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         {  // 4 stars
-            melee: 3, ranged: 0, magic: 0, health: 7, shield: 2, vision: 3, stars: 4, type: '5', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 3, ranged: 0, magic: 0, health: 7, shield: 2, vision: 3, stars: 4, type: '5', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         {  // 5 stars
-            melee: 4, ranged: 0, magic: 0, health: 7, shield: 2, vision: 3, stars: 5, type: '5', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
+            melee: 4, ranged: 0, magic: 0, health: 7, shield: 2, vision: 3, stars: 5, type: '5', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: []
         }
     ],
     '6': [
         { // 1 star
-            melee: 0, ranged: 1, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '6', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4
+            melee: 0, ranged: 1, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '6', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: ['freeze']
         },
         { // 2 stars
-            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '6', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36
+            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '6', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: ['freeze']
         },
         { // 3 stars
-            melee: 0, ranged: 2, magic: 0, health: 5, shield: 0, vision: 1, stars: 3, type: '6', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324
+            melee: 0, ranged: 2, magic: 0, health: 5, shield: 0, vision: 1, stars: 3, type: '6', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: ['freeze']
         },
         { // 4 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 0, vision: 1, stars: 4, type: '6', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 0, vision: 1, stars: 4, type: '6', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['freeze']
         },
         { // 5 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 1, stars: 5, type: '6', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 1, stars: 5, type: '6', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: ['freeze']
         }
     ],
     '7': [
         { // 1 star
-            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '7', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '7', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         { // 2 stars
-            melee: 0, ranged: 2, magic: 0, health: 5, shield: 1, vision: 1, stars: 2, type: '7', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+            melee: 0, ranged: 2, magic: 0, health: 5, shield: 1, vision: 1, stars: 2, type: '7', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         { // 3 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 2, stars: 3, type: '7', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 2, stars: 3, type: '7', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         { // 4 stars
-            melee: 0, ranged: 3, magic: 0, health: 6, shield: 1, vision: 2, stars: 4, type: '7', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 0, ranged: 3, magic: 0, health: 6, shield: 1, vision: 2, stars: 4, type: '7', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         { // 5 stars
-            melee: 0, ranged: 4, magic: 0, health: 6, shield: 1, vision: 2, stars: 5, type: '7', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244
+            melee: 0, ranged: 4, magic: 0, health: 6, shield: 1, vision: 2, stars: 5, type: '7', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: []
         }
     ],
     '8': [
         { // 1 star
-            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 1, stars: 1, type: '8', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4
+            melee: 3, ranged: 0, magic: 0, health: 6, shield: 1, vision: 1, stars: 1, type: '8', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         { // 2 stars
-            melee: 3, ranged: 0, magic: 0, health: 7, shield: 1, vision: 1, stars: 2, type: '8', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36
+            melee: 3, ranged: 0, magic: 0, health: 7, shield: 1, vision: 1, stars: 2, type: '8', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         { // 3 stars
-            melee: 4, ranged: 0, magic: 0, health: 7, shield: 2, vision: 1, stars: 3, type: '8', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324
+            melee: 4, ranged: 0, magic: 0, health: 7, shield: 2, vision: 1, stars: 3, type: '8', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         { // 4 stars
-            melee: 4, ranged: 0, magic: 0, health: 8, shield: 2, vision: 1, stars: 4, type: '8', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916
+            melee: 4, ranged: 0, magic: 0, health: 8, shield: 2, vision: 1, stars: 4, type: '8', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         { // 5 stars
-            melee: 5, ranged: 0, magic: 0, health: 8, shield: 3, vision: 1, stars: 5, type: '8', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 4
+            melee: 5, ranged: 0, magic: 0, health: 8, shield: 3, vision: 1, stars: 5, type: '8', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 4, immuneTo: []
         }
     ],
     '9': [
         { // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 3, shield: 0, vision: 1, stars: 1, type: '9', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4
+            melee: 2, ranged: 0, magic: 0, health: 3, shield: 0, vision: 1, stars: 1, type: '9', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         { // 2 stars
-            melee: 2, ranged: 0, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '9', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36
+            melee: 2, ranged: 0, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '9', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         { // 3 stars
-            melee: 3, ranged: 0, magic: 0, health: 4, shield: 1, vision: 1, stars: 3, type: '9', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324
+            melee: 3, ranged: 0, magic: 0, health: 4, shield: 1, vision: 1, stars: 3, type: '9', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         { // 4 stars
-            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 1, stars: 4, type: '9', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916
+            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 1, stars: 4, type: '9', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         { // 5 stars
-            melee: 4, ranged: 0, magic: 0, health: 5, shield: 2, vision: 1, stars: 5, type: '9', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244
+            melee: 4, ranged: 0, magic: 0, health: 5, shield: 2, vision: 1, stars: 5, type: '9', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: []
         }
     ],
 
     '11': [
         { // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 13, shield: 0, vision: 2, stars: 1, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 2, ranged: 0, magic: 0, health: 13, shield: 0, vision: 2, stars: 1, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 2 stars
-            melee: 2, ranged: 0, magic: 0, health: 14, shield: 0, vision: 2, stars: 2, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 2, ranged: 0, magic: 0, health: 14, shield: 0, vision: 2, stars: 2, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 3 stars
-            melee: 3, ranged: 0, magic: 0, health: 14, shield: 1, vision: 2, stars: 3, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 3, ranged: 0, magic: 0, health: 14, shield: 1, vision: 2, stars: 3, type: '11', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 4 stars
-            melee: 3, ranged: 0, magic: 0, health: 15, shield: 1, vision: 2, stars: 4, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 3, ranged: 0, magic: 0, health: 15, shield: 1, vision: 2, stars: 4, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 5 stars
-            melee: 4, ranged: 0, magic: 0, health: 15, shield: 2, vision: 2, stars: 5, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 4, ranged: 0, magic: 0, health: 15, shield: 2, vision: 2, stars: 5, type: '11', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         }
     ],
     '12': [
         { // 1 star
-            melee: 0, ranged: 3, magic: 0, health: 14, shield: 0, vision: 2, stars: 1, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 3, magic: 0, health: 14, shield: 0, vision: 2, stars: 1, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 2 stars
-            melee: 0, ranged: 3, magic: 0, health: 16, shield: 1, vision: 2, stars: 2, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 3, magic: 0, health: 16, shield: 1, vision: 2, stars: 2, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 3 stars
-            melee: 0, ranged: 4, magic: 0, health: 16, shield: 1, vision: 2, stars: 3, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 4, magic: 0, health: 16, shield: 1, vision: 2, stars: 3, type: '12', moves: 1, movesLeft: 1, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 4 stars
-            melee: 0, ranged: 4, magic: 0, health: 17, shield: 1, vision: 3, stars: 4, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 4, magic: 0, health: 17, shield: 1, vision: 3, stars: 4, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 5 stars
-            melee: 0, ranged: 5, magic: 0, health: 18, shield: 1, vision: 3, stars: 5, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 5, magic: 0, health: 18, shield: 1, vision: 3, stars: 5, type: '12', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         }
     ],
     '13': [
         { // 1 star
-            melee: 0, ranged: 0, magic: 2, health: 12, shield: 0, vision: 2, stars: 1, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 2, health: 12, shield: 0, vision: 2, stars: 1, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 2 stars
-            melee: 0, ranged: 0, magic: 2, health: 13, shield: 1, vision: 2, stars: 2, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 2, health: 13, shield: 1, vision: 2, stars: 2, type: '13', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 3 stars
-            melee: 0, ranged: 0, magic: 3, health: 14, shield: 1, vision: 2, stars: 3, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 3, health: 14, shield: 1, vision: 2, stars: 3, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 4 stars
-            melee: 0, ranged: 0, magic: 3, health: 15, shield: 1, vision: 2, stars: 4, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 3, health: 15, shield: 1, vision: 2, stars: 4, type: '13', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         },
         { // 5 stars
-            melee: 0, ranged: 0, magic: 4, health: 16, shield: 2, vision: 2, stars: 5, type: '13', moves: 4, movesLeft: 4, upgradeCost: null, sellsFor: null, isGiant: true
+            melee: 0, ranged: 0, magic: 4, health: 16, shield: 2, vision: 2, stars: 5, type: '13', moves: 4, movesLeft: 4, upgradeCost: null, sellsFor: null, isGiant: true, immuneTo: []
         }
     ],
 }

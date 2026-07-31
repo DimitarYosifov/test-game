@@ -44,6 +44,7 @@ export class Monster extends Phaser.GameObjects.Container {
     poisonedForDuration: number = 0;
     poisonedForDamage: number = 0;
     frozenForDuration: number = 0;
+    immuneTo: string[] = []
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -55,6 +56,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.index = index;
         this.isPlayerMonster = isPlayerMonster;
         this._displayWidth = displayWidth;
+        this.immuneTo = this.unitData.immuneTo;
 
         //bg
         this.bg = scene.add.image(0, 0, unit.type).setOrigin(0.5);
@@ -1125,11 +1127,16 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     setPoisoned(poisonedForDuration: number = 1, poisonedForDamage: number, onComplete: () => void) {
-        if (this.poisonedForDuration > 0) {
+        if (this.immuneTo.includes('poison')) {
+            // monster is immune to poison
+            this.showImmuneText();
+        }
+        else if (this.poisonedForDuration > 0) {
             // monster alredy poisoned - increase duration!
             this.poisonedForDuration += poisonedForDuration;
             this.poisoned_turns_left_text.setText(`${this.poisonedForDuration}`)
-        } else {
+        }
+        else {
             this.poisonedForDuration = poisonedForDuration;
             this.poisonedForDamage = poisonedForDamage;
             this.poisonEmitter = this.scene.add.particles(0, 0, 'green-poison-particle', {
@@ -1263,5 +1270,28 @@ export class Monster extends Phaser.GameObjects.Container {
             });
             this.bg.clearTint();
         }
+    }
+
+   showImmuneText() {
+        const x = this.x + (this.scene as any).mainGridContainer.x;
+        const y = this.y + (this.scene as any).mainGridContainer.y;
+        const immuneText = this.scene.add.text(
+            x,
+            y,
+            `immune`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 40, color: '#4bcc0f',
+                stroke: '#000000', strokeThickness: 4, letterSpacing: 4,
+                align: 'center'
+            });
+        immuneText.setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.monsterBuffQuantityText);
+        this.scene.tweens.add({
+            targets: [immuneText],
+            y: y - 75,
+            duration: 1500,
+            onComplete: () => {
+                immuneText.destroy(true);
+            }
+        })
     }
 }
