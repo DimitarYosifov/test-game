@@ -448,7 +448,7 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string, emitCheckEndTurnOnComplete) {
+    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string, emitCheckEndTurnOnComplete:boolean = false) {
         // add visual  display of the buff and tween
         const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
         const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;

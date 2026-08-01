@@ -549,6 +549,7 @@ export const GAME_OBJECT_DEPTHS = {
     gameSceneMonsterNotClaimedPopup: 25,
     gameSceneMonsterNotClaimedMsg: 25,
     spell: 30,
+    buttonDescriptionPopup: 35,
     mapSceneLevelTexture: 88,
     mapSceneLevelText: 88,
     mapSceneSurvivalLevelCountDownText: 88,

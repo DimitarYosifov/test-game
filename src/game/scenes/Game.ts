@@ -16,6 +16,14 @@ import { RainOfArrowsSpell } from './in-game/spells/RainOfArrowsSpell';
 import { FreezeSpell } from './in-game/spells/FreezeSpell';
 import { HealSpell } from './in-game/spells/HealSpell';
 
+const SPELL_BUTTONS_POPUP_DESCRIPTION = {
+    magicBall: "deals {damage} magic damage to {targets} random targets. cooldown - {cooldown}",
+    poison: "deals {damage} poison damage to {targets} random targets for {duration} rounds. cooldown - {cooldown}",
+    rainOfArrows: "deals {damage} physical damage to {targets} random targets. cooldown - {cooldown}",
+    freeze: "freezes {targets} random targets for {duration} rounds. targets can't move or attack. cooldown - {cooldown}",
+    heal: "heals {targets} random targets for {amount}. targets can exceed their initial health and also cure if poisoned. cooldown - {cooldown}",
+}
+
 export enum GAME_SCENE_SCENE_EVENTS {
     'TARGET_SELECTED' = 'target-selected',
     'CHECK_END_TURN' = 'check-end-turn',
@@ -2326,6 +2334,15 @@ export class Game extends AbstractScene {
                 targets: spellsConfig.magicBall.targets[LOCAL_STORAGE_MANAGER.get('magicBallTargetsLevel')].value
             }
 
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.magicBall.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.magicBall.targets}`)
+                .replace('{cooldown}', `${this.playerSpellsData.magicBall.cooldown}`)
+            if (this.playerSpellsData.magicBall.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.playerMagicBallButton = new Button(this, 1820, 290, 'magic-ball-button', '', () => {
                 this.spellCastInProgress = true;
                 this.playerSpellsData.magicBall.cooldownProgress = 0;
@@ -2334,8 +2351,8 @@ export class Game extends AbstractScene {
                 // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
                 this.movementArrowsContainer.removeArrows();
                 this.pauseResumeInteraction(false);
-                // this.playerMagicBallButton.setAlpha(1);
-            }, true, 0.6);
+            }, true, 0.6, true, popupDescription, false);
+
             this.playerMagicBallButton.addRevealOverlay();
             this.playerMagicBallButton.updateCooldown(
                 this.playerSpellsData.magicBall.cooldownProgress,
@@ -2359,18 +2376,27 @@ export class Game extends AbstractScene {
                 damage: spellsConfig.poison.damage[LOCAL_STORAGE_MANAGER.get('poisonDamageLevel')].value,
                 targets: spellsConfig.poison.targets[LOCAL_STORAGE_MANAGER.get('poisonTargetsLevel')].value,
                 duration: spellsConfig.poison.duration[LOCAL_STORAGE_MANAGER.get('poisonDurationLevel')].value
-
             }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.poison.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.poison.targets}`)
+                .replace('{duration}', `${this.playerSpellsData.poison.duration}`)
+                .replace('{cooldown}', `${this.playerSpellsData.poison.cooldown}`)
+            if (this.playerSpellsData.poison.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
             this.playerPoisonButton = new Button(this, 1820, 417, 'poison-button', '', () => {
                 this.spellCastInProgress = true;
                 this.playerSpellsData.poison.cooldownProgress = 0;
                 this.playerPoisonButton.readyForUse = false;
                 this.newPoisonSpell(this.playerSpellsData.poison.cooldown);
-                // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
                 this.movementArrowsContainer.removeArrows();
                 this.pauseResumeInteraction(false);
-                // this.playerMagicBallButton.setAlpha(1);
-            }, true, 0.6);
+            }, true, 0.6, true, popupDescription, false);
             this.playerPoisonButton.addRevealOverlay();
             this.playerPoisonButton.updateCooldown(
                 this.playerSpellsData.poison.cooldownProgress,
@@ -2395,6 +2421,15 @@ export class Game extends AbstractScene {
                 targets: spellsConfig.rainOfArrows.targets[LOCAL_STORAGE_MANAGER.get('rainOfArrowsTargetsLevel')].value
             }
 
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.rainOfArrows.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.rainOfArrows.targets}`)
+                .replace('{cooldown}', `${this.playerSpellsData.rainOfArrows.cooldown}`)
+            if (this.playerSpellsData.rainOfArrows.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.playerRainOfArrowsButton = new Button(this, 1820, 550, 'rain-of-arrows-button', '', () => {
                 this.spellCastInProgress = true;
                 this.playerSpellsData.rainOfArrows.cooldownProgress = 0;
@@ -2402,7 +2437,8 @@ export class Game extends AbstractScene {
                 this.newRainOfArrowsSpell(this.playerSpellsData.rainOfArrows.cooldown);
                 this.movementArrowsContainer.removeArrows();
                 this.pauseResumeInteraction(false);
-            }, true, 0.6);
+            }, true, 0.6, true, popupDescription, false);
+
             this.playerRainOfArrowsButton.addRevealOverlay();
             this.playerRainOfArrowsButton.updateCooldown(
                 this.playerSpellsData.rainOfArrows.cooldownProgress,
@@ -2427,6 +2463,16 @@ export class Game extends AbstractScene {
                 targets: spellsConfig.freeze.targets[LOCAL_STORAGE_MANAGER.get('freezeTargetsLevel')].value
             }
 
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.playerSpellsData.freeze.targets}`)
+                .replace('{duration}', `${this.playerSpellsData.freeze.duration}`)
+                .replace('{cooldown}', `${this.playerSpellsData.freeze.cooldown}`)
+            if (this.playerSpellsData.freeze.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
             this.playerFreezeButton = new Button(this, 1820, 680, 'freeze-button', '', () => {
                 this.spellCastInProgress = true;
                 this.playerSpellsData.freeze.cooldownProgress = 0;
@@ -2434,7 +2480,8 @@ export class Game extends AbstractScene {
                 this.newFreezeSpell(this.playerSpellsData.freeze.cooldown);
                 this.movementArrowsContainer.removeArrows();
                 this.pauseResumeInteraction(false);
-            }, true, 0.6);
+            }, true, 0.6, true, popupDescription, false);
+
             this.playerFreezeButton.addRevealOverlay();
             this.playerFreezeButton.updateCooldown(
                 this.playerSpellsData.freeze.cooldownProgress,
@@ -2459,6 +2506,15 @@ export class Game extends AbstractScene {
                 targets: spellsConfig.heal.targets[LOCAL_STORAGE_MANAGER.get('healTargetsLevel')].value
             }
 
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.playerSpellsData.heal.targets}`)
+                .replace('{amount}', `${this.playerSpellsData.heal.amount}`)
+                .replace('{cooldown}', `${this.playerSpellsData.heal.cooldown}`)
+            if (this.playerSpellsData.heal.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.playerHealButton = new Button(this, 1820, 810, 'heal-button', '', () => {
                 this.spellCastInProgress = true;
                 this.playerSpellsData.heal.cooldownProgress = 0;
@@ -2466,7 +2522,8 @@ export class Game extends AbstractScene {
                 this.newHealSpell(this.playerSpellsData.heal.cooldown);
                 this.movementArrowsContainer.removeArrows();
                 this.pauseResumeInteraction(false);
-            }, true, 0.6);
+            }, true, 0.6, true, popupDescription, false);
+
             this.playerHealButton.addRevealOverlay();
             this.playerHealButton.updateCooldown(
                 this.playerSpellsData.heal.cooldownProgress,
@@ -2484,14 +2541,25 @@ export class Game extends AbstractScene {
 
         // OPPONENT MAGIC BALL BUTTON
         if (this.opponentSpellsData?.magicBall) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.magicBall.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.magicBall.targets}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.magicBall.cooldown}`)
+            if (this.opponentSpellsData.magicBall.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.opponentMagicBallButton = new Button(this, 100, 290, 'magic-ball-button', '', () => {
                 // ...no action - opponent will use it next turn
-            }, true, 0.6)
+            }, true, 0.6, true, popupDescription, true)
             this.opponentMagicBallButton.addRevealOverlay();
             this.opponentMagicBallButton.updateCooldown(
                 this.opponentSpellsData.magicBall.cooldownProgress,
                 this.opponentSpellsData.magicBall.cooldown
             );
+
             this.opponentMagicBallButton.updateCooldownText(
                 `${this.opponentSpellsData.magicBall.cooldown - this.opponentSpellsData.magicBall.cooldownProgress}`
             );
@@ -2504,9 +2572,22 @@ export class Game extends AbstractScene {
 
         // OPPONENT POISON BUTTON
         if (this.opponentSpellsData?.poison) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.poison.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.poison.targets}`)
+                .replace('{duration}', `${this.opponentSpellsData.poison.duration}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.poison.cooldown}`)
+            if (this.opponentSpellsData.poison.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
             this.opponentPoisonButton = new Button(this, 100, 417, 'poison-button', '', () => {
                 // ...no action - opponent will use it next turn
-            }, true, 0.6)
+            }, true, 0.6, true, popupDescription, true)
+
             this.opponentPoisonButton.addRevealOverlay();
             this.opponentPoisonButton.updateCooldown(
                 this.opponentSpellsData.poison.cooldownProgress,
@@ -2524,9 +2605,20 @@ export class Game extends AbstractScene {
 
         // OPPONENT RAIN OF ARROWS BUTTON
         if (this.opponentSpellsData?.rainOfArrows) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.rainOfArrows.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.rainOfArrows.targets}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.rainOfArrows.cooldown}`)
+            if (this.opponentSpellsData.rainOfArrows.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.opponentRainOfArrowsButton = new Button(this, 100, 550, 'rain-of-arrows-button', '', () => {
                 // ...no action - opponent will use it next turn
-            }, true, 0.6)
+            }, true, 0.6, true, popupDescription, true);
+
             this.opponentRainOfArrowsButton.addRevealOverlay();
             this.opponentRainOfArrowsButton.updateCooldown(
                 this.opponentSpellsData.rainOfArrows.cooldownProgress,
@@ -2544,9 +2636,21 @@ export class Game extends AbstractScene {
 
         // OPPONENT FREEZE BUTTON
         if (this.opponentSpellsData?.freeze) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.opponentSpellsData.freeze.targets}`)
+                .replace('{duration}', `${this.opponentSpellsData.freeze.duration}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.freeze.cooldown}`)
+            if (this.opponentSpellsData.freeze.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
             this.opponentFreezeButton = new Button(this, 100, 680, 'freeze-button', '', () => {
                 // ...no action - opponent will use it next turn
-            }, true, 0.6)
+            }, true, 0.6, true, popupDescription, true);
+
             this.opponentFreezeButton.addRevealOverlay();
             this.opponentFreezeButton.updateCooldown(
                 this.opponentSpellsData.freeze.cooldownProgress,
@@ -2564,9 +2668,20 @@ export class Game extends AbstractScene {
 
         // OPPONENT HEAL BUTTON
         if (this.opponentSpellsData?.heal) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.opponentSpellsData.heal.targets}`)
+                .replace('{amount}', `${this.opponentSpellsData.heal.amount}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.heal.cooldown}`)
+            if (this.opponentSpellsData.heal.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
             this.opponentHealButton = new Button(this, 100, 810, 'heal-button', '', () => {
                 // ...no action - opponent will use it next turn
-            }, true, 0.6)
+            }, true, 0.6, true, popupDescription, true);
+            
             this.opponentHealButton.addRevealOverlay();
             this.opponentHealButton.updateCooldown(
                 this.opponentSpellsData.heal.cooldownProgress,
@@ -2645,7 +2760,6 @@ export class Game extends AbstractScene {
                 this.mainGridContainer,
                 this.data.list.isPlayerTurn ? this.data.list.opponentMonsters : this.data.list.playerMonsters,
                 this.data.list.isPlayerTurn ? this.playerSpellsData.magicBall : this.opponentSpellsData.magicBall
-
             );
 
             this.time.delayedCall(750, () => {

@@ -142,6 +142,8 @@ export class Preloader extends Scene {
         this.load.image('heal-button', 'heal-button.png');
         this.load.image('heal-button-locked', 'heal-button-locked.png');
 
+        this.load.image('info-popup', 'info-popup.png');
+
         this.load.image('chains', 'chains.png');
         this.load.image('green-poison-particle', 'green-poison-particle.png');
 
@@ -158,15 +160,15 @@ export class Preloader extends Scene {
     create() {
 
         // setTimeout(() => {
-            // return
-            // DailyQuestTimeHandler.initialCheck();
-            // DataHandler.setInitialAchievements();
-            this.cameras.main.fadeOut(500, 0, 0, 0);
-            this.cameras.main.once('camerafadeoutcomplete', () => {
-                this.scene.start('MainMenu');
-                DailyQuestTimeHandler.initialCheck();
-                DataHandler.setInitialAchievements();
-            });
+        // return
+        // DailyQuestTimeHandler.initialCheck();
+        // DataHandler.setInitialAchievements();
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            this.scene.start('MainMenu');
+            DailyQuestTimeHandler.initialCheck();
+            DataHandler.setInitialAchievements();
+        });
         // }, 7500);
 
 

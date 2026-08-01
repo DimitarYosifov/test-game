@@ -1,6 +1,8 @@
+import { GAME_OBJECT_DEPTHS } from "../../configs/main_config";
 
 const FONT_SIZE = 50;
 const MAX_WIDTH = 95;
+const SHOW_POPUP_WHEN_HOVERED_FOR = 1000;
 
 export class Button extends Phaser.GameObjects.Container {
 
@@ -11,18 +13,51 @@ export class Button extends Phaser.GameObjects.Container {
     spellFilledTween: Phaser.Tweens.Tween;
     readyForUse: boolean = false;
     cooldownText: Phaser.GameObjects.Text;
-    usedCurrentRound:boolean = false;
+    usedCurrentRound: boolean = false;
+    infoPopup: Phaser.GameObjects.Image;
+    infoPopupText: Phaser.GameObjects.Text;
+    currentPopupTween: Phaser.Tweens.Tween;
+    delayedShowPopupEvent: Phaser.Time.TimerEvent;
+    enabled: boolean = false;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, text: string | null, action: Function, disableInteraction: boolean = false, initialScale: number = 1) {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        texture: string,
+        text: string | null,
+        action: Function,
+        disableInteraction: boolean = false,
+        initialScale: number = 1,
+        addInfoPopup: boolean = false,
+        infoPopupDescription: string = '',
+        infoPopupFlippedX: boolean = false
+    ) {
         super(scene, x, y);
         this.scene = scene;
         this.initialScale = initialScale;
-        this.bg = this.scene.add.image(0, 0, texture);
+        this.bg = this.scene.add.image(0, 0, texture).setInteractive();
         this.add(this.bg);
         this.bg.setOrigin(0.5);
-        disableInteraction ? this.bg.disableInteractive() : this.bg.setInteractive();
+        disableInteraction ? this.disableInteractive() : this.setInteractive();
         this.setAlpha(disableInteraction ? 0.65 : 1);
+
+        if (addInfoPopup) {
+            this.createInfoPopup(x, y, infoPopupDescription, infoPopupFlippedX);
+        }
+
         this.bg.on('pointerover', () => {
+            if (addInfoPopup) {
+                this.delayedShowPopupEvent = this.scene.time.delayedCall(SHOW_POPUP_WHEN_HOVERED_FOR, () => {
+                    this.tweenPopupVisibility(true);
+                    this.delayedShowPopupEvent = null;
+                })
+            }
+
+            if (!this.enabled) {
+                return;
+            }
+
             this.scene.tweens.add({
                 targets: this,
                 scale: this.initialScale * 1.025,
@@ -30,6 +65,17 @@ export class Button extends Phaser.GameObjects.Container {
             })
         });
         this.bg.on('pointerout', () => {
+            if (addInfoPopup) {
+                if (this.delayedShowPopupEvent) {
+                    this.delayedShowPopupEvent.remove();
+                }
+                this.tweenPopupVisibility(false);
+            }
+
+            if (!this.enabled) {
+                return;
+            }
+
             this.scene.tweens.add({
                 targets: this,
                 scale: this.initialScale,
@@ -37,6 +83,11 @@ export class Button extends Phaser.GameObjects.Container {
             })
         });
         this.bg.on('pointerdown', () => {
+
+            if (!this.enabled) {
+                return;
+            }
+
             this.disableInteractive();
             this.setScale(initialScale);
             action();
@@ -63,14 +114,46 @@ export class Button extends Phaser.GameObjects.Container {
         }
     }
 
+    tweenPopupVisibility(show: boolean) {
+        this.currentPopupTween = this.scene.tweens.add({
+            targets: [this.infoPopup, this.infoPopupText],
+            alpha: +show,
+            duration: 200
+        })
+    }
+
+    createInfoPopup(x: number, y: number, infoPopupDescription: string, infoPopupFlippedX: boolean) {
+        this.infoPopup = this.scene.add.image(infoPopupFlippedX ? x + 350 : x - 350, y + 100, 'info-popup')
+            .setOrigin(0.5)
+            .setScale(2)
+            .setAlpha(0)
+            .setDepth(GAME_OBJECT_DEPTHS.buttonDescriptionPopup);
+
+
+        this.infoPopup.flipX = infoPopupFlippedX;
+
+        this.infoPopupText = this.scene.add.text(
+            infoPopupFlippedX ? this.infoPopup.x + 20 : this.infoPopup.x,
+            this.infoPopup.y,
+            `${infoPopupDescription}`,
+            {
+                fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 44, color: '#ffffff',
+                stroke: '#000000', letterSpacing: 4, wordWrap: { width: 500 },
+                align: 'center'
+            })
+            .setOrigin(0.5)
+            .setAlpha(0)
+            .setDepth(GAME_OBJECT_DEPTHS.buttonDescriptionPopup);
+    }
+
     setInteractive(): this {
-        this.bg.setInteractive();
+        this.enabled = true;
         this.setAlpha(1);
         return this;
     }
 
     disableInteractive(): this {
-        this.bg.disableInteractive();
+        this.enabled = false;
         this.setAlpha(0.45);
         return this;
     }
@@ -89,7 +172,7 @@ export class Button extends Phaser.GameObjects.Container {
             ``,
             {
                 fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: FONT_SIZE, color: '#ffffff',
-                stroke: '#000000', letterSpacing: 4, strokeThickness:4,
+                stroke: '#000000', letterSpacing: 4, strokeThickness: 4,
                 align: 'center'
             }).setOrigin(0.5);
     }

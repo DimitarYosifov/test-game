@@ -719,7 +719,7 @@ export const level_config = [
             //     cooldownProgress: 0,
             //     amount: spellsConfig.heal.amount[0].value,
             //     targets: spellsConfig.heal.targets[0].value
-            // },
+            // }
         }
     },
     // L E V E L   2    - monsters: 1 star x 8   2 stars x 0
