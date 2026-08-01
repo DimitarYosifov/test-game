@@ -1368,10 +1368,10 @@ export class Game extends AbstractScene {
             alpha: 0.85
         })
 
-        overlay.setInteractive();
-        overlay.on('pointerdown', function (pointer: any) {
-            pointer.event.stopPropagation();
-        });
+        // overlay.setInteractive();
+        // overlay.on('pointerdown', function (pointer: any) {
+        //     pointer.event.stopPropagation();
+        // });
 
         this.add.existing(overlay);
         overlay.setInteractive();

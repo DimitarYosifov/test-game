@@ -19,15 +19,12 @@ export class StartOverConfirm extends Phaser.GameObjects.Container {
     }
 
     private createBGOverlay() {
-        let overlay = this.scene.add.graphics();
-        overlay.fillStyle(0x000000, 0.95);
-        overlay.fillRect(-960, -540, 1920, 1080);
-        overlay.setInteractive();
-        this.add(overlay);
+        let overlay = this.scene.add.image(0, 0, 'black-overlay').setScale(192, 108).setOrigin(0.5).setAlpha(0.9);
         overlay.setInteractive();
         overlay.on('pointerdown', function (pointer: any) {
             pointer.event.stopPropagation();
         });
+        this.add(overlay);
     }
 
     private createMsg() {

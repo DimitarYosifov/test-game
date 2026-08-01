@@ -110,7 +110,7 @@ export class MainMenu extends AbstractScene {
 
     private createInfoButton() {
         const infoButtonClick = () => {
-            this.infoButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('MonstersInfo');
         }
         this.infoButton = new Button(this, 650, 625, 'info', null, infoButtonClick.bind(this), false, 1);
@@ -127,7 +127,7 @@ export class MainMenu extends AbstractScene {
 
     private createGambleButton() {
         const gambleButtonClick = () => {
-            this.gambleButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('Gamble');
         }
         this.gambleButton = new Button(this, 1050, 575, 'slot-machine', null, gambleButtonClick.bind(this), false, 1);
@@ -144,7 +144,7 @@ export class MainMenu extends AbstractScene {
 
     private createDefeatGiantsButton() {
         const defeatMonstersButtonClick = () => {
-            this.defeatMonstersButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('DefeatGiants');
         }
         this.defeatMonstersButton = new Button(this, 1680, 725, 'defeat-giants-menu', null, defeatMonstersButtonClick.bind(this), false, 1);
@@ -161,7 +161,7 @@ export class MainMenu extends AbstractScene {
 
     private createSpellsButton() {
         const spellButtonClick = () => {
-            this.spellsButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('Spells');
         }
         this.spellsButton = new Button(this, 1350, 700, 'spell-book', null, spellButtonClick.bind(this), false, 1);
@@ -195,7 +195,7 @@ export class MainMenu extends AbstractScene {
 
     private createMapbutton(): void {
         const mapButtonClick = () => {
-            this.mapButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('Map');
         }
         this.mapButton = new Button(this, 250, 700, 'map', null, mapButtonClick.bind(this), false, 0.9);
@@ -212,7 +212,7 @@ export class MainMenu extends AbstractScene {
 
     private createShopbutton(): void {
         const shopButtonClick = () => {
-            this.shopButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('BuyPacks');
         }
         this.shopButton = new Button(this, 790, 220, 'shop-icon', null, shopButtonClick.bind(this), false, 1);
@@ -229,7 +229,7 @@ export class MainMenu extends AbstractScene {
 
     private createDeckbutton(): void {
         const deckButtonClick = () => {
-            this.deckButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('CardSelection');
         }
         this.deckButton = new Button(this, 1650, 350, 'deck', null, deckButtonClick.bind(this), false, 0.9);
@@ -246,7 +246,7 @@ export class MainMenu extends AbstractScene {
 
     private createDailyQuestsButton(): void {
         const dailyQuestsButtonClick = () => {
-            this.dailyQuestsButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('DailyQuests');
         }
         this.dailyQuestsButton = new Button(this, 1300, 240, 'clock', null, dailyQuestsButtonClick.bind(this), false, 0.75);
@@ -268,7 +268,7 @@ export class MainMenu extends AbstractScene {
 
     private createAchievementsButton() {
         const achievementsButtonClick = () => {
-            this.achievementsButton.disableInteractive();
+            this.disableAllButtons();
             this.changeScene('Achievements');
         }
         this.achievementsButton = new Button(this, 300, 300, 'achievements', null, achievementsButtonClick.bind(this), false, 1);
@@ -286,6 +286,18 @@ export class MainMenu extends AbstractScene {
             let exclaimation = this.add.image(this.achievementsButton.x + 75, this.achievementsButton.y - 100, 'mark').setScale(0.5);
         }
 
+    }
+
+    disableAllButtons() {
+        this.achievementsButton.disableInteractive();
+        this.shopButton.disableInteractive();
+        this.dailyQuestsButton.disableInteractive();
+        this.deckButton.disableInteractive();
+        this.mapButton.disableInteractive();
+        this.infoButton.disableInteractive();
+        this.gambleButton.disableInteractive();
+        this.spellsButton.disableInteractive();
+        this.defeatMonstersButton.disableInteractive();
     }
 
     changeScene(nextScene: string): void {

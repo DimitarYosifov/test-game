@@ -32,7 +32,7 @@ export const spellsConfig = {
             { value: 2, cost: 7 }, // poison level 2
         ],
         duration: [
-            { value: 3, cost: 0 }, // duration level 1
+            { value: 5, cost: 0 }, // duration level 1
             { value: 2, cost: 7 }, // duration level 2
             { value: 3, cost: 15 } // duration level 3
         ]
@@ -66,7 +66,7 @@ export const spellsConfig = {
             { value: 3, cost: 8 }  // targets level 2
         ],
         duration: [
-            { value: 1, cost: 0 }, // duration level 0
+            { value: 5, cost: 0 }, // duration level 0
             { value: 2, cost: 2 }, // duration level 1
             { value: 3, cost: 4 } // duration level 2
         ]

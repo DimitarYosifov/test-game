@@ -680,11 +680,11 @@ export const level_config = [
             y: 0
         },
         opponentMonstersData: [
-            { type: 1, stars: 1, isGiant: false },
-            { type: 2, stars: 1 },
-            { type: 2, stars: 1 },
-            { type: 5, stars: 1 },
-            { type: 3, stars: 1 },
+            // { type: 1, stars: 1, isGiant: false },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 5, stars: 1 },
+            // { type: 3, stars: 1 },
             { type: 5, stars: 1 },
             { type: 6, stars: 1 }
         ],
