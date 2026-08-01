@@ -1,7 +1,7 @@
 export const spellsConfig = {
     magicBall: {
         coolDown: [
-            { value: 2, cost: 0 }, // cooldown level 0
+            { value: 1, cost: 0 }, // cooldown level 0
             { value: 13, cost: 3 }, // cooldown level 1
             { value: 12, cost: 6 }  // cooldown level 2
         ],
@@ -39,7 +39,7 @@ export const spellsConfig = {
     },
     rainOfArrows: {
         coolDown: [
-            { value: 4, cost: 0 }, // cooldown level 0
+            { value: 1, cost: 0 }, // cooldown level 0
             { value: 9, cost: 2 }, // cooldown level 1
             { value: 8, cost: 4 }  // cooldown level 2
         ],

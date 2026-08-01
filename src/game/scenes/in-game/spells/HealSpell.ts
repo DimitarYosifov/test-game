@@ -23,7 +23,7 @@ export class HealSpell {
             const targetMonster: Monster = targetMonsters[targetMonstеrIndex];
             const emitCheckEndTurnOnComplete = targetsCount === 0; // IMPORTANT - true if it last heal!!!!!!!!!!!
 
-            targetMonster.addHealth();
+            targetMonster.addHealth(true, healAmount);
             targetMonster.addBUffCollected(targetMonster.unitData.row, targetMonster.unitData.col, healAmount, BUFF_TYPES.HEALTH, emitCheckEndTurnOnComplete);
 
             if (targetsCount > 0) {

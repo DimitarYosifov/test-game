@@ -261,6 +261,10 @@ export class Monster extends Phaser.GameObjects.Container {
         // this.setPoisoned();
     }
 
+    private alighHeartImage() {
+        // aligh health/heart image depending on helth text width
+        this.health.x = this.health_text.x - this.health_text.width;
+    }
 
     repeatMove(): void {
         console.log('repeatMove');
@@ -477,11 +481,12 @@ export class Monster extends Phaser.GameObjects.Container {
         })
     }
 
-    addHealth() {
-        this.unitData.health++;
+    addHealth(curePoison: boolean = true, amount: number = 1) {
+        this.unitData.health += amount;
         this.health_text.setText(`${this.unitData.health}`);
+        this.alighHeartImage();
         this.health_text.tint = 0x4bcc0f;
-        if (this.poisonedForDuration > 0) {
+        if (curePoison && this.poisonedForDuration > 0) {
             this.removePoisoned();
         }
     }
@@ -547,6 +552,13 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     performHit(target: Monster | null, isTargetToTheLeft: boolean, complete: Function): void {
+
+        //============================== monter N2 special skill=============================
+        if (+this.unitData.type === 2 && target.unitData.magic > 0) {
+            this.addHealth(false);
+            this.addBUffCollected(this.unitData.row, this.unitData.col, 1, BUFF_TYPES.HEALTH, false);
+        }
+        //===================================================================================
 
         this.emitter.emitting = true;
         this.pendingAction = false;
@@ -728,7 +740,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
         this.unitData.health = healthLeft;
         this.health_text.setText(healthLeft.toString());
-
+        this.alighHeartImage();
 
         const glbPos = this.bg.getBounds()
         const x = glbPos.x + this.bg.displayWidth / 2;

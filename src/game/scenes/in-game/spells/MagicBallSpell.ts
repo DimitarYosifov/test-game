@@ -3,6 +3,7 @@ import { GAME_OBJECT_DEPTHS, getRandomNonNullIndex } from "../../../configs/main
 import { SpriteAnimation } from "../../SpriteAnimation";
 import { Monster } from "../Monster";
 import { IMagicBall } from "../../../configs/level_config";
+import { GAME_SCENE_SCENE_EVENTS } from "../../Game";
 
 export class MagicBallSpell {
 
@@ -35,17 +36,29 @@ export class MagicBallSpell {
                 duration: 100 + (targetMonster.unitData.row * 50),
                 y: targetY,
                 onComplete: () => {
+                    let emitter: null | Phaser.GameObjects.Particles.ParticleEmitter = null;
                     magicBall.destroy(true);
                     let magicAnimation = new SpriteAnimation(this.scene, targetX, targetY, 'magic-animation', 'magic-animation', 'spinrevelfx_', false, 16, 1, 1, 5)
                     magicAnimation.animation!.once('animationcomplete', () => {
                         magicAnimation.animation?.destroy(true);
                         this.scene.time.delayedCall(2000, () => {
-                            emitter.destroy(true);
+                            if (emitter) {
+                                (emitter as Phaser.GameObjects.Particles.ParticleEmitter).destroy(true);
+                            }
                         })
                     });
-                    targetMonster.takeDamege(damage, true, true, emitCheckEndTurnOnComplete, 0, true);
 
-                    const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
+                    if (targetMonster.immuneTo.includes('magic-ball')) {
+                        targetMonster.showImmuneText();
+                        if (emitCheckEndTurnOnComplete) {
+                            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
+                        return;
+                    } else {
+                        targetMonster.takeDamege(damage, true, true, emitCheckEndTurnOnComplete, 0, true);
+                    }
+
+                    emitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
                         lifespan: 1400,
                         speed: { random: [75, 150] },
                         scale: { start: 0.75, end: 0.2 },

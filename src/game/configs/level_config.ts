@@ -680,28 +680,28 @@ export const level_config = [
             y: 0
         },
         opponentMonstersData: [
-            // { type: 1, stars: 1, isGiant: false },
-            // { type: 2, stars: 1 },
-            // { type: 2, stars: 1 },
-            // { type: 5, stars: 1 },
-            // { type: 3, stars: 1 },
+            { type: 1, stars: 1, isGiant: false },
+            { type: 2, stars: 1 },
+            { type: 2, stars: 1 },
+            { type: 5, stars: 1 },
+            { type: 3, stars: 1 },
             { type: 5, stars: 1 },
             { type: 6, stars: 1 }
         ],
         opponentSpells: {
-            // magicBall: {
-            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     damage: spellsConfig.magicBall.damage[0].value,
-            //     targets: spellsConfig.magicBall.targets[0].value
-            // },
-            poison: {
-                cooldown: spellsConfig.poison.coolDown[0].value,
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
                 cooldownProgress: 0,
-                damage: spellsConfig.poison.damage[0].value,
-                targets: spellsConfig.poison.targets[0].value,
-                duration: spellsConfig.poison.duration[0].value
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
             },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
             // rainOfArrows: {
             //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
             //     cooldownProgress: 0,
@@ -714,12 +714,12 @@ export const level_config = [
             //     duration: spellsConfig.freeze.duration[0].value,
             //     targets: spellsConfig.freeze.targets[0].value
             // },
-            // heal: {
-            //     cooldown: spellsConfig.heal.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     amount: spellsConfig.heal.amount[0].value,
-            //     targets: spellsConfig.heal.targets[0].value
-            // }
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
         }
     },
     // L E V E L   2    - monsters: 1 star x 8   2 stars x 0
