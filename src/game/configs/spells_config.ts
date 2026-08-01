@@ -18,7 +18,7 @@ export const spellsConfig = {
     },
     poison: {
         coolDown: [
-            { value: 2, cost: 0 }, // poison level 0
+            { value: 1, cost: 0 }, // poison level 0
             { value: 13, cost: 4 }, // poison level 1
             { value: 12, cost: 7 }  // poison level 2
         ],
@@ -32,7 +32,7 @@ export const spellsConfig = {
             { value: 2, cost: 7 }, // poison level 2
         ],
         duration: [
-            { value: 1, cost: 0 }, // duration level 1
+            { value: 3, cost: 0 }, // duration level 1
             { value: 2, cost: 7 }, // duration level 2
             { value: 3, cost: 15 } // duration level 3
         ]
@@ -56,7 +56,7 @@ export const spellsConfig = {
     },
     freeze: {
         coolDown: [
-            { value: 12, cost: 0 }, // cooldown level 0
+            { value: 1, cost: 0 }, // cooldown level 0
             { value: 11, cost: 2 }, // cooldown level 1
             { value: 10, cost: 5 }  // cooldown level 2
         ],

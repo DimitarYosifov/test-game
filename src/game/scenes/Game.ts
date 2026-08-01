@@ -195,6 +195,7 @@ export class Game extends AbstractScene {
 
     }
 
+    // region BUFFS
     private addBuff(row: number, col: number, addQuestionMarks: boolean = true) {
         if (!this.questionMarkContainer && addQuestionMarks) {
             this.addQuestionMarks();
@@ -361,6 +362,7 @@ export class Game extends AbstractScene {
             }).setOrigin(0.5).setName('level title');
     }
 
+    // region SURVIVAL LEVELS
     private createSurvivalLevelRewardText() {
         this.survivalLevelRewardText = this.add.text(
             960,
@@ -380,6 +382,7 @@ export class Game extends AbstractScene {
         this.survivalLevelRewardImage.setX(this.survivalLevelRewardText.x + this.survivalLevelRewardText.width / 2 + 15);
     }
 
+    // region BUTTONS
     private createGiveUpButton() {
         this.giveUpButton = new Button(this, 100, 1000, 'button', 'give\nup', () => {
             this.createLevelOutroPopup();
@@ -398,9 +401,394 @@ export class Game extends AbstractScene {
                     m.pendingAction = false;
                 }
             });
-            this.checkNextTurn(false);
+            this.checkNextTurn(false, true);
         }, true)
     }
+
+    private createSpellButtons() {
+
+        const magicBallCooldownLevel = LOCAL_STORAGE_MANAGER.get('magicBallCooldownLevel');
+        const poisonCooldownLevel = LOCAL_STORAGE_MANAGER.get('poisonCooldownLevel');
+        const rainOfArrowsCooldownLevel = LOCAL_STORAGE_MANAGER.get('rainOfArrowsCooldownLevel');
+        const freezeCooldownLevel = LOCAL_STORAGE_MANAGER.get('freezeCooldownLevel');
+        const healCooldownLevel = LOCAL_STORAGE_MANAGER.get('healCooldownLevel');
+
+        (this.playerSpellsData as any) = {};
+
+        // PLAYER MAGIC BALL BUTTON
+        if (!isNaN(magicBallCooldownLevel) && magicBallCooldownLevel !== null) {
+            this.playerSpellsData.magicBall = {
+                cooldown: spellsConfig.magicBall.coolDown[magicBallCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[LOCAL_STORAGE_MANAGER.get('magicBallDamageLevel')].value,
+                targets: spellsConfig.magicBall.targets[LOCAL_STORAGE_MANAGER.get('magicBallTargetsLevel')].value
+            }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.magicBall.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.magicBall.targets}`)
+                .replace('{cooldown}', `${this.playerSpellsData.magicBall.cooldown}`)
+            if (this.playerSpellsData.magicBall.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.playerMagicBallButton = new Button(this, 1820, 290, 'magic-ball-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.magicBall.cooldownProgress = 0;
+                this.playerMagicBallButton.readyForUse = false;
+                this.newMagicBallSpell(this.playerSpellsData.magicBall.cooldown);
+                // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6, true, popupDescription, false);
+
+            this.playerMagicBallButton.addRevealOverlay();
+            this.playerMagicBallButton.updateCooldown(
+                this.playerSpellsData.magicBall.cooldownProgress,
+                this.playerSpellsData.magicBall.cooldown
+            );
+            this.playerMagicBallButton.updateCooldownText(
+                `${this.playerSpellsData.magicBall.cooldown - this.playerSpellsData.magicBall.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerMagicBallButton = this.add.image(1820, 290, 'magic-ball-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER POISON BUTTON
+        if (!isNaN(poisonCooldownLevel) && poisonCooldownLevel !== null) {
+            this.playerSpellsData.poison = {
+                cooldown: spellsConfig.poison.coolDown[poisonCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[LOCAL_STORAGE_MANAGER.get('poisonDamageLevel')].value,
+                targets: spellsConfig.poison.targets[LOCAL_STORAGE_MANAGER.get('poisonTargetsLevel')].value,
+                duration: spellsConfig.poison.duration[LOCAL_STORAGE_MANAGER.get('poisonDurationLevel')].value
+            }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.poison.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.poison.targets}`)
+                .replace('{duration}', `${this.playerSpellsData.poison.duration}`)
+                .replace('{cooldown}', `${this.playerSpellsData.poison.cooldown}`)
+            if (this.playerSpellsData.poison.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
+            this.playerPoisonButton = new Button(this, 1820, 417, 'poison-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.poison.cooldownProgress = 0;
+                this.playerPoisonButton.readyForUse = false;
+                this.newPoisonSpell(this.playerSpellsData.poison.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6, true, popupDescription, false);
+            this.playerPoisonButton.addRevealOverlay();
+            this.playerPoisonButton.updateCooldown(
+                this.playerSpellsData.poison.cooldownProgress,
+                this.playerSpellsData.poison.cooldown
+            );
+            this.playerPoisonButton.updateCooldownText(
+                `${this.playerSpellsData.poison.cooldown - this.playerSpellsData.poison.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerPoisonButton = this.add.image(1820, 417, 'poison-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER RAIN OF ARROWS BUTTON
+        if (!isNaN(rainOfArrowsCooldownLevel) && rainOfArrowsCooldownLevel !== null) {
+            this.playerSpellsData.rainOfArrows = {
+                cooldown: spellsConfig.rainOfArrows.coolDown[rainOfArrowsCooldownLevel].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[LOCAL_STORAGE_MANAGER.get('rainOfArrowsDamageLevel')].value,
+                targets: spellsConfig.rainOfArrows.targets[LOCAL_STORAGE_MANAGER.get('rainOfArrowsTargetsLevel')].value
+            }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.playerSpellsData.rainOfArrows.damage}`)
+                .replace('{targets}', `${this.playerSpellsData.rainOfArrows.targets}`)
+                .replace('{cooldown}', `${this.playerSpellsData.rainOfArrows.cooldown}`)
+            if (this.playerSpellsData.rainOfArrows.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.playerRainOfArrowsButton = new Button(this, 1820, 550, 'rain-of-arrows-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.rainOfArrows.cooldownProgress = 0;
+                this.playerRainOfArrowsButton.readyForUse = false;
+                this.newRainOfArrowsSpell(this.playerSpellsData.rainOfArrows.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6, true, popupDescription, false);
+
+            this.playerRainOfArrowsButton.addRevealOverlay();
+            this.playerRainOfArrowsButton.updateCooldown(
+                this.playerSpellsData.rainOfArrows.cooldownProgress,
+                this.playerSpellsData.rainOfArrows.cooldown
+            );
+            this.playerRainOfArrowsButton.updateCooldownText(
+                `${this.playerSpellsData.rainOfArrows.cooldown - this.playerSpellsData.rainOfArrows.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerRainOfArrowButton = this.add.image(1820, 550, 'rain-of-arrows-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER FREEZE BUTTON
+        if (!isNaN(freezeCooldownLevel) && freezeCooldownLevel !== null) {
+            this.playerSpellsData.freeze = {
+                cooldown: spellsConfig.freeze.coolDown[freezeCooldownLevel].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[LOCAL_STORAGE_MANAGER.get('freezeDurationLevel')].value,
+                targets: spellsConfig.freeze.targets[LOCAL_STORAGE_MANAGER.get('freezeTargetsLevel')].value
+            }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.playerSpellsData.freeze.targets}`)
+                .replace('{duration}', `${this.playerSpellsData.freeze.duration}`)
+                .replace('{cooldown}', `${this.playerSpellsData.freeze.cooldown}`)
+            if (this.playerSpellsData.freeze.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
+            this.playerFreezeButton = new Button(this, 1820, 680, 'freeze-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.freeze.cooldownProgress = 0;
+                this.playerFreezeButton.readyForUse = false;
+                this.newFreezeSpell(this.playerSpellsData.freeze.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6, true, popupDescription, false);
+
+            this.playerFreezeButton.addRevealOverlay();
+            this.playerFreezeButton.updateCooldown(
+                this.playerSpellsData.freeze.cooldownProgress,
+                this.playerSpellsData.freeze.cooldown
+            );
+            this.playerFreezeButton.updateCooldownText(
+                `${this.playerSpellsData.freeze.cooldown - this.playerSpellsData.freeze.cooldownProgress}`
+            );
+        } else {
+            // create static image for player magic ball button
+            const staticPlayerFreezeButton = this.add.image(1820, 680, 'freeze-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // PLAYER HEAL BUTTON
+        if (!isNaN(healCooldownLevel) && healCooldownLevel !== null) {
+            this.playerSpellsData.heal = {
+                cooldown: spellsConfig.heal.coolDown[healCooldownLevel].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[LOCAL_STORAGE_MANAGER.get('healAmountLevel')].value,
+                targets: spellsConfig.heal.targets[LOCAL_STORAGE_MANAGER.get('healTargetsLevel')].value
+            }
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.playerSpellsData.heal.targets}`)
+                .replace('{amount}', `${this.playerSpellsData.heal.amount}`)
+                .replace('{cooldown}', `${this.playerSpellsData.heal.cooldown}`)
+            if (this.playerSpellsData.heal.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.playerHealButton = new Button(this, 1820, 810, 'heal-button', '', () => {
+                this.spellCastInProgress = true;
+                this.playerSpellsData.heal.cooldownProgress = 0;
+                this.playerHealButton.readyForUse = false;
+                this.newHealSpell(this.playerSpellsData.heal.cooldown);
+                this.movementArrowsContainer.removeArrows();
+                this.pauseResumeInteraction(false);
+            }, true, 0.6, true, popupDescription, false);
+
+            this.playerHealButton.addRevealOverlay();
+            this.playerHealButton.updateCooldown(
+                this.playerSpellsData.heal.cooldownProgress,
+                this.playerSpellsData.heal.cooldown
+            );
+            this.playerHealButton.updateCooldownText(
+                `${this.playerSpellsData.heal.cooldown - this.playerSpellsData.heal.cooldownProgress}`
+            );
+        } else {
+            // create static image for player heal button
+            const staticPlayerHealButton = this.add.image(1820, 810, 'heal-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT MAGIC BALL BUTTON
+        if (this.opponentSpellsData?.magicBall) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.magicBall.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.magicBall.targets}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.magicBall.cooldown}`)
+            if (this.opponentSpellsData.magicBall.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.opponentMagicBallButton = new Button(this, 100, 290, 'magic-ball-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6, true, popupDescription, true)
+            this.opponentMagicBallButton.addRevealOverlay();
+            this.opponentMagicBallButton.updateCooldown(
+                this.opponentSpellsData.magicBall.cooldownProgress,
+                this.opponentSpellsData.magicBall.cooldown
+            );
+
+            this.opponentMagicBallButton.updateCooldownText(
+                `${this.opponentSpellsData.magicBall.cooldown - this.opponentSpellsData.magicBall.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent magic ball button
+            const staticOpponentMagicBallButton = this.add.image(100, 290, 'magic-ball-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT POISON BUTTON
+        if (this.opponentSpellsData?.poison) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.poison.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.poison.targets}`)
+                .replace('{duration}', `${this.opponentSpellsData.poison.duration}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.poison.cooldown}`)
+            if (this.opponentSpellsData.poison.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
+            this.opponentPoisonButton = new Button(this, 100, 417, 'poison-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6, true, popupDescription, true)
+
+            this.opponentPoisonButton.addRevealOverlay();
+            this.opponentPoisonButton.updateCooldown(
+                this.opponentSpellsData.poison.cooldownProgress,
+                this.opponentSpellsData.poison.cooldown
+            );
+            this.opponentPoisonButton.updateCooldownText(
+                `${this.opponentSpellsData.poison.cooldown - this.opponentSpellsData.poison.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent magic ball button
+            const staticOpponentMagicBallButton = this.add.image(100, 417, 'poison-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT RAIN OF ARROWS BUTTON
+        if (this.opponentSpellsData?.rainOfArrows) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
+            popupDescription = popupDescription
+                .replace('{damage}', `${this.opponentSpellsData.rainOfArrows.damage}`)
+                .replace('{targets}', `${this.opponentSpellsData.rainOfArrows.targets}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.rainOfArrows.cooldown}`)
+            if (this.opponentSpellsData.rainOfArrows.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.opponentRainOfArrowsButton = new Button(this, 100, 550, 'rain-of-arrows-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6, true, popupDescription, true);
+
+            this.opponentRainOfArrowsButton.addRevealOverlay();
+            this.opponentRainOfArrowsButton.updateCooldown(
+                this.opponentSpellsData.rainOfArrows.cooldownProgress,
+                this.opponentSpellsData.rainOfArrows.cooldown
+            );
+            this.opponentRainOfArrowsButton.updateCooldownText(
+                `${this.opponentSpellsData.rainOfArrows.cooldown - this.opponentSpellsData.rainOfArrows.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentRainOfArrowsButton = this.add.image(100, 550, 'rain-of-arrows-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT FREEZE BUTTON
+        if (this.opponentSpellsData?.freeze) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.opponentSpellsData.freeze.targets}`)
+                .replace('{duration}', `${this.opponentSpellsData.freeze.duration}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.freeze.cooldown}`)
+            if (this.opponentSpellsData.freeze.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`);
+                popupDescription = popupDescription.replace('rounds', `round`);
+            }
+
+            this.opponentFreezeButton = new Button(this, 100, 680, 'freeze-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6, true, popupDescription, true);
+
+            this.opponentFreezeButton.addRevealOverlay();
+            this.opponentFreezeButton.updateCooldown(
+                this.opponentSpellsData.freeze.cooldownProgress,
+                this.opponentSpellsData.freeze.cooldown
+            );
+            this.opponentFreezeButton.updateCooldownText(
+                `${this.opponentSpellsData.freeze.cooldown - this.opponentSpellsData.freeze.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentFreezeButton = this.add.image(100, 680, 'freeze-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+
+        // OPPONENT HEAL BUTTON
+        if (this.opponentSpellsData?.heal) {
+
+            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
+            popupDescription = popupDescription
+                .replace('{targets}', `${this.opponentSpellsData.heal.targets}`)
+                .replace('{amount}', `${this.opponentSpellsData.heal.amount}`)
+                .replace('{cooldown}', `${this.opponentSpellsData.heal.cooldown}`)
+            if (this.opponentSpellsData.heal.targets === 1) {
+                popupDescription = popupDescription.replace('targets', `target`)
+            }
+
+            this.opponentHealButton = new Button(this, 100, 810, 'heal-button', '', () => {
+                // ...no action - opponent will use it next turn
+            }, true, 0.6, true, popupDescription, true);
+
+            this.opponentHealButton.addRevealOverlay();
+            this.opponentHealButton.updateCooldown(
+                this.opponentSpellsData.heal.cooldownProgress,
+                this.opponentSpellsData.heal.cooldown
+            );
+            this.opponentHealButton.updateCooldownText(
+                `${this.opponentSpellsData.heal.cooldown - this.opponentSpellsData.heal.cooldownProgress}`
+            );
+        } else {
+            // create static image for opponent freeze button
+            const staticOpponentHealButton = this.add.image(100, 810, 'heal-button-locked')
+                .setOrigin(0.5)
+                .setScale(0.6);
+        }
+    }
+
+
 
     private createOpponentTurnMsg() {
         this.opponentTurnMsg = this.add.text(
@@ -462,6 +850,7 @@ export class Game extends AbstractScene {
         this.opponentBulb = this.add.image(55, 35, 'bulb').setScale(0.7).setOrigin(0.5).setAlpha(0.4);
     }
 
+    // region HANDLERS
     private checkEndTurnHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, (skipByUser: boolean = false) => {
 
@@ -843,22 +1232,6 @@ export class Game extends AbstractScene {
         })
     }
 
-    private checkSpecificMonsterSkillOnMonsterDie(killedMonster: Monster) {
-
-        /**below will not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
-
-        // monster 1 special skill 
-        if (+killedMonster.type === 5) {
-            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
-            monsters
-                .filter((m: Monster) => m && +m.type === 1)
-                .forEach((fm: Monster) => {
-                    fm.addMove();
-                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
-                });
-        }
-    }
-
     private monsterDieHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: (Monster | IUnitData)[]) => {
 
@@ -893,6 +1266,22 @@ export class Game extends AbstractScene {
                 this.checkMapVisibility(false);
             }
         });
+    }
+
+    private checkSpecificMonsterSkillOnMonsterDie(killedMonster: Monster) {
+
+        /**below will not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
+
+        // monster 1 special skill 
+        if (+killedMonster.type === 5) {
+            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+            monsters
+                .filter((m: Monster) => m && +m.type === 1)
+                .forEach((fm: Monster) => {
+                    fm.addMove();
+                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
+                });
+        }
     }
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
@@ -1517,14 +1906,28 @@ export class Game extends AbstractScene {
         return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
     }
 
-    private checkNextTurn(skipByUser: boolean): void {
+    private checkNextTurn(skipByUser: boolean, forceEndTurn: boolean = false): void {
 
         let turnEnd = false;
-        if (this.data.list.isPlayerTurn) {
-            turnEnd = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
-        } else {
+        if (forceEndTurn) {
+            // end turn immediatelly
+            turnEnd = true;
+        } else if (this.data.list.isPlayerTurn) {
+            if (this.data.list.playerMonsters.filter((m: Monster | null) => m !== null).length === 1 && this.data.list.playerMonsters[0].frozenForDuration > 0) {
+                /**
+                 * player has only 1 monster and it is frozen. do not end turn now, so player 
+                 * can use spells and then end turn manually
+                 */
+                turnEnd = false;
+                this.endTurnButton.setInteractive();
+            } else {
+                turnEnd = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
+            }
+        }
+        else {
             turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
         }
+
         if (turnEnd) {
 
             if (!this.data.list.isPlayerTurn) {
@@ -1755,7 +2158,7 @@ export class Game extends AbstractScene {
         }
 
         this.data.list.playerMonsters.forEach((monster: Monster, index: number) => {
-            if (monster) { //  && monster.pendingAction
+            if (monster && monster.frozenForDuration === 0) { //  && monster.pendingAction
                 console.log(index)
                 monster.setInteraction(resume, skipByUser);
             }
@@ -1917,6 +2320,12 @@ export class Game extends AbstractScene {
         const opponentMonsters = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m!.pendingAction);
 
         console.log(opponentMonsters);
+
+        if (opponentMonsters.length === 0) {
+            // CASE: if opponent has only 1 monster and it is frozen
+            this.checkNextTurn(false);
+            return;
+        }
 
         if (!repeatMove) {
             const rndMonsterIndex = Phaser.Math.RND.between(0, opponentMonsters.length - 1);
@@ -2315,389 +2724,6 @@ export class Game extends AbstractScene {
             (skipCheck ? true : this.data.list.gridPositions[row][col].isEmpty);
     }
 
-    private createSpellButtons() {
-
-        const magicBallCooldownLevel = LOCAL_STORAGE_MANAGER.get('magicBallCooldownLevel');
-        const poisonCooldownLevel = LOCAL_STORAGE_MANAGER.get('poisonCooldownLevel');
-        const rainOfArrowsCooldownLevel = LOCAL_STORAGE_MANAGER.get('rainOfArrowsCooldownLevel');
-        const freezeCooldownLevel = LOCAL_STORAGE_MANAGER.get('freezeCooldownLevel');
-        const healCooldownLevel = LOCAL_STORAGE_MANAGER.get('healCooldownLevel');
-
-        (this.playerSpellsData as any) = {};
-
-        // PLAYER MAGIC BALL BUTTON
-        if (!isNaN(magicBallCooldownLevel) && magicBallCooldownLevel !== null) {
-            this.playerSpellsData.magicBall = {
-                cooldown: spellsConfig.magicBall.coolDown[magicBallCooldownLevel].value,
-                cooldownProgress: 0,
-                damage: spellsConfig.magicBall.damage[LOCAL_STORAGE_MANAGER.get('magicBallDamageLevel')].value,
-                targets: spellsConfig.magicBall.targets[LOCAL_STORAGE_MANAGER.get('magicBallTargetsLevel')].value
-            }
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.playerSpellsData.magicBall.damage}`)
-                .replace('{targets}', `${this.playerSpellsData.magicBall.targets}`)
-                .replace('{cooldown}', `${this.playerSpellsData.magicBall.cooldown}`)
-            if (this.playerSpellsData.magicBall.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.playerMagicBallButton = new Button(this, 1820, 290, 'magic-ball-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.magicBall.cooldownProgress = 0;
-                this.playerMagicBallButton.readyForUse = false;
-                this.newMagicBallSpell(this.playerSpellsData.magicBall.cooldown);
-                // this.playerMagicBallButton.tweenUpdateCooldown(0, this.playerSpellsData.magicBall.cooldown);
-                this.movementArrowsContainer.removeArrows();
-                this.pauseResumeInteraction(false);
-            }, true, 0.6, true, popupDescription, false);
-
-            this.playerMagicBallButton.addRevealOverlay();
-            this.playerMagicBallButton.updateCooldown(
-                this.playerSpellsData.magicBall.cooldownProgress,
-                this.playerSpellsData.magicBall.cooldown
-            );
-            this.playerMagicBallButton.updateCooldownText(
-                `${this.playerSpellsData.magicBall.cooldown - this.playerSpellsData.magicBall.cooldownProgress}`
-            );
-        } else {
-            // create static image for player magic ball button
-            const staticPlayerMagicBallButton = this.add.image(1820, 290, 'magic-ball-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // PLAYER POISON BUTTON
-        if (!isNaN(poisonCooldownLevel) && poisonCooldownLevel !== null) {
-            this.playerSpellsData.poison = {
-                cooldown: spellsConfig.poison.coolDown[poisonCooldownLevel].value,
-                cooldownProgress: 0,
-                damage: spellsConfig.poison.damage[LOCAL_STORAGE_MANAGER.get('poisonDamageLevel')].value,
-                targets: spellsConfig.poison.targets[LOCAL_STORAGE_MANAGER.get('poisonTargetsLevel')].value,
-                duration: spellsConfig.poison.duration[LOCAL_STORAGE_MANAGER.get('poisonDurationLevel')].value
-            }
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.playerSpellsData.poison.damage}`)
-                .replace('{targets}', `${this.playerSpellsData.poison.targets}`)
-                .replace('{duration}', `${this.playerSpellsData.poison.duration}`)
-                .replace('{cooldown}', `${this.playerSpellsData.poison.cooldown}`)
-            if (this.playerSpellsData.poison.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`);
-                popupDescription = popupDescription.replace('rounds', `round`);
-            }
-
-            this.playerPoisonButton = new Button(this, 1820, 417, 'poison-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.poison.cooldownProgress = 0;
-                this.playerPoisonButton.readyForUse = false;
-                this.newPoisonSpell(this.playerSpellsData.poison.cooldown);
-                this.movementArrowsContainer.removeArrows();
-                this.pauseResumeInteraction(false);
-            }, true, 0.6, true, popupDescription, false);
-            this.playerPoisonButton.addRevealOverlay();
-            this.playerPoisonButton.updateCooldown(
-                this.playerSpellsData.poison.cooldownProgress,
-                this.playerSpellsData.poison.cooldown
-            );
-            this.playerPoisonButton.updateCooldownText(
-                `${this.playerSpellsData.poison.cooldown - this.playerSpellsData.poison.cooldownProgress}`
-            );
-        } else {
-            // create static image for player magic ball button
-            const staticPlayerPoisonButton = this.add.image(1820, 417, 'poison-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // PLAYER RAIN OF ARROWS BUTTON
-        if (!isNaN(rainOfArrowsCooldownLevel) && rainOfArrowsCooldownLevel !== null) {
-            this.playerSpellsData.rainOfArrows = {
-                cooldown: spellsConfig.rainOfArrows.coolDown[rainOfArrowsCooldownLevel].value,
-                cooldownProgress: 0,
-                damage: spellsConfig.rainOfArrows.damage[LOCAL_STORAGE_MANAGER.get('rainOfArrowsDamageLevel')].value,
-                targets: spellsConfig.rainOfArrows.targets[LOCAL_STORAGE_MANAGER.get('rainOfArrowsTargetsLevel')].value
-            }
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.playerSpellsData.rainOfArrows.damage}`)
-                .replace('{targets}', `${this.playerSpellsData.rainOfArrows.targets}`)
-                .replace('{cooldown}', `${this.playerSpellsData.rainOfArrows.cooldown}`)
-            if (this.playerSpellsData.rainOfArrows.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.playerRainOfArrowsButton = new Button(this, 1820, 550, 'rain-of-arrows-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.rainOfArrows.cooldownProgress = 0;
-                this.playerRainOfArrowsButton.readyForUse = false;
-                this.newRainOfArrowsSpell(this.playerSpellsData.rainOfArrows.cooldown);
-                this.movementArrowsContainer.removeArrows();
-                this.pauseResumeInteraction(false);
-            }, true, 0.6, true, popupDescription, false);
-
-            this.playerRainOfArrowsButton.addRevealOverlay();
-            this.playerRainOfArrowsButton.updateCooldown(
-                this.playerSpellsData.rainOfArrows.cooldownProgress,
-                this.playerSpellsData.rainOfArrows.cooldown
-            );
-            this.playerRainOfArrowsButton.updateCooldownText(
-                `${this.playerSpellsData.rainOfArrows.cooldown - this.playerSpellsData.rainOfArrows.cooldownProgress}`
-            );
-        } else {
-            // create static image for player magic ball button
-            const staticPlayerRainOfArrowButton = this.add.image(1820, 550, 'rain-of-arrows-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // PLAYER FREEZE BUTTON
-        if (!isNaN(freezeCooldownLevel) && freezeCooldownLevel !== null) {
-            this.playerSpellsData.freeze = {
-                cooldown: spellsConfig.freeze.coolDown[freezeCooldownLevel].value,
-                cooldownProgress: 0,
-                duration: spellsConfig.freeze.duration[LOCAL_STORAGE_MANAGER.get('freezeDurationLevel')].value,
-                targets: spellsConfig.freeze.targets[LOCAL_STORAGE_MANAGER.get('freezeTargetsLevel')].value
-            }
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
-            popupDescription = popupDescription
-                .replace('{targets}', `${this.playerSpellsData.freeze.targets}`)
-                .replace('{duration}', `${this.playerSpellsData.freeze.duration}`)
-                .replace('{cooldown}', `${this.playerSpellsData.freeze.cooldown}`)
-            if (this.playerSpellsData.freeze.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`);
-                popupDescription = popupDescription.replace('rounds', `round`);
-            }
-
-            this.playerFreezeButton = new Button(this, 1820, 680, 'freeze-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.freeze.cooldownProgress = 0;
-                this.playerFreezeButton.readyForUse = false;
-                this.newFreezeSpell(this.playerSpellsData.freeze.cooldown);
-                this.movementArrowsContainer.removeArrows();
-                this.pauseResumeInteraction(false);
-            }, true, 0.6, true, popupDescription, false);
-
-            this.playerFreezeButton.addRevealOverlay();
-            this.playerFreezeButton.updateCooldown(
-                this.playerSpellsData.freeze.cooldownProgress,
-                this.playerSpellsData.freeze.cooldown
-            );
-            this.playerFreezeButton.updateCooldownText(
-                `${this.playerSpellsData.freeze.cooldown - this.playerSpellsData.freeze.cooldownProgress}`
-            );
-        } else {
-            // create static image for player magic ball button
-            const staticPlayerFreezeButton = this.add.image(1820, 680, 'freeze-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // PLAYER HEAL BUTTON
-        if (!isNaN(healCooldownLevel) && healCooldownLevel !== null) {
-            this.playerSpellsData.heal = {
-                cooldown: spellsConfig.heal.coolDown[healCooldownLevel].value,
-                cooldownProgress: 0,
-                amount: spellsConfig.heal.amount[LOCAL_STORAGE_MANAGER.get('healAmountLevel')].value,
-                targets: spellsConfig.heal.targets[LOCAL_STORAGE_MANAGER.get('healTargetsLevel')].value
-            }
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
-            popupDescription = popupDescription
-                .replace('{targets}', `${this.playerSpellsData.heal.targets}`)
-                .replace('{amount}', `${this.playerSpellsData.heal.amount}`)
-                .replace('{cooldown}', `${this.playerSpellsData.heal.cooldown}`)
-            if (this.playerSpellsData.heal.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.playerHealButton = new Button(this, 1820, 810, 'heal-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.heal.cooldownProgress = 0;
-                this.playerHealButton.readyForUse = false;
-                this.newHealSpell(this.playerSpellsData.heal.cooldown);
-                this.movementArrowsContainer.removeArrows();
-                this.pauseResumeInteraction(false);
-            }, true, 0.6, true, popupDescription, false);
-
-            this.playerHealButton.addRevealOverlay();
-            this.playerHealButton.updateCooldown(
-                this.playerSpellsData.heal.cooldownProgress,
-                this.playerSpellsData.heal.cooldown
-            );
-            this.playerHealButton.updateCooldownText(
-                `${this.playerSpellsData.heal.cooldown - this.playerSpellsData.heal.cooldownProgress}`
-            );
-        } else {
-            // create static image for player heal button
-            const staticPlayerHealButton = this.add.image(1820, 810, 'heal-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // OPPONENT MAGIC BALL BUTTON
-        if (this.opponentSpellsData?.magicBall) {
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.magicBall;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.opponentSpellsData.magicBall.damage}`)
-                .replace('{targets}', `${this.opponentSpellsData.magicBall.targets}`)
-                .replace('{cooldown}', `${this.opponentSpellsData.magicBall.cooldown}`)
-            if (this.opponentSpellsData.magicBall.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.opponentMagicBallButton = new Button(this, 100, 290, 'magic-ball-button', '', () => {
-                // ...no action - opponent will use it next turn
-            }, true, 0.6, true, popupDescription, true)
-            this.opponentMagicBallButton.addRevealOverlay();
-            this.opponentMagicBallButton.updateCooldown(
-                this.opponentSpellsData.magicBall.cooldownProgress,
-                this.opponentSpellsData.magicBall.cooldown
-            );
-
-            this.opponentMagicBallButton.updateCooldownText(
-                `${this.opponentSpellsData.magicBall.cooldown - this.opponentSpellsData.magicBall.cooldownProgress}`
-            );
-        } else {
-            // create static image for opponent magic ball button
-            const staticOpponentMagicBallButton = this.add.image(100, 290, 'magic-ball-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // OPPONENT POISON BUTTON
-        if (this.opponentSpellsData?.poison) {
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.poison;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.opponentSpellsData.poison.damage}`)
-                .replace('{targets}', `${this.opponentSpellsData.poison.targets}`)
-                .replace('{duration}', `${this.opponentSpellsData.poison.duration}`)
-                .replace('{cooldown}', `${this.opponentSpellsData.poison.cooldown}`)
-            if (this.opponentSpellsData.poison.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`);
-                popupDescription = popupDescription.replace('rounds', `round`);
-            }
-
-            this.opponentPoisonButton = new Button(this, 100, 417, 'poison-button', '', () => {
-                // ...no action - opponent will use it next turn
-            }, true, 0.6, true, popupDescription, true)
-
-            this.opponentPoisonButton.addRevealOverlay();
-            this.opponentPoisonButton.updateCooldown(
-                this.opponentSpellsData.poison.cooldownProgress,
-                this.opponentSpellsData.poison.cooldown
-            );
-            this.opponentPoisonButton.updateCooldownText(
-                `${this.opponentSpellsData.poison.cooldown - this.opponentSpellsData.poison.cooldownProgress}`
-            );
-        } else {
-            // create static image for opponent magic ball button
-            const staticOpponentMagicBallButton = this.add.image(100, 417, 'poison-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // OPPONENT RAIN OF ARROWS BUTTON
-        if (this.opponentSpellsData?.rainOfArrows) {
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.rainOfArrows;
-            popupDescription = popupDescription
-                .replace('{damage}', `${this.opponentSpellsData.rainOfArrows.damage}`)
-                .replace('{targets}', `${this.opponentSpellsData.rainOfArrows.targets}`)
-                .replace('{cooldown}', `${this.opponentSpellsData.rainOfArrows.cooldown}`)
-            if (this.opponentSpellsData.rainOfArrows.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.opponentRainOfArrowsButton = new Button(this, 100, 550, 'rain-of-arrows-button', '', () => {
-                // ...no action - opponent will use it next turn
-            }, true, 0.6, true, popupDescription, true);
-
-            this.opponentRainOfArrowsButton.addRevealOverlay();
-            this.opponentRainOfArrowsButton.updateCooldown(
-                this.opponentSpellsData.rainOfArrows.cooldownProgress,
-                this.opponentSpellsData.rainOfArrows.cooldown
-            );
-            this.opponentRainOfArrowsButton.updateCooldownText(
-                `${this.opponentSpellsData.rainOfArrows.cooldown - this.opponentSpellsData.rainOfArrows.cooldownProgress}`
-            );
-        } else {
-            // create static image for opponent freeze button
-            const staticOpponentRainOfArrowsButton = this.add.image(100, 550, 'rain-of-arrows-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // OPPONENT FREEZE BUTTON
-        if (this.opponentSpellsData?.freeze) {
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.freeze;
-            popupDescription = popupDescription
-                .replace('{targets}', `${this.opponentSpellsData.freeze.targets}`)
-                .replace('{duration}', `${this.opponentSpellsData.freeze.duration}`)
-                .replace('{cooldown}', `${this.opponentSpellsData.freeze.cooldown}`)
-            if (this.opponentSpellsData.freeze.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`);
-                popupDescription = popupDescription.replace('rounds', `round`);
-            }
-
-            this.opponentFreezeButton = new Button(this, 100, 680, 'freeze-button', '', () => {
-                // ...no action - opponent will use it next turn
-            }, true, 0.6, true, popupDescription, true);
-
-            this.opponentFreezeButton.addRevealOverlay();
-            this.opponentFreezeButton.updateCooldown(
-                this.opponentSpellsData.freeze.cooldownProgress,
-                this.opponentSpellsData.freeze.cooldown
-            );
-            this.opponentFreezeButton.updateCooldownText(
-                `${this.opponentSpellsData.freeze.cooldown - this.opponentSpellsData.freeze.cooldownProgress}`
-            );
-        } else {
-            // create static image for opponent freeze button
-            const staticOpponentFreezeButton = this.add.image(100, 680, 'freeze-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-
-        // OPPONENT HEAL BUTTON
-        if (this.opponentSpellsData?.heal) {
-
-            let popupDescription = SPELL_BUTTONS_POPUP_DESCRIPTION.heal;
-            popupDescription = popupDescription
-                .replace('{targets}', `${this.opponentSpellsData.heal.targets}`)
-                .replace('{amount}', `${this.opponentSpellsData.heal.amount}`)
-                .replace('{cooldown}', `${this.opponentSpellsData.heal.cooldown}`)
-            if (this.opponentSpellsData.heal.targets === 1) {
-                popupDescription = popupDescription.replace('targets', `target`)
-            }
-
-            this.opponentHealButton = new Button(this, 100, 810, 'heal-button', '', () => {
-                // ...no action - opponent will use it next turn
-            }, true, 0.6, true, popupDescription, true);
-
-            this.opponentHealButton.addRevealOverlay();
-            this.opponentHealButton.updateCooldown(
-                this.opponentSpellsData.heal.cooldownProgress,
-                this.opponentSpellsData.heal.cooldown
-            );
-            this.opponentHealButton.updateCooldownText(
-                `${this.opponentSpellsData.heal.cooldown - this.opponentSpellsData.heal.cooldownProgress}`
-            );
-        } else {
-            // create static image for opponent freeze button
-            const staticOpponentHealButton = this.add.image(100, 810, 'heal-button-locked')
-                .setOrigin(0.5)
-                .setScale(0.6);
-        }
-    }
-
     private checkOpponentForSpellCast() {
         if (
             // check magic ball
@@ -2745,6 +2771,7 @@ export class Game extends AbstractScene {
         }
     }
 
+    // region SPELLS
     private newMagicBallSpell(cooldown: number) {
         const button = this.data.list.isPlayerTurn ? this.playerMagicBallButton : this.opponentMagicBallButton;
         button.setAlpha(1);
@@ -2837,6 +2864,7 @@ export class Game extends AbstractScene {
 
             this.time.delayedCall(750, () => {
                 this.spellCastInProgress = false;
+                this.updatePlayerSpellButtonsInteraction();
             })
         })
     }
@@ -2865,6 +2893,7 @@ export class Game extends AbstractScene {
         })
     }
 
+    // region UPDATE SPELLS RELATED
     private updatePlayerSpellButtonsInteraction(forceDisable: boolean = false) {
         // Player Magic Ball Button
         if (this.data.list.isPlayerTurn) {
@@ -3041,7 +3070,7 @@ export class Game extends AbstractScene {
         }
 
         // check opponent magic ball cooldown filled
-        if (this.opponentSpellsData.magicBall) {
+        if (this.opponentSpellsData?.magicBall) {
 
             if (this.opponentMagicBallButton.usedCurrentRound) {
                 this.opponentMagicBallButton.usedCurrentRound = false;
@@ -3060,7 +3089,7 @@ export class Game extends AbstractScene {
         }
 
         // check opponent poison cooldown filled
-        if (this.opponentSpellsData.poison) {
+        if (this.opponentSpellsData?.poison) {
 
             if (this.opponentPoisonButton.usedCurrentRound) {
                 this.opponentPoisonButton.usedCurrentRound = false;
@@ -3079,7 +3108,7 @@ export class Game extends AbstractScene {
         }
 
         // check opponent rain of arrows cooldown filled
-        if (this.opponentSpellsData.rainOfArrows) {
+        if (this.opponentSpellsData?.rainOfArrows) {
 
             if (this.opponentRainOfArrowsButton.usedCurrentRound) {
                 this.opponentRainOfArrowsButton.usedCurrentRound = false;
@@ -3098,7 +3127,7 @@ export class Game extends AbstractScene {
         }
 
         // check opponent freeze filled
-        if (this.opponentSpellsData.freeze) {
+        if (this.opponentSpellsData?.freeze) {
 
             if (this.opponentFreezeButton.usedCurrentRound) {
                 this.opponentFreezeButton.usedCurrentRound = false;
@@ -3117,7 +3146,7 @@ export class Game extends AbstractScene {
         }
 
         // check opponent heal filled
-        if (this.opponentSpellsData.heal) {
+        if (this.opponentSpellsData?.heal) {
 
             if (this.opponentHealButton.usedCurrentRound) {
                 this.opponentHealButton.usedCurrentRound = false;

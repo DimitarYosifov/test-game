@@ -695,13 +695,13 @@ export const level_config = [
             //     damage: spellsConfig.magicBall.damage[0].value,
             //     targets: spellsConfig.magicBall.targets[0].value
             // },
-            // poison: {
-            //     cooldown: spellsConfig.poison.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     damage: spellsConfig.poison.damage[0].value,
-            //     targets: spellsConfig.poison.targets[0].value,
-            //     duration: spellsConfig.poison.duration[0].value
-            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value,
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
             // rainOfArrows: {
             //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
             //     cooldownProgress: 0,

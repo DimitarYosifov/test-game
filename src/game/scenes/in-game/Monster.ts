@@ -1190,6 +1190,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
     removePoisoned() {
         if (this.poisonEmitter) {
+            this.poisonedForDuration = 0;
             this.poisonEmitter.emitting = false;
             this.poisonEmitter.timeScale = 5;
             this.scene.time.delayedCall(2000, () => {
@@ -1216,7 +1217,10 @@ export class Monster extends Phaser.GameObjects.Container {
         if (this.frozenForDuration > 0) {
             // monster alredy frozen - increase duration!
             this.frozenForDuration += frozenForDuration;
-            this.frozen_turns_left_text.setText(`${this.frozenForDuration}`)
+            this.frozen_turns_left_text.setText(`${this.frozenForDuration}`);
+            this.scene.time.delayedCall(500, () => {
+                onComplete()
+            })
         } else {
             this.frozenForDuration = frozenForDuration;
             this.frozenChains = this.scene.add.image(0, 0, 'chains')
