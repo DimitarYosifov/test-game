@@ -448,7 +448,7 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string, emitCheckEndTurnOnComplete:boolean = false) {
+    addBUffCollected(row: number, col: number, buffQuantity: number, buffImageKey: string, emitCheckEndTurnOnComplete: boolean = false) {
         // add visual  display of the buff and tween
         const x = this.scene.data.list.gridPositions[row][col].x + (this.scene as any).mainGridContainer.x;// glbPos.x + this.bg.displayWidth / 2;
         const y = this.scene.data.list.gridPositions[row][col].y + (this.scene as any).mainGridContainer.y;// glbPos.y + this.bg.displayHeight / 2;
@@ -1125,11 +1125,16 @@ export class Monster extends Phaser.GameObjects.Container {
 
     resetMoves(): void {
         this.movesLeftContainer.list.length = this.unitData.moves;
+        /**
+         * if monster is frozen set all its movement dots to grey, otherwise green
+         */
+        const dot_color = this.frozenForDuration > 0 ? 'grey-dot' : 'green-dot';
+
         this.movesLeftContainer.list.forEach(dot => {
-            (dot as Phaser.GameObjects.Image).setTexture('green-dot');
+            (dot as Phaser.GameObjects.Image).setTexture(dot_color);
         });
         this.movesLeftContainer2.list.forEach(dot => {
-            (dot as Phaser.GameObjects.Image).setTexture('green-dot');
+            (dot as Phaser.GameObjects.Image).setTexture(dot_color);
         });
         if (this.frozenForDuration === 0) {
             this.unitData.movesLeft = this.unitData.moves;

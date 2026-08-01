@@ -56,7 +56,7 @@ export const spellsConfig = {
     },
     freeze: {
         coolDown: [
-            { value: 5, cost: 0 }, // cooldown level 0
+            { value: 12, cost: 0 }, // cooldown level 0
             { value: 11, cost: 2 }, // cooldown level 1
             { value: 10, cost: 5 }  // cooldown level 2
         ],

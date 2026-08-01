@@ -1707,7 +1707,7 @@ export class Game extends AbstractScene {
             if (monster) {
                 monster.setAlpha(1);
                 monster.setInteraction(this.data.list.isPlayerTurn);
-                monster.pendingAction = this.data.list.isPlayerTurn;
+                monster.pendingAction = monster.frozenForDuration === 0 && this.data.list.isPlayerTurn;
             }
         });
 
@@ -1717,7 +1717,7 @@ export class Game extends AbstractScene {
                 if (monster.unitData.movesLeft === 0) {
                     monster.pendingAction = false;
                 } else {
-                    monster.pendingAction = !this.data.list.isPlayerTurn;
+                    monster.pendingAction = monster.frozenForDuration === 0 && !this.data.list.isPlayerTurn;
                 }
                 if (monster.bg.input) {
                     console.log('opponent monster set to interactive. row' + monster.unitData.row + 'col' + monster.unitData.col);
@@ -2681,7 +2681,7 @@ export class Game extends AbstractScene {
             this.opponentHealButton = new Button(this, 100, 810, 'heal-button', '', () => {
                 // ...no action - opponent will use it next turn
             }, true, 0.6, true, popupDescription, true);
-            
+
             this.opponentHealButton.addRevealOverlay();
             this.opponentHealButton.updateCooldown(
                 this.opponentSpellsData.heal.cooldownProgress,
