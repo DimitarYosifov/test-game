@@ -16,7 +16,7 @@ const MONSTER_TYPE_DESCRIPTION = {
     "2": "+1 helath if this monster attacks magic monster. immune to magic ball spell",
     "3": "+1 attack for every adjusting enemy magic monster. immune to magic ball spell",
     "5": "+1 permanent move when enemy 'monster N1' dies",
-    "6": "+50% attack(rounded down) for the next turn(current round) if enemy monster is killed",
+    "6": "if this monster kills an enemy +50% attack(rounded up) for the next turn in current round",
     "7": "20% chance to freeze enemy monster. immune to freeze spell",
     "8": "+50% attack if health goes below 35%",
     "9": "+1 move(current round) when enemy monster dies"

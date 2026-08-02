@@ -61,7 +61,7 @@ export const spellsConfig = {
             { value: 10, cost: 5 }  // cooldown level 2
         ],
         targets: [
-            { value: 1, cost: 0 },  // targets level 0
+            { value: 2, cost: 0 },  // targets level 0
             { value: 2, cost: 4 },  // targets level 1
             { value: 3, cost: 8 }  // targets level 2
         ],

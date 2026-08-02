@@ -27,7 +27,7 @@ export class HealSpell {
             targetMonster.addBUffCollected(targetMonster.unitData.row, targetMonster.unitData.col, healAmount, BUFF_TYPES.HEALTH, emitCheckEndTurnOnComplete);
 
             if (targetsCount > 0) {
-                this.scene.time.delayedCall(300, () => {
+                this.scene.time.delayedCall(400, () => {
                     proceed();
                 })
             }

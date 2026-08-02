@@ -784,18 +784,18 @@ export const level_config = [
             //     damage: spellsConfig.rainOfArrows.damage[0].value,
             //     targets: spellsConfig.rainOfArrows.targets[0].value
             // },
-            // freeze: {
-            //     cooldown: spellsConfig.freeze.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     duration: spellsConfig.freeze.duration[0].value,
-            //     targets: spellsConfig.freeze.targets[0].value
-            // },
-            // heal: {
-            //     cooldown: spellsConfig.heal.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     amount: spellsConfig.heal.amount[0].value,
-            //     targets: spellsConfig.heal.targets[0].value
-            // }
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[0].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
         }
     },
     // L E V E L   2    - monsters: 1 star x 8   2 stars x 0

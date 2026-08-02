@@ -880,7 +880,12 @@ export class Game extends AbstractScene {
                     return;
                 }
                 else {
-                    throw Error("NO currentlySelectedMonster")
+                    // case: all player monsters are frozen, let player use spells and end turn manually
+                    console.warn("NO currentlySelectedMonster");
+                    this.updatePlayerSpellButtonsInteraction();
+                    this.endTurnButton.setInteractive();
+                    return;
+                    // throw Error("NO currentlySelectedMonster")
                 }
             }
 
@@ -2000,10 +2005,12 @@ export class Game extends AbstractScene {
             // end turn immediatelly
             turnEnd = true;
         } else if (this.data.list.isPlayerTurn) {
-            const playerMonsters = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null);
-            if (playerMonsters.length === 1 && playerMonsters[0].frozenForDuration > 0) {
+            const allPlayerMonstersFrozen = this.data.list.playerMonsters
+                .filter((m: Monster | null) => m !== null)
+                .every((fm: Monster) => fm.frozenForDuration > 0);
+            if (allPlayerMonstersFrozen) {
                 /**
-                 * player has only 1 monster and it is frozen. do not end turn now, so player 
+                 * all player monsters are frozen. do not end turn now, so player 
                  * can use spells and then end turn manually
                  */
                 turnEnd = false;
@@ -2051,8 +2058,10 @@ export class Game extends AbstractScene {
                 this.skipButton.disableInteractive();
                 this.time.delayedCall(10, () => {
                     //this delay is needed to fix skip button action callback setting the currentlySelectedMonster to interactive...
-                    this.currentlySelectedMonster.setInteraction(false);
-                    this.currentlySelectedMonster = null;
+                    if (this.currentlySelectedMonster) {
+                        this.currentlySelectedMonster.setInteraction(false);
+                        this.currentlySelectedMonster = null;
+                    }
                     // this.checkOpponentForSpellCast();
                 })
                 this.movementArrowsContainer.removeArrows();
