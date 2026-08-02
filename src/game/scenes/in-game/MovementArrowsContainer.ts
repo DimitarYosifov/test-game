@@ -116,10 +116,16 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
     private displayArrows(emptyNeighborCells: INeighborCells[], data: IUnitData): void {
 
+        const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
         this.additionalPotentialDamage = 0;
+      
         if (+data.type === 3) {
             // monster N3 special skill
             this.additionalPotentialDamage = emptyNeighborCells.filter(enc => enc.isTargetMagicMonster).length;
+        }
+        else if (+data.type === 6) {
+            // monster N6 special skill
+            this.additionalPotentialDamage = atackingMonster.additionalRangedDamage;
         }
 
         emptyNeighborCells.forEach((emptyCell: INeighborCells) => {
@@ -142,7 +148,6 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                 img = 'sword';
             }
 
-            const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
             const giantData = this.scene.data.list.gridPositions[row][col].giantData;
 
             if (giantData) {

@@ -201,7 +201,7 @@ export class Game extends AbstractScene {
             this.addQuestionMarks();
         }
         const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
-        // const randomBuffType = BUFF_TYPES.HEALTH; // test only
+        // const randomBuffType = BUFF_TYPES.BOW; // test only
 
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
@@ -1048,16 +1048,19 @@ export class Game extends AbstractScene {
 
             let damage = 0;
             if (this.currentlySelectedMonster.unitData.ranged > 0) {
-                damage = this.currentlySelectedMonster.unitData.ranged;
+                damage = this.currentlySelectedMonster.unitData.ranged + this.currentlySelectedMonster.additionalRangedDamage;
             } else if (this.currentlySelectedMonster.unitData.magic > 0) {
-                const additionalDamage = this.movementArrowsContainer.getNeighborCells(
-                    this.currentlySelectedMonster.unitData.row,
-                    this.currentlySelectedMonster.unitData.col,
-                    1,
-                    0,
-                    1
-                ).filter(enc => enc.isTargetMagicMonster).length;
-
+                let additionalDamage = 0;
+                if (+this.currentlySelectedMonster.type === 3) {
+                    // monster N3 special skill
+                    additionalDamage = this.movementArrowsContainer.getNeighborCells(
+                        this.currentlySelectedMonster.unitData.row,
+                        this.currentlySelectedMonster.unitData.col,
+                        1,
+                        0,
+                        1
+                    ).filter(enc => enc.isTargetMagicMonster).length;
+                }
                 damage = this.currentlySelectedMonster.unitData.magic + additionalDamage;
             } else {
                 damage = this.currentlySelectedMonster.unitData.melee;
@@ -1283,7 +1286,7 @@ export class Game extends AbstractScene {
 
     private checkSpecificMonsterSkillOnMonsterDie(killedMonster: Monster) {
 
-        /**below will not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
+        /**below may not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
 
         // monster 1 special skill 
         if (+killedMonster.type === 5) {
@@ -1305,6 +1308,13 @@ export class Game extends AbstractScene {
                     fm.addMove();
                     fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
                 });
+        }
+
+        // monster 6 special skill 
+        if (+this.currentlySelectedMonster.type === 6 && this.currentlySelectedMonster.unitData.movesLeft > 0) {
+            const additionalRangedDamage = Math.ceil(this.currentlySelectedMonster.unitData.ranged * 0.5);
+            this.currentlySelectedMonster.additionalRangedDamage = additionalRangedDamage;
+            this.currentlySelectedMonster.updateRangedDamageText();
         }
     }
 

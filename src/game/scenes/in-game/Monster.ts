@@ -44,7 +44,8 @@ export class Monster extends Phaser.GameObjects.Container {
     poisonedForDuration: number = 0;
     poisonedForDamage: number = 0;
     frozenForDuration: number = 0;
-    immuneTo: string[] = []
+    immuneTo: string[] = [];
+    additionalRangedDamage: number = 0;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -1133,6 +1134,11 @@ export class Monster extends Phaser.GameObjects.Container {
         //====================================================================||
 
         this.unitData.movesLeft--;
+        if (this.additionalRangedDamage > 0) {
+            // monster N6 special skill
+            this.additionalRangedDamage = 0;
+            this.updateRangedDamageText();
+        }
         this.updateMoveDots();
     }
 
@@ -1327,5 +1333,9 @@ export class Monster extends Phaser.GameObjects.Container {
                 immuneText.destroy(true);
             }
         })
+    }
+
+    updateRangedDamageText() {
+        this.ranged_text.setText(`${this.unitData.ranged + this.additionalRangedDamage}`);
     }
 }
