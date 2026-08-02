@@ -1137,7 +1137,9 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     resetMoves(): void {
-        this.movesLeftContainer.list.length = this.unitData.moves;
+        console.log('reset moves');
+        this.movesLeftContainer.list.length = this.unitData.moves > 4 ? 4 : this.unitData.moves;
+        this.movesLeftContainer2.list.length = this.unitData.moves - 4 > 0 ? this.unitData.moves - 4 : 0;
         /**
          * if monster is frozen set all its movement dots to grey, otherwise green
          */
