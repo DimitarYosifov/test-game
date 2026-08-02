@@ -378,9 +378,10 @@ export class Monster extends Phaser.GameObjects.Container {
         if (buff) {
             //hass buff on new position
             if (
-                (buff.buffType === 'attack' && this.unitData.melee === 0) || // monster not suitable for attack buff
-                (buff.buffType === 'bow' && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
-                (buff.buffType === 'ball' && this.unitData.magic === 0)      // monster not suitable for magic buff
+                (buff.buffType === BUFF_TYPES.ATTACK && this.unitData.melee === 0) || // monster not suitable for attack buff
+                (buff.buffType === BUFF_TYPES.BOW && this.unitData.ranged === 0) ||   // monster not suitable for ranged buff
+                (buff.buffType === BUFF_TYPES.BALL && this.unitData.magic === 0) ||   // monster not suitable for magic buff
+                (buff.buffType === BUFF_TYPES.GREEN_DOT && this.unitData.moves >= 8)  // max moves reached - mainconfig.maxMovesPerRound
             ) {
                 return false;
             } else {
@@ -523,9 +524,10 @@ export class Monster extends Phaser.GameObjects.Container {
 
         const dot = this.scene.add.image(0, 0, 'grey-dot').setScale(this._displayWidth * 0.15 / 100).setOrigin(0, 0.5);
 
-
-        if (this.unitData.movesLeft > this.unitData.moves || !onlyForCurrentRound) {
-            if (this.unitData.moves > 4) {
+        const totalVisibleDots = this.movesLeftContainer.list.length + this.movesLeftContainer2.list.length;
+        if (!onlyForCurrentRound || (this.unitData.movesLeft > totalVisibleDots)
+        ) {
+            if (this.unitData.movesLeft > 4 || totalVisibleDots >= 4) {
                 this.movesLeftContainer2.add(dot);
             } else {
                 this.movesLeftContainer.add(dot);
@@ -1172,6 +1174,9 @@ export class Monster extends Phaser.GameObjects.Container {
         console.log('reset moves');
         this.movesLeftContainer.list.length = this.unitData.moves > 4 ? 4 : this.unitData.moves;
         this.movesLeftContainer2.list.length = this.unitData.moves - 4 > 0 ? this.unitData.moves - 4 : 0;
+
+
+        // this.movesLeftContainer.removeBetween(this.unitData.moves , this.movesLeftContainer.length, true);
         /**
          * if monster is frozen set all its movement dots to grey, otherwise green
          */
@@ -1186,6 +1191,32 @@ export class Monster extends Phaser.GameObjects.Container {
         if (this.frozenForDuration === 0) {
             this.unitData.movesLeft = this.unitData.moves;
         }
+
+        if (this.isPlayerMonster) {
+            console.log(`======= ${this.movesLeftContainer.list.length}`);
+            console.log(`======= ${this.movesLeftContainer2.list.length}`);
+        }
+
+        // Phaser.Actions.GridAlign(this.movesLeftContainer.list, {
+        //     width: 0,
+        //     height: this.movesLeftContainer.list.length,
+        //     cellWidth: 0,
+        //     cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+        //     position: Phaser.Display.Align.CENTER
+        // });
+
+        // if (this.movesLeftContainer2) {
+        //     Phaser.Actions.GridAlign(this.movesLeftContainer2.list, {
+        //         width: 0,
+        //         height: this.movesLeftContainer2.list.length,
+        //         cellWidth: 0,
+        //         cellHeight: this._displayWidth * 0.15, // spacing between items vertically
+        //         position: Phaser.Display.Align.CENTER
+        //     });
+        // }
+
+        this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
+        this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
     }
 
     setPoisoned(poisonedForDuration: number = 1, poisonedForDamage: number, onComplete: () => void) {
