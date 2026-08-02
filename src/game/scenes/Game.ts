@@ -1080,6 +1080,13 @@ export class Game extends AbstractScene {
             }
             const isTargetToTheLeft = target!.unitData.col < this.currentlySelectedMonster.unitData.col;
             this.currentlySelectedMonster.performHit(target, isTargetToTheLeft, () => {
+                if (+this.currentlySelectedMonster.type === 7) {
+                    // monster N7 special
+                    const useFreezeSkill = Phaser.Math.RND.between(1, 100) <= 25; // 25% chance to freeze
+                    if (useFreezeSkill) {
+                        target.setFrozen(1, () => { });
+                    }
+                }
                 target!.takeDamege(damage, this.currentlySelectedMonster.unitData.magic > 0);
             });
 
