@@ -756,13 +756,13 @@ export const level_config = [
 
 
             // TEST
-            // { type: 7, stars: 3, isGiant: false },
-            // { type: 7, stars: 5 },
-            // { type: 7, stars: 5 },
-            // { type: 7, stars: 5 },
-            // { type: 7, stars: 5 },
-            // { type: 7, stars: 5 },
-            // { type: 7, stars: 5 }
+            // { type: 3, stars: 1, isGiant: false },
+            // { type: 3, stars: 1 },
+            // { type: 3, stars: 1 },
+            // { type: 3, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 },
+            // { type: 2, stars: 1 }
         ],
         opponentSpells: {
             // magicBall: {

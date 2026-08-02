@@ -201,7 +201,7 @@ export class Game extends AbstractScene {
             this.addQuestionMarks();
         }
         const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
-        // const randomBuffType = BUFF_TYPES.BOW; // test only
+        // const randomBuffType = BUFF_TYPES.HEALTH; // test only
 
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
@@ -1047,10 +1047,11 @@ export class Game extends AbstractScene {
             const isPlayerTurn = this.data.list.isPlayerTurn;
 
             let damage = 0;
+            let additionalDamage = 0;
+
             if (this.currentlySelectedMonster.unitData.ranged > 0) {
                 damage = this.currentlySelectedMonster.unitData.ranged + this.currentlySelectedMonster.additionalRangedDamage;
             } else if (this.currentlySelectedMonster.unitData.magic > 0) {
-                let additionalDamage = 0;
                 if (+this.currentlySelectedMonster.type === 3) {
                     // monster N3 special skill
                     additionalDamage = this.movementArrowsContainer.getNeighborCells(
@@ -1063,7 +1064,11 @@ export class Game extends AbstractScene {
                 }
                 damage = this.currentlySelectedMonster.unitData.magic + additionalDamage;
             } else {
-                damage = this.currentlySelectedMonster.unitData.melee;
+                if (+this.currentlySelectedMonster.type === 8) {
+                    // monster N8 special skill
+                    additionalDamage = this.currentlySelectedMonster.additionaMelee;
+                }
+                damage = this.currentlySelectedMonster.unitData.melee + additionalDamage;
             }
 
             let target: null | Monster = null;
@@ -1944,7 +1949,6 @@ export class Game extends AbstractScene {
     private checkShouldAddBuffs() {
         // test 
         // return true
-
         return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
     }
 

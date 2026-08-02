@@ -46,6 +46,8 @@ export class Monster extends Phaser.GameObjects.Container {
     frozenForDuration: number = 0;
     immuneTo: string[] = [];
     additionalRangedDamage: number = 0;
+    additionaMelee: number = 0;
+    initialMelee: number = 0;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -54,6 +56,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.type = this.unitData.type;
         this.isGiant = unit.isGiant;
         this.unitData.movesLeft = this.unitData.moves;
+        this.initialMelee = unit.melee;
         this.index = index;
         this.isPlayerMonster = isPlayerMonster;
         this._displayWidth = displayWidth;
@@ -490,6 +493,17 @@ export class Monster extends Phaser.GameObjects.Container {
         if (curePoison && this.poisonedForDuration > 0) {
             this.removePoisoned();
         }
+
+        if (+this.type === 8) {
+            const addAditionalMelee = this.unitData.health < 3;
+            if (addAditionalMelee) {
+                this.additionaMelee = 1;// Math.floor(this.initialMelee * 0.5);
+            } else {
+                this.additionaMelee = 0;
+            }
+            this.updateMeleeText();
+        }
+
     }
 
     addMove(onlyForCurrentRound: boolean = false, addForCurrentRoundOnly: boolean = false) {
@@ -776,6 +790,18 @@ export class Monster extends Phaser.GameObjects.Container {
                 lostHealth.destroy(true);
             }
         })
+
+        if (healthLeft > 0 && +this.type === 8) {
+            // special for monter N8
+            const addAditionalMelee = healthLeft < 3;// this.initialMelee * 0.35;
+            if (addAditionalMelee) {
+                this.additionaMelee = 1;// Math.floor(this.initialMelee * 0.5);
+            } else {
+                this.additionaMelee = 0;
+            }
+            this.updateMeleeText();
+        }
+
         return healthLeft === 0;
     }
 
@@ -1337,5 +1363,9 @@ export class Monster extends Phaser.GameObjects.Container {
 
     updateRangedDamageText() {
         this.ranged_text.setText(`${this.unitData.ranged + this.additionalRangedDamage}`);
+    }
+
+    updateMeleeText() {
+        this.melee_text.setText(`${this.unitData.melee + this.additionaMelee}`);
     }
 }

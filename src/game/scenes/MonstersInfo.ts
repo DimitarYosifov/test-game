@@ -18,7 +18,8 @@ const MONSTER_TYPE_DESCRIPTION = {
     "5": "+1 permanent move when enemy 'monster N1' dies",
     "6": "if this monster kills an enemy +50% attack(rounded up) for the next turn in current round",
     "7": "20% chance to freeze enemy monster. immune to freeze spell",
-    "8": "+50% attack if health goes below 35%",
+    "8": "+1 attack if health is below 3",
+    // "8": "+50% attack if health goes below 35%",
     "9": "+1 move(current round) when enemy monster dies"
 }
 

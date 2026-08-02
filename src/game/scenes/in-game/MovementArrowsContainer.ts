@@ -118,7 +118,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
         const atackingMonster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === data.row && m.unitData.col === data.col);
         this.additionalPotentialDamage = 0;
-      
+
         if (+data.type === 3) {
             // monster N3 special skill
             this.additionalPotentialDamage = emptyNeighborCells.filter(enc => enc.isTargetMagicMonster).length;
@@ -126,6 +126,10 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         else if (+data.type === 6) {
             // monster N6 special skill
             this.additionalPotentialDamage = atackingMonster.additionalRangedDamage;
+        }
+        else if (+data.type === 8) {
+            // monster N8 special skill
+            this.additionalPotentialDamage = atackingMonster.additionaMelee;
         }
 
         emptyNeighborCells.forEach((emptyCell: INeighborCells) => {
