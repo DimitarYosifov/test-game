@@ -1290,6 +1290,17 @@ export class Game extends AbstractScene {
                     fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
                 });
         }
+
+        // monster 5 special skill 
+        if (+killedMonster.type === 1) {
+            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+            monsters
+                .filter((m: Monster) => m && +m.type === 5)
+                .forEach((fm: Monster) => {
+                    fm.addMove();
+                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
+                });
+        }
     }
 
     private createLevelOutroPopup(levelWon: boolean = false): void {
