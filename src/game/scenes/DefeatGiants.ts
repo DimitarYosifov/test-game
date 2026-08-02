@@ -53,10 +53,13 @@ export class DefeatGiants extends AbstractScene {
     }
 
     changeScene(nextScene: string): void {
+        console.log(defeat_giants_level_config);
+        const opponentSpellsData = structuredClone(defeat_giants_level_config[(this.level as number) - 1].opponentSpells);
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start(nextScene, {
-                isGiantFightLevel: true
+                isGiantFightLevel: true,
+                opponentSpellsData
             });
         });
     }

@@ -2237,7 +2237,7 @@ export class Game extends AbstractScene {
         this.data.list.playerMonsters.forEach((monster: Monster, index: number) => {
             if (monster && monster.frozenForDuration === 0) { //  && monster.pendingAction
                 console.log(index)
-                monster.setInteraction(resume, skipByUser);
+                monster.setInteraction(resume && monster.pendingAction, skipByUser);
             }
         });
 

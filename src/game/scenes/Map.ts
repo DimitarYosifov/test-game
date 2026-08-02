@@ -211,8 +211,9 @@ export class Map extends AbstractScene {
 
                     // TODO -here add opponent spells for the survival levels !!!!!
 
+                    const opponentSpellsData: any = structuredClone(lvl.opponentSpells);
 
-                    this.changeScene('Game', true);
+                    this.changeScene('Game', true, opponentSpellsData);
                 }, this);
 
                 this.levelConfirm.once('level-unselected', () => {
@@ -415,7 +416,7 @@ export class Map extends AbstractScene {
                             //TODO  - check if it is world 2 - if so below level - 1 could be wrong
                             console.log(level_config[level - 1]);
 
-                            const opponentSpellsData: ISpellsData = structuredClone(level_config[level - 1].opponentSpells);
+                            const opponentSpellsData: any = structuredClone(level_config[level - 1].opponentSpells);
 
                             this.changeScene('Game', false, opponentSpellsData);
                         }, this);
