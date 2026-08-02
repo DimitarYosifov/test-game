@@ -687,14 +687,24 @@ export const level_config = [
             { type: 3, stars: 1 },
             { type: 5, stars: 1 },
             { type: 6, stars: 1 }
+
+
+            // TEST
+            // { type: 1, stars: 3, isGiant: false },
+            // { type: 2, stars: 5 },
+            // { type: 2, stars: 5 },
+            // { type: 3, stars: 5 },
+            // { type: 2, stars: 5 },
+            // { type: 3, stars: 5 },
+            // { type: 3, stars: 5 }
         ],
         opponentSpells: {
-            magicBall: {
-                cooldown: spellsConfig.magicBall.coolDown[0].value,
-                cooldownProgress: 0,
-                damage: spellsConfig.magicBall.damage[0].value,
-                targets: spellsConfig.magicBall.targets[0].value
-            },
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.magicBall.damage[0].value,
+            //     targets: spellsConfig.magicBall.targets[0].value
+            // },
             // poison: {
             //     cooldown: spellsConfig.poison.coolDown[0].value,
             //     cooldownProgress: 0,

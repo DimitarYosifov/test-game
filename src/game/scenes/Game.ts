@@ -202,7 +202,7 @@ export class Game extends AbstractScene {
         }
         const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
         // const randomBuffType = BUFF_TYPES.HEALTH; // test only
-       
+
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
         container.setDepth(GAME_OBJECT_DEPTHS.gameSceneBuffContainer);
@@ -790,8 +790,6 @@ export class Game extends AbstractScene {
         }
     }
 
-
-
     private createOpponentTurnMsg() {
         this.opponentTurnMsg = this.add.text(
             960,
@@ -1047,7 +1045,15 @@ export class Game extends AbstractScene {
             if (this.currentlySelectedMonster.unitData.ranged > 0) {
                 damage = this.currentlySelectedMonster.unitData.ranged;
             } else if (this.currentlySelectedMonster.unitData.magic > 0) {
-                damage = this.currentlySelectedMonster.unitData.magic;
+                const additionalDamage = this.movementArrowsContainer.getNeighborCells(
+                    this.currentlySelectedMonster.unitData.row,
+                    this.currentlySelectedMonster.unitData.col,
+                    1,
+                    0,
+                    1
+                ).filter(enc => enc.isTargetMagicMonster).length;
+
+                damage = this.currentlySelectedMonster.unitData.magic + additionalDamage;
             } else {
                 damage = this.currentlySelectedMonster.unitData.melee;
             }
@@ -1891,9 +1897,10 @@ export class Game extends AbstractScene {
     }
 
     private resetPreviousSelectedMonsterMoves(): void {
-        if (this.currentlySelectedMonster && this.currentlySelectedMonster.unitData.movesLeft === 0) {
-            this.currentlySelectedMonster.unitData.movesLeft = this.currentlySelectedMonster.unitData.moves;
-        }
+        //  TODO - OBSERVE IF COMMENTING THIS OUT CAUSED ANY ISSUES
+        // if (this.currentlySelectedMonster && this.currentlySelectedMonster.unitData.movesLeft === 0) {
+        //     this.currentlySelectedMonster.unitData.movesLeft = this.currentlySelectedMonster.unitData.moves;
+        // }
     }
 
     private changeBulbIndicators(isPlayerTurn: boolean) {
@@ -1908,14 +1915,82 @@ export class Game extends AbstractScene {
         return Phaser.Math.RND.between(0, 100) <= main_config.buffs.chanceForBuffAfterRound;
     }
 
-    private checkNextTurn(skipByUser: boolean, forceEndTurn: boolean = false): void {
+    // special for monster N3
+    private updateAdditionalMagicDamage() {
 
+        const grid = this.data.list.gridPositions;
+
+        const updateMagicText = (
+            monsters: Monster[],
+            enemyMonsters: Monster[],
+            occupiedBy: 'player' | 'opponent'
+        ) => {
+            monsters
+                .filter(monster => monster && Number(monster.type) === 3)
+                .forEach(monster => {
+                    let bonusMagic = 0;
+
+                    for (let rowOffset = -1; rowOffset <= 1; rowOffset++) {
+                        for (let colOffset = -1; colOffset <= 1; colOffset++) {
+                            if (rowOffset === 0 && colOffset === 0) continue;
+
+                            const row = monster.unitData.row + rowOffset;
+                            const col = monster.unitData.col + colOffset;
+
+                            if (
+                                row < 0 ||
+                                row >= grid.length ||
+                                col < 0 ||
+                                col >= grid[0].length
+                            ) {
+                                continue;
+                            }
+
+                            if (grid[row][col].occupiedBy !== occupiedBy) {
+                                continue;
+                            }
+
+                            const neighbour = enemyMonsters.find(
+                                m =>
+                                    m &&
+                                    m.unitData.row === row &&
+                                    m.unitData.col === col
+                            );
+
+                            if (neighbour?.unitData.magic > 0) {
+                                bonusMagic++;
+                            }
+                        }
+                    }
+
+                    monster.magic_text.setText(
+                        String(monster.unitData.magic + bonusMagic)
+                    );
+                });
+        };
+
+        updateMagicText(
+            this.data.list.playerMonsters,
+            this.data.list.opponentMonsters,
+            'opponent'
+        );
+
+        updateMagicText(
+            this.data.list.opponentMonsters,
+            this.data.list.playerMonsters,
+            'player'
+        );
+    }
+
+    private checkNextTurn(skipByUser: boolean, forceEndTurn: boolean = false): void {
+        this.updateAdditionalMagicDamage();
         let turnEnd = false;
         if (forceEndTurn) {
             // end turn immediatelly
             turnEnd = true;
         } else if (this.data.list.isPlayerTurn) {
-            if (this.data.list.playerMonsters.filter((m: Monster | null) => m !== null).length === 1 && this.data.list.playerMonsters[0].frozenForDuration > 0) {
+            const playerMonsters = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null);
+            if (playerMonsters.length === 1 && playerMonsters[0].frozenForDuration > 0) {
                 /**
                  * player has only 1 monster and it is frozen. do not end turn now, so player 
                  * can use spells and then end turn manually
@@ -2793,6 +2868,7 @@ export class Game extends AbstractScene {
 
             this.time.delayedCall(750, () => {
                 this.spellCastInProgress = false;
+                this.updatePlayerSpellButtonsInteraction();
             })
         })
     }

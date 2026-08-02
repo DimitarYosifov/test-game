@@ -493,6 +493,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
     addMove(onlyForCurrentRound: boolean = false, addForCurrentRoundOnly: boolean = false) {
 
+        this.setAlpha(1);
         if (this.unitData.movesLeft < main_config.maxMonsterMovesPerRound) {
             this.unitData.movesLeft++;
         }

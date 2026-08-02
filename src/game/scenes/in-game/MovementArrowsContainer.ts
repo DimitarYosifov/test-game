@@ -10,6 +10,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
     private arrows: DirectionArrow[] = [];
     private potentialDamageTexts: Phaser.GameObjects.Text[] = [];
     private potentialDamageTextTweens: Phaser.Tweens.Tween[] = [];
+    additionalPotentialDamage: number = 0;
 
     constructor(scene: Scene, x: number, y: number) {
         super(scene, x, y);
@@ -24,7 +25,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
         this.displayArrows(this.neighborCells, data); // TODO - check if enemy, do not add arrow but attack image
     }
 
-    private getNeighborCells(row: number, col: number, radius: number, range: number, magic: number) {
+    getNeighborCells(row: number, col: number, radius: number, range: number, magic: number) {
         const isPlayerTurn = this.scene.data.list.isPlayerTurn;
         let neighborCells = [];
         const array = this.scene.data.list.gridPositions;
@@ -46,6 +47,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
 
                 const newRow = row + y;
                 const newCol = col + x;
+                let isTargetMagicMonster = false;
 
                 if (
                     newRow >= 0 && newRow < array.length &&
@@ -59,9 +61,22 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                         (isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') ||
                         (!isPlayerTurn && array[newRow][newCol].occupiedBy === 'player')
                     ) {
+
+                        if (isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') {
+                            const monster = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                            if (monster.unitData.magic > 0) {
+                                isTargetMagicMonster = true;
+                            }
+                        } else if (!isPlayerTurn && array[newRow][newCol].occupiedBy === 'player') {
+                            const monster = this.scene.data.list.playerMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                            if (monster.unitData.magic > 0) {
+                                isTargetMagicMonster = true;
+                            }
+                        }
+
                         const direction = this.getDirection(row, newRow, col, newCol);
                         if (!isNaN(direction) || isRanged || isMagic) {
-                            neighborCells.push({ row: newRow, col: newCol, direction, target: true, isRanged, isMagic });
+                            neighborCells.push({ row: newRow, col: newCol, direction, target: true, isRanged, isMagic, isTargetMagicMonster });
                         }
                     }
                 }
@@ -100,6 +115,13 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
     }
 
     private displayArrows(emptyNeighborCells: INeighborCells[], data: IUnitData): void {
+
+        this.additionalPotentialDamage = 0;
+        if (+data.type === 3) {
+            // monster N3 special skill
+            this.additionalPotentialDamage = emptyNeighborCells.filter(enc => enc.isTargetMagicMonster).length;
+        }
+
         emptyNeighborCells.forEach((emptyCell: INeighborCells) => {
             let row = emptyCell.row;
             let col = emptyCell.col;
@@ -153,23 +175,23 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             this.arrows.push(arrow);
 
             if (target) {
-                potentialDamage = this.getPotentialDamageForSpot(atackingMonster, row, col, isRanged, isMagic);
+                potentialDamage = this.getPotentialDamageForSpot(atackingMonster, row, col, isRanged, isMagic, this.additionalPotentialDamage);
                 this.showPotentialDamage(position_x, position_y, potentialDamage);
             }
         });
     }
 
-    getPotentialDamageForSpot(atackingMonster: Monster, row: number, col: number, isRanged: boolean, isMagic: boolean): number {
+    getPotentialDamageForSpot(atackingMonster: Monster, row: number, col: number, isRanged: boolean, isMagic: boolean, additionalPotentialDamage: number): number {
 
         const targetMonster = getMonsterAtSpot(row, col, this.scene.data.list.playerMonsters, this.scene.data.list.opponentMonsters);
         let potentialDamage = 0;
 
         if (isRanged) {
-            potentialDamage = atackingMonster.unitData.ranged - targetMonster.unitData.shield;
+            potentialDamage = atackingMonster.unitData.ranged - targetMonster.unitData.shield + additionalPotentialDamage;
         } else if (isMagic) {
-            potentialDamage = atackingMonster.unitData.magic;
+            potentialDamage = atackingMonster.unitData.magic + additionalPotentialDamage;
         } else {
-            potentialDamage = atackingMonster.unitData.melee - targetMonster.unitData.shield;
+            potentialDamage = atackingMonster.unitData.melee - targetMonster.unitData.shield + additionalPotentialDamage;
         }
 
         return potentialDamage > targetMonster.unitData.health ? targetMonster.unitData.health : potentialDamage;
@@ -218,4 +240,5 @@ interface INeighborCells {
     target?: boolean;
     isRanged?: boolean;
     isMagic?: boolean;
+    isTargetMagicMonster?: boolean;
 }
