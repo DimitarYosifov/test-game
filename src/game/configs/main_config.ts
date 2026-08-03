@@ -278,29 +278,25 @@ export const main_config = {
     "spellPointsToUnlockFreeze": 1,
     "spellPointsToUnlockHeal": 1,
 
-
-
-
-
-
+    // L A T E S T    T O D O . . .
+    // rearange monsters info section
+    // rearange spells section
+    // add spell data for normal levels, survival levels, and giant levels
+    // DO A LOT OF TESING/PLAYING
+    // at some point add tool for easier changing data(levels monsters etc.)
 
     //  T O D O . . .
-    // ADD DEPTHS FOR ALL GAME OBJECTS                                                                                                   
-    // ADD ROUNDS LIMIT FOR EACH LEVEL                                                                                                  
     // FIX LAST ENEMY KILLED DROP PACK PRESENTATION(LEVEL ENDS  - PACK NOT REALLY SHOWN) MAY BE ADD TEXT FOR BETTER DESCRIPTION!        
-    // ADD ENERGY MECHANIC TO THE GAME                                                                                               
-    // CHECK ENEMY MONSTER TO ATTACK PLAYER MONSTER THAT WILL CAUSE MOST DAMAGE                             NOT SURE IF NEEDED           
+    // ADD ENERGY MECHANIC TO THE GAME       ?????                                                                                         
     // add total power for opponent before level and for the player
-    // add blink tween for the bulbs
-    // add additional currency for upgrading monsters and add coin icon to the cost in card selection => upgrade section
-    //ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
+    // ADD FIGHT VS 14 OF THE SAME KIND MONSTERS AND AS A REWARD GIVE THIS KIND OG=F MONSTER
     // ADD SOME MORE LEVEL BACKGROUNDS
     // ADD 1 MORE MONSTERE - poison damage
     // add some kinda welcome screen
 
-
-
-
+    //  L A T E S T   B U G S:
+    // sometimes adding buffs (parachutte stage) can be interupted by player's interaction, causing the game flow t break, needs a lot of testing
+    // check bomb kill  - addes +1 movement to own monters if dead (noticed) - check more scenarios
 
     //  B U G S :
     //  sometimes can buy pack with insufficient coins  ---- PROBABLY FIXED!!!!!!!!!!
@@ -308,15 +304,12 @@ export const main_config = {
     //  WHEN GIANT TAKES DAMEGE FROM BOMB, SPREAD THE TEXT "-1", "-2" AN SO ON. NOW THEY ALL APPEAR IN THE CENTER OG THE GIANT
     //  FINISHING SURVIVASL LEVEL IN ADVANCE - REWARDS DO NOT FIT INTO THE SCREEN HORIZONTALLY!
 
-
-
     //   D E P L O Y    T O   G H - P A G E S
     /**
      * close all open terminals - very important
      * npm run build - make sure assets folder is present in the dist folder
      * npm run deploy
      */
-
 
 
     /**

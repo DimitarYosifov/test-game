@@ -897,7 +897,7 @@ export class Game extends AbstractScene {
     private skipButtonHandler(): void {
         this.skipButton = new Button(this, 1820, 80, 'button', 'skip\nmove', this.onSkip.bind(this), true, 1);
         this.input.keyboard!.on('keydown-SPACE', () => {
-            if (this.data.list.isPlayerTurn && this.skipButton.bg.input?.enabled) {
+            if (this.data.list.isPlayerTurn && this.skipButton.enabled) {
                 console.log('Skipped with Space');
                 this.onSkip();
             }
@@ -1323,7 +1323,7 @@ export class Game extends AbstractScene {
         }
 
         // monster 6 special skill 
-        if (+this.currentlySelectedMonster.type === 6 && this.currentlySelectedMonster.unitData.movesLeft > 0) {
+        if (+this.currentlySelectedMonster?.type === 6 && this.currentlySelectedMonster?.unitData.movesLeft > 0) {
             const additionalRangedDamage = Math.ceil(this.currentlySelectedMonster.unitData.ranged * 0.5); 2227
             this.currentlySelectedMonster.additionalRangedDamage = additionalRangedDamage;
             this.currentlySelectedMonster.updateRangedDamageText();
@@ -2101,6 +2101,7 @@ export class Game extends AbstractScene {
                     if (this.levelFinished) {
                         return;
                     }
+                    console.log('showOpponentTurnMsg2')
                     this.showOpponentTurnMsg();
                 })
             }

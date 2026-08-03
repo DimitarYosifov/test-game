@@ -39,7 +39,7 @@ export const spellsConfig = {
     },
     rainOfArrows: {
         coolDown: [
-            { value: 1, cost: 0 }, // cooldown level 0
+            { value: 2, cost: 0 }, // cooldown level 0
             { value: 9, cost: 2 }, // cooldown level 1
             { value: 8, cost: 4 }  // cooldown level 2
         ],
@@ -49,7 +49,7 @@ export const spellsConfig = {
             { value: 3, cost: 6 }  // targets level 2
         ],
         damage: [
-            { value: 1, cost: 0 }, // damage level 0
+            { value: 11, cost: 0 }, // damage level 0
             { value: 2, cost: 2 }, // damage level 1
             { value: 3, cost: 4 } // damage level 2
         ]
@@ -73,7 +73,7 @@ export const spellsConfig = {
     },
     heal: {
         coolDown: [
-            { value: 1, cost: 0 }, // cooldown level 0
+            { value: 3, cost: 0 }, // cooldown level 0
             { value: 11, cost: 2 }, // cooldown level 1
             { value: 10, cost: 5 }  // cooldown level 2
         ],
