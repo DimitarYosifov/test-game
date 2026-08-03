@@ -756,8 +756,8 @@ export const level_config = [
 
 
             // TEST
-            // { type: 3, stars: 1, isGiant: false },
-            // { type: 3, stars: 1 },
+            // { type: 1, stars: 1, isGiant: false },
+            // { type: 5, stars: 1 },
             // { type: 3, stars: 1 },
             // { type: 3, stars: 1 },
             // { type: 2, stars: 1 },

@@ -201,7 +201,7 @@ export class Game extends AbstractScene {
             this.addQuestionMarks();
         }
         const randomBuffType = Phaser.Math.RND.pick(Object.values(BUFF_TYPES));//BUFF_TYPES.GREEN_DOT//
-        // const randomBuffType = BUFF_TYPES.GREEN_DOT; // test only
+        // const randomBuffType = BUFF_TYPES.BOMB; // test only
 
         const randomBuffQuantity = main_config.buffs.quality;
         let container = this.add.container(this.data.list.gridPositions[row][col].x + this.mainGridContainer.x, this.data.list.gridPositions[row][col].y + this.mainGridContainer.y);
@@ -1302,7 +1302,7 @@ export class Game extends AbstractScene {
 
         // monster 1 special skill 
         if (+killedMonster.type === 5) {
-            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+            const monsters = killedMonster.isPlayerMonster ? this.data.list.opponentMonsters : this.data.list.playerMonsters;
             monsters
                 .filter((m: Monster) => m && +m.type === 1 && m.unitData.moves < main_config.maxMonsterMovesPerRound && m.unitData.movesLeft < main_config.maxMonsterMovesPerRound)
                 .forEach((fm: Monster) => {
@@ -1313,7 +1313,7 @@ export class Game extends AbstractScene {
 
         // monster 5 special skill 
         if (+killedMonster.type === 1) {
-            const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+            const monsters = killedMonster.isPlayerMonster ? this.data.list.opponentMonsters : this.data.list.playerMonsters;
             monsters
                 .filter((m: Monster) => m && +m.type === 5 && m.unitData.moves < main_config.maxMonsterMovesPerRound && m.unitData.movesLeft < main_config.maxMonsterMovesPerRound)
                 .forEach((fm: Monster) => {
@@ -1324,7 +1324,7 @@ export class Game extends AbstractScene {
 
         // monster 6 special skill 
         if (+this.currentlySelectedMonster?.type === 6 && this.currentlySelectedMonster?.unitData.movesLeft > 0) {
-            const additionalRangedDamage = Math.ceil(this.currentlySelectedMonster.unitData.ranged * 0.5); 2227
+            const additionalRangedDamage = Math.ceil(this.currentlySelectedMonster.unitData.ranged * 0.5);
             this.currentlySelectedMonster.additionalRangedDamage = additionalRangedDamage;
             this.currentlySelectedMonster.updateRangedDamageText();
         }
