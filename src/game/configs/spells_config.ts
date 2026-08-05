@@ -27,9 +27,10 @@ export const spellsConfig = {
             { value: 2, cost: 10 },  // poison level 1
             { value: 3, cost: 20 }  // poison level 2
         ],
+        // if a new damage level is added - add it to the spells.ts it is hardcoded there to have 2 levels!!!!!!!!!!!!!!!!
         damage: [
-            { value: 1, cost: 0 }, // poison level 1
-            { value: 2, cost: 7 }, // poison level 2
+            { value: 1, cost: 0 }, // poison level 0
+            { value: 2, cost: 7 }, // poison level 1
         ],
         duration: [
             { value: 5, cost: 0 }, // duration level 1

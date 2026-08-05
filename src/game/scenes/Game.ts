@@ -2125,7 +2125,7 @@ export class Game extends AbstractScene {
     private drawGridLines(): void {
 
         this.gridLines = this.add.graphics();
-        this.gridLines.lineStyle(main_config.lineWidth, 0xffffff);
+        this.gridLines.lineStyle(main_config.lineWidth, 0xffffff, 0.3);
 
         for (let x = 0; x <= this.gridDimensions.gridSizeHorizontal; x++) {
             this.gridLines.moveTo(x * this.gridDimensions.cellSize, 0);
