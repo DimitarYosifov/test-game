@@ -813,11 +813,13 @@ export class Monster extends Phaser.GameObjects.Container {
         let waitForGemDropped = false;
         let waitForKeyDropped = false;
         let waitForTokenDropped = false;
+        let waitForSpellPointDropped = false;
         if (!this.isPlayerMonster) {
             waitForPackDropped = this.checkFreePackDrop();
             waitForGemDropped = waitForPackDropped ? false : this.checkGemDrop();
             waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
             waitForTokenDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped ? false : this.checkTokenDrop();
+            waitForSpellPointDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped || waitForTokenDropped ? false : this.checkSpellPointDrop();
         }
         const scene = this.scene;
         this.scene.tweens.add({
@@ -852,6 +854,14 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
                 else if (waitForTokenDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED, () => {
+                        if (emitCheckEndTurnOnComplete) {
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                        }
+                        this.destroy(true);
+                    })
+                }
+                else if (waitForSpellPointDropped) {
+                    scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_SPELL_POINT_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
@@ -1103,6 +1113,53 @@ export class Monster extends Phaser.GameObjects.Container {
                         onComplete: () => {
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED);
                             token.destroy(true);
+                        }
+                    },
+                ]
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    checkSpellPointDrop() {
+        const odds = main_config.chanceToDropSpellPoint;
+        const randomNumber = Phaser.Math.RND.between(1, 1000);
+        if (randomNumber >= odds) {
+
+            const spellPoint = this.scene.add.image(this.bg.getBounds().x + this.bg.getBounds().width / 2, this.bg.getBounds().y + this.bg.getBounds().height / 2, 'spell-point').setScale(0).setOrigin(0.5).setAlpha(0).setDepth(GAME_OBJECT_DEPTHS.monsterSpellPointDropped);
+            const data = (LOCAL_STORAGE_MANAGER.get('spellPoints') as number);
+            LOCAL_STORAGE_MANAGER.set('spellPoints', +data + 1);
+
+            const scene = this.scene;
+            this.scene.tweens.chain({
+                tweens: [
+                    {
+                        targets: spellPoint,
+                        alpha: 1,
+                        scale: 0.5,
+                        duration: 350,
+                        delay: 550,
+                        ease: 'Back.easeOut'
+                    },
+                    {
+                        targets: spellPoint,
+                        x: 960,
+                        y: 540,
+                        scale: 2,
+                        duration: 300
+                    },
+                    {
+                        targets: spellPoint,
+                        delay: 1100,
+                        alpha: 0,
+                        scale: 0,
+                        duration: 300,
+                        ease: 'Back.easeOut',
+                        onComplete: () => {
+                            scene.events.emit(GAME_SCENE_SCENE_EVENTS.DROPPED_SPELL_POINT_COLLECTED);
+                            spellPoint.destroy(true);
                         }
                     },
                 ]

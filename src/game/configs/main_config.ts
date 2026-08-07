@@ -28,13 +28,14 @@ export const main_config = {
     "chanceToDropGem": 980, // 2% for gem drop on enemy kill
     "chanceToDropKey": 975, // 2.5% for key drop  on enemy kill
     "chanceToDropToken": 975, // 2.5% for token drop  on enemy kill
-    "chanceToGetGemOnLevelWin": 80, // 20% for gem reward on level win(including repeat level)
+    "chanceToDropSpellPoint": 975, // 2.5% for spell point drop  on enemy kill
     "chanceToDropPack": [ //rnd between 1 and 1000
         965,   //  96.5% for no drop
         985,   //     2% for common pack
         995,   //     1% for silver pack
         1000,  //   0.5% for golden pack
     ],
+    "chanceToGetGemOnLevelWin": 80, // 20% for gem reward on level win(including repeat level)
     "chanceToGetMonsterOnLevelWin": 25, // 25% - first time win only
     "afterLevelMonsterReward": [
         89,   // 89% for 1 star  monster
@@ -554,6 +555,7 @@ export const GAME_OBJECT_DEPTHS = {
     monsterKeyDropped: 100,
     monsterGemDropped: 100,
     monsterPackDropped: 100,
+    monsterSpellPointDropped: 100,
     mapSceneLevelContentContainer: 101,
     mapSceneLight: 102,
     mapSceneSmokeEmitter: 102,

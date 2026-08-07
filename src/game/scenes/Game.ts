@@ -34,6 +34,7 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'DROPPED_PACK_COLLECTED' = 'dropped-pack-collected',
     'DROPPED_GEM_COLLECTED' = 'dropped-gem-collected',
     'DROPPED_KEY_COLLECTED' = 'dropped-key-collected',
+    'DROPPED_SPELL_POINT_COLLECTED' = 'dropped-spell-point-collected',
     'DROPPED_TOKEN_COLLECTED' = 'dropped-token-collected',
     'BUFF_BOMB_EXPLODE' = 'buff-bomb-explode',
     'ROUND_END' = 'round-end'
@@ -1368,6 +1369,7 @@ export class Game extends AbstractScene {
         let gemReward = hasGemReward ? 1 : 0;
         let hasKeyReward = false;
         let keyReward = 0;
+        let spellPointsReward = 0;
         let hasCommonPacks = false;
         let commonPacks = 0;
         let hasSilverPacks = false;
@@ -1396,6 +1398,7 @@ export class Game extends AbstractScene {
             hasGemReward = data.gems > 0;
             hasMonsterReweard = false;
             keyReward = data.keys;
+            spellPointsReward = data.spellPoints;
             hasKeyReward = data.keys > 0;
             commonPacks = data.commonPacks;
             hasCommonPacks = data.commonPacks > 0;
@@ -1568,6 +1571,30 @@ export class Game extends AbstractScene {
                         align: 'center'
                     }).setOrigin(0, 0.5);
                 rewardsContainer.add(keystext);
+            }
+
+            // SPELL POINTS REWARD
+            let spellPoint;
+            let spellPointsPadding = 0;
+            if (spellPointsReward > 0) {
+                spellPointsPadding = 20;
+                spellPoint = this.add.image(rewardsContainer.getBounds().x + rewardsContainer.getBounds().width + spellPointsPadding, 500, 'spell-point').setScale(0.2).setOrigin(0, 0.5);
+                rewardsContainer.add(spellPoint);
+            }
+
+            // SPELL POINTS COUNT
+            let spellPointtext;
+            if (spellPointsReward > 0) {
+                spellPointtext = this.add.text(
+                    spellPoint!.x + spellPoint!.displayWidth,
+                    500,
+                    `x${spellPointsReward}`,
+                    {
+                        fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 65, color: '#ffffff',
+                        stroke: '#000000', letterSpacing: 4,
+                        align: 'center'
+                    }).setOrigin(0, 0.5);
+                rewardsContainer.add(spellPointtext);
             }
 
             // COMMON PACK REWARD
@@ -1778,6 +1805,7 @@ export class Game extends AbstractScene {
         let survivalLevelWonInAdvanceData: ISurvivalLevelWonInAdvanceData = {
             gems: 0,
             keys: 0,
+            spellPoints: 0,
             commonPacks: 0,
             silverPacks: 0,
             goldPacks: 0,
@@ -1795,6 +1823,9 @@ export class Game extends AbstractScene {
 
             rnd = Phaser.Math.RND.between(1, 1000);
             if (rnd > main_config.chanceToDropKey) survivalLevelWonInAdvanceData.keys++;
+
+            rnd = Phaser.Math.RND.between(1, 1000);
+            if (rnd > main_config.chanceToDropSpellPoint) survivalLevelWonInAdvanceData.spellPoints++;
 
             rnd = Phaser.Math.RND.between(1, 1000);
             if (rnd > main_config.chanceToDropToken) {
@@ -3383,6 +3414,7 @@ export interface IBuff {
 interface ISurvivalLevelWonInAdvanceData {
     keys: number;
     gems: number;
+    spellPoints: number;
     commonPacks: number;
     silverPacks: number;
     goldPacks: number;
