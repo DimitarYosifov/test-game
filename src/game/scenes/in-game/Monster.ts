@@ -7,12 +7,12 @@ import { SpriteAnimation } from '../SpriteAnimation';
 export class Monster extends Phaser.GameObjects.Container {
     bg: Phaser.GameObjects.Image;
     private melee: Phaser.GameObjects.Image;
-    private melee_text: Phaser.GameObjects.Text;
-    private health_text: Phaser.GameObjects.Text;
+    melee_text: Phaser.GameObjects.Text;
+    health_text: Phaser.GameObjects.Text;
     private health: Phaser.GameObjects.Image;
     private shield: Phaser.GameObjects.Image;
-    private shield_text: Phaser.GameObjects.Text;
-    private vision_text: Phaser.GameObjects.Text;
+    shield_text: Phaser.GameObjects.Text;
+    vision_text: Phaser.GameObjects.Text;
     private vision: Phaser.GameObjects.Image;
     unitData: IUnitData;
     idleTween: Phaser.Tweens.Tween | null;
@@ -34,7 +34,7 @@ export class Monster extends Phaser.GameObjects.Container {
     originalIndex: number;
     addedForSale: boolean = false;
     isPlayerMonster: boolean;
-    private _displayWidth: number;
+    _displayWidth: number;
     isGiant: boolean | undefined;
     movesLeftContainer2: Phaser.GameObjects.Container;
     frozenChains: Phaser.GameObjects.Image | null;
@@ -1217,6 +1217,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
         this.movesLeftContainer.y = this.movesLeftContainer.getBounds().height / -2;
         this.movesLeftContainer2.y = this.movesLeftContainer2.getBounds().height / -2;
+
     }
 
     setPoisoned(poisonedForDuration: number = 1, poisonedForDamage: number, onComplete: () => void) {

@@ -51,6 +51,7 @@ export class Preloader extends Scene {
         this.load.image('bg-achievments', 'bg44.jpg');
         this.load.image('bg-casino', 'casino.jpg');
         this.load.image('spells-bg', 'spells-bg.png');
+        this.load.image('info-bg', 'info-bg.png');
         this.load.image('loading-bg', 'loading-bg.png');
         this.load.image('defeat-giants', 'defeat-giants.png');
         this.load.image('bow', 'bow.png');
