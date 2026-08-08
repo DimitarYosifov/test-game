@@ -808,18 +808,20 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     die(emitCheckEndTurnOnComplete: boolean = true) {
-        this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         let waitForPackDropped = false;
         let waitForGemDropped = false;
         let waitForKeyDropped = false;
         let waitForTokenDropped = false;
         let waitForSpellPointDropped = false;
         if (!this.isPlayerMonster) {
+            // wait to see if there will be item drop before emitting monster_dead
             waitForPackDropped = this.checkFreePackDrop();
             waitForGemDropped = waitForPackDropped ? false : this.checkGemDrop();
             waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
             waitForTokenDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped ? false : this.checkTokenDrop();
             waitForSpellPointDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped || waitForTokenDropped ? false : this.checkSpellPointDrop();
+        } else {
+            this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         }
         const scene = this.scene;
         this.scene.tweens.add({
@@ -827,10 +829,12 @@ export class Monster extends Phaser.GameObjects.Container {
             alpha: 0,
             duration: 1000,
             onComplete: () => {
+
                 if (waitForPackDropped) {
                     // SOMETIMES THERES A BUG HERE - this.scene is undefined !!!!
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
+                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -839,6 +843,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 else if (waitForGemDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
+                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -847,6 +852,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 else if (waitForKeyDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
+                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -855,6 +861,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 else if (waitForTokenDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
+                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -863,17 +870,20 @@ export class Monster extends Phaser.GameObjects.Container {
                 else if (waitForSpellPointDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_SPELL_POINT_COLLECTED, () => {
                         if (emitCheckEndTurnOnComplete) {
+                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
                     })
                 }
                 else {
+                    if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                     if (emitCheckEndTurnOnComplete) {
                         scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                     }
                     this.destroy(true);
                 }
+
             }
         })
     }
