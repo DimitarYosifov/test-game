@@ -103,7 +103,7 @@ export class Button extends Phaser.GameObjects.Container {
                 `${text}`,
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: FONT_SIZE, color: '#ffffff',
-                    stroke: '#000000', letterSpacing: 4,
+                    stroke: '#000000', letterSpacing: 4, strokeThickness: 5,
                     align: 'center'
                 }).setOrigin(0.5);
             this.add(this.text);

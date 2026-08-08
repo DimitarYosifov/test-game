@@ -366,21 +366,21 @@ export const createDebugPanel = () => {
     defeatGiantsContainer.appendChild(defeatGiantsInput);
     defeatGiantsContainer.appendChild(defeatGiantsButton);
 
-    // //reset daily quest-------------------------------------------------------------------------
-    // const resetDailyQuestContainer = document.createElement('div');
-    // resetDailyQuestContainer.style.margin = '0.4em'
-    // resetDailyQuestContainer.style.display = 'flex';
-    // resetDailyQuestContainer.style['justify-content' as any] = 'center';
-    // const resetDailyQuestText = document.createElement('span');
-    // resetDailyQuestText.innerText = 'reset daily quests';
-    // const resetDailyQuestButton = document.createElement('button');
-    // resetDailyQuestButton.innerText = 'reset';
-    // resetDailyQuestButton.onclick = () => {
-    //     LOCAL_STORAGE_MANAGER.set('questStartTime', '');
-    // }
-    // mainContainer.appendChild(resetDailyQuestContainer);
-    // resetDailyQuestContainer.appendChild(resetDailyQuestText);
-    // resetDailyQuestContainer.appendChild(resetDailyQuestButton);
+    //reset daily quest-------------------------------------------------------------------------
+    const resetDailyQuestContainer = document.createElement('div');
+    resetDailyQuestContainer.style.margin = '0.4em'
+    resetDailyQuestContainer.style.display = 'flex';
+    resetDailyQuestContainer.style['justify-content' as any] = 'center';
+    const resetDailyQuestText = document.createElement('span');
+    resetDailyQuestText.innerText = 'reset daily quests';
+    const resetDailyQuestButton = document.createElement('button');
+    resetDailyQuestButton.innerText = 'reset';
+    resetDailyQuestButton.onclick = () => {
+        LOCAL_STORAGE_MANAGER.set('questStartTime', '');
+    }
+    mainContainer.appendChild(resetDailyQuestContainer);
+    resetDailyQuestContainer.appendChild(resetDailyQuestText);
+    resetDailyQuestContainer.appendChild(resetDailyQuestButton);
 
     // //reset survival levels-------------------------------------------------------------------------
     // const resetSurvivalLevelsContainer = document.createElement('div');

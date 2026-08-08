@@ -395,19 +395,19 @@ export class Monster extends Phaser.GameObjects.Container {
                     case BUFF_TYPES.ATTACK:
                         this.unitData.melee++;
                         this.melee_text.setText(`${this.unitData.melee}`);
-                        this.melee_text.tint = 0x4bcc0f;
+                        // this.melee_text.tint = 0x4bcc0f;
                         buffImageKey = BUFF_TYPES.ATTACK;
                         break;
                     case BUFF_TYPES.BOW:
                         this.unitData.ranged++;
                         this.ranged_text.setText(`${this.unitData.ranged}`);
-                        this.ranged_text.tint = 0x4bcc0f;
+                        // this.ranged_text.tint = 0x4bcc0f;
                         buffImageKey = BUFF_TYPES.BOW;
                         break;
                     case BUFF_TYPES.BALL:
                         this.unitData.magic++;
                         this.magic_text.setText(`${this.unitData.magic}`);
-                        this.magic_text.tint = 0x4bcc0f;
+                        // this.magic_text.tint = 0x4bcc0f;
                         buffImageKey = BUFF_TYPES.BALL;
                         break;
                     case BUFF_TYPES.HEALTH:
@@ -417,13 +417,13 @@ export class Monster extends Phaser.GameObjects.Container {
                     case BUFF_TYPES.SHIELD:
                         this.unitData.shield++;
                         this.shield_text.setText(`${this.unitData.shield}`);
-                        this.shield_text.tint = 0x4bcc0f;
+                        // this.shield_text.tint = 0x4bcc0f;
                         buffImageKey = BUFF_TYPES.SHIELD;
                         break;
                     case BUFF_TYPES.VISION:
                         this.unitData.vision++;
                         this.vision_text.setText(`${this.unitData.vision}`);
-                        this.vision_text.tint = 0x4bcc0f;
+                        // this.vision_text.tint = 0x4bcc0f;
                         buffImageKey = BUFF_TYPES.VISION;
                         break;
                     case BUFF_TYPES.GREEN_DOT:
@@ -490,7 +490,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.unitData.health += amount;
         this.health_text.setText(`${this.unitData.health}`);
         this.alighHeartImage();
-        this.health_text.tint = 0x4bcc0f;
+        // this.health_text.tint = 0x4bcc0f;
         if (curePoison && this.poisonedForDuration > 0) {
             this.removePoisoned();
         }
@@ -801,6 +801,7 @@ export class Monster extends Phaser.GameObjects.Container {
             } else {
                 this.additionaMelee = 0;
             }
+            this.setTextTint(this.melee_text, addAditionalMelee);
             this.updateMeleeText();
         }
 
@@ -1234,6 +1235,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.additionalRangedDamage = 0;
             this.updateRangedDamageText();
         }
+        this.setTextTint(this.ranged_text, this.additionalRangedDamage > 0);
         this.updateMoveDots();
     }
 
@@ -1462,6 +1464,14 @@ export class Monster extends Phaser.GameObjects.Container {
 
     updateRangedDamageText() {
         this.ranged_text.setText(`${this.unitData.ranged + this.additionalRangedDamage}`);
+    }
+
+    setTextTint(text: Phaser.GameObjects.Text, setTint: boolean, tint: number = 0x4bcc0f) {
+        if (setTint) {
+            text.tint = tint;
+        } else {
+            text.clearTint();
+        }
     }
 
     updateMeleeText() {

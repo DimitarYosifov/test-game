@@ -2043,6 +2043,10 @@ export class Game extends AbstractScene {
                     monster.magic_text.setText(
                         String(monster.unitData.magic + bonusMagic)
                     );
+
+                    if (bonusMagic) {
+                        monster.setTextTint(monster.magic_text, true);
+                    }
                 });
         };
 
