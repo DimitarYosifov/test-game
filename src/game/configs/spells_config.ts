@@ -11,9 +11,9 @@ export const spellsConfig = {
 
     magicBall: {
         coolDown: [
-            { value: 14, cost: 0 }, // cooldown level 0
-            { value: 13, cost: 3 }, // cooldown level 1
-            { value: 12, cost: 6 }  // cooldown level 2
+            { value: 10, cost: 0 }, // cooldown level 0
+            { value: 9, cost: 3 }, // cooldown level 1
+            { value: 8, cost: 6 }  // cooldown level 2
         ],
         targets: [
             { value: 1, cost: 0 },  // targets level 0
@@ -28,9 +28,9 @@ export const spellsConfig = {
     },
     poison: {
         coolDown: [
-            { value: 14, cost: 0 }, // poison level 0
-            { value: 13, cost: 4 }, // poison level 1
-            { value: 12, cost: 7 }  // poison level 2
+            { value: 10, cost: 0 }, // poison level 0
+            { value: 9, cost: 4 }, // poison level 1
+            { value: 8, cost: 7 }  // poison level 2
         ],
         targets: [
             { value: 1, cost: 0 },  // poison level 0
@@ -50,9 +50,9 @@ export const spellsConfig = {
     },
     rainOfArrows: {
         coolDown: [
-            { value: 10, cost: 0 }, // cooldown level 0
-            { value: 9, cost: 2 }, // cooldown level 1
-            { value: 8, cost: 4 }  // cooldown level 2
+            { value: 6, cost: 0 }, // cooldown level 0
+            { value: 5, cost: 2 }, // cooldown level 1
+            { value: 4, cost: 4 }  // cooldown level 2
         ],
         targets: [
             { value: 1, cost: 0 },  // targets level 0
@@ -67,9 +67,9 @@ export const spellsConfig = {
     },
     freeze: {
         coolDown: [
-            { value: 12, cost: 0 }, // cooldown level 0
-            { value: 11, cost: 2 }, // cooldown level 1
-            { value: 10, cost: 5 }  // cooldown level 2
+            { value: 8, cost: 0 }, // cooldown level 0
+            { value: 7, cost: 2 }, // cooldown level 1
+            { value: 6, cost: 5 }  // cooldown level 2
         ],
         targets: [
             { value: 1, cost: 0 },  // targets level 0
@@ -84,9 +84,9 @@ export const spellsConfig = {
     },
     heal: {
         coolDown: [
-            { value: 12, cost: 0 }, // cooldown level 0
-            { value: 11, cost: 2 }, // cooldown level 1
-            { value: 10, cost: 5 }  // cooldown level 2
+            { value: 8, cost: 0 }, // cooldown level 0
+            { value: 7, cost: 2 }, // cooldown level 1
+            { value: 6, cost: 5 }  // cooldown level 2
         ],
         targets: [
             { value: 1, cost: 0 },  // targets level 0

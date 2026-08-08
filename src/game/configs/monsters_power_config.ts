@@ -123,19 +123,19 @@ export const monsters_power_config = {
     ],
     '9': [
         { // 1 star
-            melee: 2, ranged: 0, magic: 0, health: 3, shield: 0, vision: 1, stars: 1, type: '9', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: []
+            melee: 1, ranged: 0, magic: 0, health: 3, shield: 0, vision: 1, stars: 1, type: '9', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         { // 2 stars
-            melee: 2, ranged: 0, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '9', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: []
+            melee: 1, ranged: 0, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '9', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         { // 3 stars
-            melee: 3, ranged: 0, magic: 0, health: 4, shield: 1, vision: 1, stars: 3, type: '9', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: []
+            melee: 2, ranged: 0, magic: 0, health: 4, shield: 1, vision: 1, stars: 3, type: '9', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         { // 4 stars
-            melee: 3, ranged: 0, magic: 0, health: 5, shield: 1, vision: 1, stars: 4, type: '9', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
+            melee: 2, ranged: 0, magic: 0, health: 5, shield: 1, vision: 1, stars: 4, type: '9', moves: 3, movesLeft: 3, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         { // 5 stars
-            melee: 4, ranged: 0, magic: 0, health: 5, shield: 2, vision: 1, stars: 5, type: '9', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: []
+            melee: 3, ranged: 0, magic: 0, health: 5, shield: 2, vision: 1, stars: 5, type: '9', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: []
         }
     ],
 
