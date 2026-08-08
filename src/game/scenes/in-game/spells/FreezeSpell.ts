@@ -26,7 +26,7 @@ export class FreezeSpell {
             const targetMonster: Monster = targetMonsters[targetMonsterIndex];
             const emitCheckEndTurnOnComplete = targetsCount === 0;
 
-            if (targetMonster.immuneTo.includes('poison')) {
+            if (targetMonster.immuneTo.includes('freeze')) {
                 targetMonster.showImmuneText();
                 if (emitCheckEndTurnOnComplete) {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);

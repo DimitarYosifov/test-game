@@ -805,6 +805,8 @@ export class Game extends AbstractScene {
 
     private showOpponentTurnMsg() {
         this.opponentTurnMsg.setScale(1.5);
+        console.log('showOpponentTurnMsg - start');
+
         this.tweens.chain({
             tweens: [
                 {
@@ -822,9 +824,9 @@ export class Game extends AbstractScene {
                     duration: 250,
                     ease: 'Back.easeIn',
                     onComplete: () => {
+                        console.log('showOpponentTurnMsg - complete');
                         this.checkOpponentForSpellCast();
                     }
-
                 }
             ]
         });
@@ -2231,7 +2233,9 @@ export class Game extends AbstractScene {
 
     // called after every player/opponent moves end
     private addInteraction(): void {
-
+     
+        console.log('addInteraction');
+      
         // //test
         // if (!this.data.list.isPlayerTurn) {
 
@@ -2889,12 +2893,15 @@ export class Game extends AbstractScene {
     }
 
     private checkOpponentForSpellCast() {
+        console.log('checkOpponentForSpellCast');
+
         if (
             // check magic ball
             this.opponentSpellsData &&
             this.opponentSpellsData.magicBall &&
             this.opponentSpellsData.magicBall.cooldownProgress === this.opponentSpellsData.magicBall.cooldown
         ) {
+            console.log('check magic ball');
             this.opponentSpellsData.magicBall.cooldownProgress = 0;
             this.newMagicBallSpell(this.opponentSpellsData.magicBall.cooldown);
         } else if (
@@ -2903,6 +2910,7 @@ export class Game extends AbstractScene {
             this.opponentSpellsData.poison &&
             this.opponentSpellsData.poison.cooldownProgress === this.opponentSpellsData.poison.cooldown
         ) {
+            console.log('check poison');
             this.opponentSpellsData.poison.cooldownProgress = 0;
             this.newPoisonSpell(this.opponentSpellsData.poison.cooldown);
         } else if (
@@ -2911,6 +2919,7 @@ export class Game extends AbstractScene {
             this.opponentSpellsData.rainOfArrows &&
             this.opponentSpellsData.rainOfArrows.cooldownProgress === this.opponentSpellsData.rainOfArrows.cooldown
         ) {
+            console.log('check rain of arrows');
             this.opponentSpellsData.rainOfArrows.cooldownProgress = 0;
             this.newRainOfArrowsSpell(this.opponentSpellsData.rainOfArrows.cooldown);
         } else if (
@@ -2919,6 +2928,7 @@ export class Game extends AbstractScene {
             this.opponentSpellsData.freeze &&
             this.opponentSpellsData.freeze.cooldownProgress === this.opponentSpellsData.freeze.cooldown
         ) {
+            console.log(' check freeze');
             this.opponentSpellsData.freeze.cooldownProgress = 0;
             this.newFreezeSpell(this.opponentSpellsData.freeze.cooldown);
         } else if (
@@ -2927,9 +2937,11 @@ export class Game extends AbstractScene {
             this.opponentSpellsData.heal &&
             this.opponentSpellsData.heal.cooldownProgress === this.opponentSpellsData.heal.cooldown
         ) {
+            console.log('check heal');
             this.opponentSpellsData.heal.cooldownProgress = 0;
             this.newHealSpell(this.opponentSpellsData.heal.cooldown);
         } else {
+            console.log('checkOpponentForSpellCast - out');
             this.addInteraction();
             this.getRandomOpponentMonster();
         }
