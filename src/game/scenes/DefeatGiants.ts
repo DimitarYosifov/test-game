@@ -203,6 +203,12 @@ export class DefeatGiants extends AbstractScene {
     }
 
     createKeys(isUnlocked: boolean) {
+
+        if (isUnlocked) {
+            // if unlocked do not show keys...
+            return;
+        }
+
         // const bg = this.add.image(960 + 110, 900, 'blur-bg').setOrigin(0, 0.5);
 
         const keysCount: any = defeat_giants_level_config[(this.level as number) - 1].keysNeededToUnlock;

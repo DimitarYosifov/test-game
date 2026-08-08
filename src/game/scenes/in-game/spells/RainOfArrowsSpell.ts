@@ -6,6 +6,7 @@ import { IMagicBall } from "../../../configs/level_config";
 
 export class RainOfArrowsSpell {
 
+
     private scene: Phaser.Scene;
     private mainGridContainer: Phaser.GameObjects.Container;
 
@@ -51,7 +52,8 @@ export class RainOfArrowsSpell {
                     //         emitter.destroy(true);
                     //     })
                     // });
-                    targetMonster.takeDamege(damage, true, true, emitCheckEndTurnOnComplete, 0, true);
+                    const finalDamage = damage - targetMonster.unitData.shield;
+                    targetMonster.takeDamege(finalDamage, true, true, emitCheckEndTurnOnComplete, 0, true);
 
                     const emitter: Phaser.GameObjects.Particles.ParticleEmitter = this.scene.add.particles(targetX, targetY, 'blood-drop', {
                         lifespan: 1400,

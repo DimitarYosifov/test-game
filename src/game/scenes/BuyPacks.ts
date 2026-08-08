@@ -605,6 +605,8 @@ export class BuyPacks extends AbstractScene {
             const newMonsterType = rewardsCfg[index].type;
             const newMonsterStars = rewardsCfg[index].stars;
             const config = getMonsterDataConfig(newMonsterType, newMonsterStars - 1);
+            console.log(`monster from pack. newMonsterType => ${newMonsterType}  newMonsterStars=> ${newMonsterStars} `);
+            console.log(`monster from pack config ${config}`);
             const x = [460, 960, 1460];
             const newMonster = new Monster(this, x[index], 540, MONSTER_SIZE, MONSTER_SIZE, config, 0, true).setAlpha(0).setScale(2);
             newMonster.starsContainer.x = MONSTER_SIZE / -4 + 10;

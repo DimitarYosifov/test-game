@@ -380,7 +380,7 @@ export class Spells extends AbstractScene {
             this.magicBallDamage = spellsConfig.magicBall.damage[magicBallDamageLevel].value;
             const magicBallDamageHeader = this.add.text(
                 -300, 90,
-                `phy dmg`,
+                `magic dmg`,
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 30, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,
@@ -1266,7 +1266,7 @@ export class Spells extends AbstractScene {
             this.rainOfArrowsDamage = spellsConfig.rainOfArrows.damage[rainOfArrowsDamageLevel].value;
             const rainOfArrowsDamageImage = this.add.text(
                 -300, 90,
-                `magic dmg`,
+                `phy dmg`,
                 {
                     fontFamily: 'main-font', padding: { left: 2, right: 4, top: 0, bottom: 0 }, fontSize: 30, color: '#ffffff',
                     stroke: '#000000', letterSpacing: 4,

@@ -63,7 +63,14 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                     ) {
 
                         if (isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') {
-                            const monster = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                            let monster;
+                            if (array[newRow][newCol].giantData) {
+                                const giantMonsterRow = array[newRow][newCol].giantData.row;
+                                const giantMonsterCol = array[newRow][newCol].giantData.col;
+                                monster = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === giantMonsterRow && m.unitData.col === giantMonsterCol);
+                            } else {
+                                monster = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
+                            }
                             if (monster.unitData.magic > 0) {
                                 isTargetMagicMonster = true;
                             }
