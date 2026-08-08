@@ -371,6 +371,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.magicBallContainer.add(maxText);
             }
 
@@ -477,6 +478,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.magicBallContainer.add(maxText);
             }
         } else {
@@ -655,6 +657,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.poisonContainer.add(maxText);
             }
 
@@ -760,6 +763,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.poisonContainer.add(maxText);
             }
 
@@ -862,6 +866,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.poisonContainer.add(maxText);
             }
 
@@ -966,6 +971,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.poisonContainer.add(maxText);
             }
 
@@ -1145,6 +1151,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.rainOfArrowsContainer.add(maxText);
             }
 
@@ -1251,6 +1258,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.rainOfArrowsContainer.add(maxText);
             }
             //========================== RAIN OF ARROWS DAMAGE =================================
@@ -1354,6 +1362,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.rainOfArrowsContainer.add(maxText);
             }
         } else {
@@ -1531,6 +1540,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.freezeContainer.add(maxText);
             }
 
@@ -1638,6 +1648,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.freezeContainer.add(maxText);
             }
 
@@ -1743,6 +1754,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.freezeContainer.add(maxText);
             }
         } else {
@@ -1921,6 +1933,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.healContainer.add(maxText);
             }
 
@@ -2027,6 +2040,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.healContainer.add(maxText);
             }
 
@@ -2132,6 +2146,7 @@ export class Spells extends AbstractScene {
                         stroke: '#000000', letterSpacing: 4,
                         align: 'center'
                     }).setOrigin(0.5);
+                maxText.setTint(0x42ff3c);
                 this.healContainer.add(maxText);
             }
 

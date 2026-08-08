@@ -33,7 +33,7 @@ export const survivalLevelsWorld1 = [
             { type: 9, stars: 1 },
             { type: 9, stars: 1 }
         ],
-        opponentSpells: {
+        opponentSpells: { // SPELL POINT  10
             // magicBall: {
             //     cooldown: spellsConfig.magicBall.coolDown[0].value,
             //     cooldownProgress: 0,
@@ -43,7 +43,7 @@ export const survivalLevelsWorld1 = [
             // poison: {
             //     cooldown: spellsConfig.poison.coolDown[0].value,
             //     cooldownProgress: 0,
-            //     damage: spellsConfig.poison.damage[0].value,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
             //     targets: spellsConfig.poison.targets[0].value,
             //     duration: spellsConfig.poison.duration[0].value
             // },
@@ -95,7 +95,40 @@ export const survivalLevelsWorld1 = [
             { type: 8, stars: 1 },
             { type: 9, stars: 2 },
             { type: 9, stars: 1 }
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  28
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     {
         levelName: 'survival_level_3',
@@ -125,7 +158,40 @@ export const survivalLevelsWorld1 = [
             { type: 2, stars: 3 },
             { type: 5, stars: 2 },
             { type: 7, stars: 3 }
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  46
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     }
 ]
 
@@ -158,7 +224,40 @@ export const survivalLevelsWorld2 = [
             { type: 1, stars: 4 },
             { type: 9, stars: 3 },
             { type: 7, stars: 4 }
-        ]
+        ],
+        opponentSpells: { // SPELL POINT 64       24
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     {
         levelName: 'survival_level_5',
@@ -189,6 +288,40 @@ export const survivalLevelsWorld2 = [
             { type: 8, stars: 5 },
             { type: 5, stars: 4 }
         ]
+        ,
+        opponentSpells: { // SPELL POINT  77 MAX
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     }
 ];
 
@@ -214,32 +347,32 @@ export const defeat_giants_level_config = [
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 1, isGiant: true },
         ],
-        opponentSpells: {
-            // magicBall: {
-            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     damage: spellsConfig.magicBall.damage[0].value,
-            //     targets: spellsConfig.magicBall.targets[0].value
-            // },
-            poison: {
-                cooldown: spellsConfig.poison.coolDown[0].value,
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 12
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
                 cooldownProgress: 0,
-                damage: spellsConfig.poison.damage[0].value,
-                targets: spellsConfig.poison.targets[0].value,
-                duration: spellsConfig.poison.duration[0].value
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
             },
-            // rainOfArrows: {
-            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
             //     cooldownProgress: 0,
-            //     damage: spellsConfig.rainOfArrows.damage[0].value,
-            //     targets: spellsConfig.rainOfArrows.targets[0].value
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
             // },
-            // freeze: {
-            //     cooldown: spellsConfig.freeze.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     duration: spellsConfig.freeze.duration[0].value,
-            //     targets: spellsConfig.freeze.targets[0].value
-            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[0].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
             // heal: {
             //     cooldown: spellsConfig.heal.coolDown[0].value,
             //     cooldownProgress: 0,
@@ -267,7 +400,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 1, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 14
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   3      
     {
@@ -288,7 +454,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 1, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 16
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   4      
     {
@@ -309,7 +508,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 1, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 18
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   5      
     {
@@ -330,7 +562,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 2, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 20
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   6      
     {
@@ -351,7 +616,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 1, isGiant: true },
             { type: 11, stars: 2, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 22
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   7      
     {
@@ -372,7 +670,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 2, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 24
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   8      
     {
@@ -393,7 +724,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 2, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 26
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   9      
     {
@@ -414,7 +778,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 2, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 28
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   10      
     {
@@ -435,7 +832,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 2, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 3, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 30
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   11      
     {
@@ -456,7 +886,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 3, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 3, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 32
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   12      
     {
@@ -477,7 +940,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 3, isGiant: true },
             { type: 13, stars: 2, isGiant: true },
             { type: 11, stars: 3, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 34
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   13      
     {
@@ -498,7 +994,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 3, isGiant: true },
             { type: 13, stars: 3, isGiant: true },
             { type: 11, stars: 3, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 36
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   14     
     {
@@ -519,7 +1048,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 3, isGiant: true },
             { type: 13, stars: 3, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 38
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   15     
     {
@@ -540,7 +1102,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 3, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 40
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   16     
     {
@@ -561,7 +1156,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 4, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 42
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   17     
     {
@@ -582,7 +1210,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 4, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 44     14
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   18     
     {
@@ -603,7 +1264,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 4, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 46
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[0].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   19     
     {
@@ -624,7 +1318,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 4, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 48     16
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   20     
     {
@@ -645,7 +1372,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 4, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 50     17
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   21     
     {
@@ -666,7 +1426,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 5, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 52    18
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   22     
     {
@@ -687,7 +1480,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 5, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 54   19
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L   23     
     {
@@ -708,7 +1534,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 4, isGiant: true },
             { type: 13, stars: 5, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 56   20
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   24     
     {
@@ -729,7 +1588,40 @@ export const defeat_giants_level_config = [
             { type: 12, stars: 5, isGiant: true },
             { type: 13, stars: 5, isGiant: true },
             { type: 11, stars: 4, isGiant: true },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + (LEVEL X 2) = 58     21
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
 ]
 
@@ -754,23 +1646,14 @@ export const level_config = [
             { type: 5, stars: 1 },
             { type: 6, stars: 1 }
 
-
-            // TEST
-            // { type: 1, stars: 1, isGiant: false },
-            // { type: 5, stars: 1 },
-            // { type: 3, stars: 1 },
-            // { type: 3, stars: 1 },
-            // { type: 2, stars: 1 },
-            // { type: 2, stars: 1 },
-            // { type: 2, stars: 1 }
         ],
-        opponentSpells: {
-            // magicBall: {
-            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     damage: spellsConfig.magicBall.damage[0].value,
-            //     targets: spellsConfig.magicBall.targets[0].value
-            // },
+        opponentSpells: { // SPELL POINT  10 + LEVEL = 11
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
             // poison: {
             //     cooldown: spellsConfig.poison.coolDown[0].value,
             //     cooldownProgress: 0,
@@ -778,18 +1661,18 @@ export const level_config = [
             //     targets: spellsConfig.poison.targets[0].value,
             //     duration: spellsConfig.poison.duration[0].value
             // },
-            // rainOfArrows: {
-            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     damage: spellsConfig.rainOfArrows.damage[0].value,
-            //     targets: spellsConfig.rainOfArrows.targets[0].value
-            // },
-            // freeze: {
-            //     cooldown: spellsConfig.freeze.coolDown[0].value,
-            //     cooldownProgress: 0,
-            //     duration: spellsConfig.freeze.duration[0].value,
-            //     targets: spellsConfig.freeze.targets[0].value
-            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[0].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
             // heal: {
             //     cooldown: spellsConfig.heal.coolDown[0].value,
             //     cooldownProgress: 0,
@@ -820,7 +1703,40 @@ export const level_config = [
             // { type: 7, stars: 1 },
             // { type: 8, stars: 1 },
             // { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(2) = 12
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   3    - monsters: 1 star x 9   2 stars x 0
     {
@@ -844,7 +1760,40 @@ export const level_config = [
             // { type: 7, stars: 1 },
             // { type: 8, stars: 1 },
             // { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(3) = 13
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[0].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   4    - monsters: 1 star x 10   2 stars x 0
     {
@@ -866,9 +1815,40 @@ export const level_config = [
             { type: 6, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
-            // { type: 8, stars: 1 },
-            // { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(4) = 14
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   5    - monsters: 1 star x 11   2 stars x 0
     {
@@ -892,7 +1872,39 @@ export const level_config = [
             { type: 7, stars: 1 },
             { type: 8, stars: 1 },
             // { type: 9, stars: 1 },
-        ]
+        ], opponentSpells: { // SPELL POINT  10 + LEVEL(5) = 15
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value,
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L   6    - monsters: 1 star x 12   2 stars x 0
     {
@@ -916,7 +1928,40 @@ export const level_config = [
             { type: 6, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(6) = 16
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L   7    - monsters: 1 star x 12   2 stars x 0
     {
@@ -940,7 +1985,40 @@ export const level_config = [
             { type: 7, stars: 1 },
             { type: 8, stars: 1 },
             { type: 8, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(7) = 17
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value,
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L   8    - monsters: 1 star x 13   2 stars x 0
     {
@@ -965,7 +2043,40 @@ export const level_config = [
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(8) = 18
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  9    - monsters: 1 star x 14   2 stars x 0
     {
@@ -991,7 +2102,40 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 8, stars: 1 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(9) = 19
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  10    - monsters: 1 star x 13   2 stars x 1
     {
@@ -1017,7 +2161,40 @@ export const level_config = [
             { type: 9, stars: 1 },
             { type: 8, stars: 2 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(10) = 20
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[0].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value,
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  11    - monsters: 1 star x 12   2 stars x 2
     {
@@ -1043,7 +2220,40 @@ export const level_config = [
             { type: 5, stars: 1 },
             { type: 6, stars: 1 },
             { type: 6, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(11) = 21
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value,
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  12    - monsters: 1 star x 11   2 stars x 3
     {
@@ -1069,7 +2279,40 @@ export const level_config = [
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(12) = 22
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value,
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  13    - monsters: 1 star x 10   2 stars x 4
     {
@@ -1095,7 +2338,40 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 8, stars: 2 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(13) = 23
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value,
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  14    - monsters: 1 star x 9   2 stars x 5
     {
@@ -1121,7 +2397,40 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 8, stars: 2 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(14) = 24
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value,
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  15    - monsters: 1 star x 8   2 stars x 6
     {
@@ -1147,7 +2456,40 @@ export const level_config = [
             { type: 9, stars: 1 },
             { type: 9, stars: 1 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(15) = 25
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  16    - monsters: 1 star x 7   2 stars x 7
     {
@@ -1173,7 +2515,40 @@ export const level_config = [
             { type: 7, stars: 1 },
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(16) = 26
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  17    - monsters: 1 star x 6   2 stars x 8
     {
@@ -1199,7 +2574,40 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 8, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(17) = 27
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  18    - monsters: 1 star x 5   2 stars x 9
     {
@@ -1225,7 +2633,40 @@ export const level_config = [
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(18) = 28
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  19    - monsters: 1 star x 4   2 stars x 10
     {
@@ -1251,7 +2692,40 @@ export const level_config = [
             { type: 8, stars: 1 },
             { type: 9, stars: 2 },
             { type: 9, stars: 1 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(19) = 29
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  20    - monsters: 1 star x 3   2 stars x 11
     {
@@ -1277,7 +2751,40 @@ export const level_config = [
             { type: 6, stars: 2 },
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(20) = 30
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  21    - monsters: 1 star x 2   2 stars x 12
     {
@@ -1303,7 +2810,40 @@ export const level_config = [
             { type: 6, stars: 2 },
             { type: 7, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(21) = 31
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            // rainOfArrows: {
+            //     cooldown: spellsConfig.rainOfArrows.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.rainOfArrows.damage[0].value,
+            //                 targets: spellsConfig.rainOfArrows.targets[0].value
+            // },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  22    - monsters: 1 star x 1   2 stars x 13
     {
@@ -1329,7 +2869,40 @@ export const level_config = [
             { type: 8, stars: 2 },
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(22) = 32
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  23    - monsters: 1 star x 0   2 stars x 14   3 stars x 0
     {
@@ -1355,7 +2928,40 @@ export const level_config = [
             { type: 8, stars: 2 },
             { type: 8, stars: 2 },
             { type: 8, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(23) = 33
+            // magicBall: {
+            //     cooldown: spellsConfig.magicBall.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             damage: spellsConfig.magicBall.damage[0].value,
+            //                 targets: spellsConfig.magicBall.targets[0].value
+            // },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  24    - monsters: 1 star x 0   2 stars x 13   3 stars x 1
     {
@@ -1381,7 +2987,40 @@ export const level_config = [
             { type: 8, stars: 2 },
             { type: 8, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(24) = 34
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            // poison: {
+            //     cooldown: spellsConfig.poison.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+            //     targets: spellsConfig.poison.targets[0].value,
+            //     duration: spellsConfig.poison.duration[0].value
+            // },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            // freeze: {
+            //     cooldown: spellsConfig.freeze.coolDown[0].value,
+            //         cooldownProgress: 0,
+            //             duration: spellsConfig.freeze.duration[0].value,
+            //                 targets: spellsConfig.freeze.targets[0].value
+            // },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  25    - monsters: 1 star x 0   2 stars x 12   3 stars x 2
     {
@@ -1406,8 +3045,40 @@ export const level_config = [
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
             { type: 9, stars: 3 },
-            { type: 9, stars: 2 },
-        ]
+            { type: 9, stars: 2 }
+        ], opponentSpells: { // SPELL POINT  10 + LEVEL(25) = 35
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            // heal: {
+            //     cooldown: spellsConfig.heal.coolDown[0].value,
+            //     cooldownProgress: 0,
+            //     amount: spellsConfig.heal.amount[0].value,
+            //     targets: spellsConfig.heal.targets[0].value
+            // }
+        }
     },
     // L E V E L  26    - monsters: 1 star x 0   2 stars x 11   3 stars x 3
     {
@@ -1433,7 +3104,39 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
             { type: 8, stars: 2 },
-        ]
+        ], opponentSpells: { // SPELL POINT  10 + LEVEL(26) = 36
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  27    - monsters: 1 star x 0   2 stars x 10   3 stars x 4
     {
@@ -1459,7 +3162,40 @@ export const level_config = [
             { type: 8, stars: 2 },
             { type: 8, stars: 3 },
             { type: 8, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(27) = 37
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  28    - monsters: 1 star x 0   2 stars x 9   3 stars x 5
     {
@@ -1485,7 +3221,40 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(28) = 38
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[0].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  29    - monsters: 1 star x 0   2 stars x 8   3 stars x 6
     {
@@ -1511,7 +3280,40 @@ export const level_config = [
             { type: 9, stars: 2 },
             { type: 9, stars: 2 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(29) = 39
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  30    - monsters: 1 star x 0   2 stars x 7   3 stars x 7
     {
@@ -1537,7 +3339,40 @@ export const level_config = [
             { type: 8, stars: 3 },
             { type: 9, stars: 2 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(30) = 40
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  31    - monsters: 1 star x 0   2 stars x 6   3 stars x 8
     {
@@ -1563,7 +3398,40 @@ export const level_config = [
             { type: 6, stars: 2 },
             { type: 9, stars: 3 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(31) = 41
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  32    - monsters: 1 star x 0   2 stars x 5   3 stars x 9
     {
@@ -1589,7 +3457,40 @@ export const level_config = [
             { type: 8, stars: 3 },
             { type: 8, stars: 2 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(32) = 42
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[0].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  33    - monsters: 1 star x 0   2 stars x 4   3 stars x 10
     {
@@ -1615,7 +3516,40 @@ export const level_config = [
             { type: 8, stars: 3 },
             { type: 8, stars: 3 },
             { type: 9, stars: 2 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(33) = 43
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[0].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  34    - monsters: 1 star x 0   2 stars x 3   3 stars x 11
     {
@@ -1641,7 +3575,40 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(34) = 44
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  35    - monsters: 1 star x 0   2 stars x 2   3 stars x 12
     {
@@ -1667,7 +3634,40 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(35) = 45
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[0].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // T R A N S I T I O N   T O   W O R L D   2
     {
@@ -1703,7 +3703,40 @@ export const level_config = [
             { type: 7, stars: 3 },
             { type: 7, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(36) = 46
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  37     - monsters: 1 star x 0   2 stars x 0   3 stars x 14 
     {
@@ -1729,7 +3762,40 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(37) = 47
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  38     - monsters: 1 star x 0   2 stars x 0   3 stars x 13   4 stars x 1
     {
@@ -1755,7 +3821,40 @@ export const level_config = [
             { type: 7, stars: 3 },
             { type: 7, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(38) = 48
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  39     - monsters: 1 star x 0   2 stars x 0   3 stars x 12   4 stars x 2
     {
@@ -1781,7 +3880,40 @@ export const level_config = [
             { type: 7, stars: 4 },
             { type: 7, stars: 3 },
             { type: 8, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(39) = 49
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  40     - monsters: 1 star x 0   2 stars x 0   3 stars x 11   4 stars x 3
     {
@@ -1807,7 +3939,40 @@ export const level_config = [
             { type: 8, stars: 3 },
             { type: 9, stars: 3 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(40) = 50
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  41     - monsters: 1 star x 0   2 stars x 0   3 stars x 10   4 stars x 4
     {
@@ -1833,7 +3998,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(41) = 51
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  42     - monsters: 1 star x 0   2 stars x 0   3 stars x 9   4 stars x 5
     {
@@ -1859,7 +4057,40 @@ export const level_config = [
             { type: 9, stars: 4 },
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(42) = 52
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  43     - monsters: 1 star x 0   2 stars x 0   3 stars x 8   4 stars x 6
     {
@@ -1885,7 +4116,40 @@ export const level_config = [
             { type: 8, stars: 3 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(43) = 53
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[0].value
+            }
+        }
     },
     // L E V E L  44     - monsters: 1 star x 0   2 stars x 0   3 stars x 7   4 stars x 7
     {
@@ -1911,7 +4175,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 3 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(44) = 54
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[0].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  45     - monsters: 1 star x 0   2 stars x 0   3 stars x 6   4 stars x 8
     {
@@ -1937,7 +4234,40 @@ export const level_config = [
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
             { type: 9, stars: 3 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(45) = 55
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[0].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[0].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[0].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[0].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  46     - monsters: 1 star x 0   2 stars x 0   3 stars x 5   4 stars x 9
     {
@@ -1963,7 +4293,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 9, stars: 3 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(46) = 56
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  47     - monsters: 1 star x 0   2 stars x 0   3 stars x 4   4 stars x 10
     {
@@ -1989,7 +4352,40 @@ export const level_config = [
             { type: 9, stars: 4 },
             { type: 9, stars: 3 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(47) = 57
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  48     - monsters: 1 star x 0   2 stars x 0   3 stars x 3   4 stars x 11
     {
@@ -2015,7 +4411,40 @@ export const level_config = [
             { type: 7, stars: 4 },
             { type: 8, stars: 3 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(48) = 58
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[0].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  49     - monsters: 1 star x 0   2 stars x 0   3 stars x 2   4 stars x 12
     {
@@ -2041,7 +4470,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(49) = 59
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[1].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  50     - monsters: 1 star x 0   2 stars x 0   3 stars x 1   4 stars x 13
     {
@@ -2067,7 +4529,40 @@ export const level_config = [
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(50) = 60
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  51     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 14
     {
@@ -2093,7 +4588,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(51) = 61  
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  52     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 13   5 stars x 1
     {
@@ -2119,7 +4647,40 @@ export const level_config = [
             { type: 7, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(52) = 62   23
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  53     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 12   5 stars x 2
     {
@@ -2145,7 +4706,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(53) = 63   
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  54     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 11   5 stars x 3
     {
@@ -2171,7 +4765,40 @@ export const level_config = [
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(54) = 64   24
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  55     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 10   5 stars x 4
     {
@@ -2197,7 +4824,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 9, stars: 5 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(55) = 65  25
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  56     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 9   5 stars x 5
     {
@@ -2223,7 +4883,40 @@ export const level_config = [
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(56) = 66   25
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[1].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  57     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 8   5 stars x 6
     {
@@ -2249,7 +4942,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(57) = 67  26
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  58     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 7   5 stars x 7
     {
@@ -2275,7 +5001,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 8, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(58) = 68   26
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  59     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 6   5 stars x 8
     {
@@ -2301,7 +5060,40 @@ export const level_config = [
             { type: 8, stars: 4 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(59) = 69   27
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[1].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[1].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  60     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 5   5 stars x 9
     {
@@ -2327,7 +5119,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 9, stars: 4 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(60) = 70  27
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[1].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[1].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  61     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 4   5 stars x 10
     {
@@ -2353,7 +5178,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 8, stars: 5 },
             { type: 9, stars: 4 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(61) = 71     28
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[1].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  62     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 3   5 stars x 11
     {
@@ -2379,7 +5237,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(62) = 72    28
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[0].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[1].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  63     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 2   5 stars x 12
     {
@@ -2405,7 +5296,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(63) = 73    29
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[1].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  64     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 1   5 stars x 13
     {
@@ -2431,7 +5355,40 @@ export const level_config = [
             { type: 7, stars: 5 },
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(64) = 74  29
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[1].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[1].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  65     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 14
     {
@@ -2457,7 +5414,40 @@ export const level_config = [
             { type: 7, stars: 5 },
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(65) = 75   30
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[1].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  66     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 15
     {
@@ -2484,7 +5474,40 @@ export const level_config = [
             { type: 9, stars: 5 },
             { type: 9, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(66) = 76   30
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[1].value
+            }
+        }
     },
     // L E V E L  67     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 16
     {
@@ -2512,7 +5535,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(67) = 77    77 IS MAX!
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  68     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 17
     {
@@ -2541,7 +5597,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(68 = 78    77 IS MAX!
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
     // L E V E L  69     - monsters: 1 star x 0   2 stars x 0   3 stars x 0   4 stars x 0   5 stars x 18
     {
@@ -2571,7 +5660,40 @@ export const level_config = [
             { type: 8, stars: 5 },
             { type: 8, stars: 5 },
             { type: 9, stars: 5 },
-        ]
+        ],
+        opponentSpells: { // SPELL POINT  10 + LEVEL(69 = 79    77 IS MAX!
+            magicBall: {
+                cooldown: spellsConfig.magicBall.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.magicBall.damage[2].value,
+                targets: spellsConfig.magicBall.targets[2].value
+            },
+            poison: {
+                cooldown: spellsConfig.poison.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.poison.damage[1].value, // [1] MAX!!!!
+                targets: spellsConfig.poison.targets[2].value,
+                duration: spellsConfig.poison.duration[2].value
+            },
+            rainOfArrows: {
+                cooldown: spellsConfig.rainOfArrows.coolDown[2].value,
+                cooldownProgress: 0,
+                damage: spellsConfig.rainOfArrows.damage[2].value,
+                targets: spellsConfig.rainOfArrows.targets[2].value
+            },
+            freeze: {
+                cooldown: spellsConfig.freeze.coolDown[2].value,
+                cooldownProgress: 0,
+                duration: spellsConfig.freeze.duration[2].value,
+                targets: spellsConfig.freeze.targets[2].value
+            },
+            heal: {
+                cooldown: spellsConfig.heal.coolDown[2].value,
+                cooldownProgress: 0,
+                amount: spellsConfig.heal.amount[2].value,
+                targets: spellsConfig.heal.targets[2].value
+            }
+        }
     },
 ]
 

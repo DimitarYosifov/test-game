@@ -252,7 +252,7 @@ export const main_config = {
             "min": 5,
             "max": 6
         },
-        "chanceForBuffAfterRound": 45 // 33 %
+        "chanceForBuffAfterRound": 66 // 33 %
     },
     "slotCoins": {
         "min": 50,
