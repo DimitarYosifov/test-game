@@ -1235,7 +1235,9 @@ export class Monster extends Phaser.GameObjects.Container {
             this.additionalRangedDamage = 0;
             this.updateRangedDamageText();
         }
-        this.setTextTint(this.ranged_text, this.additionalRangedDamage > 0);
+        if (this.ranged_text) {
+            this.setTextTint(this.ranged_text, this.additionalRangedDamage > 0);
+        }
         this.updateMoveDots();
     }
 
@@ -1467,6 +1469,9 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     setTextTint(text: Phaser.GameObjects.Text, setTint: boolean, tint: number = 0x4bcc0f) {
+      
+        if (!text) return;
+       
         if (setTint) {
             text.tint = tint;
         } else {
