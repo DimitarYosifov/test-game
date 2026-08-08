@@ -26,11 +26,18 @@ export class FreezeSpell {
             const targetMonster: Monster = targetMonsters[targetMonsterIndex];
             const emitCheckEndTurnOnComplete = targetsCount === 0;
 
-            targetMonster.setFrozen(duration, () => {
+            if (targetMonster.immuneTo.includes('poison')) {
+                targetMonster.showImmuneText();
                 if (emitCheckEndTurnOnComplete) {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                 }
-            });
+            } else {
+                targetMonster.setFrozen(duration, () => {
+                    if (emitCheckEndTurnOnComplete) {
+                        this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
+                    }
+                });
+            }
 
             if (targetsCount > 0) {
                 this.scene.time.delayedCall(200, () => {

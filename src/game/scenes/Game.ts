@@ -1088,7 +1088,7 @@ export class Game extends AbstractScene {
             this.currentlySelectedMonster.performHit(target, isTargetToTheLeft, () => {
                 if (+this.currentlySelectedMonster.type === 7) {
                     // monster N7 special
-                    const useFreezeSkill = Phaser.Math.RND.between(1, 100) <= 25; // 25% chance to freeze
+                    const useFreezeSkill = Phaser.Math.RND.between(1, 100) <= 20; // 20% chance to freeze
                     if (useFreezeSkill) {
                         target.setFrozen(1, () => { });
                     }

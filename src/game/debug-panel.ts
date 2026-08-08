@@ -376,6 +376,7 @@ export const createDebugPanel = () => {
     const resetDailyQuestButton = document.createElement('button');
     resetDailyQuestButton.innerText = 'reset';
     resetDailyQuestButton.onclick = () => {
+        LOCAL_STORAGE_MANAGER.set('lastResetTime', '');
         LOCAL_STORAGE_MANAGER.set('questStartTime', '');
     }
     mainContainer.appendChild(resetDailyQuestContainer);
