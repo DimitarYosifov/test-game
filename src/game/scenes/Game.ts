@@ -936,13 +936,17 @@ export class Game extends AbstractScene {
 
     private monsterSelectHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
+
+            if (this.currentlySelectedMonster) {
+                this.currentlySelectedMonster.removeFX();
+            }
+
             if (this.data.list.isPlayerTurn) {
                 const monsterBounds = (data[0] as Monster).bg.getBounds();
                 this.currentlySelectedMonsterAnimation!
                     .moveTo(monsterBounds.x + monsterBounds.width / 2, monsterBounds.y + monsterBounds.height / 2)
                     .show()
                     .resume();
-
                 this.endTurnButton.setInteractive();
                 this.skipButton.setInteractive();
                 this.giveUpButton.setInteractive();
@@ -959,6 +963,19 @@ export class Game extends AbstractScene {
             if (repeatMove) {
                 this.pauseResumeInteraction(true);//????
             }
+
+
+            // effect to the currently selected monster
+            const barrelFX = this.currentlySelectedMonster.bg.preFX.addBarrel(1.075);
+            const pulseTween = this.tweens.add({
+                targets: barrelFX,
+                amount: 1,
+                yoyo: true,
+                duration: 600,
+                loop: -1,
+                ease: 'sine.inout'
+            });
+            const fx = this.currentlySelectedMonster.bg.postFX.addShine(0.5, .3, 3);
         });
     }
 
@@ -968,6 +985,7 @@ export class Game extends AbstractScene {
 
             if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
+                this.currentlySelectedMonster.removeFX();
             }
 
             const newRow = data[0];
@@ -1039,6 +1057,7 @@ export class Game extends AbstractScene {
 
             if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
+                this.currentlySelectedMonster.removeFX();
             }
 
             const newRow = data[0];
@@ -2133,6 +2152,7 @@ export class Game extends AbstractScene {
                 })
                 this.movementArrowsContainer.removeArrows();
                 this.currentlySelectedMonsterAnimation!.pause().hide();
+                this.currentlySelectedMonster.removeFX();
                 this.applyPoison(() => {
                     console.log('showOpponentTurnMsg')
                     if (this.levelFinished) {

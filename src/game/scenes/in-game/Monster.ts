@@ -777,7 +777,7 @@ export class Monster extends Phaser.GameObjects.Container {
         this.scene.tweens.add({
             targets: lostHealth,
             // alpha: { value: 0, delay: 2750 },
-            y: y + 75,
+            y: y - 75,
             delay: delayAnimation,
             duration: 1500,
             onStart: () => {
@@ -1469,9 +1469,9 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     setTextTint(text: Phaser.GameObjects.Text, setTint: boolean, tint: number = 0x4bcc0f) {
-      
+
         if (!text) return;
-       
+
         if (setTint) {
             text.tint = tint;
         } else {
@@ -1481,5 +1481,11 @@ export class Monster extends Phaser.GameObjects.Container {
 
     updateMeleeText() {
         this.melee_text.setText(`${this.unitData.melee + this.additionaMelee}`);
+    }
+
+    removeFX() {
+        this.scene.tweens.killTweensOf(this);
+        this.bg.preFX.clear();
+        this.bg.postFX.clear();
     }
 }

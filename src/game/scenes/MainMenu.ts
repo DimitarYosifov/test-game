@@ -286,6 +286,31 @@ export class MainMenu extends AbstractScene {
             let exclaimation = this.add.image(this.achievementsButton.x + 75, this.achievementsButton.y - 100, 'mark').setScale(0.5);
         }
 
+        this.achievementsButton.bg.on('pointerover', () => {
+            // achievementsTitle.setTint(0x90D5FF);
+            // const fx = this.achievementsButton.bg.postFX.addShine(1, .1, 3);
+
+            // this.achievementsButton.postFX.addGlow(0xffffff, 2, 0, false, 2, 32);
+
+            //  this.tweens.add({
+            //     targets: achievementsTitle,
+            //     // scale: 2,
+            //     duration: 450,
+            //     tint: 0x42ff3c
+            // })
+        })
+        this.achievementsButton.bg.on('pointerout', () => {
+            // achievementsTitle.clearTint();
+            // this.achievementsButton.postFX.clear();
+            // achievementsTitle.update()
+            // this.tweens.add({
+            //     targets: achievementsTitle,
+            //     // scale: 2,
+            //     duration: 450,
+            //     tint: 0x42ff3c
+            // })
+        })
+
     }
 
     disableAllButtons() {
