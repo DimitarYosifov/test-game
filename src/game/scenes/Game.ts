@@ -116,7 +116,7 @@ export class Game extends AbstractScene {
 
         this.isSurvivalLevel = (this.scene.settings.data as any).isSurvivalLevel;
         this.isGiantFightLevel = d.isGiantFightLevel;
-        this.opponentSpellsData = d.opponentSpellsData;
+        this.opponentSpellsData = structuredClone(d.opponentSpellsData);
         this.survivalLevelData = LOCAL_STORAGE_MANAGER.get('survivalLevelData');
         this.survivalLevelReward = 0;
         this.survivalLevelKilledMonsters = 0;
@@ -2233,9 +2233,9 @@ export class Game extends AbstractScene {
 
     // called after every player/opponent moves end
     private addInteraction(): void {
-     
+
         console.log('addInteraction');
-      
+
         // //test
         // if (!this.data.list.isPlayerTurn) {
 

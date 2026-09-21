@@ -72,36 +72,36 @@ export const monsters_power_config = {
     ],
     '6': [
         { // 1 star
-            melee: 0, ranged: 1, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '6', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: ['freeze']
+            melee: 0, ranged: 1, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '6', moves: 2, movesLeft: 2, upgradeCost: 36, sellsFor: 4, immuneTo: []
         },
         { // 2 stars
-            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '6', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: ['freeze']
+            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 2, type: '6', moves: 2, movesLeft: 2, upgradeCost: 324, sellsFor: 36, immuneTo: []
         },
         { // 3 stars
-            melee: 0, ranged: 2, magic: 0, health: 5, shield: 0, vision: 1, stars: 3, type: '6', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: ['freeze']
+            melee: 0, ranged: 2, magic: 0, health: 5, shield: 0, vision: 1, stars: 3, type: '6', moves: 2, movesLeft: 2, upgradeCost: 2916, sellsFor: 324, immuneTo: []
         },
         { // 4 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 0, vision: 1, stars: 4, type: '6', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['freeze']
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 0, vision: 1, stars: 4, type: '6', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
         },
         { // 5 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 1, stars: 5, type: '6', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: ['freeze']
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 1, stars: 5, type: '6', moves: 3, movesLeft: 3, upgradeCost: null, sellsFor: 26244, immuneTo: []
         }
     ],
     '7': [
         { // 1 star
-            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '7', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: []
+            melee: 0, ranged: 2, magic: 0, health: 4, shield: 0, vision: 1, stars: 1, type: '7', moves: 1, movesLeft: 1, upgradeCost: 36, sellsFor: 4, immuneTo: ['freeze']
         },
         { // 2 stars
-            melee: 0, ranged: 2, magic: 0, health: 5, shield: 1, vision: 1, stars: 2, type: '7', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: []
+            melee: 0, ranged: 2, magic: 0, health: 5, shield: 1, vision: 1, stars: 2, type: '7', moves: 1, movesLeft: 1, upgradeCost: 324, sellsFor: 36, immuneTo: ['freeze']
         },
         { // 3 stars
-            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 2, stars: 3, type: '7', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: []
+            melee: 0, ranged: 3, magic: 0, health: 5, shield: 1, vision: 2, stars: 3, type: '7', moves: 1, movesLeft: 1, upgradeCost: 2916, sellsFor: 324, immuneTo: ['freeze']
         },
         { // 4 stars
-            melee: 0, ranged: 3, magic: 0, health: 6, shield: 1, vision: 2, stars: 4, type: '7', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: []
+            melee: 0, ranged: 3, magic: 0, health: 6, shield: 1, vision: 2, stars: 4, type: '7', moves: 2, movesLeft: 2, upgradeCost: 26244, sellsFor: 2916, immuneTo: ['freeze']
         },
         { // 5 stars
-            melee: 0, ranged: 4, magic: 0, health: 6, shield: 1, vision: 2, stars: 5, type: '7', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: []
+            melee: 0, ranged: 4, magic: 0, health: 6, shield: 1, vision: 2, stars: 5, type: '7', moves: 2, movesLeft: 2, upgradeCost: null, sellsFor: 26244, immuneTo: ['freeze']
         }
     ],
     '8': [
