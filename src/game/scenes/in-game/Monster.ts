@@ -1485,7 +1485,9 @@ export class Monster extends Phaser.GameObjects.Container {
 
     removeFX(scene: Phaser.Scene) {
         scene.tweens.killTweensOf(this);
-        this.bg.preFX.clear();
-        this.bg.postFX.clear();
+        if (this.bg) {
+            this.bg.preFX.clear();
+            this.bg.postFX.clear();
+        }
     }
 }
