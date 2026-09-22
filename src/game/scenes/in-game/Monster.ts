@@ -1483,8 +1483,8 @@ export class Monster extends Phaser.GameObjects.Container {
         this.melee_text.setText(`${this.unitData.melee + this.additionaMelee}`);
     }
 
-    removeFX() {
-        this.scene.tweens.killTweensOf(this);
+    removeFX(scene: Phaser.Scene) {
+        scene.tweens.killTweensOf(this);
         this.bg.preFX.clear();
         this.bg.postFX.clear();
     }

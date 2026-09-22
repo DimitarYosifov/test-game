@@ -19,6 +19,10 @@ export class Button extends Phaser.GameObjects.Container {
     currentPopupTween: Phaser.Tweens.Tween;
     delayedShowPopupEvent: Phaser.Time.TimerEvent;
     enabled: boolean = false;
+    raysImage: Phaser.GameObjects.Image;
+    raysImageStatic: Phaser.GameObjects.Image;
+    raysImageTween: Phaser.Tweens.Tween;
+    emitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
     constructor(
         scene: Phaser.Scene,
@@ -240,7 +244,52 @@ export class Button extends Phaser.GameObjects.Container {
         });
     }
 
+    startRaysSpin() {
+        if (!this.raysImage) {
+            this.raysImage = this.scene.add.image(0, 0, 'rays').setScale(2);
+            this.raysImageStatic = this.scene.add.image(0, 0, 'rays').setScale(2.3);
+            this.addAt(this.raysImage, 0);
+            this.addAt(this.raysImageStatic, 1);
+        } else {
+            this.raysImage.visible = true;
+            this.raysImageStatic.visible = true;
+        }
+
+        this.emitter = this.scene.add.particles(0, 0, 'fire-particle', {
+            speed: { min: 15, max: 30 },
+            angle: { min: 0, max: 360 },
+            rotate: { min: 0, max: 360 },
+            lifespan: 750,
+            quantity: 3,
+            frequency: 50,
+            scale: { start: 0.4, end: 0.2 },
+            emitCallback: (particle: any) => {
+                const spawnRadius = 125 + Phaser.Math.RND.between(-25, 25);
+                const angle = Math.random() * Math.PI * 2;
+                particle.x = Math.cos(angle) * spawnRadius;
+                particle.y = Math.sin(angle) * spawnRadius;
+            }
+        })
+        this.addAt(this.emitter, 2);
+
+        this.raysImageTween = this.scene.tweens.add({
+            targets: this.raysImage,
+            rotation: 36,
+            duration: 120000
+        })
+    }
+
+    stopRaysTween() {
+        this.raysImage.visible = false;
+        this.raysImageStatic.visible = false;
+        this.raysImageTween.remove();
+        this.spellFilledTween = null;
+        this.emitter.destroy(true);
+        this.emitter = null;
+    }
+
     startSpellFilledTween(setInteractive: boolean) {
+        this.startRaysSpin();
         this.setAlpha(1);
         if (setInteractive) {
             this.setInteractive();
@@ -249,7 +298,7 @@ export class Button extends Phaser.GameObjects.Container {
         }
         this.spellFilledTween = this.scene.tweens.add({
             targets: this,
-            scale: this.initialScale * 1.05,
+            scale: this.initialScale * 1.025,
             duration: 450,
             yoyo: true,
             repeat: -1
@@ -258,6 +307,7 @@ export class Button extends Phaser.GameObjects.Container {
     }
 
     removeSpellFilledTween() {
+        this.stopRaysTween();
         this.setAlpha(1);
         this.disableInteractive();
         if (this.spellFilledTween) {
@@ -269,6 +319,15 @@ export class Button extends Phaser.GameObjects.Container {
     }
 
     animateSpellTrigger(onComplete: () => void) {
+
+        this.emitter.updateConfig(
+            {
+                quantity: 6,
+                frequency: 25,
+                speed: { min: 65, max: 130 },
+            }
+        )
+
         this.setScale(this.initialScale);
         this.scene.tweens.chain({
             targets: this,
@@ -277,25 +336,37 @@ export class Button extends Phaser.GameObjects.Container {
                     scale: this.initialScale * 0.9,
                     yoyo: true,
                     duration: 150,
-                    ease: 'Cubic.easeOut'
+                    ease: 'Cubic.easeOut',
+                    onStart: () => {
+                        this.emitter.explode(100);
+                    }
                 },
                 {
                     scale: this.initialScale * 1.1,
                     yoyo: true,
                     duration: 150,
-                    ease: 'Cubic.easeOut'
+                    ease: 'Cubic.easeOut',
+                    onStart: () => {
+                        this.emitter.explode(100);
+                    }
                 },
                 {
                     scale: this.initialScale * 1.2,
                     yoyo: true,
                     duration: 150,
-                    ease: 'Cubic.easeOut'
+                    ease: 'Cubic.easeOut',
+                    onStart: () => {
+                        this.emitter.explode(100);
+                    }
                 },
                 {
                     scale: this.initialScale * 1.3,
                     yoyo: true,
                     duration: 150,
-                    ease: 'Cubic.easeOut'
+                    ease: 'Cubic.easeOut',
+                    onStart: () => {
+                        this.emitter.explode(100);
+                    }
                 },
                 {
                     scale: this.initialScale * 1.4,
@@ -305,7 +376,10 @@ export class Button extends Phaser.GameObjects.Container {
                         this.setScale(this.initialScale);
                         onComplete();
                     },
-                    ease: 'Cubic.easeOut'
+                    ease: 'Cubic.easeOut',
+                    onStart: () => {
+                        this.emitter.explode(100);
+                    }
                 }
             ]
         })

@@ -99,6 +99,8 @@ export class Preloader extends Scene {
         this.load.image('blur-bg', 'blur-bg.png');
         this.load.image('bomb', 'bomb.png');
         this.load.image('boom', 'boom.png');
+        this.load.image('rays', 'rays.png');
+        this.load.image('fire-particle', 'fire-particle.png');
 
         this.load.image('confetti-yellow', 'confetti-yellow.png');
         this.load.image('confetti-orange', 'confetti-orange.png');

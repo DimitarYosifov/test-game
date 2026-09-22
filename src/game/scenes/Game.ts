@@ -938,7 +938,7 @@ export class Game extends AbstractScene {
         this.events.on(GAME_SCENE_SCENE_EVENTS.MONSTER_SELECTED, (data: Monster[] | IUnitData[]) => {
 
             if (this.currentlySelectedMonster) {
-                this.currentlySelectedMonster.removeFX();
+                this.currentlySelectedMonster.removeFX(this);
             }
 
             if (this.data.list.isPlayerTurn) {
@@ -985,7 +985,7 @@ export class Game extends AbstractScene {
 
             if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
-                this.currentlySelectedMonster.removeFX();
+                this.currentlySelectedMonster.removeFX(this);
             }
 
             const newRow = data[0];
@@ -1057,7 +1057,7 @@ export class Game extends AbstractScene {
 
             if (this.currentlySelectedMonsterAnimation?.animation!.alpha === 1) {
                 this.currentlySelectedMonsterAnimation.pause().hide();
-                this.currentlySelectedMonster.removeFX();
+                this.currentlySelectedMonster.removeFX(this);
             }
 
             const newRow = data[0];
@@ -2152,7 +2152,7 @@ export class Game extends AbstractScene {
                 })
                 this.movementArrowsContainer.removeArrows();
                 this.currentlySelectedMonsterAnimation!.pause().hide();
-                this.currentlySelectedMonster.removeFX();
+                this.currentlySelectedMonster.removeFX(this);
                 this.applyPoison(() => {
                     console.log('showOpponentTurnMsg')
                     if (this.levelFinished) {
