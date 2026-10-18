@@ -45,21 +45,30 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
             for (let x = -radius; x <= radius; x++) {
                 if (x === 0 && y === 0) continue;
 
+
                 const newRow = row + y;
                 const newCol = col + x;
+
+
                 let isTargetMagicMonster = false;
 
                 if (
                     newRow >= 0 && newRow < array.length &&
                     newCol >= 0 && newCol < array[0].length
-                    && cloudsArray[newRow][newCol].alpha === 0
+                    && cloudsArray[newRow][newCol].alpha < 1
                 ) {
+
+                    console.log(`row ${newRow} col ${newCol} ressurected => ${array[newRow][newCol]?.justRessurected}`);
+
+
                     if (array[newRow][newCol].isEmpty === true) {
                         const direction = this.getDirection(row, newRow, col, newCol)
                         neighborCells.push({ row: newRow, col: newCol, direction });
                     } else if (
-                        (isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') ||
-                        (!isPlayerTurn && array[newRow][newCol].occupiedBy === 'player')
+                        (
+                            ((isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') || (!isPlayerTurn && array[newRow][newCol].occupiedBy === 'player'))
+                            && !array[newRow][newCol].justRessurected
+                        )
                     ) {
 
                         if (isPlayerTurn && array[newRow][newCol].occupiedBy === 'opponent') {
@@ -71,6 +80,7 @@ export class MovementArrowsContainer extends Phaser.GameObjects.Container {
                             } else {
                                 monster = this.scene.data.list.opponentMonsters.find((m: Monster) => m && m.unitData.row === newRow && m.unitData.col === newCol);
                             }
+                            console.log(monster)
                             if (monster.unitData.magic > 0) {
                                 isTargetMagicMonster = true;
                             }

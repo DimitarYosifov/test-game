@@ -1645,7 +1645,7 @@ export const level_config = [
             { type: 3, stars: 1 },
             { type: 5, stars: 1 },
             { type: 6, stars: 1 }
-
+            
         ],
         opponentSpells: { // SPELL POINT  10 + LEVEL = 11
             magicBall: {

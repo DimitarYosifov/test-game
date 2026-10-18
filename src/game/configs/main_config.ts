@@ -294,6 +294,7 @@ export const main_config = {
     // ADD SOME MORE LEVEL BACKGROUNDS
     // ADD 1 MORE MONSTERE - poison damage
     // add some kinda welcome screen
+    // MAKE ENEMY MONSTERS CHECK FOR SUITABLE BUFFS BEFORE MOVING AND AIM FOR THEM
 
     //  L A T E S T   B U G S:
     // sometimes adding buffs (parachutte stage) can be interupted by player's interaction, causing the game flow t break, needs a lot of testing
@@ -318,6 +319,16 @@ export const main_config = {
      * check correct spellsData from level_config for levels around world change - 35,36,37...
      * add opponentMonstersData for ALL LEVELS  inside level_config
      * 
+     */
+
+
+    /**
+     * LATEST N1 AND N5 SPECIALS CHANGES - THINGS TO  TEST
+    *  add better presentation of the resurrected monster
+     *  add effect to monster info section when monster is selected
+     *  when the new ressurected monster is of type "1" animation for increase move is played - SHOULD NOT! also enemy monster get +1 move(monster N5) when their monster dies !!!!!!!!!!! should not
+     * check what happens if a monster is killed by bomb - it should ressurect
+     *  check giant battles
      */
 
 }

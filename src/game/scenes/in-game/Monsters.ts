@@ -72,11 +72,18 @@ export class Monsters {
                     delete this.scene.data.list.gridPositions[data.row + 1][data.col].giantData;
                     delete this.scene.data.list.gridPositions[data.row + 1][data.col + 1].giantData;
                 }
-                if (isPlayer) {
-                    this.scene.data.list.playerMonsters[index] = null;
-                } else {
-                    this.scene.data.list.opponentMonsters[index] = null;
+
+                let monsterAtIndex = isPlayer ? this.scene.data.list.playerMonsters[index] : this.scene.data.list.opponentMonsters[index];
+                /**
+                 *  flag to indicated it is no longer the same monster as it was before
+                 *  currently used for monster N5 special skill
+                 *  this could potentially cause issues - to be fixed
+                 */
+                const hasBeenRessurected = monster.type !== monsterAtIndex.type;
+                if (!hasBeenRessurected) {
+                    isPlayer ? this.scene.data.list.playerMonsters[index] = null : this.scene.data.list.opponentMonsters[index] = null;
                 }
+
                 this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, [monster, data]);
             });
 

@@ -1,4 +1,4 @@
-import { addFullscreenFunctionality, GAME_OBJECT_DEPTHS, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
+import { addFullscreenFunctionality, GAME_OBJECT_DEPTHS, getAllMonsterTypes, getMonsterDataConfig, getRandomMonsterType, main_config } from '../configs/main_config';
 import { Monsters } from './in-game/Monsters';
 import { MovementArrowsContainer } from './in-game/MovementArrowsContainer';
 import { Monster } from './in-game/Monster';
@@ -37,7 +37,9 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'DROPPED_SPELL_POINT_COLLECTED' = 'dropped-spell-point-collected',
     'DROPPED_TOKEN_COLLECTED' = 'dropped-token-collected',
     'BUFF_BOMB_EXPLODE' = 'buff-bomb-explode',
-    'ROUND_END' = 'round-end'
+    'ROUND_END' = 'round-end',
+    'CHECK_PENDING_RESSURECTION' = 'check-pending-ressurection',
+    'PENDING_RESSURECTIONS_COMPLETE' = 'pending-ressurections-complete'
 }
 
 export enum BUFF_TYPES {
@@ -98,6 +100,7 @@ export class Game extends AbstractScene {
 
     opponentSpellsData: ISpellsData;
     playerSpellsData: ISpellsData;
+    pendingRessurections: Monster[] = [];
 
     constructor() {
         super('Game');
@@ -158,6 +161,7 @@ export class Game extends AbstractScene {
         this.directionSelectHandler();
         this.targetSelectHandler();
         this.buffBombExplodeHandler();
+        this.pendingRessurectionHandler();
         // this.checkEndTurnHandler(); // it calls  this.addInteraction // BEING CALLED AFTER INITIAL BUFFS HAVE LANDED
 
         LOCAL_STORAGE_MANAGER.remove('survivalLevelData');
@@ -857,6 +861,8 @@ export class Game extends AbstractScene {
     private checkEndTurnHandler(): void {
         this.events.on(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, (skipByUser: boolean = false) => {
 
+            console.log(this.pendingRessurections);
+
             if (this.levelFinished) {
                 return;
             }
@@ -892,7 +898,9 @@ export class Game extends AbstractScene {
                 }
             }
 
+            // if (!this.pendingRessurections.length) {
             this.checkNextTurn(skipByUser);
+            // }
         })
         this.addInteraction();
     }
@@ -1114,6 +1122,13 @@ export class Game extends AbstractScene {
                         target.setFrozen(1, () => { });
                     }
                 }
+                else if (+this.currentlySelectedMonster.type === 1) {
+                    // monster N1 special
+                    const usePoisonSkill = Phaser.Math.RND.between(1, 100) <= 20; // 20% chance to poison
+                    if (usePoisonSkill) {
+                        target.setPoisoned(2, 1, () => { });
+                    }
+                }
                 target!.takeDamege(damage, this.currentlySelectedMonster.unitData.magic > 0);
             });
 
@@ -1137,7 +1152,7 @@ export class Game extends AbstractScene {
 
     private buffBombExplodeHandler() {
         this.events.on(GAME_SCENE_SCENE_EVENTS.BUFF_BOMB_EXPLODE, (data: number[]) => {
-
+            // TODO - check if a bomb kills monster N5 - it shoold ressurect - CHECK IF IT WORKS
             const row = data[0];
             const col = data[1];
             if (this.data.list.gridPositions[row][col].buff?.buffContainer) {
@@ -1300,6 +1315,11 @@ export class Game extends AbstractScene {
                 this.updateSurvivalLevelRewardText();
             }
 
+            if (this.pendingRessurections.length) {
+                this.checkMapVisibility(false);
+                return;
+            }
+
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
                 // alert('player wins');
                 this.levelFinished = true;
@@ -1318,46 +1338,132 @@ export class Game extends AbstractScene {
         });
     }
 
+    private removeMonstersInvincibilty() {
+        for (let row = 0; row < main_config.gridSizeVertical; row++) {
+            for (let col = 0; col < main_config.gridSizeHorizontal; col++) {
+                this.data.list.gridPositions[row][col].justRessurected = false;
+            }
+        }
+    }
+
+    private applyPendingResurrections(onComplete?: Function) {
+
+        // return;
+        console.log(this.pendingRessurections);
+
+        if (!this.pendingRessurections.length) {
+            this.pendingRessurections = [];
+            if (onComplete) {
+                onComplete();
+            } else {
+                this.checkNextTurn(false);
+            }
+            return;
+        }
+
+        this.pendingRessurections.forEach((element, index) => {
+            const killedMonster = element;
+            const isLast = index === this.pendingRessurections.length - 1;
+            const isPLayer = killedMonster.isPlayerMonster;
+            const gridPosition = this.data.list.gridPositions[killedMonster.unitData.row][killedMonster.unitData.col];
+            gridPosition.isEmpty = false;
+            gridPosition.occupiedBy = isPLayer ? 'player' : 'opponent';
+
+
+            const randomMonsterType = Phaser.Math.RND.pick(getAllMonsterTypes().filter(x => x !== '5'));
+            let unitData = getMonsterDataConfig(+randomMonsterType, killedMonster.unitData.stars - 1);
+
+            let x = this.gridDimensions.cellSize * killedMonster.unitData.col + this.gridDimensions.cellSize / 2;
+            let y = this.gridDimensions.cellSize * killedMonster.unitData.row + this.gridDimensions.cellSize / 2;
+            let width = this.gridDimensions.cellSize - main_config.lineWidth;
+            let height = this.gridDimensions.cellSize - main_config.lineWidth;
+            unitData.health = 1;
+            unitData.row = killedMonster.unitData.row;
+            unitData.col = killedMonster.unitData.col;
+            const ressurectedMonster = new Monster(this, x, y, width, height, unitData, killedMonster.index, isPLayer);
+            this.data.list.gridPositions[killedMonster.unitData.row][killedMonster.unitData.col].justRessurected = true;
+            console.log(`======= just ressurected at: row ${killedMonster.unitData.row} col ${killedMonster.unitData.col}`)
+
+            // ressurectedMonster.justRessurected = true;
+            // ressurectedMonster.pendingAction = false;
+            ressurectedMonster.unitData.movesLeft = 0;
+
+            ressurectedMonster.on(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, (data: IUnitData) => {
+                this.data.list.gridPositions[data.row][data.col].isEmpty = true;
+                delete this.data.list.gridPositions[data.row][data.col].occupiedBy;
+                delete this.data.list.gridPositions[data.row][data.col].giantData;
+                if (isPLayer) {
+                    this.data.list.playerMonsters[killedMonster.index] = null;
+                } else {
+                    this.data.list.opponentMonsters[killedMonster.index] = null;
+                }
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, [ressurectedMonster, data]);
+            });
+
+            this.mainGridContainer.add(ressurectedMonster);
+
+            if (isPLayer) {
+                this.data.list.playerMonsters[killedMonster.index] = ressurectedMonster;
+            } else {
+                this.data.list.opponentMonsters[killedMonster.index] = ressurectedMonster;
+            }
+
+            // PROCEED
+            // TODO -play new  animation here immediately... and on its completion  proceed
+            if (isLast) {
+                this.checkMapVisibility(true);
+                this.time.delayedCall(1000, () => {
+                    this.pendingRessurections = [];
+                    this.events.emit(GAME_SCENE_SCENE_EVENTS.PENDING_RESSURECTIONS_COMPLETE);
+                    if (onComplete) {
+                        onComplete();
+                    } else {
+                        this.checkNextTurn(false);
+                    }
+                })
+            }
+        });
+    }
+
+    // monster 5 special skill 
+    pendingRessurectionHandler() {
+        this.events.on(GAME_SCENE_SCENE_EVENTS.CHECK_PENDING_RESSURECTION, (killedMonster: (Monster)) => {
+            if (killedMonster.type === '5') {
+                console.log(killedMonster);
+                this.pendingRessurections.push(killedMonster);
+            }
+        })
+    }
+
     private checkSpecificMonsterSkillOnMonsterDie(killedMonster: Monster) {
 
         /**below may not apply if a monster died from bomb-buff dmg - TODO - check this scenario */
 
-        // monster 1 special skill 
-        if (+killedMonster.type === 5) {
-            const monsters = killedMonster.isPlayerMonster ? this.data.list.opponentMonsters : this.data.list.playerMonsters;
-            monsters
-                .filter((m: Monster) => m && +m.type === 1 && m.unitData.moves < main_config.maxMonsterMovesPerRound && m.unitData.movesLeft < main_config.maxMonsterMovesPerRound)
-                .forEach((fm: Monster) => {
-                    fm.addMove();
-                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
-                });
-        }
 
         // monster 5 special skill 
-        if (+killedMonster.type === 1) {
-            const monsters = killedMonster.isPlayerMonster ? this.data.list.opponentMonsters : this.data.list.playerMonsters;
-            monsters
-                .filter((m: Monster) => m && +m.type === 5 && m.unitData.moves < main_config.maxMonsterMovesPerRound && m.unitData.movesLeft < main_config.maxMonsterMovesPerRound)
-                .forEach((fm: Monster) => {
-                    fm.addMove();
-                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
-                });
-        }
+        // if (+killedMonster.type === 5) {
+        //     const newMonsterType = getAllMonsterTypes(false).filter(x => x !== '5');
+        //     console.log(newMonsterType);
+        //     console.log(newMonsterType);
+        //     this.pendingRessurections.push(killedMonster);
+        // }
 
         // monster 6 special skill 
-        if (+this.currentlySelectedMonster?.type === 6 && this.currentlySelectedMonster?.unitData.movesLeft > 0) {
+        if (+ this.currentlySelectedMonster?.type === 6 && this.currentlySelectedMonster?.unitData.movesLeft > 0) {
             const additionalRangedDamage = Math.ceil(this.currentlySelectedMonster.unitData.ranged * 0.5);
             this.currentlySelectedMonster.additionalRangedDamage = additionalRangedDamage;
             this.currentlySelectedMonster.updateRangedDamageText();
         }
 
-        // monster 9 special skill 
-        const monsters = this.data.list.isPlayerTurn ? this.data.list.playerMonsters : this.data.list.opponentMonsters;
+        // monster 9 special skill  - Not applicable if killed by poison
+        const monsters = killedMonster.isPlayerMonster ? this.data.list.opponentMonsters : this.data.list.playerMonsters;
         monsters
             .filter((m: Monster) => m && +m.type === 9 && m.unitData.moves < main_config.maxMonsterMovesPerRound && m.unitData.movesLeft < main_config.maxMonsterMovesPerRound)
             .forEach((fm: Monster) => {
-                fm.addMove(true);
-                fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
+                if (!killedMonster.killedByPoison) {
+                    fm.addMove(true);
+                    fm.addBUffCollected(fm.unitData.row, fm.unitData.col, 1, BUFF_TYPES.GREEN_DOT);
+                }
             });
     }
 
@@ -2084,13 +2190,8 @@ export class Game extends AbstractScene {
         );
     }
 
-    private checkNextTurn(skipByUser: boolean, forceEndTurn: boolean = false): void {
-        this.updateAdditionalMagicDamage();
-        let turnEnd = false;
-        if (forceEndTurn) {
-            // end turn immediatelly
-            turnEnd = true;
-        } else if (this.data.list.isPlayerTurn) {
+    private checkRoundEnded(): boolean {
+        if (this.data.list.isPlayerTurn) {
             const allPlayerMonstersFrozen = this.data.list.playerMonsters
                 .filter((m: Monster | null) => m !== null)
                 .every((fm: Monster) => fm.frozenForDuration > 0);
@@ -2099,14 +2200,30 @@ export class Game extends AbstractScene {
                  * all player monsters are frozen. do not end turn now, so player 
                  * can use spells and then end turn manually
                  */
-                turnEnd = false;
+                return false;
                 this.endTurnButton.setInteractive();
             } else {
-                turnEnd = this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
+                return this.data.list.playerMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
             }
+        } else {
+            return this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
+        }
+    }
+
+    private checkNextTurn(skipByUser: boolean, forceEndTurn: boolean = false): void {
+        this.updateAdditionalMagicDamage();
+        let turnEnd = false;
+        if (forceEndTurn) {
+            // end turn immediatelly
+            turnEnd = true;
         }
         else {
-            turnEnd = this.data.list.opponentMonsters.filter((m: Monster | null) => m !== null && m.pendingAction === true).length === 0;
+            turnEnd = this.checkRoundEnded();
+        }
+
+        if (this.pendingRessurections.length) {
+            this.applyPendingResurrections();
+            return;
         }
 
         if (turnEnd) {
@@ -2127,17 +2244,21 @@ export class Game extends AbstractScene {
             this.pauseResumeInteraction(false);
             // this.updatePlayerSpellButtonsInteraction();
             this.updateFrozenMonsters();
+            this.removeMonstersInvincibilty();
 
             if (this.data.list.isPlayerTurn) {
                 // player turn starts
                 this.updateSpellLevelsOnTurnEnd();
+                this.updatePlayerSpellButtonsInteraction(true);
                 this.applyPoison(() => {
-                    if (this.checkShouldAddBuffs()) {
-                        console.log('checkShouldAddBuffs')
-                        this.addBuffs(1);
-                    } else {
-                        this.addInteraction();
-                    }
+                    this.applyPendingResurrections(() => {
+                        if (this.checkShouldAddBuffs()) {
+                            console.log('checkShouldAddBuffs')
+                            this.addBuffs(1);
+                        } else {
+                            this.addInteraction();
+                        }
+                    });
                 })
             } else {
                 // opponent turn starts 
@@ -2153,13 +2274,16 @@ export class Game extends AbstractScene {
                 this.movementArrowsContainer.removeArrows();
                 this.currentlySelectedMonsterAnimation!.pause().hide();
                 this.currentlySelectedMonster.removeFX(this);
+                this.updatePlayerSpellButtonsInteraction(true);
                 this.applyPoison(() => {
-                    console.log('showOpponentTurnMsg')
-                    if (this.levelFinished) {
-                        return;
-                    }
-                    console.log('showOpponentTurnMsg2')
-                    this.showOpponentTurnMsg();
+                    this.applyPendingResurrections(() => {
+                        console.log('showOpponentTurnMsg')
+                        if (this.levelFinished) {
+                            return;
+                        }
+                        console.log('showOpponentTurnMsg2')
+                        this.showOpponentTurnMsg();
+                    })
                 })
             }
         } else if (this.data.list.isPlayerTurn) {
@@ -2432,8 +2556,8 @@ export class Game extends AbstractScene {
         }
     }
 
-    private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = [], isGiant: boolean = false): { row: number, col: number, occupiedBy: string }[] {
-        const visibleCells: { row: number, col: number, occupiedBy: string }[] = [];
+    private getVisibleCells(row: number, col: number, radius: number, allVisibleCellsToOpponent: boolean[][] = [], isGiant: boolean = false): { row: number, col: number, occupiedBy: string, justRessurected: boolean }[] {
+        const visibleCells: { row: number, col: number, occupiedBy: string, justRessurected: boolean }[] = [];
         const array = this.data.list.gridPositions;
 
         const getCells = (r: number, c: number) => {
@@ -2451,7 +2575,8 @@ export class Game extends AbstractScene {
                             continue;// enemy unreachable by current monster
                         }
                         const occupiedBy = array[newRow][newCol].occupiedBy;
-                        visibleCells.push({ row: newRow, col: newCol, occupiedBy });
+                        const justRessurected = array[newRow][newCol].justRessurected;
+                        visibleCells.push({ row: newRow, col: newCol, occupiedBy, justRessurected });
 
 
                         // reveal the whole giant monster
@@ -2459,10 +2584,10 @@ export class Game extends AbstractScene {
                         if (giantData) {
                             const giantMainRow = giantData.row;
                             const giantMainCol = giantData.col;
-                            visibleCells.push({ row: giantMainRow, col: giantMainCol, occupiedBy });
-                            visibleCells.push({ row: giantMainRow, col: giantMainCol + 1, occupiedBy });
-                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol, occupiedBy });
-                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol + 1, occupiedBy });
+                            visibleCells.push({ row: giantMainRow, col: giantMainCol, occupiedBy, justRessurected });
+                            visibleCells.push({ row: giantMainRow, col: giantMainCol + 1, occupiedBy, justRessurected });
+                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol, occupiedBy, justRessurected });
+                            visibleCells.push({ row: giantMainRow + 1, col: giantMainCol + 1, occupiedBy, justRessurected });
 
                         }
                     }
@@ -2542,7 +2667,9 @@ export class Game extends AbstractScene {
         );
 
         // all player monsters in range by current opponent's monster
-        attackableTargetsToCurrentOpponentMonster = attackableTargetsToCurrentOpponentMonster.filter(x => x.occupiedBy === 'player');
+        attackableTargetsToCurrentOpponentMonster = attackableTargetsToCurrentOpponentMonster.filter(
+            x => x.occupiedBy === 'player' && !x.justRessurected
+        );
 
         if (attackableTargetsToCurrentOpponentMonster.length > 0) {
             //ATTACK
@@ -2961,9 +3088,27 @@ export class Game extends AbstractScene {
             this.opponentSpellsData.heal.cooldownProgress = 0;
             this.newHealSpell(this.opponentSpellsData.heal.cooldown);
         } else {
-            console.log('checkOpponentForSpellCast - out');
-            this.addInteraction();
-            this.getRandomOpponentMonster();
+            if (this.pendingRessurections.length) {
+
+
+                this.applyPendingResurrections();
+                //
+                this.events.once(GAME_SCENE_SCENE_EVENTS.PENDING_RESSURECTIONS_COMPLETE, () => {
+                    this.addInteraction();
+
+                    // this.getRandomOpponentMonster();
+                })
+            } else {
+                console.log('checkOpponentForSpellCast - out');
+                // if (!this.pendingRessurections.length) {
+                console.log('checkOpponentForSpellCast - out2');
+                this.addInteraction();
+                this.getRandomOpponentMonster();
+                console.log(this.pendingRessurections);
+            }
+
+
+            // }
         }
     }
 
@@ -3406,7 +3551,12 @@ export class Game extends AbstractScene {
         while (allPoisonedMonsters.length) {
             const monster = allPoisonedMonsters.shift();
             let emitCheckEndTurnOnComplete = false;
-            monster.takePoisonDamege(emitCheckEndTurnOnComplete)
+            monster.takePoisonDamege(emitCheckEndTurnOnComplete);
+            // if (monster.isPlayerMonster) {
+            //     this.data.list.playerMonsters[monster.index] = null;
+            // } else {
+            //     this.data.list.opponentMonsters[monster.index] = null;
+            // }
         }
     }
 

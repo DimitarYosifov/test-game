@@ -12,15 +12,16 @@ const VERTICAL_DISTANCE_BETWEEN_MONSTERS = 20;
 const MAX_TOTAL_WIDTH = 1640;
 const MONSTER_TYPE_DESCRIPTION = {
     // TODO - replace 'monster N4' with image or monster name...
-    "1": "+1 permanent move when enemy 'monster N5' dies. immune to poison spell",
+    "1": "20% chance to poison an enemy when attacking (Poison 1, duration 2). Immune to Poison Spell.",
+    // "1": "+1 permanent move when enemy 'monster N5' dies. immune to poison spell",
     "2": "+1 helath if this monster attacks magic monster. immune to magic ball spell",
-    "3": "+1 attack for every adjusting enemy magic monster. immune to magic ball spell",
-    "5": "+1 permanent move when enemy 'monster N1' dies",
-    "6": "if this monster kills an enemy +50% attack(rounded up) for the next turn in current round",
-    "7": "20% chance to freeze enemy monster. immune to freeze spell",
+    "3": "+1 attack for every adjacent enemy magic monster. immune to magic ball spell",
+    // "5": "+1 permanent move when enemy 'monster N1' dies",
+    "5": "On death, transforms into a random same-tier creature with 1 HP. Can only be targeted by spells this round",
+    "6": "if this monster kills an enemy +50% attack(rounded up) for its next turn",
+    "7": "20% chance to freeze an enemy for one turn when attacking. immune to freeze spell",
     "8": "+1 attack if health is below 3",
-    // "8": "+50% attack if health goes below 35%",
-    "9": "+1 move(current round) when enemy monster dies",
+    "9": "+1 move(current round) when enemy monster dies. Not applicable if killed by poison spell",
     "11": "N/A",
     "12": "N/A",
     "13": "N/A"
@@ -47,7 +48,7 @@ export class MonstersInfo extends AbstractScene {
 
     create() {
         super.create();
-      
+
         this.add.image(0, 0, 'info-bg').setOrigin(0);
 
         this.createBackButton();

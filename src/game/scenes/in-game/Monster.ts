@@ -48,6 +48,8 @@ export class Monster extends Phaser.GameObjects.Container {
     additionalRangedDamage: number = 0;
     additionaMelee: number = 0;
     initialMelee: number = 0;
+    killedByPoison: boolean;
+    // justRessurected: boolean = false;
 
     constructor(scene: Scene, x: number, y: number, displayWidth: number, displayHeight: number, unit: IUnitData, index: number, isPlayerMonster: boolean) {
         super(scene, x, y);
@@ -289,6 +291,11 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     setInteraction(interactive: boolean, skipByUser: boolean = false): void {
+
+        if (this.unitData.health <= 0) {
+            return; // dirty hack to prevent game crash
+        }
+
         // skipByUser is false for the currentlySelectedMonster when skipped
         interactive && this.frozenForDuration === 0 ? this.bg.setInteractive() : this.bg.disableInteractive();
         if (interactive && !skipByUser) {
@@ -715,7 +722,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
     takePoisonDamege(emitCheckEndTurnOnComplete: boolean) {
 
-        this.takeDamege(this.poisonedForDamage, true, true, emitCheckEndTurnOnComplete);
+        this.takeDamege(this.poisonedForDamage, true, true, emitCheckEndTurnOnComplete, 0, false, true);
         this.poisonedForDuration--;
         this.poisoned_turns_left_text.setText(`${this.poisonedForDuration}`);
         if (this.poisonedForDuration === 0) {
@@ -724,7 +731,7 @@ export class Monster extends Phaser.GameObjects.Container {
         }
     }
 
-    takeDamege(damage: number, isMagicAttack: boolean, ignoreArmor: boolean = false, emitCheckEndTurnOnComplete: boolean = true, delayAnimation: number = 0, continueIfDead: boolean = false): boolean {
+    takeDamege(damage: number, isMagicAttack: boolean, ignoreArmor: boolean = false, emitCheckEndTurnOnComplete: boolean = true, delayAnimation: number = 0, continueIfDead: boolean = false, isPoisonDamage: boolean = false): boolean {
 
         let alreadyDead = this.unitData.health === 0;
         if (this.unitData.health === 0 && !continueIfDead) {
@@ -774,6 +781,14 @@ export class Monster extends Phaser.GameObjects.Container {
             });
         lostHealth.setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.monsterLostHealth).setAlpha(0);
         // this.add(lostHealth);
+
+        const willDie = healthLeft === 0 && !alreadyDead;
+        this.killedByPoison = willDie && isPoisonDamage;
+
+        if (willDie) {
+            this.scene.data.list.gridPositions[this.unitData.row][this.unitData.col].isEmpty = true; //????????????????????????????????? may be after the tween below ???
+            this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_PENDING_RESSURECTION, this);
+        }
         this.scene.tweens.add({
             targets: lostHealth,
             // alpha: { value: 0, delay: 2750 },
@@ -784,7 +799,7 @@ export class Monster extends Phaser.GameObjects.Container {
                 lostHealth.alpha = 1;
             },
             onComplete: () => {
-                if (healthLeft === 0 && !alreadyDead) {
+                if (willDie) {
                     this.die(emitCheckEndTurnOnComplete);
                 } else if (emitCheckEndTurnOnComplete) {
                     this.scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
@@ -809,6 +824,7 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     die(emitCheckEndTurnOnComplete: boolean = true) {
+
         let waitForPackDropped = false;
         let waitForGemDropped = false;
         let waitForKeyDropped = false;
@@ -817,7 +833,17 @@ export class Monster extends Phaser.GameObjects.Container {
         if (!this.isPlayerMonster) {
             // wait to see if there will be item drop before emitting monster_dead
             waitForPackDropped = this.checkFreePackDrop();
+
+
+
+            //TEST - uncomment when testing done !!!!!!!!
             waitForGemDropped = waitForPackDropped ? false : this.checkGemDrop();
+
+            // TEST - DELETE WHE TESTING DONE!!!!!
+            // this.checkGemDrop();
+            // waitForGemDropped = true;
+
+
             waitForKeyDropped = waitForPackDropped || waitForGemDropped ? false : this.checkKeyDrop();
             waitForTokenDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped ? false : this.checkTokenDrop();
             waitForSpellPointDropped = waitForPackDropped || waitForGemDropped || waitForKeyDropped || waitForTokenDropped ? false : this.checkSpellPointDrop();
@@ -825,6 +851,7 @@ export class Monster extends Phaser.GameObjects.Container {
             this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
         }
         const scene = this.scene;
+        if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData); //????? may be not here, but on each DROPPED_...._COLLECTED event
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -834,8 +861,8 @@ export class Monster extends Phaser.GameObjects.Container {
                 if (waitForPackDropped) {
                     // SOMETIMES THERES A BUG HERE - this.scene is undefined !!!!
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_PACK_COLLECTED, () => {
+                        // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                         if (emitCheckEndTurnOnComplete) {
-                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -843,8 +870,8 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
                 else if (waitForGemDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_GEM_COLLECTED, () => {
+                        // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                         if (emitCheckEndTurnOnComplete) {
-                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -852,8 +879,8 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
                 else if (waitForKeyDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_KEY_COLLECTED, () => {
+                        // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                         if (emitCheckEndTurnOnComplete) {
-                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -861,8 +888,8 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
                 else if (waitForTokenDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_TOKEN_COLLECTED, () => {
+                        // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                         if (emitCheckEndTurnOnComplete) {
-                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
@@ -870,15 +897,15 @@ export class Monster extends Phaser.GameObjects.Container {
                 }
                 else if (waitForSpellPointDropped) {
                     scene.events.once(GAME_SCENE_SCENE_EVENTS.DROPPED_SPELL_POINT_COLLECTED, () => {
+                        // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                         if (emitCheckEndTurnOnComplete) {
-                            if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                             scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                         }
                         this.destroy(true);
                     })
                 }
                 else {
-                    if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
+                    // if (!this.isPlayerMonster) this.emit(GAME_SCENE_SCENE_EVENTS.MONSTER_DIED, this.unitData);
                     if (emitCheckEndTurnOnComplete) {
                         scene.events.emit(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN);
                     }
@@ -937,7 +964,11 @@ export class Monster extends Phaser.GameObjects.Container {
     }
 
     checkGemDrop() {
+      
+        //todo - TEST uncomment when testing readyq 
         const odds = main_config.chanceToDropGem;
+        // const odds = 1 //main_config.chanceToDropGem; // TEST
+
         const randomNumber = Phaser.Math.RND.between(1, 1000);
         if (randomNumber >= odds) {
 
@@ -1243,6 +1274,9 @@ export class Monster extends Phaser.GameObjects.Container {
 
     resetMoves(): void {
         console.log('reset moves');
+        if (this.unitData.health <= 0) {
+            return; // dirty hack to prevent game crash
+        }
         this.movesLeftContainer.list.length = this.unitData.moves > 4 ? 4 : this.unitData.moves;
         this.movesLeftContainer2.list.length = this.unitData.moves - 4 > 0 ? this.unitData.moves - 4 : 0;
 
@@ -1456,7 +1490,7 @@ export class Monster extends Phaser.GameObjects.Container {
         immuneText.setOrigin(0.5).setDepth(GAME_OBJECT_DEPTHS.monsterBuffQuantityText);
         this.scene.tweens.add({
             targets: [immuneText],
-            y: y - 75,
+            y: y + 75,
             duration: 1500,
             onComplete: () => {
                 immuneText.destroy(true);
@@ -1485,8 +1519,10 @@ export class Monster extends Phaser.GameObjects.Container {
 
     removeFX(scene: Phaser.Scene) {
         scene.tweens.killTweensOf(this);
-        if (this.bg) {
+        if (this.bg && this.bg.preFX) {
             this.bg.preFX.clear();
+        }
+        if (this.bg && this.bg.postFX) {
             this.bg.postFX.clear();
         }
     }
