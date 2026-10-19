@@ -11,13 +11,12 @@ const HORIZONTAL_DISTANCE_BETWEEN_MONSTERS = 40;
 const VERTICAL_DISTANCE_BETWEEN_MONSTERS = 20;
 const MAX_TOTAL_WIDTH = 1640;
 const MONSTER_TYPE_DESCRIPTION = {
-    // TODO - replace 'monster N4' with image or monster name...
     "1": "20% chance to poison an enemy when attacking (Poison 1, duration 2). Immune to Poison Spell.",
     // "1": "+1 permanent move when enemy 'monster N5' dies. immune to poison spell",
     "2": "+1 helath if this monster attacks magic monster. immune to magic ball spell",
     "3": "+1 attack for every adjacent enemy magic monster. immune to magic ball spell",
     // "5": "+1 permanent move when enemy 'monster N1' dies",
-    "5": "On death, transforms into a random same-tier creature with 1 HP. Can only be targeted by spells this round",
+    "5": "On death, transforms into a random same-tier creature with 1 HP. Can only be targeted by spells or bombs this round", // bombs can kill - proven
     "6": "if this monster kills an enemy +50% attack(rounded up) for its next turn",
     "7": "20% chance to freeze an enemy for one turn when attacking. immune to freeze spell",
     "8": "+1 attack if health is below 3",

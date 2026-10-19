@@ -17,7 +17,7 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 1,// clouds visibility
+    "fullCloudsOpacity": 1,// clouds visibility 
     "rangedUnitsRange": 2,
     "maxMonsterMovesPerRound": 8,
     "playerStartingCoins": 50,
@@ -323,13 +323,22 @@ export const main_config = {
 
 
     /**
-     * LATEST N1 AND N5 SPECIALS CHANGES - THINGS TO  TEST
+     * LATEST bugs
     *  add better presentation of the resurrected monster
      *  add effect to monster info section when monster is selected
-     *  when the new ressurected monster is of type "1" animation for increase move is played - SHOULD NOT! also enemy monster get +1 move(monster N5) when their monster dies !!!!!!!!!!! should not
      * check what happens if a monster is killed by bomb - it should ressurect
      *  check giant battles
-     */
+    *  IF ANY BUFF DROP ON THE LAST ROUND - OUTRO POPUP DOES NOTWAIT FOR BUFF PRESENTATION
+    *  WHEN DIAMOND BUFF IS BEING COLLECTED, OPPONENT MOVES SHOULD WAIT  FOR PRESENTATION TO FINISH !!!!
+    *  SOMEHOW SHOW DURATION AND DAMAGE FOR A POISONED MONSTER, ALSO CHECK IF MONSTER POISONED + FROZEN
+    *  3 MAGIC SPELL ON A N5(GOING TO DIE FROM THE MAGIC) DISPLAYS 0-DMG VISUALLY (PROBABLY CAUSE IT DIED FROM THE FIRST SHOT) - CHECK!!!!
+    *  WHEN GIANT TAKES BUFF +1 MOVES  - NOTHING HAPPENS ??????
+    *  USING 2 SPELLS  ONE AFTER ANOTHER WITH JUST 1  MONSTER ALIVE (WHICH IS FROZEN)LEAVES UI LOCKED AND GAME STALLS(NO ERRORS)
+    *  DOES POISON(N1 SPECIAL) WORK ON GIANTS?
+    *  MAKE TEXT "IMMUNE" DIFF COLOR DEPENDING ON THE SPELL
+    *  M3 NOT UPDATING ATTACK WHILE NEXT TO GIANT MAGIC MONSTER (DAMAGE FROM ARROW CONTAINER SEEMS ACCURATE)
+    *  WHEN  A MONSTER IS RESSURECTED,  TEXT "ENEMIES LEFT" IS NOT UPDATED PROPERLY - IT SHOULD NOT DECREASE
+    */
 
 }
 
