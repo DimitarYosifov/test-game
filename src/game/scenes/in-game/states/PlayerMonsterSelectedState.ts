@@ -1,8 +1,9 @@
 import { Game, GAME_SCENE_SCENE_EVENTS } from '../../Game';
 import { BaseState } from './BaseState';
-import { PlayerMovingState } from './PlayerMovingState';
-import { PlayerAttackingState } from './PlayerAttackingState';
+import { MonsterMoveState } from './MonsterMoveState';
+import { MonsterAttackState } from './MonsterAttackState';
 import { PlayerSpellCastingState } from './PlayerSpellCastingState';
+import { SpellKey } from './spellTable';
 import { PlayerSkipMoveState } from './PlayerSkipMoveState';
 import { PlayerEndTurnState } from './PlayerEndTurnState';
 import { PlayerGiveUpState } from './PlayerGiveUpState';
@@ -18,6 +19,7 @@ export class PlayerMonsterSelectedState extends BaseState {
     private onEndTurnPressed: () => void;
     private onSkipPressed: () => void;
     private onGiveUpPressed: () => void;
+    private onSpellPressed: (spellKey: SpellKey) => void;
 
     // one listener per selectable monster so we can remove them individually
     private otherMonsterListeners: Map<Monster, () => void> = new Map();
@@ -76,14 +78,14 @@ export class PlayerMonsterSelectedState extends BaseState {
         // ── DIRECTION arrow clicked → PLAYER_MOVING ──
         this.onDirectionSelected = (data: number[]) => {
             if (!this.active) return;
-            context.stateMachine.setState(new PlayerMovingState(data[0], data[1]));
+            context.stateMachine.setState(new MonsterMoveState(this.monster, data[0], data[1]));
         };
         context.events.on(GAME_SCENE_SCENE_EVENTS.DIRECTION_SELECTED, this.onDirectionSelected);
 
         // ── ATTACK arrow clicked → PLAYER_ATTACKING ──
         this.onTargetSelected = (data: number[]) => {
             if (!this.active) return;
-            context.stateMachine.setState(new PlayerAttackingState(data[0], data[1], data[2] as unknown as boolean));
+            context.stateMachine.setState(new MonsterAttackState(this.monster, data[0], data[1]));
         };
         context.events.on(GAME_SCENE_SCENE_EVENTS.TARGET_SELECTED, this.onTargetSelected);
 
@@ -108,8 +110,12 @@ export class PlayerMonsterSelectedState extends BaseState {
         };
         context.events.on(GAME_SCENE_SCENE_EVENTS.GIVE_UP_PRESSED, this.onGiveUpPressed);
 
-        // ── Spell buttons → PLAYER_SPELL_CASTING ──
-        this.wireSpellButtons(context);
+        // ── SPELL button pressed → PLAYER_SPELL_CASTING ──
+        this.onSpellPressed = (spellKey: SpellKey) => {
+            if (!this.active) return;
+            context.stateMachine.setState(new PlayerSpellCastingState(spellKey, this.monster));
+        };
+        context.events.on(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, this.onSpellPressed);
     }
 
     exit(context: Game): void {
@@ -122,6 +128,7 @@ export class PlayerMonsterSelectedState extends BaseState {
         context.events.off(GAME_SCENE_SCENE_EVENTS.END_TURN_PRESSED, this.onEndTurnPressed);
         context.events.off(GAME_SCENE_SCENE_EVENTS.SKIP_PRESSED, this.onSkipPressed);
         context.events.off(GAME_SCENE_SCENE_EVENTS.GIVE_UP_PRESSED, this.onGiveUpPressed);
+        context.events.off(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, this.onSpellPressed);
 
         // remove per-monster re-select listeners and disable interactivity on them
         this.otherMonsterListeners.forEach((listener, monster) => {
@@ -161,21 +168,4 @@ export class PlayerMonsterSelectedState extends BaseState {
         });
     }
 
-    private wireSpellButtons(context: Game): void {
-        const spellButtons = [
-            context.playerMagicBallButton,
-            context.playerPoisonButton,
-            context.playerRainOfArrowsButton,
-            context.playerFreezeButton,
-            context.playerHealButton,
-        ];
-
-        spellButtons.forEach(btn => {
-            if (!btn) return;
-            btn.once('pointerdown', () => {
-                if (!this.active) return;
-                context.stateMachine.setState(new PlayerSpellCastingState(btn));
-            });
-        });
-    }
 }

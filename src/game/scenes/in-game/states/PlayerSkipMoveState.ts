@@ -1,65 +1,59 @@
-import { Game, GAME_SCENE_SCENE_EVENTS } from '../../Game';
+import { Game } from '../../Game';
 import { BaseState } from './BaseState';
 import { PlayerMonsterSelectedState } from './PlayerMonsterSelectedState';
 import { ApplyPoisonState } from './ApplyPoisonState';
+import { finishPlayerTurn } from './PlayerEndTurnState';
 import { Monster } from '../Monster';
 
+/**
+ * Entered from PlayerMonsterSelectedState when the skip button (or SPACE) is pressed.
+ * Spends one move of the selected monster without acting, then exits to:
+ *  - PlayerMonsterSelectedState (same monster)   -> it still has moves left
+ *  - PlayerMonsterSelectedState (another monster) -> another player monster has moves
+ *  - ApplyPoisonState                             -> no player monster has moves
+ */
 export class PlayerSkipMoveState extends BaseState {
-
-    private onSkipComplete: () => void;
 
     enter(context: Game): void {
         this.active = true;
         console.log('[PlayerSkipMoveState] enter');
 
-        const monster = context.currentlySelectedMonster;
-        if (!monster) return;
-
         context.skipButton.disableInteractive();
-        context.movementArrowsContainer.removeArrows();
 
-        // dim the monster to show it used its move
-        monster.setAlpha(0.7);
+        const monster: Monster | null = context.currentlySelectedMonster;
 
-        // skipMove: sets pendingAction=false, decreaseMoves(), emits CHECK_END_TURN
-        // we listen once for CHECK_END_TURN to decide next state
-        this.onSkipComplete = () => {
-            if (!this.active) return;
-            this.onAfterSkip(context, monster);
-        };
-        context.events.once(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, this.onSkipComplete);
+        if (monster) {
+            // skipping costs one move (decreaseMoves also clears the N6 ranged bonus)
+            monster.decreaseMoves();
 
-        monster.skipMove(true);
-    }
+            // exit 1: the same monster has more moves
+            if (monster.unitData.movesLeft > 0 && monster.frozenForDuration === 0) {
+                context.stateMachine.setState(new PlayerMonsterSelectedState(monster));
+                return;
+            }
 
-    exit(context: Game): void {
-        this.active = false;
-        console.log('[PlayerSkipMoveState] exit');
-        context.events.off(GAME_SCENE_SCENE_EVENTS.CHECK_END_TURN, this.onSkipComplete);
-    }
-
-    // ── private ──────────────────────────────────────────────────────────────
-
-    private onAfterSkip(context: Game, monster: Monster): void {
-        if (!this.active) return;
-
-        // case 1: same monster still has moves left
-        if (monster.unitData.movesLeft > 0) {
-            monster.setAlpha(1);
-            context.stateMachine.setState(new PlayerMonsterSelectedState(monster));
-            return;
+            // monster is done for this turn - dim it and make it non-selectable
+            monster.pendingAction = false;
+            monster.setInteraction(false);
+            monster.setAlpha(0.7);
         }
 
-        // case 2: another player monster has moves
-        const nextMonster: Monster = context.data.list.playerMonsters.find(
-            (m: Monster) => m && m !== monster && m.pendingAction && m.frozenForDuration === 0
+        // exit 2: another player monster still has moves
+        const nextMonster: Monster | undefined = context.data.list.playerMonsters.find(
+            (m: Monster | null) => m && m !== monster && m.pendingAction && m.frozenForDuration === 0
         );
         if (nextMonster) {
             context.stateMachine.setState(new PlayerMonsterSelectedState(nextMonster));
             return;
         }
 
-        // case 3: all player monsters have no moves
+        // exit 3: nobody has moves left - the player's turn is over
+        finishPlayerTurn(context);
         context.stateMachine.setState(new ApplyPoisonState());
+    }
+
+    exit(_context: Game): void {
+        this.active = false;
+        console.log('[PlayerSkipMoveState] exit');
     }
 }

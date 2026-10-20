@@ -17,6 +17,7 @@ import { FreezeSpell } from './in-game/spells/FreezeSpell';
 import { HealSpell } from './in-game/spells/HealSpell';
 import { GameStateMachine } from './in-game/states/GameStateMachine';
 import { LevelIntroState } from './in-game/states/LevelIntroState';
+import { LevelOutroPopupState } from './in-game/states/LevelOutroPopupState';
 
 const SPELL_BUTTONS_POPUP_DESCRIPTION = {
     magicBall: "deals {damage} magic damage to {targets} random targets. cooldown - {cooldown}",
@@ -44,7 +45,8 @@ export enum GAME_SCENE_SCENE_EVENTS {
     'PENDING_RESSURECTIONS_COMPLETE' = 'pending-ressurections-complete',
     'END_TURN_PRESSED' = 'end-turn-pressed',
     'SKIP_PRESSED' = 'skip-pressed',
-    'GIVE_UP_PRESSED' = 'give-up-pressed'
+    'GIVE_UP_PRESSED' = 'give-up-pressed',
+    'SPELL_PRESSED' = 'spell-pressed' // payload: the spell key (magicBall, poison, rainOfArrows, freeze, heal)
 }
 
 export enum BUFF_TYPES {
@@ -605,12 +607,14 @@ export class Game extends AbstractScene {
                 this.checkMapVisibility(false);
                 return;
             }
+            // several monsters can die in the same moment (a bomb, a spell) - the level ends only once
+            if (this.levelFinished) {
+                return;
+            }
             if (this.data.list.opponentMonsters.every((m: Monster) => m === null)) {
-                this.levelFinished = true;
-                this.createLevelOutroPopup(true);
+                this.stateMachine.setState(new LevelOutroPopupState(true));
             } else if (this.data.list.playerMonsters.every((m: Monster) => m === null)) {
-                this.levelFinished = true;
-                this.createLevelOutroPopup();
+                this.stateMachine.setState(new LevelOutroPopupState(false));
             } else {
                 this.checkMapVisibility(false);
             }
@@ -625,7 +629,7 @@ export class Game extends AbstractScene {
         });
     }
 
-    private removeMonstersInvincibilty(): void {
+    removeMonstersInvincibilty(): void {
         for (let row = 0; row < main_config.gridSizeVertical; row++) {
             for (let col = 0; col < main_config.gridSizeHorizontal; col++) {
                 this.data.list.gridPositions[row][col].justRessurected = false;
@@ -774,7 +778,7 @@ export class Game extends AbstractScene {
         }
     }
 
-    private getVisibleCells(
+    getVisibleCells(
         row: number, col: number, radius: number,
         allVisibleCellsToOpponent: boolean[][] = [],
         isGiant: boolean = false
@@ -813,7 +817,7 @@ export class Game extends AbstractScene {
         return visibleCells;
     }
 
-    private isCellEmpty(row: number, col: number, skipCheck: boolean = false): boolean {
+    isCellEmpty(row: number, col: number, skipCheck: boolean = false): boolean {
         return this.data.list.gridPositions[row] !== undefined &&
             this.data.list.gridPositions[row][col] !== undefined &&
             (skipCheck ? true : this.data.list.gridPositions[row][col].isEmpty);
@@ -949,22 +953,27 @@ export class Game extends AbstractScene {
         });
     }
 
-    private updateFrozenMonsters(): void {
-        const allMonsters = [
-            ...this.data.list.playerMonsters.filter((m: Monster) => m !== null),
-            ...this.data.list.opponentMonsters.filter((m: Monster) => m !== null)
-        ];
-        allMonsters.forEach((monster: Monster) => {
-            if (monster.frozenForDuration > 0) {
-                monster.frozenForDuration--;
-                if (monster.frozenForDuration === 0) {
-                    monster.removeFrozen();
-                }
+    /**
+     * Called right after the turn flag flips. Decrements the freeze duration of the monsters
+     * that just SKIPPED their turn (the side whose turn is NOT starting), as in Game-old.ts.
+     */
+    updateFrozenMonsters(): void {
+        const frozenMonsters: Monster[] = this.data.list.isPlayerTurn
+            ? this.data.list.opponentMonsters.filter((m: Monster) => m && m.frozenForDuration > 0)
+            : this.data.list.playerMonsters.filter((m: Monster) => m && m.frozenForDuration > 0);
+
+        frozenMonsters.forEach((monster: Monster) => {
+            monster.frozenForDuration--;
+            monster.unitData.movesLeft = 0;
+            monster.frozen_turns_left_text.setText(`${monster.frozenForDuration}`);
+            monster.pendingAction = false;
+            if (monster.frozenForDuration === 0) {
+                monster.removeFrozen();
             }
         });
     }
 
-    private updateAdditionalMagicDamage(): void {
+    updateAdditionalMagicDamage(): void {
         const grid = this.data.list.gridPositions;
         const updateMagicText = (monsters: Monster[], enemyMonsters: Monster[], occupiedBy: 'player' | 'opponent') => {
             monsters.filter(monster => monster && Number(monster.type) === 3).forEach(monster => {
@@ -988,7 +997,7 @@ export class Game extends AbstractScene {
         updateMagicText(this.data.list.opponentMonsters, this.data.list.playerMonsters, 'player');
     }
 
-    private updateSpellLevelsOnTurnEnd(): void {
+    updateSpellLevelsOnTurnEnd(): void {
         const updateButton = (button: Button, spellData: any) => {
             if (!button || !spellData || isNaN(spellData.cooldown)) return;
             if (button.usedCurrentRound) {
@@ -1296,7 +1305,7 @@ export class Game extends AbstractScene {
         return { newRow, newCol };
     }
 
-    private addNewSurvivalLevelMonsters(): void {
+    addNewSurvivalLevelMonsters(): void {
         const newMonstersCount = this.survivalLevelData.newEnemiesPerRound || 0;
         for (let index = 0; index < newMonstersCount; index++) {
             const monstersSpawned = this.data.list.opponentMonsters.length;
@@ -1333,7 +1342,7 @@ export class Game extends AbstractScene {
         this.updateOpponentMonstersLeft();
     }
 
-    private createLevelOutroPopup(levelWon: boolean = false): void {
+    createLevelOutroPopup(levelWon: boolean = false): void {
         let currentLevel = (LOCAL_STORAGE_MANAGER.get('currentLevel') as number);
         const currentWorld = LOCAL_STORAGE_MANAGER.get('currentWorld');
         currentLevel = currentWorld === 2 ? currentLevel + 1 : currentLevel - 1;
@@ -1456,11 +1465,7 @@ export class Game extends AbstractScene {
                 .replace('{cooldown}', `${this.playerSpellsData.magicBall.cooldown}`);
             if (this.playerSpellsData.magicBall.targets === 1) desc = desc.replace('targets', 'target');
             this.playerMagicBallButton = new Button(this, 1820, 290, 'magic-ball-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.magicBall.cooldownProgress = 0;
-                this.playerMagicBallButton.readyForUse = false;
-                this.newMagicBallSpell(this.playerSpellsData.magicBall.cooldown);
-                this.movementArrowsContainer.removeArrows();
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, 'magicBall');
             }, true, 0.6, true, desc, false);
             this.playerMagicBallButton.addRevealOverlay();
             this.playerMagicBallButton.updateCooldown(this.playerSpellsData.magicBall.cooldownProgress, this.playerSpellsData.magicBall.cooldown);
@@ -1484,11 +1489,7 @@ export class Game extends AbstractScene {
                 .replace('{cooldown}', `${this.playerSpellsData.poison.cooldown}`);
             if (this.playerSpellsData.poison.targets === 1) { desc = desc.replace('targets', 'target').replace('rounds', 'round'); }
             this.playerPoisonButton = new Button(this, 1820, 417, 'poison-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.poison.cooldownProgress = 0;
-                this.playerPoisonButton.readyForUse = false;
-                this.newPoisonSpell(this.playerSpellsData.poison.cooldown);
-                this.movementArrowsContainer.removeArrows();
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, 'poison');
             }, true, 0.6, true, desc, false);
             this.playerPoisonButton.addRevealOverlay();
             this.playerPoisonButton.updateCooldown(this.playerSpellsData.poison.cooldownProgress, this.playerSpellsData.poison.cooldown);
@@ -1510,11 +1511,7 @@ export class Game extends AbstractScene {
                 .replace('{cooldown}', `${this.playerSpellsData.rainOfArrows.cooldown}`);
             if (this.playerSpellsData.rainOfArrows.targets === 1) desc = desc.replace('targets', 'target');
             this.playerRainOfArrowsButton = new Button(this, 1820, 550, 'rain-of-arrows-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.rainOfArrows.cooldownProgress = 0;
-                this.playerRainOfArrowsButton.readyForUse = false;
-                this.newRainOfArrowsSpell(this.playerSpellsData.rainOfArrows.cooldown);
-                this.movementArrowsContainer.removeArrows();
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, 'rainOfArrows');
             }, true, 0.6, true, desc, false);
             this.playerRainOfArrowsButton.addRevealOverlay();
             this.playerRainOfArrowsButton.updateCooldown(this.playerSpellsData.rainOfArrows.cooldownProgress, this.playerSpellsData.rainOfArrows.cooldown);
@@ -1536,11 +1533,7 @@ export class Game extends AbstractScene {
                 .replace('{cooldown}', `${this.playerSpellsData.freeze.cooldown}`);
             if (this.playerSpellsData.freeze.targets === 1) { desc = desc.replace('targets', 'target').replace('rounds', 'round'); }
             this.playerFreezeButton = new Button(this, 1820, 680, 'freeze-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.freeze.cooldownProgress = 0;
-                this.playerFreezeButton.readyForUse = false;
-                this.newFreezeSpell(this.playerSpellsData.freeze.cooldown);
-                this.movementArrowsContainer.removeArrows();
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, 'freeze');
             }, true, 0.6, true, desc, false);
             this.playerFreezeButton.addRevealOverlay();
             this.playerFreezeButton.updateCooldown(this.playerSpellsData.freeze.cooldownProgress, this.playerSpellsData.freeze.cooldown);
@@ -1562,11 +1555,7 @@ export class Game extends AbstractScene {
                 .replace('{cooldown}', `${this.playerSpellsData.heal.cooldown}`);
             if (this.playerSpellsData.heal.targets === 1) desc = desc.replace('targets', 'target');
             this.playerHealButton = new Button(this, 1820, 810, 'heal-button', '', () => {
-                this.spellCastInProgress = true;
-                this.playerSpellsData.heal.cooldownProgress = 0;
-                this.playerHealButton.readyForUse = false;
-                this.newHealSpell(this.playerSpellsData.heal.cooldown);
-                this.movementArrowsContainer.removeArrows();
+                this.events.emit(GAME_SCENE_SCENE_EVENTS.SPELL_PRESSED, 'heal');
             }, true, 0.6, true, desc, false);
             this.playerHealButton.addRevealOverlay();
             this.playerHealButton.updateCooldown(this.playerSpellsData.heal.cooldownProgress, this.playerSpellsData.heal.cooldown);
