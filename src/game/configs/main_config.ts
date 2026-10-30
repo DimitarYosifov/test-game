@@ -17,7 +17,7 @@ export const main_config = {
     "gameWidth": 1920,
     "gameHeight": 1080,
     "lineWidth": 6,
-    "fullCloudsOpacity": 0.5,// clouds visibility 
+    "fullCloudsOpacity": 1,// clouds visibility 
     "rangedUnitsRange": 2,
     "maxMonsterMovesPerRound": 8,
     "playerStartingCoins": 50,
@@ -323,7 +323,8 @@ export const main_config = {
 
 
     /**
-     * LATEST bugs
+     * LATEST bugs AS OF 30.10.2026
+     * AFTER EACH MOVE UPDATE MAP VISIBILITY!!!!
     *  add better presentation of the resurrected monster
      *  add effect to monster info section when monster is selected
      * check what happens if a monster is killed by bomb - it should ressurect

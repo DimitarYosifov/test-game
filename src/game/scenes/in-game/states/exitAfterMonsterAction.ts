@@ -20,7 +20,9 @@ import { Monster } from '../Monster';
  * pendingAction, the old handler restored it); a monster that has none is dimmed.
  */
 export function exitAfterMonsterAction(context: Game, monster: Monster): void {
-
+   
+    context.checkMapVisibility();
+   
     const isPlayer = monster.isPlayerMonster;
     const team: Monster[] = isPlayer ? context.data.list.playerMonsters : context.data.list.opponentMonsters;
     const selectedState = (m: Monster) => isPlayer ? new PlayerMonsterSelectedState(m) : new OpponentMonsterSelectedState(m);
